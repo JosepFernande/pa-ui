@@ -1,0 +1,12 @@
+dist
+.nx
+.angular
+node_modules
+coverage
+**/node_modules
+**/dist
+**/.nx
+**/coverage
+*.lock
+package-lock.json
+**/CHANGELOG.md

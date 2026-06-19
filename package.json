@@ -6,7 +6,10 @@
     "start": "nx serve",
     "build": "nx build",
     "watch": "nx build --watch --configuration development",
-    "test": "nx test"
+    "test": "nx test",
+    "format": "nx format:write",
+    "format:check": "nx format:check",
+    "lint": "nx lint"
   },
   "private": true,
   "dependencies": {
@@ -38,6 +41,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "nx": "20.8.4",
+    "prettier": "^3.8.4",
     "typescript": "~5.7.2"
   }
 }
