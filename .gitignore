@@ -43,3 +43,8 @@ Thumbs.db
 
 # AI tool local state
 /.atl/
+
+
+
+.nx/cache
+.nx/workspace-data
