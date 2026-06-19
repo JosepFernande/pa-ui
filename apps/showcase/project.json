@@ -3,27 +3,27 @@
   "name": "showcase",
   "projectType": "application",
   "generators": {},
-  "sourceRoot": "src",
+  "sourceRoot": "apps/showcase/src",
   "prefix": "app",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
       "options": {
         "outputPath": "dist/showcase",
-        "index": "src/index.html",
-        "browser": "src/main.ts",
+        "index": "apps/showcase/src/index.html",
+        "browser": "apps/showcase/src/main.ts",
         "polyfills": [
           "zone.js"
         ],
-        "tsConfig": "tsconfig.app.json",
+        "tsConfig": "apps/showcase/tsconfig.app.json",
         "assets": [
           {
             "glob": "**/*",
-            "input": "public"
+            "input": "apps/showcase/public"
           }
         ],
         "styles": [
-          "src/styles.css"
+          "apps/showcase/src/styles.css"
         ],
         "scripts": []
       },
@@ -73,15 +73,15 @@
           "zone.js",
           "zone.js/testing"
         ],
-        "tsConfig": "tsconfig.spec.json",
+        "tsConfig": "apps/showcase/tsconfig.spec.json",
         "assets": [
           {
             "glob": "**/*",
-            "input": "public"
+            "input": "apps/showcase/public"
           }
         ],
         "styles": [
-          "src/styles.css"
+          "apps/showcase/src/styles.css"
         ],
         "scripts": []
       }
