@@ -1,0 +1,23 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@pa-ui/button": ["libs/button/src/index.ts"],
+      "@pa-ui/core": ["libs/core/src/index.ts"],
+      "@pa-ui/input": ["libs/input/src/index.ts"],
+      "@pa-ui/select": ["libs/select/src/index.ts"],
+      "@pa-ui/styles": ["libs/styles/src/index.ts"],
+      "@pa-ui/themes": ["libs/themes/src/index.ts"],
+      "@pa-ui/tokens": ["libs/tokens/src/index.ts"],
+      "@pa-ui/utils": ["libs/utils/src/index.ts"],
+      "pa-ui": ["libs/pa-ui/src/index.ts"]
+    }
+  }
+}
