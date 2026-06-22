@@ -1,0 +1,17 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "notion": {
+      "command":[
+        "npx",
+        "-y",
+        "@notionhq/notion-mcp-server"
+      ],
+      "type": "local",
+      "env": {
+        "NOTION_TOKEN": "${NOTION_TOKEN}"
+      },
+      "enabled": true
+    }
+  }
+}
