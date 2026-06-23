@@ -12,6 +12,7 @@
     "format:check": "nx format:check",
     "lint": "nx lint",
     "lint:css": "echo '✅ CSS lint passed (stub — stylelint not yet configured)'",
+    "changeset": "changeset",
     "prepare": "husky"
   },
   "private": true,
@@ -33,6 +34,7 @@
     "@angular-devkit/schematics": "^19.2.27",
     "@angular/cli": "^19.2.27",
     "@angular/compiler-cli": "^19.2.0",
+    "@changesets/cli": "^2.31.0",
     "@commitlint/cli": "^20.5.3",
     "@commitlint/config-conventional": "^20.5.3",
     "@nx/angular": "20.8.4",
