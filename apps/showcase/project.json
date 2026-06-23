@@ -72,23 +72,10 @@
       "outputs": ["{options.outputFile}"]
     },
     "test": {
-      "executor": "@angular-devkit/build-angular:karma",
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "polyfills": [
-          "zone.js",
-          "zone.js/testing"
-        ],
-        "tsConfig": "apps/showcase/tsconfig.spec.json",
-        "assets": [
-          {
-            "glob": "**/*",
-            "input": "apps/showcase/public"
-          }
-        ],
-        "styles": [
-          "apps/showcase/src/styles.css"
-        ],
-        "scripts": []
+        "jestConfig": "apps/showcase/jest.config.ts"
       }
     }
   }
