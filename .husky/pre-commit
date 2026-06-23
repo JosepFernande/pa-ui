@@ -1,0 +1,1 @@
+npx nx format:check --files="$(git diff --cached --name-only --diff-filter=ACMR | tr '\n' ' ')"

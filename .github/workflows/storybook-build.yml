@@ -1,0 +1,31 @@
+name: Storybook Build
+
+on:
+  pull_request:
+    paths:
+      - 'libs/*/stories/**'
+      - 'libs/*/src/lib/*.stories.ts'
+      - 'libs/tokens/**'
+
+jobs:
+  storybook:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+      - run: npm ci
+      - name: Restore Nx cache
+        uses: actions/cache@v4
+        with:
+          path: .nx/cache
+          key: nx-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+      - run: npx nx run-many -t storybook-build
+      - name: Upload Storybook
+        uses: actions/upload-artifact@v4
+        with:
+          name: storybook
+          path: dist/storybook/
+          retention-days: 7
