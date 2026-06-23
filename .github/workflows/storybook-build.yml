@@ -22,7 +22,7 @@ jobs:
         with:
           path: .nx/cache
           key: nx-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
-      - run: npx nx affected -t storybook-build --base=origin/main --head=HEAD
+      - run: npx nx run-many -t storybook-build
       - name: Upload Storybook
         uses: actions/upload-artifact@v4
         with:
