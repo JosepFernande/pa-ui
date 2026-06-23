@@ -1,1 +1,1 @@
-export * from './lib/pa-ui/pa-ui.component';
+export * from './public-api';
