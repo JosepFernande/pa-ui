@@ -1,0 +1,175 @@
+/*
+ * PaButton — BEM CSS classes
+ * Every value comes from a --pa-* custom property. Zero hardcoded colors, spacing, or radii.
+ *
+ * Token mapping:
+ *   --pa-button-bg             → background-color
+ *   --pa-button-color          → color (text / icon)
+ *   --pa-button-border         → border shorthand
+ *   --pa-button-radius         → border-radius
+ *   --pa-button-padding-sm     → padding (sm)
+ *   --pa-button-padding-md     → padding (md)
+ *   --pa-button-padding-lg     → padding (lg)
+ *   --pa-button-font-sm        → font-size (sm)
+ *   --pa-button-font-md        → font-size (md)
+ *   --pa-button-font-lg        → font-size (lg)
+ *   --pa-button-min-height     → min-height
+ *   --pa-button-focus-ring     → box-shadow for focus-visible
+ *   --pa-button-hover-bg       → background-color on hover
+ *   --pa-button-active-bg      → background-color on active
+ *   --pa-button-disabled-bg    → background-color when disabled
+ *   --pa-button-disabled-color → color when disabled
+ *   --pa-button-loading-color  → spinner color
+ *   --pa-button-spinner-size   → spinner width & height
+ */
+
+/* ------------------------------------------------------------------ */
+/* Base                                                                 */
+/* ------------------------------------------------------------------ */
+
+.pa-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pa-button-gap, var(--pa-spacing-2, 0.5rem));
+  box-sizing: border-box;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  text-decoration: none;
+  vertical-align: middle;
+
+  font-family: var(--pa-button-font-family, var(--pa-font-family, inherit));
+  font-weight: var(--pa-button-font-weight, var(--pa-font-weight-medium, 500));
+  line-height: var(--pa-button-line-height, 1);
+
+  border: var(--pa-button-border, 2px solid transparent);
+  border-radius: var(--pa-button-radius, var(--pa-radius-2, 0.375rem));
+
+  background-color: var(--pa-button-bg, transparent);
+  color: var(--pa-button-color, inherit);
+
+  transition:
+    background-color var(--pa-button-transition-duration, 150ms)
+      var(--pa-button-transition-easing, ease),
+    border-color var(--pa-button-transition-duration, 150ms)
+      var(--pa-button-transition-easing, ease),
+    color var(--pa-button-transition-duration, 150ms)
+      var(--pa-button-transition-easing, ease),
+    box-shadow var(--pa-button-transition-duration, 150ms)
+      var(--pa-button-transition-easing, ease);
+}
+
+/* ------------------------------------------------------------------ */
+/* Variants                                                             */
+/* ------------------------------------------------------------------ */
+
+/* Solid: filled background, no border */
+.pa-button--solid {
+  background-color: var(--pa-button-bg, var(--pa-button-color));
+  color: var(--pa-button-solid-color, var(--pa-surface, #fff));
+  border-color: transparent;
+}
+
+/* Outline: bordered, transparent background */
+.pa-button--outline {
+  background-color: transparent;
+  color: var(--pa-button-color);
+  border-color: var(--pa-button-border, var(--pa-border, currentColor));
+}
+
+/* Ghost: no border, transparent background */
+.pa-button--ghost {
+  background-color: transparent;
+  color: var(--pa-button-color);
+  border-color: transparent;
+}
+
+/* ------------------------------------------------------------------ */
+/* Hover & Active                                                      */
+/* ------------------------------------------------------------------ */
+
+.pa-button:not(.pa-button--disabled):hover {
+  background-color: var(--pa-button-hover-bg, var(--pa-surface, rgba(0, 0, 0, 0.06)));
+}
+
+.pa-button:not(.pa-button--disabled):active {
+  background-color: var(--pa-button-active-bg, var(--pa-surface, rgba(0, 0, 0, 0.1)));
+}
+
+/* ------------------------------------------------------------------ */
+/* Sizes                                                               */
+/* ------------------------------------------------------------------ */
+
+.pa-button--sm {
+  padding: var(--pa-button-padding-sm, var(--pa-spacing-1, 0.25rem) var(--pa-spacing-2, 0.5rem));
+  font-size: var(--pa-button-font-sm, var(--pa-font-size-sm, 0.875rem));
+  min-height: var(--pa-button-min-height-sm, var(--pa-button-min-height, 2rem));
+}
+
+.pa-button--md {
+  padding: var(--pa-button-padding-md, var(--pa-spacing-2, 0.5rem) var(--pa-spacing-4, 1rem));
+  font-size: var(--pa-button-font-md, var(--pa-font-size-md, 1rem));
+  min-height: var(--pa-button-min-height-md, var(--pa-button-min-height, 2.5rem));
+}
+
+.pa-button--lg {
+  padding: var(--pa-button-padding-lg, var(--pa-spacing-3, 0.75rem) var(--pa-spacing-6, 1.5rem));
+  font-size: var(--pa-button-font-lg, var(--pa-font-size-lg, 1.125rem));
+  min-height: var(--pa-button-min-height-lg, var(--pa-button-min-height, 3rem));
+}
+
+/* ------------------------------------------------------------------ */
+/* Disabled                                                            */
+/* ------------------------------------------------------------------ */
+
+.pa-button--disabled {
+  opacity: var(--pa-button-disabled-opacity, 0.6);
+  cursor: not-allowed;
+  pointer-events: none;
+  background-color: var(--pa-button-disabled-bg, var(--pa-surface));
+  color: var(--pa-button-disabled-color, var(--pa-text-muted));
+}
+
+/* ------------------------------------------------------------------ */
+/* Loading                                                             */
+/* ------------------------------------------------------------------ */
+
+.pa-button--loading {
+  cursor: wait;
+  color: transparent !important;
+}
+
+/* ------------------------------------------------------------------ */
+/* Spinner                                                             */
+/* ------------------------------------------------------------------ */
+
+.pa-button__spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--pa-button-spinner-size, 1em);
+  height: var(--pa-button-spinner-size, 1em);
+  margin-top: calc(var(--pa-button-spinner-size, 1em) / -2);
+  margin-left: calc(var(--pa-button-spinner-size, 1em) / -2);
+  border: 2px solid var(--pa-button-loading-color, var(--pa-text-muted));
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: pa-button-spin 0.6s linear infinite;
+}
+
+@keyframes pa-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Focus visible (CDK FocusMonitor)                                    */
+/* ------------------------------------------------------------------ */
+
+.pa-button.cdk-keyboard-focused {
+  box-shadow: var(--pa-button-focus-ring, var(--pa-focus-ring, 0 0 0 2px var(--pa-primary)));
+  outline: none;
+}
