@@ -43,5 +43,19 @@ describe('Packaging contract — source-level', () => {
       expect(peers).toBeDefined();
       expect(peers!['@angular/forms']).toBeDefined();
     });
+
+    it('peerDependencies includes @pa-ui/button', () => {
+      const peers = pkg['peerDependencies'] as Record<string, string> | undefined;
+      expect(peers).toBeDefined();
+      expect(peers!['@pa-ui/button']).toBeDefined();
+    });
+  });
+
+  describe('umbrella re-exports', () => {
+    it('public-api.ts re-exports from @pa-ui/button', () => {
+      const publicApiPath = path.resolve(libRoot(), 'src', 'public-api.ts');
+      const content = fs.readFileSync(publicApiPath, 'utf-8');
+      expect(content).toContain("export * from '@pa-ui/button'");
+    });
   });
 });
