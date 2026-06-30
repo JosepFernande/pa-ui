@@ -110,8 +110,33 @@ jobs:
           name: audit-report
           path: tools/audit/report.json
 
+  gga-review:
+    needs: setup
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+      - run: npm ci
+      - name: Install gga
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/Gentleman-Programming/gentleman-guardian-angel/main/install.sh | bash
+          export PATH="$HOME/.gga/bin:$PATH"
+      - name: Run gga PR review
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          export PATH="$HOME/.gga/bin:$PATH"
+          gga run --pr-mode --ci
+
   summary:
-    needs: [lint, test, build, audit]
+    needs: [lint, test, build, audit, gga-review]
     if: always()
     runs-on: ubuntu-latest
     steps:
