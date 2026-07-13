@@ -1,0 +1,28 @@
+@if (label()) {
+  <label class="pa-input__label" [for]="inputId()">{{ label() }}</label>
+}
+
+<div class="pa-input__wrapper">
+  <input
+    #nativeInput
+    class="pa-input__input"
+    [id]="inputId()"
+    [type]="type()"
+    [placeholder]="placeholder()"
+    [value]="internalValue()"
+    [disabled]="effectiveDisabled()"
+    [readonly]="readonly()"
+    [attr.aria-invalid]="ariaInvalid()"
+    [attr.aria-describedby]="ariaDescribedBy()"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+  />
+</div>
+
+@if (hintText() && !hasError()) {
+  <span class="pa-input__hint" [id]="hintId()">{{ hintText() }}</span>
+}
+
+@if (hasError()) {
+  <span class="pa-input__error" [id]="errorId()" role="alert">{{ errorMessage() }}</span>
+}

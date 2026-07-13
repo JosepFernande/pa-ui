@@ -1,0 +1,121 @@
+/* Base component */
+.pa-input {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pa-input-gap, 0.25rem);
+  font-family: var(--pa-input-font-family, inherit);
+}
+
+/* Label */
+.pa-input__label {
+  display: block;
+  color: var(--pa-input-label-color, currentColor);
+  font-size: var(--pa-input-label-font-size, 0.875rem);
+  font-weight: var(--pa-input-label-font-weight, 500);
+  margin-bottom: var(--pa-input-label-margin-bottom, 0.25rem);
+}
+
+/* Wrapper */
+.pa-input__wrapper {
+  display: flex;
+  align-items: center;
+  border: var(--pa-input-border-width, 1px) solid var(--pa-input-border, currentColor);
+  border-radius: var(--pa-input-radius, 0.25rem);
+  background-color: var(--pa-input-bg, transparent);
+  transition: border-color var(--pa-input-transition-duration, 150ms) var(--pa-input-transition-easing, ease-in-out);
+}
+
+/* Input */
+.pa-input__input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--pa-input-color, currentColor);
+  font-family: inherit;
+  font-weight: var(--pa-input-font-weight, 400);
+  line-height: var(--pa-input-line-height, 1.5);
+  width: 100%;
+}
+
+.pa-input__input::placeholder {
+  color: var(--pa-input-placeholder-color, currentColor);
+  opacity: 0.6;
+}
+
+/* Size modifiers */
+.pa-input--sm .pa-input__wrapper {
+  min-height: var(--pa-input-min-height-sm, 2rem);
+}
+
+.pa-input--sm .pa-input__input {
+  padding: var(--pa-input-padding-sm, 0.25rem 0.5rem);
+  font-size: var(--pa-input-font-sm, 0.875rem);
+}
+
+.pa-input--md .pa-input__wrapper {
+  min-height: var(--pa-input-min-height-md, 2.5rem);
+}
+
+.pa-input--md .pa-input__input {
+  padding: var(--pa-input-padding-md, 0.5rem 0.75rem);
+  font-size: var(--pa-input-font-md, 1rem);
+}
+
+.pa-input--lg .pa-input__wrapper {
+  min-height: var(--pa-input-min-height-lg, 3rem);
+}
+
+.pa-input--lg .pa-input__input {
+  padding: var(--pa-input-padding-lg, 0.75rem 1rem);
+  font-size: var(--pa-input-font-lg, 1.125rem);
+}
+
+/* Focus state */
+.pa-input__wrapper:focus-within {
+  border-color: var(--pa-input-focus-border, currentColor);
+  box-shadow: 0 0 0 var(--pa-input-focus-ring-width, 2px) var(--pa-input-focus-ring, currentColor);
+}
+
+/* Disabled state */
+.pa-input--disabled .pa-input__wrapper {
+  background-color: var(--pa-input-disabled-bg, transparent);
+  opacity: var(--pa-input-disabled-opacity, 0.6);
+  cursor: not-allowed;
+}
+
+.pa-input--disabled .pa-input__input {
+  color: var(--pa-input-disabled-color, currentColor);
+  cursor: not-allowed;
+}
+
+/* Readonly state */
+.pa-input--readonly .pa-input__wrapper {
+  background-color: var(--pa-input-readonly-bg, transparent);
+  border-color: var(--pa-input-readonly-border, currentColor);
+}
+
+/* Invalid state */
+.pa-input--invalid .pa-input__wrapper {
+  border-color: var(--pa-input-error-border, currentColor);
+}
+
+.pa-input--invalid .pa-input__input {
+  color: var(--pa-input-error-color, currentColor);
+}
+
+/* Hint text */
+.pa-input__hint {
+  display: block;
+  margin-top: var(--pa-input-hint-margin-top, 0.25rem);
+  color: var(--pa-input-hint-color, currentColor);
+  font-size: var(--pa-input-hint-font-size, 0.75rem);
+}
+
+/* Error text */
+.pa-input__error {
+  display: block;
+  margin-top: var(--pa-input-error-margin-top, 0.25rem);
+  color: var(--pa-input-error-color, currentColor);
+  font-size: var(--pa-input-error-font-size, 0.75rem);
+}

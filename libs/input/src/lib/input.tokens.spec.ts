@@ -13,6 +13,6 @@ describe('input tokens', () => {
   });
 
   it('should have expected token count', () => {
-    expect(Object.keys(PA_INPUT_TOKENS).length).toBe(34);
+    expect(Object.keys(PA_INPUT_TOKENS).length).toBe(40);
   });
 });
