@@ -1,1 +1,6 @@
+#!/usr/bin/env sh
+# ======== GGA START ========
+gga run || exit 1
+# ======== GGA END ========
+
 npx nx format:check --files="$(git diff --cached --name-only --diff-filter=ACMR | tr '\n' ' ')"
