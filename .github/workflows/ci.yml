@@ -124,6 +124,11 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'npm'
       - run: npm ci
+      - name: Install opencode
+        run: |
+          curl -fsSL https://github.com/anomalyco/opencode/releases/latest/download/opencode-linux-x64.tar.gz -o /tmp/opencode.tar.gz
+          tar -xzf /tmp/opencode.tar.gz -C /usr/local/bin
+          chmod +x /usr/local/bin/opencode
       - name: Install gga
         run: |
           git clone --depth 1 https://github.com/Gentleman-Programming/gentleman-guardian-angel.git /tmp/gga
@@ -132,7 +137,6 @@ jobs:
       - name: Run gga PR review
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GGA_PROVIDER: github:gpt-4o
         run: gga run --pr-mode --ci
 
   summary:
