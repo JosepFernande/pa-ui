@@ -132,6 +132,7 @@ jobs:
       - name: Run gga PR review
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GGA_PROVIDER: github:gpt-4o
         run: gga run --pr-mode --ci
 
   summary:
