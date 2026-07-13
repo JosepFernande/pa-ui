@@ -47,4 +47,4 @@ TIMEOUT="300"
 
 # Base branch for --pr-mode (auto-detects main/master/develop if empty)
 # Default: auto-detect
-# PR_BASE_BRANCH="main"
+PR_BASE_BRANCH="main"
