@@ -23,6 +23,7 @@ import type { PaButtonVariant, PaButtonSize } from './button.types';
   host: {
     '[class]': 'hostClasses()',
     '[disabled]': 'effectiveDisabled()',
+    '[attr.aria-disabled]': 'effectiveDisabled()',
     '[attr.aria-busy]': 'loading() ? "true" : null',
     '[attr.type]': 'type()',
     '[style.--pa-button-color]': 'colorVar()',

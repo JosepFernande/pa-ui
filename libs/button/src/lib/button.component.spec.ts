@@ -113,6 +113,28 @@ describe('PaButton', () => {
       expect(buttonEl.textContent).toContain('Save Changes');
     });
 
+    it('should wrap ng-content in a .pa-button__label span', () => {
+      const { fixture, host } = createTestHost();
+      host.label = 'Save Changes';
+      host.loading = false;
+      fixture.detectChanges();
+
+      const labelSpan = fixture.debugElement.query(By.css('.pa-button__label'));
+      expect(labelSpan).not.toBeNull();
+      expect(labelSpan.nativeElement.textContent).toContain('Save Changes');
+    });
+
+    it('should NOT render .pa-button__label when loading', () => {
+      const { fixture, host } = createTestHost();
+      host.label = 'Save Changes';
+      host.loading = true;
+      fixture.detectChanges();
+
+      const labelSpan = fixture.debugElement.query(By.css('.pa-button__label'));
+      expect(labelSpan).not.toBeNull();
+      expect(labelSpan.nativeElement.classList.contains('pa-button__label--hidden')).toBe(true);
+    });
+
     it('should have implicit role="button" from the native element', () => {
       const { fixture, buttonEl } = createTestHost();
       fixture.detectChanges();
@@ -314,6 +336,22 @@ describe('PaButton', () => {
       fixture.detectChanges();
 
       expect(buttonEl.disabled).toBe(true);
+    });
+
+    it('should set aria-disabled when disabled is true', () => {
+      const { fixture, host, buttonEl } = createTestHost();
+      host.disabled = true;
+      fixture.detectChanges();
+
+      expect(buttonEl.getAttribute('aria-disabled')).toBe('true');
+    });
+
+    it('should NOT have aria-disabled when not disabled', () => {
+      const { fixture, host, buttonEl } = createTestHost();
+      host.disabled = false;
+      fixture.detectChanges();
+
+      expect(buttonEl.getAttribute('aria-disabled')).toBe('false');
     });
 
     it('should suppress click when disabled', () => {
