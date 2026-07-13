@@ -126,14 +126,13 @@ jobs:
       - run: npm ci
       - name: Install gga
         run: |
-          curl -fsSL https://raw.githubusercontent.com/Gentleman-Programming/gentleman-guardian-angel/main/install.sh | bash
-          export PATH="$HOME/.gga/bin:$PATH"
+          git clone --depth 1 https://github.com/Gentleman-Programming/gentleman-guardian-angel.git /tmp/gga
+          bash /tmp/gga/install.sh
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
       - name: Run gga PR review
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          export PATH="$HOME/.gga/bin:$PATH"
-          gga run --pr-mode --ci
+        run: gga run --pr-mode --ci
 
   summary:
     needs: [lint, test, build, audit, gga-review]
