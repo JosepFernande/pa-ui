@@ -49,6 +49,12 @@ describe('Packaging contract — source-level', () => {
       expect(peers).toBeDefined();
       expect(peers!['@pa-ui/button']).toBeDefined();
     });
+
+    it('peerDependencies includes @pa-ui/input', () => {
+      const peers = pkg['peerDependencies'] as Record<string, string> | undefined;
+      expect(peers).toBeDefined();
+      expect(peers!['@pa-ui/input']).toBeDefined();
+    });
   });
 
   describe('umbrella re-exports', () => {
@@ -56,6 +62,12 @@ describe('Packaging contract — source-level', () => {
       const publicApiPath = path.resolve(libRoot(), 'src', 'public-api.ts');
       const content = fs.readFileSync(publicApiPath, 'utf-8');
       expect(content).toContain("export * from '@pa-ui/button'");
+    });
+
+    it('public-api.ts re-exports from @pa-ui/input', () => {
+      const publicApiPath = path.resolve(libRoot(), 'src', 'public-api.ts');
+      const content = fs.readFileSync(publicApiPath, 'utf-8');
+      expect(content).toContain("export * from '@pa-ui/input'");
     });
   });
 });
