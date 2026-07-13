@@ -31,7 +31,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--pa-button-gap, var(--pa-spacing-2, 0.5rem));
+  gap: var(--pa-button-gap);
   box-sizing: border-box;
   position: relative;
   cursor: pointer;
@@ -40,25 +40,25 @@
   text-decoration: none;
   vertical-align: middle;
 
-  font-family: var(--pa-button-font-family, var(--pa-font-family, inherit));
-  font-weight: var(--pa-button-font-weight, var(--pa-font-weight-medium, 500));
-  line-height: var(--pa-button-line-height, 1);
+  font-family: var(--pa-button-font-family);
+  font-weight: var(--pa-button-font-weight);
+  line-height: var(--pa-button-line-height);
 
-  border: var(--pa-button-border, 2px solid transparent);
-  border-radius: var(--pa-button-radius, var(--pa-radius-2, 0.375rem));
+  border: var(--pa-button-border);
+  border-radius: var(--pa-button-radius);
 
-  background-color: var(--pa-button-bg, transparent);
-  color: var(--pa-button-color, inherit);
+  background-color: var(--pa-button-bg);
+  color: var(--pa-button-color);
 
   transition:
-    background-color var(--pa-button-transition-duration, 150ms)
-      var(--pa-button-transition-easing, ease),
-    border-color var(--pa-button-transition-duration, 150ms)
-      var(--pa-button-transition-easing, ease),
-    color var(--pa-button-transition-duration, 150ms)
-      var(--pa-button-transition-easing, ease),
-    box-shadow var(--pa-button-transition-duration, 150ms)
-      var(--pa-button-transition-easing, ease);
+    background-color var(--pa-button-transition-duration)
+      var(--pa-button-transition-easing),
+    border-color var(--pa-button-transition-duration)
+      var(--pa-button-transition-easing),
+    color var(--pa-button-transition-duration)
+      var(--pa-button-transition-easing),
+    box-shadow var(--pa-button-transition-duration)
+      var(--pa-button-transition-easing);
 }
 
 /* ------------------------------------------------------------------ */
@@ -67,8 +67,8 @@
 
 /* Solid: filled background, no border */
 .pa-button--solid {
-  background-color: var(--pa-button-bg, var(--pa-button-color));
-  color: var(--pa-button-solid-color, var(--pa-surface, #fff));
+  background-color: var(--pa-button-bg);
+  color: var(--pa-button-solid-color);
   border-color: transparent;
 }
 
@@ -76,7 +76,7 @@
 .pa-button--outline {
   background-color: transparent;
   color: var(--pa-button-color);
-  border-color: var(--pa-button-border, var(--pa-border, currentColor));
+  border-color: var(--pa-button-color);
 }
 
 /* Ghost: no border, transparent background */
@@ -91,11 +91,11 @@
 /* ------------------------------------------------------------------ */
 
 .pa-button:not(.pa-button--disabled):hover {
-  background-color: var(--pa-button-hover-bg, var(--pa-surface, rgba(0, 0, 0, 0.06)));
+  background-color: var(--pa-button-hover-bg);
 }
 
 .pa-button:not(.pa-button--disabled):active {
-  background-color: var(--pa-button-active-bg, var(--pa-surface, rgba(0, 0, 0, 0.1)));
+  background-color: var(--pa-button-active-bg);
 }
 
 /* ------------------------------------------------------------------ */
@@ -103,21 +103,21 @@
 /* ------------------------------------------------------------------ */
 
 .pa-button--sm {
-  padding: var(--pa-button-padding-sm, var(--pa-spacing-1, 0.25rem) var(--pa-spacing-2, 0.5rem));
-  font-size: var(--pa-button-font-sm, var(--pa-font-size-sm, 0.875rem));
-  min-height: var(--pa-button-min-height-sm, var(--pa-button-min-height, 2rem));
+  padding: var(--pa-button-padding-sm);
+  font-size: var(--pa-button-font-sm);
+  min-height: var(--pa-button-min-height-sm);
 }
 
 .pa-button--md {
-  padding: var(--pa-button-padding-md, var(--pa-spacing-2, 0.5rem) var(--pa-spacing-4, 1rem));
-  font-size: var(--pa-button-font-md, var(--pa-font-size-md, 1rem));
-  min-height: var(--pa-button-min-height-md, var(--pa-button-min-height, 2.5rem));
+  padding: var(--pa-button-padding-md);
+  font-size: var(--pa-button-font-md);
+  min-height: var(--pa-button-min-height-md);
 }
 
 .pa-button--lg {
-  padding: var(--pa-button-padding-lg, var(--pa-spacing-3, 0.75rem) var(--pa-spacing-6, 1.5rem));
-  font-size: var(--pa-button-font-lg, var(--pa-font-size-lg, 1.125rem));
-  min-height: var(--pa-button-min-height-lg, var(--pa-button-min-height, 3rem));
+  padding: var(--pa-button-padding-lg);
+  font-size: var(--pa-button-font-lg);
+  min-height: var(--pa-button-min-height-lg);
 }
 
 /* ------------------------------------------------------------------ */
@@ -125,11 +125,11 @@
 /* ------------------------------------------------------------------ */
 
 .pa-button--disabled {
-  opacity: var(--pa-button-disabled-opacity, 0.6);
+  opacity: var(--pa-button-disabled-opacity);
   cursor: not-allowed;
   pointer-events: none;
-  background-color: var(--pa-button-disabled-bg, var(--pa-surface));
-  color: var(--pa-button-disabled-color, var(--pa-text-muted));
+  background-color: var(--pa-button-disabled-bg);
+  color: var(--pa-button-disabled-color);
 }
 
 /* ------------------------------------------------------------------ */
@@ -138,7 +138,19 @@
 
 .pa-button--loading {
   cursor: wait;
-  color: transparent !important;
+}
+
+/* Visually hidden but accessible to screen readers */
+.pa-button__label--hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 /* ------------------------------------------------------------------ */
@@ -149,14 +161,14 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: var(--pa-button-spinner-size, 1em);
-  height: var(--pa-button-spinner-size, 1em);
-  margin-top: calc(var(--pa-button-spinner-size, 1em) / -2);
-  margin-left: calc(var(--pa-button-spinner-size, 1em) / -2);
-  border: 2px solid var(--pa-button-loading-color, var(--pa-text-muted));
+  width: var(--pa-button-spinner-size);
+  height: var(--pa-button-spinner-size);
+  margin-top: calc(var(--pa-button-spinner-size) / -2);
+  margin-left: calc(var(--pa-button-spinner-size) / -2);
+  border: var(--pa-button-spinner-border, 2px solid var(--pa-button-loading-color));
   border-top-color: transparent;
   border-radius: 50%;
-  animation: pa-button-spin 0.6s linear infinite;
+  animation: pa-button-spin var(--pa-button-spinner-duration) linear infinite;
 }
 
 @keyframes pa-button-spin {
@@ -170,6 +182,6 @@
 /* ------------------------------------------------------------------ */
 
 .pa-button.cdk-keyboard-focused {
-  box-shadow: var(--pa-button-focus-ring, var(--pa-focus-ring, 0 0 0 2px var(--pa-primary)));
+  box-shadow: var(--pa-button-focus-ring);
   outline: none;
 }
