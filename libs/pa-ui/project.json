@@ -45,6 +45,13 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint"
+    },
+    "stylelint": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "npx stylelint \"{projectRoot}/**/*.css\" --allow-empty-input"
+      }
     }
   }
 }

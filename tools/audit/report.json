@@ -1,6 +1,57 @@
 {
-  "timestamp": "2026-06-22T20:57:30.956Z",
-  "status": "pass",
-  "rules": [],
-  "summary": "Audit stub — no rules enforced yet."
+  "timestamp": "2026-07-14T16:37:27.972Z",
+  "components": [
+    {
+      "path": "libs/button/src/lib/button.component.ts",
+      "selector": "button[pa-button]",
+      "encapsulation": "None",
+      "tokens": [
+        "--pa-button-active-bg",
+        "--pa-button-bg",
+        "--pa-button-border",
+        "--pa-button-color",
+        "--pa-button-disabled-bg",
+        "--pa-button-disabled-color",
+        "--pa-button-disabled-opacity",
+        "--pa-button-focus-ring",
+        "--pa-button-font-family",
+        "--pa-button-font-lg",
+        "--pa-button-font-md",
+        "--pa-button-font-sm",
+        "--pa-button-font-weight",
+        "--pa-button-gap",
+        "--pa-button-hover-bg",
+        "--pa-button-line-height",
+        "--pa-button-loading-color",
+        "--pa-button-min-height-lg",
+        "--pa-button-min-height-md",
+        "--pa-button-min-height-sm",
+        "--pa-button-padding-lg",
+        "--pa-button-padding-md",
+        "--pa-button-padding-sm",
+        "--pa-button-radius",
+        "--pa-button-solid-color",
+        "--pa-button-spinner-border",
+        "--pa-button-spinner-duration",
+        "--pa-button-spinner-size",
+        "--pa-button-sr-only-height",
+        "--pa-button-sr-only-margin",
+        "--pa-button-sr-only-width",
+        "--pa-button-transition-duration",
+        "--pa-button-transition-easing"
+      ]
+    },
+    {
+      "path": "libs/pa-ui/src/lib/pa-ui/pa-ui.component.ts",
+      "selector": "pa-pa-ui",
+      "encapsulation": "None",
+      "tokens": []
+    }
+  ],
+  "selectors": [
+    "button[pa-button]",
+    "pa-pa-ui"
+  ],
+  "violations": [],
+  "status": "pass"
 }

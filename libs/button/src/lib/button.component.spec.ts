@@ -30,6 +30,7 @@ declare global {
  * matching real consumer usage with `<button pa-button>`.
  */
 @Component({
+  selector: 'app-test-host',
   standalone: true,
   selector: 'pa-test-host',
   imports: [PaButton],

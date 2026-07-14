@@ -27,6 +27,13 @@
           "codeCoverage": true
         }
       }
+    },
+    "stylelint": {
+      "cache": true,
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx stylelint \"{projectRoot}/**/*.css\" --allow-empty-input"
+      }
     }
   },
   "namedInputs": {
@@ -53,7 +60,7 @@
       "unitTestRunner": "jest"
     },
     "@nx/angular:component": {
-      "style": "scss"
+      "style": "css"
     }
   }
 }
