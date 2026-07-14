@@ -1,0 +1,109 @@
+{
+  "parent_page_id": "35f80bf9-7f94-80d7-83ff-e06cb99a1505",
+  "parent_page_title": "Documentacion",
+  "last_synced": null,
+  "documents": [
+    {
+      "id": "35f80bf9-7f94-814a-96d6-ccb90055e545",
+      "title": "Architecture & Foundation",
+      "last_edited": null,
+      "tags": ["arquitectura", "tokens", "standalone", "signals", "css-variables", "cdk", "apis-consistentes", "monorepo", "nx"]
+    },
+    {
+      "id": "35f80bf9-7f94-8149-80a0-ede8a524fad9",
+      "title": "CSS Strategy & View Encapsulation",
+      "last_edited": null,
+      "tags": ["css", "view-encapsulation", "bem", "tokens", "theme-engine", "stylelint", "eslint", "custom-rules", "pa-prefix"]
+    },
+    {
+      "id": "35f80bf9-7f94-818c-8821-d58a5dec897d",
+      "title": "Versioning & Breaking Changes",
+      "last_edited": null,
+      "tags": ["versioning", "semver", "conventional-commits", "changesets", "breaking-changes", "angular-alignment", "major-version"]
+    },
+    {
+      "id": "35f80bf9-7f94-815c-84f2-c8e280615a14",
+      "title": "Testing Strategy",
+      "last_edited": null,
+      "tags": ["testing", "jest", "testbed", "coverage", "unit-tests", "integration-tests", "visual-tests"]
+    },
+    {
+      "id": "35f80bf9-7f94-81f2-bfb6-f880540f44b0",
+      "title": "ControlValueAccessor (CVA)",
+      "last_edited": null,
+      "tags": ["cva", "forms", "reactive-forms", "template-forms", "ngModel", "FormControl", "form-integration"]
+    },
+    {
+      "id": "38480bf9-7f94-819b-a53f-c134e4a12791",
+      "title": "Nx Workspace Setup",
+      "last_edited": null,
+      "tags": ["nx", "workspace", "monorepo", "build", "cache", "project-structure", "libs", "apps"]
+    },
+    {
+      "id": "38480bf9-7f94-8147-9d93-c098b127f7dc",
+      "title": "CI/CD Pipeline",
+      "last_edited": null,
+      "tags": ["ci", "cd", "github-actions", "workflows", "release", "publish", "branch-protection", "husky", "pre-commit"]
+    },
+    {
+      "id": "38480bf9-7f94-812c-8506-fcd10d91144e",
+      "title": "Release & Publishing",
+      "last_edited": null,
+      "tags": ["release", "publishing", "npm", "changesets", "trusted-publishing", "oidc", "provenance", "dist-tags", "alpha", "beta"]
+    },
+    {
+      "id": "38480bf9-7f94-811c-9be2-f61e6bfbe385",
+      "title": "Showcase App Guidelines",
+      "last_edited": null,
+      "tags": ["showcase", "playground", "demo", "examples", "storybook"]
+    },
+    {
+      "id": "38480bf9-7f94-812c-a909-e1d7f457e8df",
+      "title": "Theming Deep-Dive",
+      "last_edited": null,
+      "tags": ["theme-engine", "providePaTheme", "ThemeService", "colores", "HSL", "SSR", "multi-tema", "derivacion", "normalizacion"]
+    },
+    {
+      "id": "38480bf9-7f94-8135-83a1-f2af8d95d068",
+      "title": "Storybook Setup",
+      "last_edited": null,
+      "tags": ["storybook", "stories", "documentation", "playground", "visual-tests"]
+    },
+    {
+      "id": "38480bf9-7f94-8128-9d61-c622586adaf6",
+      "title": "Performance Budgets",
+      "last_edited": null,
+      "tags": ["performance", "bundle-size", "tree-shaking", "lazy-loading", "budgets", "optimization"]
+    },
+    {
+      "id": "38480bf9-7f94-8179-8025-d0c378a83fb5",
+      "title": "Contribution / PR / Code Review Guidelines",
+      "last_edited": null,
+      "tags": ["contributing", "pr", "code-review", "guidelines", "process", "approval"]
+    },
+    {
+      "id": "38480bf9-7f94-81af-b72b-d254c4a27c22",
+      "title": "Icons Library",
+      "last_edited": null,
+      "tags": ["icons", "svg", "icon-library", "custom-icons"]
+    },
+    {
+      "id": "38480bf9-7f94-810f-9e9b-d9d28c659906",
+      "title": "Internationalization (i18n)",
+      "last_edited": null,
+      "tags": ["i18n", "internationalization", "translations", "locale", "multi-language"]
+    },
+    {
+      "id": "38480bf9-7f94-81b2-9d42-d65d041b4aa9",
+      "title": "Browser Support",
+      "last_edited": null,
+      "tags": ["browser", "support", "compatibility", "polyfills", "browserslist"]
+    },
+    {
+      "id": "38f80bf9-7f94-80da-bb56-f6880b256385",
+      "title": "AI Code Review with gga",
+      "last_edited": null,
+      "tags": ["ai", "code-review", "gga", "gentleman-guardian-angel", "automation"]
+    }
+  ]
+}
