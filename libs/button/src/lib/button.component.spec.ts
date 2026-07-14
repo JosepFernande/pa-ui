@@ -6,7 +6,10 @@ import { FocusMonitor, FocusOrigin } from '@angular/cdk/a11y';
 // jest-axe v10 has no TS declarations — use require()
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const { axe, toHaveNoViolations } = require('jest-axe') as {
-  axe: (element: Element | Document, options?: Record<string, unknown>) => Promise<Record<string, unknown>>;
+  axe: (
+    element: Element | Document,
+    options?: Record<string, unknown>,
+  ) => Promise<Record<string, unknown>>;
   toHaveNoViolations: Record<string, jest.CustomMatcher>;
 };
 
@@ -30,9 +33,8 @@ declare global {
  * matching real consumer usage with `<button pa-button>`.
  */
 @Component({
-  selector: 'app-test-host',
-  standalone: true,
   selector: 'pa-test-host',
+  standalone: true,
   imports: [PaButton],
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -362,7 +364,9 @@ describe('PaButton', () => {
       host.disabled = true;
       fixture.detectChanges();
 
-      const { buttonEl } = { buttonEl: fixture.debugElement.query(By.css('button'))!.nativeElement as HTMLButtonElement };
+      const { buttonEl } = {
+        buttonEl: fixture.debugElement.query(By.css('button'))!.nativeElement as HTMLButtonElement,
+      };
       buttonEl.click();
 
       expect(host.clicked).toBe(false);
@@ -421,7 +425,8 @@ describe('PaButton', () => {
       host.loading = true;
       fixture.detectChanges();
 
-      const buttonEl = fixture.debugElement.query(By.css('button'))!.nativeElement as HTMLButtonElement;
+      const buttonEl = fixture.debugElement.query(By.css('button'))!
+        .nativeElement as HTMLButtonElement;
       buttonEl.click();
 
       // effectiveDisabled = disabled || loading → native disabled prevents click
@@ -639,7 +644,8 @@ describe('PaButton', () => {
       host.size = 'lg';
       fixture.detectChanges();
 
-      const buttonEl = fixture.debugElement.query(By.css('button'))!.nativeElement as HTMLButtonElement;
+      const buttonEl = fixture.debugElement.query(By.css('button'))!
+        .nativeElement as HTMLButtonElement;
       expect(buttonEl.classList.contains('pa-button--lg')).toBe(true);
     });
   });
