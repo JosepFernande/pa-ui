@@ -1,0 +1,10 @@
+{
+  "plugins": ["./tools/stylelint/pa-ui-rules/dist/index.js"],
+  "rules": {
+    "pa-ui/pa-prefix-selector": true,
+    "pa-ui/no-hardcoded-colors": true,
+    "pa-ui/no-hardcoded-spacing-radius": true,
+    "pa-ui/no-ng-deep-host-context": true,
+    "pa-ui/no-important-outside-host": true
+  }
+}
