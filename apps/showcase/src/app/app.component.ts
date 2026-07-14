@@ -4,6 +4,7 @@ import { PaUiComponent } from 'pa-ui';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [RouterOutlet, PaUiComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
