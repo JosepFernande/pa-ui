@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'pa-pa-ui',
-  imports: [CommonModule],
+  standalone: true,
   templateUrl: './pa-ui.component.html',
-  styleUrl: './pa-ui.component.scss',
+  styleUrl: './pa-ui.component.css',
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaUiComponent {}
