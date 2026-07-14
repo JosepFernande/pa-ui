@@ -7,7 +7,7 @@ function workspaceRoot(): string {
 }
 
 function distDir(): string {
-  return path.resolve(workspaceRoot(), 'dist', 'libs', 'pa-ui');
+  return path.resolve(workspaceRoot(), 'dist', 'libs', 'core');
 }
 
 function readJson(filePath: string): Record<string, unknown> {
@@ -15,22 +15,19 @@ function readJson(filePath: string): Record<string, unknown> {
 }
 
 describe('Build-output verification', () => {
-  beforeAll(
-    () => {
-      const dist = distDir();
-      if (fs.existsSync(dist)) {
-        fs.rmSync(dist, { recursive: true, force: true });
-      }
-      execSync('nx build pa-ui --configuration=production', {
-        stdio: 'inherit',
-        cwd: workspaceRoot(),
-      });
-    },
-    120_000
-  );
+  beforeAll(() => {
+    const dist = distDir();
+    if (fs.existsSync(dist)) {
+      fs.rmSync(dist, { recursive: true, force: true });
+    }
+    execSync('nx build core --configuration=production', {
+      stdio: 'inherit',
+      cwd: workspaceRoot(),
+    });
+  }, 120_000);
 
   describe('dist shape', () => {
-    it('dist/libs/pa-ui/package.json exists', () => {
+    it('dist/libs/core/package.json exists', () => {
       const pkgPath = path.resolve(distDir(), 'package.json');
       expect(fs.existsSync(pkgPath)).toBe(true);
     });
@@ -52,8 +49,8 @@ describe('Build-output verification', () => {
       expect(peers['@angular/forms']).toBeDefined();
     });
 
-    it('fesm2022/pa-ui.mjs exists', () => {
-      const mjsPath = path.resolve(distDir(), 'fesm2022', 'pa-ui.mjs');
+    it('fesm2022/pa-ui-core.mjs exists', () => {
+      const mjsPath = path.resolve(distDir(), 'fesm2022', 'pa-ui-core.mjs');
       expect(fs.existsSync(mjsPath)).toBe(true);
     });
 
@@ -65,14 +62,14 @@ describe('Build-output verification', () => {
 
   describe('tree-shaking proxy', () => {
     it('fesm2022 bundle does not import @angular/cdk', () => {
-      const mjsPath = path.resolve(distDir(), 'fesm2022', 'pa-ui.mjs');
+      const mjsPath = path.resolve(distDir(), 'fesm2022', 'pa-ui-core.mjs');
       const content = fs.readFileSync(mjsPath, 'utf-8');
       expect(content).not.toContain("from '@angular/cdk'");
       expect(content).not.toContain('from "@angular/cdk"');
     });
 
     it('fesm2022 bundle does not import @angular/forms', () => {
-      const mjsPath = path.resolve(distDir(), 'fesm2022', 'pa-ui.mjs');
+      const mjsPath = path.resolve(distDir(), 'fesm2022', 'pa-ui-core.mjs');
       const content = fs.readFileSync(mjsPath, 'utf-8');
       expect(content).not.toContain("from '@angular/forms'");
       expect(content).not.toContain('from "@angular/forms"');

@@ -42,16 +42,13 @@
       ]
     },
     {
-      "path": "libs/pa-ui/src/lib/pa-ui/pa-ui.component.ts",
+      "path": "libs/core/src/lib/pa-ui/pa-ui.component.ts",
       "selector": "pa-pa-ui",
       "encapsulation": "None",
       "tokens": []
     }
   ],
-  "selectors": [
-    "button[pa-button]",
-    "pa-pa-ui"
-  ],
+  "selectors": ["button[pa-button]", "pa-pa-ui"],
   "violations": [],
   "status": "pass"
 }

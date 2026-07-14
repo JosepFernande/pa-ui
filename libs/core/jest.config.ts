@@ -1,8 +1,8 @@
 export default {
-  displayName: 'pa-ui',
+  displayName: 'core',
   preset: '../../jest.preset.cjs',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../coverage/libs/pa-ui',
+  coverageDirectory: '../../coverage/libs/core',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

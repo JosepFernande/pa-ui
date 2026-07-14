@@ -27,9 +27,7 @@ describe('PaUiComponent', () => {
   describe('architectural compliance', () => {
     function getComponentAnnotation(): Record<string, unknown> | undefined {
       const annotations = reflection.annotations(PaUiComponent);
-      return annotations.find(
-        (a: Record<string, unknown>) => a['selector'] !== undefined,
-      );
+      return annotations.find((a: Record<string, unknown>) => a['selector'] !== undefined);
     }
 
     it('should be standalone', () => {
@@ -47,9 +45,7 @@ describe('PaUiComponent', () => {
     it('should use ChangeDetectionStrategy.OnPush', () => {
       const annotation = getComponentAnnotation();
       expect(annotation).toBeDefined();
-      expect(annotation!['changeDetection']).toBe(
-        ChangeDetectionStrategy.OnPush,
-      );
+      expect(annotation!['changeDetection']).toBe(ChangeDetectionStrategy.OnPush);
     });
 
     it('should use .css styleUrl, not .scss', () => {

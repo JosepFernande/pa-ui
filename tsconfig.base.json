@@ -16,8 +16,7 @@
       "@pa-ui/styles": ["libs/styles/src/index.ts"],
       "@pa-ui/themes": ["libs/themes/src/index.ts"],
       "@pa-ui/tokens": ["libs/tokens/src/index.ts"],
-      "@pa-ui/utils": ["libs/utils/src/index.ts"],
-      "pa-ui": ["libs/pa-ui/src/index.ts"]
+      "@pa-ui/utils": ["libs/utils/src/index.ts"]
     }
   }
 }
