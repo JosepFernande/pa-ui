@@ -46,6 +46,23 @@ jobs:
           key: nx-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
       - run: npx nx run-many -t lint
 
+  stylelint:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+      - run: npm ci
+      - name: Restore Nx cache
+        uses: actions/cache@v4
+        with:
+          path: .nx/cache
+          key: nx-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+      - run: npx nx run-many -t stylelint
+
   test:
     needs: setup
     runs-on: ubuntu-latest
@@ -140,13 +157,14 @@ jobs:
         run: gga run --pr-mode --ci
 
   summary:
-    needs: [lint, test, build, audit, gga-review]
+    needs: [lint, stylelint, test, build, audit, gga-review]
     if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Check all required jobs passed
         run: |
           if [[ "${{ needs.lint.result }}" != "success" || \
+                "${{ needs.stylelint.result }}" != "success" || \
                 "${{ needs.test.result }}" != "success" || \
                 "${{ needs.build.result }}" != "success" || \
                 "${{ needs.audit.result }}" != "success" ]]; then

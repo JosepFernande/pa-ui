@@ -143,10 +143,10 @@
 /* Visually hidden but accessible to screen readers */
 .pa-button__label--hidden {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  width: var(--pa-button-sr-only-width, 1px);
+  height: var(--pa-button-sr-only-height, 1px);
   padding: 0;
-  margin: -1px;
+  margin: var(--pa-button-sr-only-margin, -1px);
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
