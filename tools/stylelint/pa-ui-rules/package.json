@@ -1,0 +1,16 @@
+{
+  "name": "@pa-ui/stylelint-plugin",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest --config jest.config.mjs"
+  },
+  "devDependencies": {
+    "stylelint": "^17.0.0",
+    "typescript": "~5.7.0"
+  }
+}
