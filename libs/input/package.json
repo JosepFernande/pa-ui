@@ -1,0 +1,10 @@
+{
+  "name": "@pa-ui/input",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/core": "^19.0.0",
+    "@angular/forms": "^19.0.0",
+    "@angular/cdk": "^19.0.0"
+  },
+  "sideEffects": false
+}
