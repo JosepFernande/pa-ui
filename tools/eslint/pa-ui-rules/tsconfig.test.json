@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "baseUrl": "../../..",
+    "paths": {
+      "@typescript-eslint/rule-tester": ["node_modules/@typescript-eslint/rule-tester/dist/index.d.ts"]
+    }
+  },
+  "include": ["src/**/*.ts"]
+}
