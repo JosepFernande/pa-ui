@@ -1,10 +1,34 @@
 {
   "name": "@pa-ui/button",
   "version": "0.0.1",
+  "license": "MIT",
+  "description": "Accessible, token-driven Angular 19 button component",
+  "keywords": [
+    "angular",
+    "angular19",
+    "ui-library",
+    "pa-ui",
+    "button",
+    "accessible"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JosepFernande/pa-ui",
+    "directory": "libs/button"
+  },
+  "bugs": {
+    "url": "https://github.com/JosepFernande/pa-ui/issues"
+  },
+  "homepage": "https://github.com/JosepFernande/pa-ui#readme",
+  "author": "JosepFernande",
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "@angular/common": "^19.2.0",
     "@angular/core": "^19.2.0",
     "@angular/cdk": "^19.2.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "type": "module"
 }

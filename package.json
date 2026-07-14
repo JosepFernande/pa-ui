@@ -13,6 +13,7 @@
     "lint": "nx lint",
     "lint:css": "npx nx run-many -t stylelint",
     "changeset": "changeset",
+    "tree-shaking": "source-map-explorer 'dist/libs/core/fesm2022/**/*.mjs'",
     "prepare": "husky"
   },
   "private": true,
@@ -70,6 +71,7 @@
     "postcss": "^8.4.5",
     "postcss-url": "~10.1.3",
     "prettier": "^3.8.4",
+    "source-map-explorer": "^2.5.3",
     "stylelint": "^17.14.0",
     "ts-jest": "^29.1.0",
     "ts-node": "10.9.1",

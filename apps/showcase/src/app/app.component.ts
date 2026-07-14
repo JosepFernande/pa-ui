@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { PaUiComponent } from 'pa-ui';
+import { PaUiComponent } from '@pa-ui/core';
 
 @Component({
   selector: 'app-root',

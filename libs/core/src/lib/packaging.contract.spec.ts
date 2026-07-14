@@ -11,7 +11,7 @@ function readJson(filePath: string): Record<string, unknown> {
 
 describe('Packaging contract — source-level', () => {
   describe('public-api.ts barrel', () => {
-    it('exists at libs/pa-ui/src/public-api.ts', () => {
+    it('exists at libs/core/src/public-api.ts', () => {
       const publicApi = path.resolve(libRoot(), 'src', 'public-api.ts');
       expect(fs.existsSync(publicApi)).toBe(true);
     });
