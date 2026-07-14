@@ -1,9 +1,12 @@
 // Root ESLint flat config for pa-ui
-// Extends typescript-eslint + @nx/eslint-plugin, adds pa-ui module boundary rules
-// and the pa-ui custom rules (placeholder for now — to be implemented).
+// Extends typescript-eslint + @nx/eslint-plugin + angular-eslint + pa-ui custom rules
+// eslint-config-prettier applied as last override to disable conflicting formatting rules.
 
 import tseslint from 'typescript-eslint';
 import nx from '@nx/eslint-plugin';
+import angularEslint from 'angular-eslint';
+import paUi from './tools/eslint/pa-ui-rules/dist/index.js';
+import eslintConfigPrettier from 'eslint-config-prettier/flat';
 
 export default tseslint.config(
   {
@@ -21,6 +24,7 @@ export default tseslint.config(
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
     plugins: {
       '@nx': nx,
+      'pa-ui': paUi,
     },
     rules: {
       // Nx module boundaries — the architecture contract is enforced here.
@@ -54,6 +58,11 @@ export default tseslint.config(
           ],
         },
       ],
+
+      // pa-ui custom ESLint rules — architecture enforcement
+      'pa-ui/require-view-encapsulation-none': 'error',
+      'pa-ui/no-color-literal-union': 'error',
+      'pa-ui/max-component-lines': 'error',
     },
   },
   // Base TypeScript rules — applied to all TS files except generated/config.
@@ -64,4 +73,24 @@ export default tseslint.config(
       '@typescript-eslint/no-empty-object-type': 'warn',
     },
   },
+  // Angular ESLint integration — use the angular-eslint TS plugin
+  {
+    plugins: {
+      '@angular-eslint': angularEslint.tsPlugin,
+    },
+    rules: {
+      '@angular-eslint/component-class-suffix': 'off',
+      '@angular-eslint/contextual-lifecycle': 'error',
+      '@angular-eslint/directive-class-suffix': 'error',
+      '@angular-eslint/no-empty-lifecycle-method': 'error',
+      '@angular-eslint/no-input-rename': 'error',
+      '@angular-eslint/no-output-native': 'error',
+      '@angular-eslint/no-output-rename': 'error',
+      '@angular-eslint/prefer-output-readonly': 'error',
+      '@angular-eslint/use-component-selector': 'error',
+      '@angular-eslint/use-lifecycle-interface': 'warn',
+    },
+  },
+  // eslint-config-prettier — MUST be last to disable conflicting ESLint formatting rules
+  eslintConfigPrettier,
 );

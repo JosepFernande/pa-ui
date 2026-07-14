@@ -29,4 +29,8 @@ export const PA_BUTTON_TOKENS = {
   spinnerSize: '--pa-button-spinner-size',
   spinnerBorder: '--pa-button-spinner-border',
   spinnerDuration: '--pa-button-spinner-duration',
+  /** Visually-hidden screen reader only — width, height, and margin tokens */
+  srOnlyWidth: '--pa-button-sr-only-width',
+  srOnlyHeight: '--pa-button-sr-only-height',
+  srOnlyMargin: '--pa-button-sr-only-margin',
 } as const;

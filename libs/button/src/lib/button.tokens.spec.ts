@@ -42,6 +42,9 @@ describe('Button Tokens', () => {
       'spinnerSize',
       'spinnerBorder',
       'spinnerDuration',
+      'srOnlyWidth',
+      'srOnlyHeight',
+      'srOnlyMargin',
     ];
 
     for (const key of required) {

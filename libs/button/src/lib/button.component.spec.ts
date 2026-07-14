@@ -1,4 +1,4 @@
-import { Component, DebugElement } from '@angular/core';
+import { Component, DebugElement, ViewEncapsulation } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
@@ -30,8 +30,10 @@ declare global {
  * matching real consumer usage with `<button pa-button>`.
  */
 @Component({
+  selector: 'app-test-host',
   standalone: true,
   imports: [PaButton],
+  encapsulation: ViewEncapsulation.None,
   template: `
     <button
       pa-button
