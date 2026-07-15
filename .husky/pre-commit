@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 # ======== GGA START ========
-gga run || exit 1
+if command -v gga >/dev/null 2>&1; then
+  gga run || exit 1
+fi
 # ======== GGA END ========
 
 npx lint-staged
