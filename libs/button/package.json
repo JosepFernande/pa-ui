@@ -1,6 +1,6 @@
 {
   "name": "@pa-ui/button",
-  "version": "0.0.1",
+  "version": "19.0.0-alpha.0",
   "license": "MIT",
   "description": "Accessible, token-driven Angular 19 button component",
   "keywords": [
