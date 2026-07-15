@@ -2,6 +2,9 @@
   "name": "pa-ui",
   "version": "0.0.0",
   "type": "module",
+  "workspaces": [
+    "libs/*"
+  ],
   "scripts": {
     "ng": "ng",
     "start": "nx serve",

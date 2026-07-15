@@ -1,6 +1,6 @@
 {
   "name": "@pa-ui/input",
-  "version": "0.0.1",
+  "version": "19.0.0-alpha.0",
   "license": "MIT",
   "description": "Accessible, token-driven Angular 19 input component with forms integration",
   "keywords": [
