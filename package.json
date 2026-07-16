@@ -17,7 +17,7 @@
     "lint:css": "npx nx run-many -t stylelint",
     "changeset": "changeset",
     "tree-shaking": "source-map-explorer 'dist/libs/core/fesm2022/**/*.mjs'",
-    "prepare": "husky"
+    "prepare": "([ -n \"$CI\" ] && echo \"Skipping husky in CI\") || husky"
   },
   "private": true,
   "dependencies": {
