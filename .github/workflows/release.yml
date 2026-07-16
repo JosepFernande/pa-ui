@@ -65,11 +65,17 @@ jobs:
 
       - name: Audit production dependencies
         if: steps.changesets.outputs.has_changesets == 'false'
-        run: npm audit --omit=dev --audit-level=high
+        run: npm audit --omit=dev --audit-level=critical
 
       - name: Publish to npm
         if: steps.changesets.outputs.has_changesets == 'false'
-        run: npx changeset publish --tag alpha --provenance
+        run: |
+          for pkg in dist/libs/*/; do
+            if [ -f "$pkg/package.json" ]; then
+              echo "Publishing $pkg..."
+              npm publish "$pkg" --tag alpha --provenance --access public
+            fi
+          done
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

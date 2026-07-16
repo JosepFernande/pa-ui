@@ -7,7 +7,5 @@
     "@pa-ui/core": "19.0.0-alpha.0",
     "@pa-ui/input": "19.0.0-alpha.0"
   },
-  "changesets": [
-    "alpha-release"
-  ]
+  "changesets": []
 }
