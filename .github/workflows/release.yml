@@ -67,21 +67,9 @@ jobs:
         if: steps.changesets.outputs.has_changesets == 'false'
         run: npm audit --omit=dev --audit-level=critical
 
-      - name: Publish to npm
+      - name: Publish to npm with changeset
         if: steps.changesets.outputs.has_changesets == 'false'
-        run: |
-          for pkg in dist/libs/*/; do
-            if [ -f "$pkg/package.json" ]; then
-              name=$(node -p "require('./$pkg/package.json').name")
-              version=$(node -p "require('./$pkg/package.json').version")
-              if npm view "$name@$version" version &>/dev/null; then
-                echo "Skipping $name@$version (already published)"
-              else
-                echo "Publishing $pkg..."
-                npm publish "$pkg" --tag alpha --provenance --access public
-              fi
-            fi
-          done
+        run: npx changeset publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
