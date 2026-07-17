@@ -2,7 +2,7 @@
   "mode": "pre",
   "tag": "alpha",
   "initialVersions": {
-    "@pa-ui": "19.0.1-alpha.0",
+    "@pa-ui/angular": "19.0.1-alpha.0",
     "@pa-ui/button": "19.0.1-alpha.0",
     "@pa-ui/core": "19.0.1-alpha.0",
     "@pa-ui/input": "19.0.1-alpha.0"

@@ -1,5 +1,5 @@
 {
-  "name": "@pa-ui",
+  "name": "@pa-ui/angular",
   "version": "19.0.1-alpha.0",
   "license": "MIT",
   "description": "Accessible, token-driven Angular 19 UI component library — umbrella package",

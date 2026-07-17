@@ -28,8 +28,8 @@ describe('Umbrella packaging contract — source-level', () => {
   describe('package.json', () => {
     const pkg = readJson(path.resolve(libRoot(), 'package.json'));
 
-    it('name is @pa-ui', () => {
-      expect(pkg['name']).toBe('@pa-ui');
+    it('name is @pa-ui/angular', () => {
+      expect(pkg['name']).toBe('@pa-ui/angular');
     });
 
     it('sideEffects is set to false', () => {
