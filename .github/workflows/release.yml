@@ -68,13 +68,26 @@ jobs:
         run: npm audit --omit=dev --audit-level=critical
 
       - name: Publish to npm with changeset
+        id: publish
         if: steps.changesets.outputs.has_changesets == 'false'
-        run: npx changeset publish
+        run: |
+          before_tags="$(git tag --list | sort)"
+          set +e
+          npx changeset publish
+          publish_exit=$?
+          set -e
+          after_tags="$(git tag --list | sort)"
+          if [ "$before_tags" != "$after_tags" ]; then
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          fi
+          exit "$publish_exit"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create release tag
-        if: steps.changesets.outputs.has_changesets == 'false'
+        if: steps.publish.outputs.published == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -84,7 +97,7 @@ jobs:
           echo "TAG=$TAG" >> $GITHUB_ENV
 
       - name: Create GitHub Release
-        if: steps.changesets.outputs.has_changesets == 'false'
+        if: steps.publish.outputs.published == 'true'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.TAG }}
