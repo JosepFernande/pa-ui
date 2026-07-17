@@ -72,8 +72,14 @@ jobs:
         run: |
           for pkg in dist/libs/*/; do
             if [ -f "$pkg/package.json" ]; then
-              echo "Publishing $pkg..."
-              npm publish "$pkg" --tag alpha --provenance --access public
+              name=$(node -p "require('./$pkg/package.json').name")
+              version=$(node -p "require('./$pkg/package.json').version")
+              if npm view "$name@$version" version &>/dev/null; then
+                echo "Skipping $name@$version (already published)"
+              else
+                echo "Publishing $pkg..."
+                npm publish "$pkg" --tag alpha --provenance --access public
+              fi
             fi
           done
         env:

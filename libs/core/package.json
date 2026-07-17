@@ -1,6 +1,6 @@
 {
   "name": "@pa-ui/core",
-  "version": "19.0.0-alpha.0",
+  "version": "19.0.1-alpha.0",
   "license": "MIT",
   "description": "Accessible, token-driven Angular 19 UI component library with Theme Engine",
   "keywords": [
@@ -30,7 +30,7 @@
     "@angular/core": "^19.2.0",
     "@angular/cdk": "^19.2.0",
     "@angular/forms": "^19.2.0",
-    "@pa-ui/button": "19.0.0-alpha.0"
+    "@pa-ui/button": "19.0.1-alpha.0"
   },
   "sideEffects": false,
   "type": "module"
