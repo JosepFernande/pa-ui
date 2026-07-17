@@ -1,4 +1,4 @@
-# @pa-ui/input
+# @pa-ui/angular
 
 ## 19.1.0-alpha.1
 
@@ -16,9 +16,5 @@
 
 - Updated dependencies [20a9d22]
   - @pa-ui/core@19.1.0-alpha.1
-
-## 19.0.0-alpha.0
-
-### Minor Changes
-
-- 0ed71ab: Initial alpha release of pa-ui component library
+  - @pa-ui/button@19.1.0-alpha.1
+  - @pa-ui/input@19.1.0-alpha.1
