@@ -49,6 +49,12 @@ describe('Build-output verification', () => {
       expect(peers['@angular/forms']).toBeDefined();
     });
 
+    it('dist package.json peerDependencies does NOT include @pa-ui/button', () => {
+      const pkg = readJson(path.resolve(distDir(), 'package.json'));
+      const peers = pkg['peerDependencies'] as Record<string, string>;
+      expect(peers['@pa-ui/button']).toBeUndefined();
+    });
+
     it('fesm2022/pa-ui-core.mjs exists', () => {
       const mjsPath = path.resolve(distDir(), 'fesm2022', 'pa-ui-core.mjs');
       expect(fs.existsSync(mjsPath)).toBe(true);

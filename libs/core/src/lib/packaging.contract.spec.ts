@@ -44,18 +44,28 @@ describe('Packaging contract — source-level', () => {
       expect(peers!['@angular/forms']).toBeDefined();
     });
 
-    it('peerDependencies includes @pa-ui/button', () => {
+    it('name is @pa-ui/core (public package)', () => {
+      expect(pkg['name']).toBe('@pa-ui/core');
+    });
+
+    it('does NOT include @pa-ui/button in peerDependencies', () => {
       const peers = pkg['peerDependencies'] as Record<string, string> | undefined;
       expect(peers).toBeDefined();
-      expect(peers!['@pa-ui/button']).toBeDefined();
+      expect(peers!['@pa-ui/button']).toBeUndefined();
     });
   });
 
-  describe('umbrella re-exports', () => {
-    it('public-api.ts re-exports from @pa-ui/button', () => {
+  describe('public-api exports', () => {
+    it('public-api.ts does NOT re-export from @pa-ui/button', () => {
       const publicApiPath = path.resolve(libRoot(), 'src', 'public-api.ts');
       const content = fs.readFileSync(publicApiPath, 'utf-8');
-      expect(content).toContain("export * from '@pa-ui/button'");
+      expect(content).not.toContain("export * from '@pa-ui/button'");
+    });
+
+    it('public-api.ts exports PaUiComponent', () => {
+      const publicApiPath = path.resolve(libRoot(), 'src', 'public-api.ts');
+      const content = fs.readFileSync(publicApiPath, 'utf-8');
+      expect(content).toContain('PaUiComponent');
     });
   });
 });

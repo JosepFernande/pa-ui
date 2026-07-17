@@ -9,6 +9,7 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@pa-ui": ["libs/pa-ui/src/index.ts"],
       "@pa-ui/button": ["libs/button/src/index.ts"],
       "@pa-ui/core": ["libs/core/src/index.ts"],
       "@pa-ui/input": ["libs/input/src/index.ts"],

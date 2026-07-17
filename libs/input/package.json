@@ -25,6 +25,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "dependencies": {
+    "@pa-ui/core": "19.0.1-alpha.0"
+  },
   "peerDependencies": {
     "@angular/core": "^19.2.0",
     "@angular/forms": "^19.2.0",
