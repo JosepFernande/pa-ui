@@ -1,6 +1,6 @@
 # Ejemplos de Uso
 
-## Ejemplo 1: Revisar historia existente (caso común - todo fresco)
+## Ejemplo 1: Revisar issue existente (caso común - todo fresco)
 
 ### Input del usuario
 
@@ -11,14 +11,14 @@ revisar US-11
 ### Flujo de ejecución
 
 ```
-[Skill] Iniciando revisión de US-11...
+[Skill] Iniciando revisión de US-11 (issue #11)...
 
-[1/9] Leyendo historia desde Notion...
-  → retrieve-a-page(38380bf9-7f94-8182-b0d2-ea54d03720be)
+[1/9] Leyendo issue desde GitHub...
+  → gh issue view 11 --json title,body,labels,comments
   → Título: "Theme Engine extensible basado en tokens"
-  → Criterios: 11 criterios encontrados
+  → Criterios: 11 criterios encontrados en el body
 
-[2/9] Determinando tema de la historia...
+[2/9] Determinando tema del issue...
   → Keywords extraídas: "Theme Engine", "providePaTheme", "colores", "tokens"
   → Tema: Theming, tokens, colores personalizados
 
@@ -43,10 +43,10 @@ revisar US-11
 
 [6/9] Cargando contenido desde cache...
   → mem_get_observation para cada documento
-  → 3 documentos cargados desde Engram (0 API calls adicionales)
+  → 3 documentos cargados desde Engram (0 API calls adicionales a Notion)
 
-[7/9] Analizando historia contra documentación...
-  → Comparando criterios de US-11 vs documentación:
+[7/9] Analizando issue contra documentación...
+  → Comparando criterios del issue #11 vs documentación:
     ✓ Theme Engine centralizado en core/theme
     ✓ providePaTheme() expuesto
     ✓ Default theme funcional
@@ -62,35 +62,35 @@ revisar US-11
   → Criterios propuestos: 22
   → Cambios: agregar estructura de archivos, algoritmo HSL, ThemeService, SSR, normalización
 
-[9/9] Actualizando historia en Notion...
-  → patch-page con nuevos criterios
+[9/9] Actualizando issue en GitHub...
+  → gh issue edit 11 --body "<body actualizado con 22 criterios>"
   → Actualización exitosa
 
 [Resumen]
-  ✓ Historia US-11 revisada y actualizada
+  ✓ Issue #11 (US-11) revisado y actualizado en GitHub
   ✓ Documentos consultados: 3 (todos desde cache)
-  ✓ API calls: 4 (1 historia + 3 validaciones)
+  ✓ API calls a Notion: 3 (solo validaciones de frescura)
   ✓ Tokens usados: ~2500
   ✓ Tokens ahorrados vs. leer siempre: ~3500 (58%)
   ✓ Gaps encontrados: 5
   ✓ Criterios agregados: 11
 ```
 
-## Ejemplo 2: Revisar historia con documento obsoleto
+## Ejemplo 2: Revisar issue con documento de referencia obsoleto
 
 ### Input del usuario
 
 ```
-revisar US-8
+revisar issue #8
 ```
 
 ### Flujo de ejecución
 
 ```
-[Skill] Iniciando revisión de US-8...
+[Skill] Iniciando revisión del issue #8...
 
-[1/9] Leyendo historia desde Notion...
-  → retrieve-a-page(36180bf9-7f94-816b-83d6-d55425ec4a10)
+[1/9] Leyendo issue desde GitHub...
+  → gh issue view 8 --json title,body,labels,comments
   → Título: "Configurar ESLint y Prettier para DX consistente"
 
 [2/9] Determinando tema...
@@ -125,7 +125,7 @@ revisar US-8
 [7/9] Cargando contenido...
   → 4 documentos cargados (1 desde Notion, 3 desde cache)
 
-[8/9] Analizando historia...
+[8/9] Analizando issue...
   → Gaps encontrados:
     ✗ Falta: Stylelint con custom rules
     ✗ Falta: ESLint custom rules (ViewEncapsulation.None, color string, 400 líneas)
@@ -133,32 +133,32 @@ revisar US-8
     ✗ Falta: CI falla build si reglas fallan
   → Gaps encontrados: 4
 
-[9/9] Actualizando historia...
-  → patch-page con nuevos criterios
+[9/9] Actualizando issue...
+  → gh issue edit 8 --body "<body actualizado con 9 criterios>"
   → Actualización exitosa
 
 [Resumen]
-  ✓ Historia US-8 revisada y actualizada
+  ✓ Issue #8 revisado y actualizado en GitHub
   ✓ Documentos consultados: 4 (3 desde cache, 1 re-leído)
-  ✓ API calls: 6 (1 historia + 4 validaciones + 1 re-lectura)
+  ✓ API calls a Notion: 5 (4 validaciones + 1 re-lectura)
   ✓ Tokens usados: ~3200
   ✓ Tokens ahorrados vs. leer siempre: ~2800 (47%)
   ✓ Gaps encontrados: 4
   ✓ Criterios agregados: 9
 ```
 
-## Ejemplo 3: Crear nueva historia
+## Ejemplo 3: Crear nuevo issue
 
 ### Input del usuario
 
 ```
-crear historia de usuario para componente Avatar
+crear issue para componente Avatar
 ```
 
 ### Flujo de ejecución
 
 ```
-[Skill] Iniciando creación de historia para Avatar...
+[Skill] Iniciando creación de issue para Avatar...
 
 [1/5] Recopilando requisitos...
   → Usuario: "componente Avatar con imagen, iniciales, tamaños y colores dinámicos"
@@ -171,8 +171,8 @@ crear historia de usuario para componente Avatar
     - "Theming Deep-Dive" (colores dinámicos)
   → Todos frescos, cargados desde cache
 
-[3/5] Generando historia alineada...
-  → Analizando patrones de US-4 (Button) y US-6 (Badge)
+[3/5] Generando body del issue alineado con documentación...
+  → Analizando patrones de issues previos (Button, Badge)
   → Generando criterios basados en arquitectura:
     - Input color (string, abierto — Theme Engine)
     - Input size (sm | md | lg)
@@ -186,32 +186,28 @@ crear historia de usuario para componente Avatar
     - Tipado sin any
     - Archivo bajo 400 líneas
 
-[4/5] Creando en Notion...
-  → post-page en database de User Stories
-  → Título: "Crear componente Avatar"
+[4/5] Creando issue en GitHub...
+  → gh issue create --title "Crear componente Avatar" --label "component,enhancement" --body "..."
   → Como: "developer que usa la librería"
   → Quiero: "un componente Avatar con soporte para imagen, iniciales, tamaños y colores dinámicos vía Theme Engine"
   → Para: "mostrar avatares de usuarios de forma consistente sin CSS custom"
   → Criterios: 11 criterios
-  → Prioridad: Media
-  → Puntos: 3
-  → Fase: Fase 1
-  → Creación exitosa: US-15
+  → Creación exitosa: issue #15
 
 [5/5] Guardando learnings...
   → mem_save con decisión de diseño
-  → topic_key: "user-story/15/analysis"
+  → topic_key: "github-issue/15/analysis"
 
 [Resumen]
-  ✓ Historia US-15 creada exitosamente
-  ✓ Alineada con: Architecture Foundation, CSS Strategy, Theming Deep-Dive
+  ✓ Issue #15 creado exitosamente en GitHub
+  ✓ Alineado con: Architecture Foundation, CSS Strategy, Theming Deep-Dive
   ✓ Documentos consultados: 3 (todos desde cache)
-  ✓ API calls: 1 (solo creación)
+  ✓ API calls a Notion: 0 (documentación 100% desde cache)
   ✓ Tokens usados: ~1800
   ✓ Criterios generados: 11
 ```
 
-## Ejemplo 4: Primera ejecución (sin cache)
+## Ejemplo 4: Primera ejecución (sin cache de documentación)
 
 ### Input del usuario
 
@@ -222,37 +218,37 @@ revisar US-4
 ### Flujo de ejecución (primera vez)
 
 ```
-[Skill] Iniciando revisión de US-4...
-[Skill] Índice no encontrado en Engram. Ejecutando sincronización inicial...
+[Skill] Iniciando revisión de US-4 (issue #4)...
+[Skill] Índice de documentación no encontrado en Engram. Ejecutando sincronización inicial...
 
-[SYNC] Sincronizando documentos de Notion...
+[SYNC] Sincronizando documentos de referencia de Notion...
   → Leyendo lista de documentos desde Notion...
   → 17 documentos encontrados
-  
+
   [1/17] Architecture & Foundation...
     → retrieve-page-markdown... 12500 caracteres
     → Generando tags... 8 tags
     → Guardando en Engram...
-  
+
   [2/17] CSS Strategy & View Encapsulation...
     → retrieve-page-markdown... 15000 caracteres
     → Generando tags... 10 tags
     → Guardando en Engram...
-  
+
   ... (15 documentos más) ...
-  
+
   [17/17] AI Code Review with gga...
     → retrieve-page-markdown... 3000 caracteres
     → Generando tags... 5 tags
     → Guardando en Engram...
-  
+
   → Guardando índice en Engram...
   → Sincronización completada: 17 documentos, 120 tags generados
 
-[Skill] Continuando con revisión de US-4...
+[Skill] Continuando con revisión del issue #4...
 
-[1/9] Leyendo historia desde Notion...
-  → retrieve-a-page(36180bf9-7f94-8188-be74-d726b08c01d2)
+[1/9] Leyendo issue desde GitHub...
+  → gh issue view 4 --json title,body,labels,comments
   → Título: "Crear componente Button con variantes"
 
 [2/9] Determinando tema...
@@ -270,7 +266,7 @@ revisar US-4
 [6/9] Cargando contenido desde cache...
   → 3 documentos cargados desde Engram
 
-[7/9] Analizando historia...
+[7/9] Analizando issue...
   → Gaps encontrados:
     ✗ Confusión variante vs. color (primary es color, no variante)
     ✗ Falta input color como string abierto
@@ -283,14 +279,15 @@ revisar US-4
   → Cambios en "Quiero...": separar variantes (solid/outline/ghost) de colores (Theme Engine)
   → Cambios en criterios: agregar 5 criterios arquitectónicos
 
-[9/9] Actualizando historia...
-  → patch-page exitoso
+[9/9] Actualizando issue...
+  → gh issue edit 4 --body "<body actualizado>"
+  → Actualización exitosa
 
 [Resumen]
-  ✓ Historia US-4 revisada y actualizada
-  ✓ Sincronización inicial: 17 documentos (primera vez)
-  ✓ Documentos consultados: 3 (todos desde cache)
-  ✓ API calls: 38 (17×2 sincronización + 1 historia + 3 validaciones)
+  ✓ Issue #4 (US-4) revisado y actualizado en GitHub
+  ✓ Sincronización inicial de documentación: 17 documentos (primera vez)
+  ✓ Documentos consultados: 3 (todos desde cache tras el sync)
+  ✓ API calls a Notion: 34 (17×2 sincronización, 0 validaciones adicionales)
   ✓ Tokens usados: ~8500 (sincronización) + ~2000 (revisión) = ~10500
   ✓ Tokens ahorrados en futuras ejecuciones: ~60% por revisión
   ✓ Gaps encontrados: 5
@@ -324,7 +321,7 @@ revisar US-4
   → [4/17] Testing Strategy: FRESCO
   → ... (13 documentos más) ...
   → [17/17] AI Code Review: FRESCO
-  
+
   → Resultado: 1 documento obsoleto
 
 [3/3] Sincronizando documentos obsoletos...
@@ -338,19 +335,21 @@ revisar US-4
   ✓ Sincronización incremental completada
   ✓ Documentos validados: 17
   ✓ Documentos actualizados: 1
-  ✓ API calls: 18 (17 validaciones + 1 re-lectura)
+  ✓ API calls a Notion: 18 (17 validaciones + 1 re-lectura)
   ✓ Tiempo total: ~20 segundos
 ```
 
 ## Comparación de escenarios
 
-| Escenario | API calls | Tokens | Tiempo | Cache hit rate |
-|---|---|---|---|---|
-| Revisar historia (todo fresco) | 4-6 | ~2500 | 10-15s | 100% |
-| Revisar historia (1 doc obsoleto) | 6-9 | ~3200 | 15-25s | 75% |
-| Crear nueva historia | 1-4 | ~1800 | 5-10s | 100% |
-| Primera ejecución (sin cache) | 38+ | ~10500 | 60-90s | 0% → 100% |
-| Sincronización incremental (1 cambio) | 18 | ~4000 | 20s | 94% |
-| Sincronización completa (forzada) | 34 | ~8000 | 60s | 0% → 100% |
+| Escenario                             | API calls a Notion | Tokens | Tiempo | Cache hit rate |
+| ------------------------------------- | ------------------ | ------ | ------ | -------------- |
+| Revisar issue (todo fresco)           | 3-5                | ~2500  | 10-15s | 100%           |
+| Revisar issue (1 doc obsoleto)        | 5-8                | ~3200  | 15-25s | 75%            |
+| Crear nuevo issue                     | 0-3                | ~1800  | 5-10s  | 100%           |
+| Primera ejecución (sin cache)         | 34+                | ~10500 | 60-90s | 0% → 100%      |
+| Sincronización incremental (1 cambio) | 18                 | ~4000  | 20s    | 94%            |
+| Sincronización completa (forzada)     | 34                 | ~8000  | 60s    | 0% → 100%      |
 
-**Promedio de ahorro:** 60-80% menos tokens vs. leer siempre desde Notion
+**Promedio de ahorro:** 60-80% menos tokens vs. leer siempre desde Notion.
+Ninguna de estas operaciones escribe en Notion — la creación/actualización de
+issues ocurre exclusivamente vía `gh` CLI.
