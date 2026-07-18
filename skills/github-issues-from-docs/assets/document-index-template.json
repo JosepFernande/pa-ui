@@ -7,31 +7,75 @@
       "id": "35f80bf9-7f94-814a-96d6-ccb90055e545",
       "title": "Architecture & Foundation",
       "last_edited": null,
-      "tags": ["arquitectura", "tokens", "standalone", "signals", "css-variables", "cdk", "apis-consistentes", "monorepo", "nx"]
+      "tags": [
+        "arquitectura",
+        "tokens",
+        "standalone",
+        "signals",
+        "css-variables",
+        "cdk",
+        "apis-consistentes",
+        "monorepo",
+        "nx"
+      ]
     },
     {
       "id": "35f80bf9-7f94-8149-80a0-ede8a524fad9",
       "title": "CSS Strategy & View Encapsulation",
       "last_edited": null,
-      "tags": ["css", "view-encapsulation", "bem", "tokens", "theme-engine", "stylelint", "eslint", "custom-rules", "pa-prefix"]
+      "tags": [
+        "css",
+        "view-encapsulation",
+        "bem",
+        "tokens",
+        "theme-engine",
+        "stylelint",
+        "eslint",
+        "custom-rules",
+        "pa-prefix"
+      ]
     },
     {
       "id": "35f80bf9-7f94-818c-8821-d58a5dec897d",
       "title": "Versioning & Breaking Changes",
       "last_edited": null,
-      "tags": ["versioning", "semver", "conventional-commits", "changesets", "breaking-changes", "angular-alignment", "major-version"]
+      "tags": [
+        "versioning",
+        "semver",
+        "conventional-commits",
+        "changesets",
+        "breaking-changes",
+        "angular-alignment",
+        "major-version"
+      ]
     },
     {
       "id": "35f80bf9-7f94-815c-84f2-c8e280615a14",
       "title": "Testing Strategy",
       "last_edited": null,
-      "tags": ["testing", "jest", "testbed", "coverage", "unit-tests", "integration-tests", "visual-tests"]
+      "tags": [
+        "testing",
+        "jest",
+        "testbed",
+        "coverage",
+        "unit-tests",
+        "integration-tests",
+        "visual-tests"
+      ]
     },
     {
       "id": "35f80bf9-7f94-81f2-bfb6-f880540f44b0",
       "title": "ControlValueAccessor (CVA)",
       "last_edited": null,
-      "tags": ["cva", "forms", "reactive-forms", "template-forms", "ngModel", "FormControl", "form-integration"]
+      "tags": [
+        "cva",
+        "forms",
+        "reactive-forms",
+        "template-forms",
+        "ngModel",
+        "FormControl",
+        "form-integration"
+      ]
     },
     {
       "id": "38480bf9-7f94-819b-a53f-c134e4a12791",
@@ -43,13 +87,34 @@
       "id": "38480bf9-7f94-8147-9d93-c098b127f7dc",
       "title": "CI/CD Pipeline",
       "last_edited": null,
-      "tags": ["ci", "cd", "github-actions", "workflows", "release", "publish", "branch-protection", "husky", "pre-commit"]
+      "tags": [
+        "ci",
+        "cd",
+        "github-actions",
+        "workflows",
+        "release",
+        "publish",
+        "branch-protection",
+        "husky",
+        "pre-commit"
+      ]
     },
     {
       "id": "38480bf9-7f94-812c-8506-fcd10d91144e",
       "title": "Release & Publishing",
       "last_edited": null,
-      "tags": ["release", "publishing", "npm", "changesets", "trusted-publishing", "oidc", "provenance", "dist-tags", "alpha", "beta"]
+      "tags": [
+        "release",
+        "publishing",
+        "npm",
+        "changesets",
+        "trusted-publishing",
+        "oidc",
+        "provenance",
+        "dist-tags",
+        "alpha",
+        "beta"
+      ]
     },
     {
       "id": "38480bf9-7f94-811c-9be2-f61e6bfbe385",
@@ -61,7 +126,17 @@
       "id": "38480bf9-7f94-812c-a909-e1d7f457e8df",
       "title": "Theming Deep-Dive",
       "last_edited": null,
-      "tags": ["theme-engine", "providePaTheme", "ThemeService", "colores", "HSL", "SSR", "multi-tema", "derivacion", "normalizacion"]
+      "tags": [
+        "theme-engine",
+        "providePaTheme",
+        "ThemeService",
+        "colores",
+        "HSL",
+        "SSR",
+        "multi-tema",
+        "derivacion",
+        "normalizacion"
+      ]
     },
     {
       "id": "38480bf9-7f94-8135-83a1-f2af8d95d068",
@@ -73,7 +148,14 @@
       "id": "38480bf9-7f94-8128-9d61-c622586adaf6",
       "title": "Performance Budgets",
       "last_edited": null,
-      "tags": ["performance", "bundle-size", "tree-shaking", "lazy-loading", "budgets", "optimization"]
+      "tags": [
+        "performance",
+        "bundle-size",
+        "tree-shaking",
+        "lazy-loading",
+        "budgets",
+        "optimization"
+      ]
     },
     {
       "id": "38480bf9-7f94-8179-8025-d0c378a83fb5",

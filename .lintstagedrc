@@ -1,5 +1,5 @@
 {
   "*.ts": ["eslint --fix"],
   "libs/**/*.css": ["stylelint"],
-  "*": ["prettier --write --ignore-unknown"]
+  "!(.claude/**)": ["prettier --write --ignore-unknown"]
 }
