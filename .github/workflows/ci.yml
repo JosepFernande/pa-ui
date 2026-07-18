@@ -144,6 +144,9 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     continue-on-error: true
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -163,6 +166,12 @@ jobs:
       - name: Install gga
         run: |
           git clone --depth 1 https://github.com/Gentleman-Programming/gentleman-guardian-angel.git /tmp/gga
+          # Upstream caps the STATUS: PASSED/FAILED lookahead at 30 lines (bin/gga).
+          # The opencode agent's own tool-call transcript (skill loads, find/glob/
+          # read calls) routinely pushes the real verdict past that, so gga reports
+          # "Could not determine review status" on perfectly clear responses.
+          # Widen the window until upstream fixes the parser.
+          sed -i 's/parse_review_status "\$RESULT" 30/parse_review_status "$RESULT" 200/' /tmp/gga/bin/gga
           bash /tmp/gga/install.sh
           echo "$HOME/.local/bin" >> $GITHUB_PATH
       - name: Ensure base branch is fetched locally
@@ -174,10 +183,39 @@ jobs:
           git merge-base "${{ github.base_ref }}" HEAD
           git diff --name-only "${{ github.base_ref }}...HEAD"
       - name: Run gga PR review
+        id: gga_review
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_BASE_BRANCH: ${{ github.base_ref }}
-        run: gga run --pr-mode --ci
+        run: |
+          set +e
+          gga run --pr-mode --ci 2>&1 | tee /tmp/gga-review.log
+          exit_code="${PIPESTATUS[0]}"
+          set -e
+          echo "exit_code=$exit_code" >> "$GITHUB_OUTPUT"
+          exit "$exit_code"
+      - name: Comment gga review on PR
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          {
+            echo "### 🤖 Gentleman Guardian Angel — PR review"
+            echo ""
+            if [[ "${{ steps.gga_review.outputs.exit_code }}" == "0" ]]; then
+              echo "**Result:** ✅ PASSED"
+            else
+              echo "**Result:** ❌ FAILED (exit code ${{ steps.gga_review.outputs.exit_code }})"
+            fi
+            echo ""
+            echo "<details><summary>Full gga output</summary>"
+            echo ""
+            echo '```'
+            cat /tmp/gga-review.log
+            echo '```'
+            echo "</details>"
+          } > /tmp/gga-comment.md
+          gh pr comment "${{ github.event.pull_request.number }}" --body-file /tmp/gga-comment.md
 
   summary:
     needs: [lint, stylelint, test, build, audit, gga-review]
