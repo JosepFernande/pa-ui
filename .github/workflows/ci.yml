@@ -213,15 +213,9 @@ jobs:
             fi
             echo ""
             # Everything from the STATUS: line onward is the actual verdict —
-            # show it inline instead of burying it under the agent's tool-call trace.
+            # the setup banner and agent tool-call trace before it add no
+            # value here; they're still visible in the Actions job log.
             awk '/^STATUS:/{p=1; next} p' /tmp/gga-review.log
-            echo ""
-            echo "<details><summary>Full gga output (setup + agent trace)</summary>"
-            echo ""
-            echo '```'
-            cat /tmp/gga-review.log
-            echo '```'
-            echo "</details>"
           } > /tmp/gga-comment.md
           gh pr comment "${{ github.event.pull_request.number }}" --body-file /tmp/gga-comment.md
 
