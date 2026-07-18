@@ -33,6 +33,16 @@ describe('theme.tokens', () => {
         },
       });
     });
+
+    it('is frozen so importing it from the public API cannot corrupt the shared singleton', () => {
+      expect(Object.isFrozen(DEFAULT_THEME)).toBe(true);
+      expect(Object.isFrozen(DEFAULT_THEME.colors)).toBe(true);
+      expect(() => {
+        'use strict';
+        (DEFAULT_THEME.colors as Record<string, string>)['primary'] = 'mutated';
+      }).toThrow();
+      expect(DEFAULT_THEME.colors['primary']).toBe('#2563eb');
+    });
   });
 
   describe('PA_THEME_TOKEN', () => {

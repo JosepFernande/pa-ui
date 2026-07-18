@@ -11,6 +11,16 @@ import { DEFAULT_THEME, PA_THEME_STATE_KEY, PA_THEME_TOKEN } from './theme.token
 import type { PaThemeConfig, PaThemeOptions, ResolvedTheme } from './theme.tokens';
 
 /**
+ * Returns a frozen, independent copy of `theme` so the value provided under
+ * `PA_THEME_TOKEN` — read via `PaThemeService.theme()` and persisted into
+ * `TransferState` — can never be mutated by a consumer, regardless of how
+ * `mergeTheme()` or `TransferState.get()` produced it.
+ */
+function freezeSnapshot(theme: ResolvedTheme): ResolvedTheme {
+  return Object.freeze({ colors: Object.freeze({ ...theme.colors }) });
+}
+
+/**
  * Registers the pa-ui theme engine at application bootstrap
  * (Requirement: Bootstrap Registration).
  *
@@ -44,22 +54,22 @@ export function providePaTheme(
 
         try {
           if (isPlatformServer(platformId)) {
-            const snapshot = mergeTheme(config, options);
+            const snapshot = freezeSnapshot(mergeTheme(config, options));
             transferState.set(PA_THEME_STATE_KEY, snapshot);
             return snapshot;
           }
 
           if (transferState.hasKey(PA_THEME_STATE_KEY)) {
-            return transferState.get(PA_THEME_STATE_KEY, DEFAULT_THEME);
+            return freezeSnapshot(transferState.get(PA_THEME_STATE_KEY, DEFAULT_THEME));
           }
 
-          return mergeTheme(config, options);
+          return freezeSnapshot(mergeTheme(config, options));
         } catch (error) {
           console.warn(
             '[pa-ui] providePaTheme: failed to compute the theme snapshot, falling back to DEFAULT_THEME.',
             error,
           );
-          return { colors: { ...DEFAULT_THEME.colors } };
+          return freezeSnapshot(DEFAULT_THEME);
         }
       },
     },
