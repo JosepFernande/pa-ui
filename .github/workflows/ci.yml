@@ -199,6 +199,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Strip ANSI color/cursor codes — GitHub markdown renders them as
+          # garbled literal escape sequences instead of colors.
+          sed -i 's/\x1b\[[0-9;]*[mK]//g' /tmp/gga-review.log
+
           {
             echo "### 🤖 Gentleman Guardian Angel — PR review"
             echo ""
@@ -208,7 +212,11 @@ jobs:
               echo "**Result:** ❌ FAILED (exit code ${{ steps.gga_review.outputs.exit_code }})"
             fi
             echo ""
-            echo "<details><summary>Full gga output</summary>"
+            # Everything from the STATUS: line onward is the actual verdict —
+            # show it inline instead of burying it under the agent's tool-call trace.
+            awk '/^STATUS:/{p=1; next} p' /tmp/gga-review.log
+            echo ""
+            echo "<details><summary>Full gga output (setup + agent trace)</summary>"
             echo ""
             echo '```'
             cat /tmp/gga-review.log
