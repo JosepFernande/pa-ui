@@ -22,7 +22,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
         env:
-          HUSKY: "0"
+          HUSKY: '0'
       - name: Restore Nx cache
         uses: actions/cache@v4
         with:
@@ -42,7 +42,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
         env:
-          HUSKY: "0"
+          HUSKY: '0'
       - name: Restore Nx cache
         uses: actions/cache@v4
         with:
@@ -61,7 +61,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
         env:
-          HUSKY: "0"
+          HUSKY: '0'
       - name: Restore Nx cache
         uses: actions/cache@v4
         with:
@@ -80,7 +80,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
         env:
-          HUSKY: "0"
+          HUSKY: '0'
       - name: Restore Nx cache
         uses: actions/cache@v4
         with:
@@ -105,7 +105,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
         env:
-          HUSKY: "0"
+          HUSKY: '0'
       - name: Restore Nx cache
         uses: actions/cache@v4
         with:
@@ -130,7 +130,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
         env:
-          HUSKY: "0"
+          HUSKY: '0'
       - run: npx tsx tools/audit/index.ts
       - name: Upload audit report
         uses: actions/upload-artifact@v4
@@ -157,7 +157,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
         env:
-          HUSKY: "0"
+          HUSKY: '0'
       - name: Install opencode
         run: |
           curl -fsSL https://github.com/anomalyco/opencode/releases/latest/download/opencode-linux-x64.tar.gz -o /tmp/opencode.tar.gz
@@ -172,6 +172,43 @@ jobs:
           # "Could not determine review status" on perfectly clear responses.
           # Widen the window until upstream fixes the parser.
           sed -i 's/parse_review_status "\$RESULT" 30/parse_review_status "$RESULT" 200/' /tmp/gga/bin/gga
+          # Upstream leaves response format/language unconstrained beyond the STATUS
+          # line, so real PR comments come out inconsistently formatted and in
+          # English. Enforce a fixed Spanish table-based template to match this
+          # repo's requirement that PR/issue/commit-facing text be in Spanish.
+          python3 - <<'PYEOF'
+          import pathlib
+
+          path = pathlib.Path("/tmp/gga/lib/pr_mode.sh")
+          content = path.read_text()
+
+          marker = "**Begin with STATUS:**"
+          block = """**FORMATO DE RESPUESTA OBLIGATORIO (en español, sin excepciones):**
+
+          Responde siempre en español neutro/profesional, sin importar el idioma de este prompt. Usa exactamente esta estructura, sin desviarte:
+
+          ### 🤖 Gentleman Guardian Angel — Revisión de PR
+
+          **Resultado:** ✅ APROBADO  (o ❌ RECHAZADO)
+
+          | Regla | Evidencia |
+          |-------|-----------|
+          | <nombre de la regla> | <evidencia concreta: qué se verificó y por qué cumple o no> |
+
+          Si es ❌ RECHAZADO, agrega debajo de la tabla una lista de violaciones, una por línea, con: archivo, número de línea (si aplica), regla violada, y descripción del problema.
+
+          Termina siempre con una de estas dos líneas exactas:
+          **✅ REVISIÓN DE CÓDIGO APROBADA**
+          **❌ REVISIÓN DE CÓDIGO RECHAZADA**
+
+          """
+
+          if block not in content:
+              if marker not in content:
+                  raise SystemExit(f"marker not found in {path}")
+              content = content.replace(marker, block + marker, 1)
+              path.write_text(content)
+          PYEOF
           bash /tmp/gga/install.sh
           echo "$HOME/.local/bin" >> $GITHUB_PATH
       - name: Ensure base branch is fetched locally
