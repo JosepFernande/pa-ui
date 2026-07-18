@@ -29,16 +29,19 @@ export interface ResolvedTheme {
 /**
  * Default palette registered when no consumer config is provided, and the
  * fallback used on fail-safe bootstrap (Requirement: Fail-Safe Bootstrap).
+ * Frozen (including `colors`) so importing it directly from the public API
+ * can never corrupt the shared singleton — `mergeTheme()` uses this exact
+ * reference as its default merge base for every call in the process.
  */
-export const DEFAULT_THEME: ResolvedTheme = {
-  colors: {
+export const DEFAULT_THEME: ResolvedTheme = Object.freeze({
+  colors: Object.freeze({
     primary: '#2563eb',
     success: '#16a34a',
     danger: '#dc2626',
     warning: '#f59e0b',
     neutral: '#6b7280',
-  },
-};
+  }),
+});
 
 /**
  * DI token carrying the resolved theme snapshot, provided by
