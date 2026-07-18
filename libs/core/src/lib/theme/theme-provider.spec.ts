@@ -47,6 +47,17 @@ describe('providePaTheme', () => {
       expect(theme).toEqual(DEFAULT_THEME);
       expect(mergeThemeMock).toHaveBeenCalledWith(undefined, undefined);
     });
+
+    it('freezes the provided snapshot so a consumer cannot mutate it in place', () => {
+      configureTestBed('browser');
+      const theme = TestBed.inject(PA_THEME_TOKEN);
+      expect(Object.isFrozen(theme)).toBe(true);
+      expect(Object.isFrozen(theme.colors)).toBe(true);
+      expect(() => {
+        'use strict';
+        (theme.colors as Record<string, string>)['primary'] = 'mutated';
+      }).toThrow();
+    });
   });
 
   describe('partial config forwarding (browser, triangulation)', () => {
@@ -110,13 +121,17 @@ describe('providePaTheme', () => {
       expect(warnSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('returns a fresh fallback snapshot, never the shared DEFAULT_THEME reference', () => {
+    it('returns a fresh, frozen fallback snapshot, never the shared DEFAULT_THEME reference', () => {
       mergeThemeMock.mockImplementation(() => {
         throw new Error('boom');
       });
       configureTestBed('server');
       const theme = TestBed.inject(PA_THEME_TOKEN);
-      theme.colors['primary'] = 'mutated';
+      expect(Object.isFrozen(theme.colors)).toBe(true);
+      expect(() => {
+        'use strict';
+        (theme.colors as Record<string, string>)['primary'] = 'mutated';
+      }).toThrow();
       expect(DEFAULT_THEME.colors['primary']).toBe('#2563eb');
     });
 
