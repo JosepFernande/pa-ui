@@ -165,9 +165,18 @@ jobs:
           git clone --depth 1 https://github.com/Gentleman-Programming/gentleman-guardian-angel.git /tmp/gga
           bash /tmp/gga/install.sh
           echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - name: Ensure base branch is fetched locally
+        run: |
+          git fetch --force origin "${{ github.base_ref }}:refs/heads/${{ github.base_ref }}"
+          echo "--- diagnostic ---"
+          git rev-parse --verify "${{ github.base_ref }}"
+          git rev-parse HEAD
+          git merge-base "${{ github.base_ref }}" HEAD
+          git diff --name-only "${{ github.base_ref }}...HEAD"
       - name: Run gga PR review
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_BASE_BRANCH: ${{ github.base_ref }}
         run: gga run --pr-mode --ci
 
   summary:

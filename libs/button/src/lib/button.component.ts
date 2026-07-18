@@ -87,6 +87,7 @@ export class PaButton implements OnInit, OnDestroy {
     this.focusMonitor
       .monitor(this.elementRef.nativeElement, true)
       .subscribe((origin) => {
+        console.log('debug focus origin', origin);
         this.focusOrigin.set(origin);
       });
   }
