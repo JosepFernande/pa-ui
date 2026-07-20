@@ -68,3 +68,12 @@ describe('public-api — HSL derivation surface (Issue #47, Task 3.2)', () => {
     expect(vars['--pa-color-primary']).toBe('#3366ff');
   });
 });
+
+describe('public-api — theme runtime surface (Issue #48, Phase 5)', () => {
+  it('exports toSemanticCssVariables as a function, importable with zero @angular/* required to call it', () => {
+    expect(typeof publicApi.toSemanticCssVariables).toBe('function');
+    expect(publicApi.toSemanticCssVariables({ '--pa-color-primary': '#2563eb' })).toEqual({
+      '--pa-primary': '#2563eb',
+    });
+  });
+});
