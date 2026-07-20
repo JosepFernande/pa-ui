@@ -240,20 +240,36 @@ jobs:
           # garbled literal escape sequences instead of colors.
           sed -i 's/\x1b\[[0-9;]*[mK]//g' /tmp/gga-review.log
 
-          {
-            echo "### 🤖 Gentleman Guardian Angel — PR review"
-            echo ""
-            if [[ "${{ steps.gga_review.outputs.exit_code }}" == "0" ]]; then
-              echo "**Result:** ✅ PASSED"
-            else
-              echo "**Result:** ❌ FAILED (exit code ${{ steps.gga_review.outputs.exit_code }})"
-            fi
-            echo ""
-            # Everything from the STATUS: line onward is the actual verdict —
-            # the setup banner and agent tool-call trace before it add no
-            # value here; they're still visible in the Actions job log.
-            awk '/^STATUS:/{p=1; next} p' /tmp/gga-review.log
-          } > /tmp/gga-comment.md
+          # Everything from the STATUS: line onward is the model's own
+          # Spanish-templated verdict (header + result + table, per #54) —
+          # the setup banner and agent tool-call trace before it add no
+          # value here; they're still visible in the Actions job log.
+          awk '/^STATUS:/{p=1; next} p' /tmp/gga-review.log > /tmp/gga-verdict.md
+
+          if [[ -s /tmp/gga-verdict.md ]]; then
+            # Model produced its templated verdict — use it as-is, don't
+            # prepend a second header or it duplicates the model's own.
+            cp /tmp/gga-verdict.md /tmp/gga-comment.md
+          elif grep -q "No matching files changed in PR" /tmp/gga-review.log; then
+            # gga's own file-pattern filter (*.ts,*.js,*.css,*.scss,*.html)
+            # found nothing to review — this is a legitimate skip, not a
+            # failure, so it must not read as one in the PR comment.
+            {
+              echo "### 🤖 Gentleman Guardian Angel — Revisión de PR"
+              echo ""
+              echo "**Resultado:** ⚪ NO APLICA (sin archivos que coincidan con los patrones revisados por gga)"
+            } > /tmp/gga-comment.md
+          else
+            # gga never reached STATUS: for any other reason (crash/timeout
+            # before the model replied) — fall back to a minimal Spanish
+            # banner so the PR still gets a comment instead of an empty one.
+            {
+              echo "### 🤖 Gentleman Guardian Angel — Revisión de PR"
+              echo ""
+              echo "**Resultado:** ❌ FALLÓ (exit code ${{ steps.gga_review.outputs.exit_code }}, sin veredicto — ver logs del job)"
+            } > /tmp/gga-comment.md
+          fi
+
           gh pr comment "${{ github.event.pull_request.number }}" --body-file /tmp/gga-comment.md
 
   summary:
