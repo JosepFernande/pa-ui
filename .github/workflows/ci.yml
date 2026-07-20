@@ -250,10 +250,19 @@ jobs:
             # Model produced its templated verdict — use it as-is, don't
             # prepend a second header or it duplicates the model's own.
             cp /tmp/gga-verdict.md /tmp/gga-comment.md
+          elif grep -q "No matching files changed in PR" /tmp/gga-review.log; then
+            # gga's own file-pattern filter (*.ts,*.js,*.css,*.scss,*.html)
+            # found nothing to review — this is a legitimate skip, not a
+            # failure, so it must not read as one in the PR comment.
+            {
+              echo "### 🤖 Gentleman Guardian Angel — Revisión de PR"
+              echo ""
+              echo "**Resultado:** ⚪ NO APLICA (sin archivos que coincidan con los patrones revisados por gga)"
+            } > /tmp/gga-comment.md
           else
-            # gga never reached STATUS: (crash/timeout before the model
-            # replied) — fall back to a minimal Spanish banner so the PR
-            # still gets a comment instead of an empty one.
+            # gga never reached STATUS: for any other reason (crash/timeout
+            # before the model replied) — fall back to a minimal Spanish
+            # banner so the PR still gets a comment instead of an empty one.
             {
               echo "### 🤖 Gentleman Guardian Angel — Revisión de PR"
               echo ""
