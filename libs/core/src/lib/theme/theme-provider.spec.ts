@@ -1,4 +1,4 @@
-import { PLATFORM_ID, TransferState } from '@angular/core';
+import { EnvironmentInjector, PLATFORM_ID, TransferState } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DEFAULT_THEME, PA_THEME_STATE_KEY, PA_THEME_TOKEN } from './theme.tokens';
 import type { PaThemeConfig, PaThemeOptions, ResolvedTheme } from './theme.tokens';
@@ -74,9 +74,15 @@ describe('providePaTheme', () => {
 
   describe('SSR-safe computation — server', () => {
     it('computes synchronously via isPlatformServer and persists the snapshot into TransferState', () => {
+      // Spy on the prototype BEFORE any TestBed.inject(...) call. Since
+      // providePaTheme() now eagerly constructs PaThemeService via
+      // provideEnvironmentInitializer() (Phase 3), TestBed's environment
+      // injector — and therefore PA_THEME_TOKEN's factory — resolves on the
+      // FIRST inject() call of ANY token, not only when PA_THEME_TOKEN
+      // itself is explicitly requested. Spying on an already-injected
+      // instance would miss that first (real) call.
+      const setSpy = jest.spyOn(TransferState.prototype, 'set');
       configureTestBed('server');
-      const transferState = TestBed.inject(TransferState);
-      const setSpy = jest.spyOn(transferState, 'set');
       const theme = TestBed.inject(PA_THEME_TOKEN);
       expect(setSpy).toHaveBeenCalledWith(PA_THEME_STATE_KEY, theme);
       expect(theme).toEqual(DEFAULT_THEME);
@@ -85,11 +91,22 @@ describe('providePaTheme', () => {
 
   describe('SSR-safe computation — browser reads transferred snapshot', () => {
     it('reads the seeded TransferState snapshot without recomputing via mergeTheme', () => {
-      configureTestBed('browser');
-      const transferState = TestBed.inject(TransferState);
       const seeded: ResolvedTheme = { colors: { primary: '#seeded' } };
-      transferState.set(PA_THEME_STATE_KEY, seeded);
-      mergeThemeMock.mockClear();
+      const seededTransferState = new TransferState();
+      seededTransferState.set(PA_THEME_STATE_KEY, seeded);
+
+      // Provide the pre-seeded TransferState directly rather than seeding it
+      // after TestBed.inject(TransferState) — the eager environment
+      // initializer (Phase 3) resolves PA_THEME_TOKEN on the first inject()
+      // call in this environment, so seeding afterwards would be too late.
+      TestBed.configureTestingModule({
+        providers: [
+          providePaTheme(),
+          { provide: PLATFORM_ID, useValue: 'browser' },
+          { provide: TransferState, useValue: seededTransferState },
+        ],
+      });
+
       const theme = TestBed.inject(PA_THEME_TOKEN);
       expect(theme).toEqual(seeded);
       expect(mergeThemeMock).not.toHaveBeenCalled();
@@ -154,6 +171,41 @@ describe('providePaTheme', () => {
       configureTestBed('browser');
       TestBed.inject(PA_THEME_TOKEN);
       expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('providePaTheme'), error);
+    });
+  });
+
+  describe('eager PaThemeService instantiation (Task 3.2, resolved decision #175 — deliberate extension of a closed file)', () => {
+    afterEach(() => {
+      // Same shared jsdom document across tests in this file — see the
+      // identical note in theme.service.spec.ts.
+      jest.restoreAllMocks();
+    });
+
+    it('constructs PaThemeService and runs its initial DOM write with zero explicit injection anywhere in the test', () => {
+      // Spy on the global document BEFORE any TestBed.inject(...) call —
+      // TestBed.inject(DOCUMENT) itself would be the first inject() call in
+      // this environment and would already trigger PaThemeService's eager
+      // construction (and its DOM write) via provideEnvironmentInitializer,
+      // running before a spy attached afterward could observe it.
+      const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');
+
+      configureTestBed('browser', { colors: { primary: '#111111' } });
+
+      // Force environment-injector construction WITHOUT ever calling
+      // TestBed.inject(PaThemeService) explicitly.
+      TestBed.inject(EnvironmentInjector);
+
+      expect(setPropertySpy).toHaveBeenCalledWith('--pa-primary', '#111111');
+    });
+
+    it('also constructs the service on the server without any document access (Task 3.4 — triangulation)', () => {
+      const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');
+
+      configureTestBed('server', { colors: { primary: '#111111' } });
+
+      expect(() => TestBed.inject(EnvironmentInjector)).not.toThrow();
+
+      expect(setPropertySpy).not.toHaveBeenCalled();
     });
   });
 });

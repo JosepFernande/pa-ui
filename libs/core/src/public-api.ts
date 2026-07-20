@@ -26,3 +26,5 @@ export {
   getContrastColor,
   deriveTokens,
 } from './lib/theme/color-derivation';
+
+export { toSemanticCssVariables } from './lib/theme/semantic-tokens';

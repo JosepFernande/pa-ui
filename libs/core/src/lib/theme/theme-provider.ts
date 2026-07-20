@@ -4,9 +4,11 @@ import {
   TransferState,
   inject,
   makeEnvironmentProviders,
+  provideEnvironmentInitializer,
 } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import { mergeTheme } from './theme-engine';
+import { PaThemeService } from './theme.service';
 import { DEFAULT_THEME, PA_THEME_STATE_KEY, PA_THEME_TOKEN } from './theme.tokens';
 import type { PaThemeConfig, PaThemeOptions, ResolvedTheme } from './theme.tokens';
 
@@ -40,6 +42,13 @@ function freezeSnapshot(theme: ResolvedTheme): ResolvedTheme {
  * `@angular/forms` — and has no top-level side effects, keeping
  * `sideEffects: false` / tree-shaking intact (Requirement: Packaging
  * Constraints).
+ *
+ * Also eagerly instantiates `PaThemeService` via `provideEnvironmentInitializer()`
+ * so its constructor runs the first semantic DOM write at bootstrap, before
+ * any consumer explicitly injects the service (resolved decision: issue #48,
+ * deliberate extension of this already-merged #46 file — without this,
+ * Angular's lazy DI means nothing would ever inject `PaThemeService` and
+ * Button would never resolve custom colors).
  */
 export function providePaTheme(
   config?: PaThemeConfig,
@@ -73,5 +82,8 @@ export function providePaTheme(
         }
       },
     },
+    provideEnvironmentInitializer(() => {
+      inject(PaThemeService);
+    }),
   ]);
 }
