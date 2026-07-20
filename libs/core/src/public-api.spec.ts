@@ -39,3 +39,32 @@ describe('public-api — theme engine surface (Issue #46)', () => {
     expect(typeof publicApi.PaUiComponent).toBe('function');
   });
 });
+
+describe('public-api — HSL derivation surface (Issue #47, Task 3.2)', () => {
+  it('exports every color-math conversion function', () => {
+    expect(typeof publicApi.hexToRgb).toBe('function');
+    expect(typeof publicApi.rgbToHsl).toBe('function');
+    expect(typeof publicApi.hslToRgb).toBe('function');
+    expect(typeof publicApi.hexToHsl).toBe('function');
+    expect(typeof publicApi.hslToHex).toBe('function');
+    expect(typeof publicApi.relativeLuminance).toBe('function');
+  });
+
+  it('exports every color-derivation function', () => {
+    expect(typeof publicApi.normalizeColorName).toBe('function');
+    expect(typeof publicApi.adjustLightness).toBe('function');
+    expect(typeof publicApi.getContrastColor).toBe('function');
+    expect(typeof publicApi.deriveTokens).toBe('function');
+  });
+
+  it('exports usable HSL, RGB, and ThemeCssVariables types end to end', () => {
+    const rgb: import('./public-api').RGB = publicApi.hexToRgb('#3366ff');
+    const hsl: import('./public-api').HSL = publicApi.rgbToHsl(rgb);
+    const vars: import('./public-api').ThemeCssVariables = publicApi.deriveTokens({
+      colors: { primary: '#3366ff' },
+    });
+
+    expect(hsl.h).toBeGreaterThanOrEqual(0);
+    expect(vars['--pa-color-primary']).toBe('#3366ff');
+  });
+});

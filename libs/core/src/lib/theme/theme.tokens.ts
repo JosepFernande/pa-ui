@@ -27,6 +27,12 @@ export interface ResolvedTheme {
 }
 
 /**
+ * Flat CSS custom-property name→value map produced by `deriveTokens()`
+ * (Requirement: CSS Variable Map Output Shape). Pure data — no DOM writes.
+ */
+export type ThemeCssVariables = Record<string, string>;
+
+/**
  * Default palette registered when no consumer config is provided, and the
  * fallback used on fail-safe bootstrap (Requirement: Fail-Safe Bootstrap).
  * Frozen (including `colors`) so importing it directly from the public API
