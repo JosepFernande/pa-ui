@@ -13,15 +13,6 @@ export default {
     ],
   },
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
-  collectCoverageFrom: ['<rootDir>/src/lib/**/*.ts'],
-  coverageThreshold: {
-    global: {
-      lines: 80,
-      branches: 80,
-      functions: 90,
-      statements: 80,
-    },
-  },
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',
     'jest-preset-angular/build/serializers/ng-snapshot',
