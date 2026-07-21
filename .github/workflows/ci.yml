@@ -86,7 +86,7 @@ jobs:
         with:
           path: .nx/cache
           key: nx-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
-      - run: npx nx run-many -t test
+      - run: npx nx run-many -t test --coverage
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         if: always()

@@ -1,27 +1,34 @@
 ---
 name: pa-ui-testing
-description: "Trigger: writing or reviewing tests for pa-ui Angular components, directives, pipes, or services. Defines test patterns, jest-axe a11y, coverage thresholds, and CDK mocking conventions."
+description:
+  'Trigger: writing or reviewing tests for pa-ui Angular components, directives,
+  pipes, or services. Defines test patterns, jest-axe a11y, coverage thresholds,
+  and CDK mocking conventions.'
 license: MIT
 metadata:
   author: JosepFernande
-  version: "1.0"
+  version: '1.0'
   project: pa-ui
 ---
 
 ## Activation Contract
 
-Load this skill when writing or reviewing tests for any `pa-ui` library. Tests are a first-class artifact — every component PR MUST include or update tests. This skill defines the patterns, conventions, and thresholds that make tests consistent across the project.
+Load this skill when writing or reviewing tests for any `pa-ui` library. Tests
+are a first-class artifact — every component PR MUST include or update tests.
+This skill defines the patterns, conventions, and thresholds that make tests
+consistent across the project.
 
 ## Test Stack
 
-| Tool | Version | Role |
-|------|---------|------|
-| Jest | ^29.7.0 | Test runner |
-| jest-preset-angular | ~14.4.0 | Angular transform, zone setup, serializers |
-| jest-axe | ^10.0.0 | A11y assertions via axe-core |
-| jest-environment-jsdom | ^29.7.0 | DOM environment |
+| Tool                   | Version | Role                                       |
+| ---------------------- | ------- | ------------------------------------------ |
+| Jest                   | ^29.7.0 | Test runner                                |
+| jest-preset-angular    | ~14.4.0 | Angular transform, zone setup, serializers |
+| jest-axe               | ^10.0.0 | A11y assertions via axe-core               |
+| jest-environment-jsdom | ^29.7.0 | DOM environment                            |
 
-No `@testing-library/angular`, no `ComponentHarness`. Use `TestBed` + `DebugElement` + `By.css` + `nativeElement`.
+No `@testing-library/angular`, no `ComponentHarness`. Use `TestBed` +
+`DebugElement` + `By.css` + `nativeElement`.
 
 ## Project Configuration
 
@@ -36,7 +43,10 @@ export default {
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
-      { tsconfig: '<rootDir>/tsconfig.spec.json', stringifyContentPathRegex: '\\.(html|svg)$' },
+      {
+        tsconfig: '<rootDir>/tsconfig.spec.json',
+        stringifyContentPathRegex: '\\.(html|svg)$',
+      },
     ],
   },
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
@@ -52,14 +62,18 @@ export default {
 
 ```typescript
 import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone';
-setupZoneTestEnv({ errorOnUnknownElements: true, errorOnUnknownProperties: true });
+setupZoneTestEnv({
+  errorOnUnknownElements: true,
+  errorOnUnknownProperties: true,
+});
 ```
 
 ## Coverage Thresholds
 
 Minimum thresholds: **80% lines, 80% branches, 90% functions, 80% statements**.
 
-Configured in each lib's `jest.config.ts`:
+Configured once in the shared `jest.preset.cjs` (every lib inherits it — do not
+duplicate per-lib):
 
 ```typescript
 collectCoverageFrom: ['<rootDir>/src/lib/**/*.ts'],
@@ -72,6 +86,9 @@ coverageThreshold: {
   },
 },
 ```
+
+Enforced in CI via `npx nx run-many -t test --coverage` (`ci.yml`, `test` job) —
+a run below threshold fails the job, it is not just a report.
 
 ## Test Categories
 
@@ -106,33 +123,61 @@ describe('Button Tokens', () => {
 
   it('should include all required token keys from the design spec', () => {
     const keys = Object.keys(PA_BUTTON_TOKENS);
-    const required = ['bg', 'color', 'border', 'radius', 'shadow', 'hover-bg',
-      'hover-color', 'active-bg', 'active-color', 'focus-ring', 'disabled-opacity',
-      'font-size', 'font-weight', 'padding-x', 'padding-y', 'min-height',
-      'gap', 'transition-duration', 'loading-opacity'];
-    for (const key of required) { expect(keys).toContain(key); }
+    const required = [
+      'bg',
+      'color',
+      'border',
+      'radius',
+      'shadow',
+      'hover-bg',
+      'hover-color',
+      'active-bg',
+      'active-color',
+      'focus-ring',
+      'disabled-opacity',
+      'font-size',
+      'font-weight',
+      'padding-x',
+      'padding-y',
+      'min-height',
+      'gap',
+      'transition-duration',
+      'loading-opacity',
+    ];
+    for (const key of required) {
+      expect(keys).toContain(key);
+    }
     expect(keys).toHaveLength(required.length);
   });
 
   it('should have all values prefixed with --pa-button-', () => {
     const values = Object.values(PA_BUTTON_TOKENS);
-    for (const value of values) { expect(value).toMatch(/^--pa-button-/); }
+    for (const value of values) {
+      expect(value).toMatch(/^--pa-button-/);
+    }
   });
 });
 ```
 
 ### 3. Component Unit Tests (TestBed + Test Host)
 
-For directive-based components (attribute selectors like `button[pa-button]`), use a **Test Host** wrapper.
+For directive-based components (attribute selectors like `button[pa-button]`),
+use a **Test Host** wrapper.
 
 ```typescript
 @Component({
   standalone: true,
   imports: [PaButton],
   template: `
-    <button pa-button [variant]="variant" [size]="size"
-            [color]="color" [disabled]="disabled"
-            [loading]="loading" (click)="onClick()">
+    <button
+      pa-button
+      [variant]="variant"
+      [size]="size"
+      [color]="color"
+      [disabled]="disabled"
+      [loading]="loading"
+      (click)="onClick()"
+    >
       {{ label }}
     </button>
   `,
@@ -145,14 +190,18 @@ class TestHost {
   loading = false;
   label = 'Test Button';
   clicked = false;
-  onClick(): void { this.clicked = true; }
+  onClick(): void {
+    this.clicked = true;
+  }
 }
 
 describe('PaButton', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestHost],
-      providers: [/* CDK mocks here */],
+      providers: [
+        /* CDK mocks here */
+      ],
     }).compileComponents();
   });
 
@@ -169,43 +218,53 @@ describe('PaButton', () => {
 #### Required describe blocks (in order):
 
 **rendering**
+
 - Renders native element
 - Projects content/slots correctly
 - Implicit ARIA role (if applicable)
 - Base BEM class present
 
 **variant classes**
+
 - Each variant (`solid`, `outline`, `ghost`)
 - Negative test (unknown variant)
 
 **size classes**
+
 - Each size (`sm`, `md`, `lg`)
 - Negative test (unknown size)
 
 **color CSS variable**
+
 - `--pa-component-color` resolves to `var(--pa-{color})`
 
 **state classes / attributes**
+
 - `disabled` — native attribute, click suppressed, BEM class
 - `loading` — `aria-busy`, spinner visible, click suppressed
 - Combination states (disabled + loading)
 
 **CDK integration**
-- FocusMonitor: mock with `Subject<FocusOrigin>`, verify `cdk-keyboard-focused` class
+
+- FocusMonitor: mock with `Subject<FocusOrigin>`, verify `cdk-keyboard-focused`
+  class
 - CdkTrapFocus: verify trap activates on open
 - LiveAnnouncer: verify announcement on state change
 
 **architectural compliance**
+
 - `standalone: true`
 - `ChangeDetectionStrategy.OnPush`
 - Signal inputs (if applicable)
 
 **accessibility**
+
 - `toHaveNoViolations()` with jest-axe
 
 ### 4. Build/Packaging Contract Tests
 
-For the entry-point lib (`libs/pa-ui/`), verify public API, side effects, peer dependencies, and tree-shaking.
+For the entry-point lib (`libs/pa-ui/`), verify public API, side effects, peer
+dependencies, and tree-shaking.
 
 ```typescript
 // packaging.contract.spec.ts
@@ -223,7 +282,8 @@ it('should declare all @angular/cdk and @angular/forms as peerDependencies', () 
 
 ## CDK Mocking Pattern
 
-When a component depends on CDK services (`FocusMonitor`, `LiveAnnouncer`, `CdkDrag`, etc.), provide mocks in `TestBed.configureTestingModule`:
+When a component depends on CDK services (`FocusMonitor`, `LiveAnnouncer`,
+`CdkDrag`, etc.), provide mocks in `TestBed.configureTestingModule`:
 
 ```typescript
 import { Subject } from 'rxjs';
@@ -236,9 +296,7 @@ const focusMonitorMock = {
 beforeEach(async () => {
   await TestBed.configureTestingModule({
     imports: [TestHost],
-    providers: [
-      { provide: FocusMonitor, useValue: focusMonitorMock },
-    ],
+    providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
   }).compileComponents();
 });
 ```
@@ -250,14 +308,19 @@ Import and extend in the spec file:
 ```typescript
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const { axe, toHaveNoViolations } = require('jest-axe') as {
-  axe: (element: Element | Document, options?: Record<string, unknown>) => Promise<Record<string, unknown>>;
+  axe: (
+    element: Element | Document,
+    options?: Record<string, unknown>,
+  ) => Promise<Record<string, unknown>>;
   toHaveNoViolations: Record<string, jest.CustomMatcher>;
 };
 expect.extend(toHaveNoViolations);
 
 declare global {
   namespace jest {
-    interface Matchers<R> { toHaveNoViolations(): R; }
+    interface Matchers<R> {
+      toHaveNoViolations(): R;
+    }
   }
 }
 ```
@@ -278,13 +341,19 @@ Test at minimum 3 states: default, disabled/loading, and a custom-color variant.
 ## What gga Will Flag in Tests
 
 1. **Missing a11y test** (`toHaveNoViolations`) for any component spec
-2. **Missing coverage threshold enforcement** in jest.config.ts
-3. **No token contract test** for components that define tokens
-4. **No type/constants test** for components that define types or constants
-5. **Component spec without Test Bed** (component is NOT tested with TestBed)
-6. **Tests using `@testing-library/angular` or `ComponentHarness`** (reject — use TestBed + DebugElement)
-7. **Tests missing one or more required describe blocks** (rendering, variants, states, a11y)
-8. **Snapshots without explicit review** (snapshot serializers are configured, but prefer explicit assertions)
+2. **No token contract test** for components that define tokens
+3. **No type/constants test** for components that define types or constants
+4. **Component spec without Test Bed** (component is NOT tested with TestBed)
+5. **Tests using `@testing-library/angular` or `ComponentHarness`** (reject —
+   use TestBed + DebugElement)
+6. **Tests missing one or more required describe blocks** (rendering, variants,
+   states, a11y)
+7. **Snapshots without explicit review** (snapshot serializers are configured,
+   but prefer explicit assertions)
+
+Coverage threshold enforcement is no longer on this list — it is enforced
+automatically by CI (`test` job, `--coverage`), not something a reviewer needs
+to catch by eye.
 
 ## Review Checklist (For Human Reviewers)
 
