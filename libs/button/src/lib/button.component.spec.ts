@@ -289,6 +289,73 @@ describe('PaButton', () => {
   });
 
   // -----------------------------------------------------------------------
+  // Theme-derived token variants (Issue #59)
+  // -----------------------------------------------------------------------
+  describe('theme-derived token variants', () => {
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        imports: [TestHost],
+        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
+      }).compileComponents();
+    });
+
+    it('should resolve --pa-button-bg to var(--pa-primary) for color=primary', () => {
+      const { fixture, host, buttonEl } = createTestHost();
+      host.color = 'primary';
+      fixture.detectChanges();
+
+      expect(buttonEl.style.getPropertyValue('--pa-button-bg')).toBe('var(--pa-primary)');
+    });
+
+    it('should resolve --pa-button-hover-bg to var(--pa-primary-hover) for color=primary', () => {
+      const { fixture, host, buttonEl } = createTestHost();
+      host.color = 'primary';
+      fixture.detectChanges();
+
+      expect(buttonEl.style.getPropertyValue('--pa-button-hover-bg')).toBe(
+        'var(--pa-primary-hover)',
+      );
+    });
+
+    it('should resolve --pa-button-active-bg to var(--pa-primary-active) for color=primary', () => {
+      const { fixture, host, buttonEl } = createTestHost();
+      host.color = 'primary';
+      fixture.detectChanges();
+
+      expect(buttonEl.style.getPropertyValue('--pa-button-active-bg')).toBe(
+        'var(--pa-primary-active)',
+      );
+    });
+
+    it('should resolve --pa-button-solid-color to var(--pa-primary-contrast) for color=primary', () => {
+      const { fixture, host, buttonEl } = createTestHost();
+      host.color = 'primary';
+      fixture.detectChanges();
+
+      expect(buttonEl.style.getPropertyValue('--pa-button-solid-color')).toBe(
+        'var(--pa-primary-contrast)',
+      );
+    });
+
+    it('should resolve all 4 variants against --pa-secondary-* for color=secondary', () => {
+      const { fixture, host, buttonEl } = createTestHost();
+      host.color = 'secondary';
+      fixture.detectChanges();
+
+      expect(buttonEl.style.getPropertyValue('--pa-button-bg')).toBe('var(--pa-secondary)');
+      expect(buttonEl.style.getPropertyValue('--pa-button-hover-bg')).toBe(
+        'var(--pa-secondary-hover)',
+      );
+      expect(buttonEl.style.getPropertyValue('--pa-button-active-bg')).toBe(
+        'var(--pa-secondary-active)',
+      );
+      expect(buttonEl.style.getPropertyValue('--pa-button-solid-color')).toBe(
+        'var(--pa-secondary-contrast)',
+      );
+    });
+  });
+
+  // -----------------------------------------------------------------------
   // Type attribute
   // -----------------------------------------------------------------------
   describe('type attribute', () => {

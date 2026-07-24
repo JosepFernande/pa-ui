@@ -283,6 +283,7 @@ pa-ui/
 | [Architecture & Foundation](https://github.com/JosepFernande/pa-ui/wiki/Architecture) | The 6 hard rules, token system, and decision gates        |
 | [CSS Strategy](./docs/css-strategy.md)                                                | Token reference, override patterns, and theming guide     |
 | [Accessibility](./docs/accessibility.md)                                              | A11y checklist, ARIA patterns, and testing approach       |
+| [Storybook](./docs/storybook.md)                                                      | Running Storybook locally and adding a new story          |
 | [Showcase App](./apps/showcase/)                                                      | Live component playground                                 |
 | [Contributing](./CONTRIBUTING.md)                                                     | How to contribute, PR guidelines, and code review process |
 
@@ -307,6 +308,18 @@ nx run lint:css
 # Format check
 npm run format:check
 ```
+
+### Storybook
+
+```bash
+# Start the dev server (http://localhost:4400)
+npx nx run showcase:storybook
+
+# Build the static site (output: dist/storybook/showcase/)
+npx nx run showcase:build-storybook
+```
+
+See [docs/storybook.md](./docs/storybook.md) for how to add a new story.
 
 ---
 

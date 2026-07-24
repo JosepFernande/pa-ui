@@ -27,6 +27,10 @@ import type { PaButtonVariant, PaButtonSize } from './button.types';
     '[attr.aria-busy]': 'loading() ? "true" : null',
     '[attr.type]': 'type()',
     '[style.--pa-button-color]': 'colorVar()',
+    '[style.--pa-button-bg]': 'colorVar()',
+    '[style.--pa-button-hover-bg]': 'hoverVar()',
+    '[style.--pa-button-active-bg]': 'activeVar()',
+    '[style.--pa-button-solid-color]': 'contrastVar()',
   },
 })
 export class PaButton implements OnInit, OnDestroy {
@@ -52,9 +56,7 @@ export class PaButton implements OnInit, OnDestroy {
   protected readonly focusOrigin = signal<FocusOrigin>(null);
 
   /** Computed: disabled OR loading — drives the native disabled attribute. */
-  protected readonly effectiveDisabled = computed(
-    () => this.disabled() || this.loading(),
-  );
+  protected readonly effectiveDisabled = computed(() => this.disabled() || this.loading());
 
   /** Computed: BEM class string for the host element. */
   protected readonly hostClasses = computed(() => {
@@ -74,9 +76,16 @@ export class PaButton implements OnInit, OnDestroy {
   });
 
   /** Computed: CSS custom property value resolving the color input. */
-  protected readonly colorVar = computed(
-    () => `var(--pa-${this.color()})`,
-  );
+  protected readonly colorVar = computed(() => `var(--pa-${this.color()})`);
+
+  /** Computed: CSS custom property value resolving the color's hover variant. */
+  protected readonly hoverVar = computed(() => `var(--pa-${this.color()}-hover)`);
+
+  /** Computed: CSS custom property value resolving the color's active variant. */
+  protected readonly activeVar = computed(() => `var(--pa-${this.color()}-active)`);
+
+  /** Computed: CSS custom property value resolving the color's contrast variant. */
+  protected readonly contrastVar = computed(() => `var(--pa-${this.color()}-contrast)`);
 
   constructor(
     private readonly focusMonitor: FocusMonitor,
@@ -84,11 +93,9 @@ export class PaButton implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.focusMonitor
-      .monitor(this.elementRef.nativeElement, true)
-      .subscribe((origin) => {
-        this.focusOrigin.set(origin);
-      });
+    this.focusMonitor.monitor(this.elementRef.nativeElement, true).subscribe((origin) => {
+      this.focusOrigin.set(origin);
+    });
   }
 
   ngOnDestroy(): void {

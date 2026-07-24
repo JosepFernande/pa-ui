@@ -166,12 +166,66 @@ jobs:
       - name: Install gga
         run: |
           git clone --depth 1 https://github.com/Gentleman-Programming/gentleman-guardian-angel.git /tmp/gga
-          # Upstream caps the STATUS: PASSED/FAILED lookahead at 30 lines (bin/gga).
-          # The opencode agent's own tool-call transcript (skill loads, find/glob/
-          # read calls) routinely pushes the real verdict past that, so gga reports
-          # "Could not determine review status" on perfectly clear responses.
-          # Widen the window until upstream fixes the parser.
-          sed -i 's/parse_review_status "\$RESULT" 30/parse_review_status "$RESULT" 200/' /tmp/gga/bin/gga
+          # Upstream's parse_review_status() only scans the first N lines of the
+          # provider output for a `STATUS: PASSED|FAILED` line. The opencode
+          # agent emits a verbose tool-call transcript (skill loads, glob/read/
+          # git-diff calls + the streamed diff content) BEFORE printing its final
+          # verdict, so the real STATUS: line routinely lands past any fixed N
+          # (we previously widened 30→200 and it still missed it on this PR).
+          # Replace the function entirely so it scans the WHOLE output and keeps
+          # the LAST matching STATUS: line. Last-wins (not first) protects against
+          # the model echoing the "Begin with STATUS:" instruction back as part
+          # of its reasoning. AMBIGUOUS semantics are preserved: if both PASSED
+          # and FAILED appear, we still return AMBIGUOUS and fail.
+          python3 - <<'PYEOF'
+          import pathlib
+          path = pathlib.Path("/tmp/gga/bin/gga")
+          lines = path.read_text().splitlines(keepends=True)
+          start = next(i for i, l in enumerate(lines) if l.startswith("parse_review_status() {"))
+          # The function body ends at the first line that is exactly "}\n" after
+          # the start index (closing brace at column 0).
+          end = next(i for i in range(start + 1, len(lines)) if lines[i].rstrip("\n") == "}")
+          new_fn = (
+            "parse_review_status() {\n"
+            "  local response=\"$1\"\n"
+            "  # Second arg (max_lines) is accepted for backward compatibility with\n"
+            "  # the upstream caller `parse_review_status \"$RESULT\" 30`, but we scan\n"
+            "  # the WHOLE output: the opencode agent's transcript can push the real\n"
+            "  # STATUS: line arbitrarily far down, so any fixed lookahead is wrong.\n"
+            "  local last_status=\"\"\n"
+            "  local line\n"
+            "  while IFS= read -r line; do\n"
+            "    line=$(printf '%s' \"$line\" | sed $'s/\\x1b\\[[0-9;]*[mK]//g')\n"
+            "    line=\"${line#\"${line%%[![:space:]]*}\"}\"\n"
+            "    line=\"${line%\"${line##*[![:space:]]}\"}\"\n"
+            "    line=\"${line#\\*\\*}\"\n"
+            "    line=\"${line%\\*\\*}\"\n"
+            "    line=\"${line#\\*}\"\n"
+            "    line=\"${line%\\*}\"\n"
+            "    line=\"${line#\\`}\"\n"
+            "    line=\"${line%\\`}\"\n"
+            "    line=\"${line#\\# }\"\n"
+            "    line=\"${line#> }\"\n"
+            "    if [[ \"$line\" =~ ^STATUS:[[:space:]]*(PASSED|FAILED)([^[:alnum:]_].*)?$ ]]; then\n"
+            "      local candidate=\"${BASH_REMATCH[1]}\"\n"
+            "      if [[ -n \"$last_status\" && \"$last_status\" != \"$candidate\" ]]; then\n"
+            "        echo \"AMBIGUOUS\"\n"
+            "        return 1\n"
+            "      fi\n"
+            "      last_status=\"$candidate\"\n"
+            "    fi\n"
+            "  done <<< \"$response\"\n"
+            "  if [[ -n \"$last_status\" ]]; then\n"
+            "    echo \"$last_status\"\n"
+            "    return 0\n"
+            "  fi\n"
+            "  echo \"AMBIGUOUS\"\n"
+            "  return 1\n"
+            "}\n"
+          )
+          lines[start:end + 1] = [new_fn]
+          path.write_text("".join(lines))
+          PYEOF
           # Upstream leaves response format/language unconstrained beyond the STATUS
           # line, so real PR comments come out inconsistently formatted and in
           # English. Enforce a fixed Spanish table-based template to match this

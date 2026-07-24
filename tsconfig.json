@@ -15,5 +15,11 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
-  "extends": "./tsconfig.base.json"
+  "extends": "./tsconfig.base.json",
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs",
+      "moduleResolution": "node10"
+    }
+  }
 }
