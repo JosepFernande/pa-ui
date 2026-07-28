@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-07-24T21:16:11.380Z",
+  "results": [
+    {
+      "package": "@pa-ui/core",
+      "file": "dist/libs/core/fesm2022/pa-ui-core.mjs",
+      "gzipBytes": 6743,
+      "maxGzipBytes": 8192,
+      "status": "pass"
+    },
+    {
+      "package": "@pa-ui/button",
+      "file": "dist/libs/button/fesm2022/pa-ui-button.mjs",
+      "gzipBytes": 2821,
+      "maxGzipBytes": 4096,
+      "status": "pass"
+    },
+    {
+      "package": "@pa-ui/input",
+      "file": "dist/libs/input/fesm2022/pa-ui-input.mjs",
+      "gzipBytes": 499,
+      "maxGzipBytes": 5120,
+      "status": "pass"
+    },
+    {
+      "package": "@pa-ui/angular",
+      "file": "dist/libs/pa-ui/index.mjs",
+      "gzipBytes": 68,
+      "maxGzipBytes": 1024,
+      "status": "pass"
+    }
+  ],
+  "status": "pass"
+}
