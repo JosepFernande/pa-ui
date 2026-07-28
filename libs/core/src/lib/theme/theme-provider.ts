@@ -10,16 +10,25 @@ import { isPlatformServer } from '@angular/common';
 import { mergeTheme } from './theme-engine';
 import { PaThemeService } from './theme.service';
 import { DEFAULT_THEME, PA_THEME_STATE_KEY, PA_THEME_TOKEN } from './theme.tokens';
-import type { PaThemeConfig, PaThemeOptions, ResolvedTheme } from './theme.tokens';
+import type { PaColorValue, PaThemeConfig, PaThemeOptions, ResolvedTheme } from './theme.tokens';
 
 /**
  * Returns a frozen, independent copy of `theme` so the value provided under
  * `PA_THEME_TOKEN` — read via `PaThemeService.theme()` and persisted into
  * `TransferState` — can never be mutated by a consumer, regardless of how
- * `mergeTheme()` or `TransferState.get()` produced it.
+ * `mergeTheme()` or `TransferState.get()` produced it. Object-shaped color
+ * entries (Requirement: Deep-Freeze of Object-Shaped Color Entries) are
+ * frozen as an independent shallow copy — never the original reference —
+ * so freezing here can never lock the caller's own config object. Plain
+ * string entries need no extra work (freezing a primitive is a no-op).
  */
 function freezeSnapshot(theme: ResolvedTheme): ResolvedTheme {
-  return Object.freeze({ colors: Object.freeze({ ...theme.colors }) });
+  const colors: Record<string, PaColorValue> = {};
+  for (const [name, value] of Object.entries(theme.colors)) {
+    colors[name] =
+      typeof value === 'object' && value !== null ? Object.freeze({ ...value }) : value;
+  }
+  return Object.freeze({ colors: Object.freeze(colors) });
 }
 
 /**

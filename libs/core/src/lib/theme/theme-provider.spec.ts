@@ -174,6 +174,63 @@ describe('providePaTheme', () => {
     });
   });
 
+  describe('deep-freeze of object-shaped color entries (Phase 3)', () => {
+    it('deep-freezes a nested object entry, and a strict-mode mutation of one of its variants throws (Task 3.1)', () => {
+      const config: PaThemeConfig = {
+        colors: { primary: { base: '#16709e', hover: '#0a4f6b' } },
+      };
+      configureTestBed('browser', config);
+      const theme = TestBed.inject(PA_THEME_TOKEN);
+
+      expect(Object.isFrozen(theme.colors['primary'])).toBe(true);
+      expect(() => {
+        'use strict';
+        (theme.colors['primary'] as { hover: string }).hover = '#000000';
+      }).toThrow();
+      expect((theme.colors['primary'] as { hover: string }).hover).toBe('#0a4f6b');
+    });
+
+    it('freezes an independent copy of an object entry, so mutating the caller-owned config object afterward never affects the snapshot (Task 3.2)', () => {
+      const primaryEntry = { base: '#16709e', hover: '#0a4f6b' };
+      const config: PaThemeConfig = { colors: { primary: primaryEntry } };
+      configureTestBed('browser', config);
+      const theme = TestBed.inject(PA_THEME_TOKEN);
+
+      // Mutate the caller's own object AFTER bootstrap.
+      primaryEntry.hover = '#ffffff';
+
+      expect((theme.colors['primary'] as { hover: string }).hover).toBe('#0a4f6b');
+      expect(theme.colors['primary']).not.toBe(primaryEntry);
+    });
+  });
+
+  describe('SSR TransferState round-trip for object-shaped entries (Phase 3, Req: SSR TransferState Round-Trip)', () => {
+    it('an object-shaped entry seeded server-side survives TransferState and is deep-frozen after browser rehydration (Task 3.3)', () => {
+      const seeded: ResolvedTheme = {
+        colors: { primary: { base: '#16709e', hover: '#0a4f6b', active: '#1a80b3' } },
+      };
+      const seededTransferState = new TransferState();
+      seededTransferState.set(PA_THEME_STATE_KEY, seeded);
+
+      TestBed.configureTestingModule({
+        providers: [
+          providePaTheme(),
+          { provide: PLATFORM_ID, useValue: 'browser' },
+          { provide: TransferState, useValue: seededTransferState },
+        ],
+      });
+
+      const theme = TestBed.inject(PA_THEME_TOKEN);
+
+      expect(theme.colors['primary']).toEqual(seeded.colors['primary']);
+      expect(Object.isFrozen(theme.colors['primary'])).toBe(true);
+      expect(() => {
+        'use strict';
+        (theme.colors['primary'] as { hover: string }).hover = '#mutated';
+      }).toThrow();
+    });
+  });
+
   describe('eager PaThemeService instantiation (Task 3.2, resolved decision #175 — deliberate extension of a closed file)', () => {
     afterEach(() => {
       // Same shared jsdom document across tests in this file — see the

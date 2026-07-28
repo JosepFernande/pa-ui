@@ -15,7 +15,14 @@ const meta: Meta<PaButton> = {
   component: PaButton,
   decorators: [
     applicationConfig({
-      providers: [providePaTheme({ colors: { brand: '#ec4899' } })],
+      providers: [
+        providePaTheme({
+          colors: {
+            brand: '#ec4899',
+            primary: { base: '#16709e', hover: '#0a4f6b' },
+          },
+        }),
+      ],
     }),
   ],
   argTypes: {

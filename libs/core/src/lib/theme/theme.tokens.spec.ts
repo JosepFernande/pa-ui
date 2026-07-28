@@ -3,6 +3,8 @@ import {
   DEFAULT_THEME,
   PA_THEME_TOKEN,
   PA_THEME_STATE_KEY,
+  type PaColorValue,
+  type PaColorVariants,
   type PaThemeConfig,
   type PaThemeOptions,
   type ResolvedTheme,
@@ -77,6 +79,36 @@ describe('theme.tokens', () => {
     it('ResolvedTheme shape matches DEFAULT_THEME', () => {
       const resolved: ResolvedTheme = DEFAULT_THEME;
       expect(resolved.colors['primary']).toBe(DEFAULT_THEME.colors['primary']);
+    });
+
+    it('PaThemeConfig accepts an object-shaped color entry (PaColorVariants) alongside plain strings', () => {
+      const config: PaThemeConfig = {
+        colors: {
+          primary: { base: '#16709e', hover: '#0a4f6b' },
+          brand: '#00ff00',
+        },
+      };
+      const primary = config.colors['primary'] as PaColorVariants;
+      expect(primary.base).toBe('#16709e');
+      expect(primary.hover).toBe('#0a4f6b');
+      expect(config.colors['brand']).toBe('#00ff00');
+    });
+
+    it('ResolvedTheme accepts an object-shaped color entry and DEFAULT_THEME stays assignable', () => {
+      const resolvedWithObject: ResolvedTheme = {
+        colors: { primary: { base: '#16709e' } },
+      };
+      expect((resolvedWithObject.colors['primary'] as PaColorVariants).base).toBe('#16709e');
+
+      const resolved: ResolvedTheme = DEFAULT_THEME;
+      expect(resolved.colors['primary']).toBe(DEFAULT_THEME.colors['primary']);
+    });
+
+    it('PaColorValue is a union of string and PaColorVariants', () => {
+      const asString: PaColorValue = '#16709e';
+      const asObject: PaColorValue = { base: '#16709e', active: '#0a4f6b' };
+      expect(asString).toBe('#16709e');
+      expect((asObject as PaColorVariants).base).toBe('#16709e');
     });
   });
 });
