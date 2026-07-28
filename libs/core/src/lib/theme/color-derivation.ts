@@ -7,7 +7,7 @@
  */
 import { hexToHsl, hslToHex, hslToRgb, relativeLuminance } from './color-math';
 import type { HSL } from './color-math';
-import type { ResolvedTheme, ThemeCssVariables } from './theme.tokens';
+import type { PaColorVariants, ResolvedTheme, ThemeCssVariables } from './theme.tokens';
 
 /** Lightness delta applied for hover (+) and active (-) variants. */
 export const LIGHTNESS_STEP = 8;
@@ -55,6 +55,36 @@ export function normalizeColorName(raw: string): string {
 }
 
 /**
+ * Resolves a single hover/active/contrast variant: an explicit hex wins
+ * verbatim when present and valid; otherwise (omitted, or invalid) falls
+ * back to `derive()` (Requirement: Per-Variant Explicit-or-Derived
+ * Resolution, Per-Variant Fail-Soft on Invalid Explicit Hex). Validity uses
+ * the exact same hex regex as `base` (via `hexToHsl`), so the two paths can
+ * never drift — the parsed HSL is discarded, only used for validation.
+ * Module-private: no new public surface for a throwaway check.
+ */
+function resolveVariant(
+  explicit: string | undefined,
+  name: string,
+  variant: 'hover' | 'active' | 'contrast',
+  derive: () => string,
+): string {
+  if (explicit === undefined) {
+    return derive();
+  }
+
+  try {
+    hexToHsl(explicit);
+    return explicit;
+  } catch {
+    console.warn(
+      `[pa-ui] deriveTokens: invalid explicit ${variant} value "${explicit}" for key "${name}"; falling back to derivation.`,
+    );
+    return derive();
+  }
+}
+
+/**
  * Walks `theme.colors` in insertion order and emits a flat
  * `--pa-color-{name}[-hover|-active|-contrast]` map (Requirement: CSS
  * Variable Map Output Shape). Per entry: normalize the key (warn if
@@ -62,13 +92,16 @@ export function normalizeColorName(raw: string): string {
  * overwrite), then derive the 4 variant values. Malformed hex values are
  * warned and skipped — `deriveTokens` never throws (resolved Open Question
  * 1). The base token is emitted verbatim, exactly as registered (resolved
- * Open Question 2) — only hover/active/contrast round-trip through HSL.
+ * Open Question 2) — only hover/active/contrast round-trip through HSL,
+ * unless a variant is explicitly overridden on an object-shaped entry
+ * (Requirement: Bootstrap Color Union Type), in which case that explicit
+ * hex is emitted verbatim instead.
  */
 export function deriveTokens(theme: ResolvedTheme): ThemeCssVariables {
   const result: ThemeCssVariables = {};
   const seen = new Set<string>();
 
-  for (const [rawName, hex] of Object.entries(theme.colors)) {
+  for (const [rawName, value] of Object.entries(theme.colors)) {
     const name = normalizeColorName(rawName);
 
     if (name !== rawName) {
@@ -82,20 +115,33 @@ export function deriveTokens(theme: ResolvedTheme): ThemeCssVariables {
     }
     seen.add(name);
 
+    const isObj = typeof value === 'object' && value !== null;
+    const variants: PaColorVariants | undefined = isObj ? value : undefined;
+    const base = isObj ? value.base : value;
+
     let hsl: HSL;
     try {
-      hsl = hexToHsl(hex);
+      hsl = hexToHsl(base);
     } catch {
       console.warn(
-        `[pa-ui] deriveTokens: invalid color value "${hex}" for key "${name}"; skipping this color.`,
+        `[pa-ui] deriveTokens: invalid color value "${base}" for key "${name}"; skipping this color.`,
       );
       continue;
     }
 
-    result[`--pa-color-${name}`] = hex;
-    result[`--pa-color-${name}-hover`] = hslToHex(adjustLightness(hsl, LIGHTNESS_STEP));
-    result[`--pa-color-${name}-active`] = hslToHex(adjustLightness(hsl, -LIGHTNESS_STEP));
-    result[`--pa-color-${name}-contrast`] = getContrastColor(hsl);
+    result[`--pa-color-${name}`] = base;
+    result[`--pa-color-${name}-hover`] = resolveVariant(variants?.hover, name, 'hover', () =>
+      hslToHex(adjustLightness(hsl, LIGHTNESS_STEP)),
+    );
+    result[`--pa-color-${name}-active`] = resolveVariant(variants?.active, name, 'active', () =>
+      hslToHex(adjustLightness(hsl, -LIGHTNESS_STEP)),
+    );
+    result[`--pa-color-${name}-contrast`] = resolveVariant(
+      variants?.contrast,
+      name,
+      'contrast',
+      () => getContrastColor(hsl),
+    );
   }
 
   return result;

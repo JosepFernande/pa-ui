@@ -1,12 +1,32 @@
 import { InjectionToken, makeStateKey } from '@angular/core';
 
 /**
+ * Explicit hover/active/contrast overrides for a single bootstrap color
+ * entry (Requirement: Bootstrap Color Union Type). `base` is always required
+ * and is the HSL anchor for any variant not explicitly supplied — omitted
+ * variants keep deriving from `base` exactly as a plain-string entry would.
+ */
+export interface PaColorVariants {
+  base: string;
+  hover?: string;
+  active?: string;
+  contrast?: string;
+}
+
+/**
+ * A bootstrap color entry: either a plain hex string (today's shape) or an
+ * object with an explicit `base` and optional explicit hover/active/contrast
+ * overrides (Requirement: Bootstrap Color Union Type).
+ */
+export type PaColorValue = string | PaColorVariants;
+
+/**
  * Consumer-provided theme configuration passed to `providePaTheme()`.
  * `colors` is an open dictionary — any string key is accepted, not just the
  * 5 default base colors (Requirement: Open Color Dictionary).
  */
 export interface PaThemeConfig {
-  colors: Record<string, string>;
+  colors: Record<string, PaColorValue>;
 }
 
 /**
@@ -23,7 +43,7 @@ export interface PaThemeOptions {
  * exposed via `PA_THEME_TOKEN`.
  */
 export interface ResolvedTheme {
-  colors: Record<string, string>;
+  colors: Record<string, PaColorValue>;
 }
 
 /**

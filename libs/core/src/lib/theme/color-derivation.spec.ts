@@ -7,7 +7,7 @@ import {
   LIGHTNESS_STEP,
   normalizeColorName,
 } from './color-derivation';
-import { hexToHsl } from './color-math';
+import { hexToHsl, hslToHex } from './color-math';
 import type { ResolvedTheme } from './theme.tokens';
 
 describe('adjustLightness (Task 2.1 — Mid-range shifts both directions)', () => {
@@ -151,6 +151,120 @@ describe('deriveTokens (Tasks 2.8-2.14 — full derivation policy)', () => {
     expect(result['--pa-color-accent-active']).toMatch(/^#[0-9a-f]{6}$/);
     expect(result['--pa-color-accent-hover']).not.toBe(result['--pa-color-accent']);
     expect(result['--pa-color-accent-active']).not.toBe(result['--pa-color-accent']);
+  });
+});
+
+describe('deriveTokens — explicit hover/active/contrast overrides (Phase 2)', () => {
+  let warnSpy: jest.SpyInstance;
+
+  beforeEach(() => {
+    warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+  });
+
+  afterEach(() => {
+    warnSpy.mockRestore();
+  });
+
+  it('emits an explicit hover verbatim while active/contrast keep deriving from base (Task 2.1)', () => {
+    const theme: ResolvedTheme = {
+      colors: { primary: { base: '#16709e', hover: '#0a4f6b' } },
+    };
+    const result = deriveTokens(theme);
+    const hsl = hexToHsl('#16709e');
+
+    expect(result['--pa-color-primary']).toBe('#16709e');
+    expect(result['--pa-color-primary-hover']).toBe('#0a4f6b');
+    expect(result['--pa-color-primary-active']).toBe(
+      hslToHex(adjustLightness(hsl, -LIGHTNESS_STEP)),
+    );
+    expect(result['--pa-color-primary-contrast']).toBe(getContrastColor(hsl));
+  });
+
+  it('emits all four explicit variant values verbatim with zero HSL/WCAG computation (Task 2.2)', () => {
+    const theme: ResolvedTheme = {
+      colors: {
+        primary: {
+          base: '#16709e',
+          hover: '#0a4f6b',
+          active: '#1a80b3',
+          contrast: '#f0f0f0',
+        },
+      },
+    };
+    const result = deriveTokens(theme);
+
+    expect(result['--pa-color-primary']).toBe('#16709e');
+    expect(result['--pa-color-primary-hover']).toBe('#0a4f6b');
+    expect(result['--pa-color-primary-active']).toBe('#1a80b3');
+    expect(result['--pa-color-primary-contrast']).toBe('#f0f0f0');
+  });
+
+  it('emits a 3-digit explicit hex verbatim without expansion (Task 2.3)', () => {
+    const theme: ResolvedTheme = {
+      colors: { primary: { base: '#16709e', hover: '#abc' } },
+    };
+    const result = deriveTokens(theme);
+    expect(result['--pa-color-primary-hover']).toBe('#abc');
+  });
+
+  it('produces byte-identical output for a plain string and its object-shape equivalent (Task 2.4)', () => {
+    const stringTheme: ResolvedTheme = { colors: { primary: '#16709e' } };
+    const objectTheme: ResolvedTheme = { colors: { primary: { base: '#16709e' } } };
+
+    expect(deriveTokens(objectTheme)).toEqual(deriveTokens(stringTheme));
+  });
+
+  it('falls back to derivation with a distinct warning for an invalid explicit hover, leaving base/active/contrast unaffected (Task 2.5)', () => {
+    const theme: ResolvedTheme = {
+      colors: { primary: { base: '#16709e', hover: 'not-a-hex' } },
+    };
+    const result = deriveTokens(theme);
+    const hsl = hexToHsl('#16709e');
+
+    expect(result['--pa-color-primary']).toBe('#16709e');
+    expect(result['--pa-color-primary-hover']).toBe(hslToHex(adjustLightness(hsl, LIGHTNESS_STEP)));
+    expect(result['--pa-color-primary-active']).toBe(
+      hslToHex(adjustLightness(hsl, -LIGHTNESS_STEP)),
+    );
+    expect(result['--pa-color-primary-contrast']).toBe(getContrastColor(hsl));
+
+    expect(
+      warnSpy.mock.calls.some(([message]) => /hover/i.test(message) && /not-a-hex/.test(message)),
+    ).toBe(true);
+    // Distinct from the existing invalid-base warning message.
+    expect(warnSpy.mock.calls.some(([message]) => /skipping this color/i.test(message))).toBe(
+      false,
+    );
+  });
+
+  it('skips the whole color when the base inside an object entry is invalid, with the unchanged base-skip message (Task 2.6)', () => {
+    const theme: ResolvedTheme = {
+      colors: { primary: { base: 'not-a-hex', hover: '#0a4f6b' } },
+    };
+
+    let result: ReturnType<typeof deriveTokens> | undefined;
+    expect(() => {
+      result = deriveTokens(theme);
+    }).not.toThrow();
+
+    expect(Object.keys(result ?? {}).some((key) => key.startsWith('--pa-color-primary'))).toBe(
+      false,
+    );
+    expect(
+      warnSpy.mock.calls.some(
+        ([message]) => /invalid color value/i.test(message) && /skipping this color/i.test(message),
+      ),
+    ).toBe(true);
+  });
+
+  it('accepts an explicit contrast verbatim even below WCAG AA, with zero warnings (Task 2.7)', () => {
+    const theme: ResolvedTheme = {
+      colors: { primary: { base: '#16709e', contrast: '#e0e0e0' } },
+    };
+    const result = deriveTokens(theme);
+
+    expect(result['--pa-color-primary-contrast']).toBe('#e0e0e0');
+    expect(warnSpy).not.toHaveBeenCalled();
   });
 });
 

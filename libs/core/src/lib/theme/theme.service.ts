@@ -84,10 +84,13 @@ export class PaThemeService {
 
   /**
    * Convenience synchronous getter for a single color by key. Returns
-   * `undefined` for unknown keys instead of throwing.
+   * `undefined` for unknown keys instead of throwing. Normalizes an
+   * object-shaped entry to its `base` hex string — no accessor exposes
+   * explicit variants (Requirement: getColor Returns Base Hex Only).
    */
   getColor(name: string): string | undefined {
-    return this.theme().colors[name];
+    const value = this.theme().colors[name];
+    return typeof value === 'object' && value !== null ? value.base : value;
   }
 
   /**

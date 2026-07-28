@@ -1,5 +1,11 @@
 import * as publicApi from './public-api';
-import type { PaThemeConfig, PaThemeOptions, ResolvedTheme } from './public-api';
+import type {
+  PaColorValue,
+  PaColorVariants,
+  PaThemeConfig,
+  PaThemeOptions,
+  ResolvedTheme,
+} from './public-api';
 
 describe('public-api — theme engine surface (Issue #46)', () => {
   it('exports providePaTheme as a function', () => {
@@ -27,6 +33,17 @@ describe('public-api — theme engine surface (Issue #46)', () => {
     expect(config.colors['primary']).toBe('#000');
     expect(options.extendDefaults).toBe(false);
     expect(resolved.colors['primary']).toBeDefined();
+  });
+
+  it('exports PaColorVariants and PaColorValue as usable types for object-shaped bootstrap colors', () => {
+    const variants: PaColorVariants = { base: '#16709e', hover: '#0a4f6b' };
+    const config: PaThemeConfig = { colors: { primary: variants, brand: '#00ff00' } };
+    const asString: PaColorValue = '#16709e';
+    const asVariants: PaColorValue = variants;
+
+    expect((config.colors['primary'] as PaColorVariants).base).toBe('#16709e');
+    expect(asString).toBe('#16709e');
+    expect((asVariants as PaColorVariants).base).toBe('#16709e');
   });
 
   it('does NOT export mergeTheme, PA_THEME_TOKEN, or PA_THEME_STATE_KEY (internal surface)', () => {

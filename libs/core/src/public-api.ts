@@ -4,6 +4,8 @@ export { providePaTheme } from './lib/theme/theme-provider';
 export { PaThemeService } from './lib/theme/theme.service';
 export { DEFAULT_THEME } from './lib/theme/theme.tokens';
 export type {
+  PaColorValue,
+  PaColorVariants,
   PaThemeConfig,
   PaThemeOptions,
   ResolvedTheme,

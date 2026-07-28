@@ -205,5 +205,57 @@ describe('PaThemeService', () => {
       expect(() => service.getColor('does-not-exist')).not.toThrow();
       expect(service.getColor('does-not-exist')).toBeUndefined();
     });
+
+    it('normalizes an object-shaped entry to its base hex string (Task 4.1, Req: getColor Returns Base Hex Only)', () => {
+      const service = configureTestBed('browser', {
+        colors: { primary: { base: '#16709e', hover: '#0a4f6b' } },
+      });
+      expect(service.getColor('primary')).toBe('#16709e');
+    });
+  });
+
+  describe('object-shaped bootstrap colors — runtime mutation drops explicit variants (Phase 4)', () => {
+    it('overrideColor with a plain string over an object entry drops explicit variants and fully re-derives hover/active/contrast (Task 4.2)', () => {
+      const service = configureTestBed('browser', {
+        colors: { primary: { base: '#16709e', hover: '#0a4f6b' } },
+      });
+      const document = TestBed.inject(DOCUMENT);
+      const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');
+
+      service.overrideColor('primary', '#334455');
+
+      expect(service.theme().colors['primary']).toBe('#334455');
+      // Fully re-derived hover must NOT equal the dropped explicit hover.
+      expect(setPropertySpy).not.toHaveBeenCalledWith('--pa-primary-hover', '#0a4f6b');
+      expect(setPropertySpy).toHaveBeenCalledWith('--pa-primary', '#334455');
+    });
+
+    it('applyTheme with a plain string over an object entry drops explicit variants for that color (Task 4.2)', () => {
+      const service = configureTestBed('browser', {
+        colors: {
+          primary: { base: '#16709e', hover: '#0a4f6b' },
+          secondary: { base: '#222222', hover: '#111111' },
+        },
+      });
+
+      service.applyTheme({ primary: '#111111', secondary: '#222222' });
+
+      expect(service.theme().colors['primary']).toBe('#111111');
+      expect(service.theme().colors['secondary']).toBe('#222222');
+    });
+
+    it('reset() after an override restores the bootstrap object entry and its explicit hover verbatim (Task 4.3)', () => {
+      const service = configureTestBed('browser', {
+        colors: { primary: { base: '#16709e', hover: '#0a4f6b' } },
+      });
+      const document = TestBed.inject(DOCUMENT);
+      const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');
+
+      service.overrideColor('primary', '#334455');
+      service.reset();
+
+      expect(service.theme().colors['primary']).toEqual({ base: '#16709e', hover: '#0a4f6b' });
+      expect(setPropertySpy).toHaveBeenCalledWith('--pa-primary-hover', '#0a4f6b');
+    });
   });
 });
