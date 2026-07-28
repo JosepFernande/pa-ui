@@ -120,7 +120,7 @@ jobs:
           retention-days: 7
 
   audit:
-    needs: setup
+    needs: [setup, build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -131,13 +131,21 @@ jobs:
       - run: npm ci
         env:
           HUSKY: '0'
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
       - run: npx tsx tools/audit/index.ts
+      - run: npx tsx tools/audit/bundle-check.ts
       - name: Upload audit report
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: audit-report
-          path: tools/audit/report.json
+          path: |
+            tools/audit/report.json
+            tools/audit/bundle-report.json
 
   gga-review:
     needs: setup
@@ -278,6 +286,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_BASE_BRANCH: ${{ github.base_ref }}
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
         run: |
           set +e
           gga run --pr-mode --ci 2>&1 | tee /tmp/gga-review.log
