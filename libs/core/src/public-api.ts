@@ -30,3 +30,34 @@ export {
 } from './lib/theme/color-derivation';
 
 export { toSemanticCssVariables } from './lib/theme/semantic-tokens';
+
+export { PA_COLOR_SCALE_STEPS, PA_SIZE_STEPS } from './lib/foundation/foundation.types';
+export type {
+  PaColorScale,
+  PaColorScaleStep,
+  PaFontWeightScale,
+  PaFoundationPalette,
+  PaPartialColorScale,
+  PaSizeScale,
+  PaSizeStep,
+  PaTypographyRole,
+  PaTypographyScale,
+} from './lib/foundation/foundation.types';
+
+export {
+  PA_FONT_FAMILY,
+  PA_FONT_WEIGHT_SCALE,
+  PA_FOUNDATION_PALETTE,
+  PA_GAP_SCALE,
+  PA_ICON_SIZE_SCALE,
+  PA_RADIUS_SCALE,
+  PA_SPACING_SCALE,
+  PA_TYPOGRAPHY_SCALE,
+} from './lib/foundation/foundation.tokens';
+
+export {
+  PA_BUTTON_FIGMA_DIMENSIONS,
+  PA_BUTTON_PROVISIONAL_DIMENSIONS,
+} from './lib/foundation/button-dimensions.tokens';
+
+export { PA_COMPONENT_TOKEN_DEFAULTS } from './lib/foundation/component-defaults.tokens';

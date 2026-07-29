@@ -1,0 +1,268 @@
+/*
+ * @pa-ui/core/theme.css — the Foundation static CSS artifact.
+ *
+ * Source of truth is TypeScript (`foundation.tokens.ts` + `foundation-css.ts`
+ * + `component-defaults.tokens.ts` + `button-dimensions.tokens.ts`). This
+ * file is a hand-authored mirror of `toFoundationCssVariables()`; drift is
+ * caught by `foundation-css.spec.ts`, not by a build step.
+ *
+ * Three layers, in order (skills/pa-ui-architecture/SKILL.md:24-32):
+ *   1. Foundation   — raw values, UNPREFIXED  (--dark-blue-500, --spacing-md)
+ *   2. Semantic     — --pa-* non-color passthrough (--pa-spacing-md, --pa-font-size-h1)
+ *   3. Component    — --pa-button-* defaults, referencing (1) and runtime (2)
+ *
+ * Runtime color semantics (--pa-{name}[-hover|-active|-contrast]) are NOT
+ * declared here — they are written inline on documentElement by
+ * PaThemeService at bootstrap (higher specificity, always wins). This file
+ * only ships what is safe to be 100% static: raw scales, spacing/gap/
+ * radius/typography/icon-size, and component defaults built from them.
+ *
+ * Consumer setup: one import in addition to `providePaTheme()`:
+ *   @import '@pa-ui/core/theme.css';
+ *
+ * Montserrat / Flaticon are NOT shipped here — declared by name/class only,
+ * consumer responsibility (see docs/css-strategy.md).
+ */
+
+:root {
+  /* ------------------------------------------------------------------ */
+  /* Foundation — raw color scales (25-900), unprefixed                  */
+  /* ------------------------------------------------------------------ */
+
+  --dark-blue-25: #f2f6f7;
+  --dark-blue-50: #e6edf0;
+  --dark-blue-100: #cedbe1;
+  --dark-blue-200: #9db8c3;
+  --dark-blue-300: #6c95a6;
+  --dark-blue-400: #3b7288;
+  --dark-blue-500: #0a4f6b;
+  --dark-blue-600: #083f55;
+  --dark-blue-700: #062f40;
+  --dark-blue-800: #041f2a;
+  --dark-blue-900: #020f15;
+
+  --light-blue-25: #f3f7fa;
+  --light-blue-50: #e7f0f5;
+  --light-blue-100: #d0e2eb;
+  --light-blue-200: #a1c5d8;
+  --light-blue-300: #73a9c4;
+  --light-blue-400: #448cb1;
+  --light-blue-500: #16709e;
+  --light-blue-600: #11597e;
+  --light-blue-700: #0d435e;
+  --light-blue-800: #082c3f;
+  --light-blue-900: #04161f;
+
+  --dark-green-25: #f6f8f2;
+  --dark-green-50: #edf1e5;
+  --dark-green-100: #dce4cc;
+  --dark-green-200: #b9c999;
+  --dark-green-300: #96ae67;
+  --dark-green-400: #739334;
+  --dark-green-500: #507802;
+  --dark-green-600: #406001;
+  --dark-green-700: #304801;
+  --dark-green-800: #203000;
+  --dark-green-900: #101800;
+
+  --light-green-25: #f9fbf3;
+  --light-green-50: #f3f8e8;
+  --light-green-100: #e8f2d2;
+  --light-green-200: #d2e5a6;
+  --light-green-300: #bbd879;
+  --light-green-400: #a5cb4d;
+  --light-green-500: #8fbf21;
+  --light-green-600: #72981a;
+  --light-green-700: #557213;
+  --light-green-800: #394c0d;
+  --light-green-900: #1c2606;
+
+  --neutral-50: #fafafa;
+  --neutral-200: #ededed;
+  --neutral-500: #b8b8b8;
+  --neutral-700: #828282;
+  --neutral-900: #4c4c4c;
+
+  /* ------------------------------------------------------------------ */
+  /* Foundation — spacing / gap / radius (assistant-authored,             */
+  /* pending product confirmation — see foundation.tokens.ts)             */
+  /* ------------------------------------------------------------------ */
+
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  --gap-xs: 4px;
+  --gap-sm: 8px;
+  --gap-md: 16px;
+  --gap-lg: 24px;
+  --gap-xl: 32px;
+
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* ------------------------------------------------------------------ */
+  /* Foundation — icon size (CONFIRMED design values)                     */
+  /* ------------------------------------------------------------------ */
+
+  --icon-size-xs: 16px;
+  --icon-size-sm: 20px;
+  --icon-size-md: 24px;
+  --icon-size-lg: 32px;
+  --icon-size-xl: 40px;
+
+  /* ------------------------------------------------------------------ */
+  /* Foundation — typography (fontSize/fontWeight CONFIRMED;              */
+  /* lineHeight assistant-authored — see foundation.tokens.ts)            */
+  /* ------------------------------------------------------------------ */
+
+  --font-size-h1: 2rem;
+  --font-weight-h1: 700;
+  --line-height-h1: 1.25;
+
+  --font-size-h2: 1.5rem;
+  --font-weight-h2: 700;
+  --line-height-h2: 1.25;
+
+  --font-size-h3: 1.125rem;
+  --font-weight-h3: 700;
+  --line-height-h3: 1.3;
+
+  --font-size-h4: 1rem;
+  --font-weight-h4: 700;
+  --line-height-h4: 1.3;
+
+  --font-size-body: 1rem;
+  --font-weight-body: 400;
+  --line-height-body: 1.5;
+
+  --font-size-small-body: 0.875rem;
+  --font-weight-small-body: 400;
+  --line-height-small-body: 1.5;
+
+  --font-size-caption: 0.75rem;
+  --font-weight-caption: 400;
+  --line-height-caption: 1.5;
+
+  --font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ------------------------------------------------------------------ */
+  /* Semantic — non-color passthrough (--pa-*), 1:1 alias of foundation   */
+  /* ------------------------------------------------------------------ */
+
+  --pa-spacing-xs: var(--spacing-xs);
+  --pa-spacing-sm: var(--spacing-sm);
+  --pa-spacing-md: var(--spacing-md);
+  --pa-spacing-lg: var(--spacing-lg);
+  --pa-spacing-xl: var(--spacing-xl);
+
+  --pa-gap-xs: var(--gap-xs);
+  --pa-gap-sm: var(--gap-sm);
+  --pa-gap-md: var(--gap-md);
+  --pa-gap-lg: var(--gap-lg);
+  --pa-gap-xl: var(--gap-xl);
+
+  --pa-radius-xs: var(--radius-xs);
+  --pa-radius-sm: var(--radius-sm);
+  --pa-radius-md: var(--radius-md);
+  --pa-radius-lg: var(--radius-lg);
+  --pa-radius-xl: var(--radius-xl);
+
+  --pa-icon-size-xs: var(--icon-size-xs);
+  --pa-icon-size-sm: var(--icon-size-sm);
+  --pa-icon-size-md: var(--icon-size-md);
+  --pa-icon-size-lg: var(--icon-size-lg);
+  --pa-icon-size-xl: var(--icon-size-xl);
+
+  --pa-font-size-h1: var(--font-size-h1);
+  --pa-font-weight-h1: var(--font-weight-h1);
+  --pa-line-height-h1: var(--line-height-h1);
+
+  --pa-font-size-h2: var(--font-size-h2);
+  --pa-font-weight-h2: var(--font-weight-h2);
+  --pa-line-height-h2: var(--line-height-h2);
+
+  --pa-font-size-h3: var(--font-size-h3);
+  --pa-font-weight-h3: var(--font-weight-h3);
+  --pa-line-height-h3: var(--line-height-h3);
+
+  --pa-font-size-h4: var(--font-size-h4);
+  --pa-font-weight-h4: var(--font-weight-h4);
+  --pa-line-height-h4: var(--line-height-h4);
+
+  --pa-font-size-body: var(--font-size-body);
+  --pa-font-weight-body: var(--font-weight-body);
+  --pa-line-height-body: var(--line-height-body);
+
+  --pa-font-size-small-body: var(--font-size-small-body);
+  --pa-font-weight-small-body: var(--font-weight-small-body);
+  --pa-line-height-small-body: var(--line-height-small-body);
+
+  --pa-font-size-caption: var(--font-size-caption);
+  --pa-font-weight-caption: var(--font-weight-caption);
+  --pa-line-height-caption: var(--line-height-caption);
+
+  --pa-font-family: var(--font-family);
+
+  /* ------------------------------------------------------------------ */
+  /* Component defaults — Button (D4)                                    */
+  /* ------------------------------------------------------------------ */
+
+  --pa-button-bg: var(--pa-primary);
+  --pa-button-color: var(--pa-primary-contrast);
+  --pa-button-border: 1px solid var(--pa-primary);
+  --pa-button-radius: 4px;
+  --pa-button-gap: var(--gap-sm);
+  --pa-button-font-family: var(--font-family);
+  --pa-button-font-weight: var(--font-weight-semibold);
+  --pa-button-line-height: var(--line-height-body);
+
+  /* sm/lg padding sourced from PA_BUTTON_PROVISIONAL_DIMENSIONS (D5) */
+  --pa-button-padding-sm: 0 12px; /* provisional: pending design validation */
+  --pa-button-padding-md: 0 16px;
+  --pa-button-padding-lg: 0 20px; /* provisional: pending design validation */
+
+  --pa-button-font-sm: var(--font-size-small-body);
+  --pa-button-font-md: var(--font-size-body);
+  --pa-button-font-lg: var(--font-size-body);
+
+  /* sm/lg min-height sourced from PA_BUTTON_PROVISIONAL_DIMENSIONS (D5) */
+  --pa-button-min-height-sm: 40px; /* provisional: pending design validation */
+  --pa-button-min-height-md: 48px;
+  --pa-button-min-height-lg: 56px; /* provisional: pending design validation */
+
+  /* min-width is Figma-confirmed for ALL sizes, incl. sm/lg — never provisional */
+  --pa-button-min-width-sm: 200px;
+  --pa-button-min-width-md: 224px;
+  --pa-button-min-width-lg: 280px;
+
+  /* sm/lg gap sourced from PA_BUTTON_PROVISIONAL_DIMENSIONS (D5) */
+  --pa-button-gap-sm: 8px; /* provisional: pending design validation */
+  --pa-button-gap-md: 10px;
+  --pa-button-gap-lg: 12px; /* provisional: pending design validation */
+
+  --pa-button-focus-ring: 0 0 0 3px var(--pa-primary-hover);
+  --pa-button-hover-bg: var(--pa-primary-hover);
+  --pa-button-active-bg: var(--pa-primary-active);
+  --pa-button-disabled-bg: var(--neutral-200);
+  --pa-button-disabled-color: var(--neutral-500);
+  --pa-button-disabled-opacity: 0.6;
+  --pa-button-solid-color: var(--pa-primary-contrast);
+  --pa-button-transition-duration: 150ms;
+  --pa-button-transition-easing: ease-in-out;
+  --pa-button-loading-color: var(--pa-primary-contrast);
+  --pa-button-spinner-size: 1em;
+  --pa-button-spinner-border: 2px solid currentColor;
+  --pa-button-spinner-duration: 600ms;
+  --pa-button-sr-only-width: 1px;
+  --pa-button-sr-only-height: 1px;
+  --pa-button-sr-only-margin: -1px;
+}
