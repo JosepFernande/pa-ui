@@ -40,10 +40,11 @@ fi
 ### Paso 3: Listar las páginas del Wiki
 
 ```bash
-# Todas las páginas .md, excluyendo Home y _Sidebar (metadata de navegación,
-# no documentación de referencia)
+# Todas las páginas .md, excluyendo Home y cualquier página especial con
+# prefijo "_" (convención de Gollum/GitHub Wiki para metadata de navegación:
+# _Sidebar, _Footer, _Header, etc. — no son documentación de referencia)
 find .wiki-cache/pa-ui.wiki -maxdepth 1 -name '*.md' \
-  ! -name 'Home.md' ! -name '_Sidebar.md'
+  ! -name 'Home.md' ! -name '_*.md'
 ```
 
 ```typescript
@@ -231,10 +232,10 @@ git clone https://github.com/JosepFernande/pa-ui.wiki.git .wiki-cache/pa-ui.wiki
 ```
 
 Un Wiki de GitHub no existe como repo git hasta que se crea al menos una página
-manualmente desde la UI. En `pa-ui` el Wiki ya está poblado (17 páginas +
-`Home.md` + `_Sidebar.md`), así que este error solo debería reaparecer si el
-Wiki se elimina y recrea desde cero. Ver `references/wiki-git-patterns.md` para
-el detalle.
+manualmente desde la UI. En `pa-ui` el Wiki ya está poblado (17 páginas de
+referencia + `Home.md` + páginas especiales con prefijo `_` como `_Sidebar.md` y
+`_Footer.md`), así que este error solo debería reaparecer si el Wiki se elimina
+y recrea desde cero. Ver `references/wiki-git-patterns.md` para el detalle.
 
 ```typescript
 if (cloneFailed) {

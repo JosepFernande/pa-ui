@@ -223,7 +223,8 @@ revisar US-4
 [SYNC] Sincronizando páginas de referencia del Wiki...
   → .wiki-cache/pa-ui.wiki no existe, clonando...
   → git clone https://github.com/JosepFernande/pa-ui.wiki.git .wiki-cache/pa-ui.wiki
-  → 17 páginas encontradas (excluyendo Home.md y _Sidebar.md)
+  → 17 páginas encontradas (excluyendo Home.md y páginas especiales con
+    prefijo _, como _Sidebar.md y _Footer.md)
 
   [1/17] Architecture-and-Foundation.md...
     → Read(.wiki-cache/pa-ui.wiki/Architecture-and-Foundation.md)... 12500 caracteres

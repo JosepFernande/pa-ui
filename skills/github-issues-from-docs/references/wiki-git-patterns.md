@@ -120,9 +120,10 @@ git clone https://github.com/JosepFernande/pa-ui.wiki.git .wiki-cache/pa-ui.wiki
 Un Wiki de GitHub no existe como repo git accesible por clone hasta que se crea
 al menos una página manualmente desde la UI del repo (esto es un comportamiento
 documentado de GitHub, no un bug de la skill). En `pa-ui` el Wiki ya está
-poblado (17 páginas de referencia + `Home.md` + `_Sidebar.md`, pusheadas en la
-migración inicial de la documentación), así que este caso solo debería
-reaparecer si el Wiki llegara a eliminarse y recrearse desde cero. Si ocurre:
+poblado (17 páginas de referencia + `Home.md` + páginas especiales con prefijo
+`_` como `_Sidebar.md` y `_Footer.md`, pusheadas en la migración inicial de la
+documentación), así que este caso solo debería reaparecer si el Wiki llegara a
+eliminarse y recrearse desde cero. Si ocurre:
 
 ```typescript
 if (cloneFailed) {
