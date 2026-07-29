@@ -80,7 +80,8 @@
         "port": 4400,
         "configDir": "apps/showcase/.storybook",
         "browserTarget": "showcase:build",
-        "compodoc": false
+        "compodoc": false,
+        "styles": ["libs/core/src/lib/foundation/theme.css"]
       },
       "configurations": {
         "ci": {
@@ -95,7 +96,8 @@
         "outputDir": "dist/storybook/showcase",
         "configDir": "apps/showcase/.storybook",
         "browserTarget": "showcase:build",
-        "compodoc": false
+        "compodoc": false,
+        "styles": ["libs/core/src/lib/foundation/theme.css"]
       },
       "configurations": {
         "ci": {

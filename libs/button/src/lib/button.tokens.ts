@@ -16,6 +16,14 @@ export const PA_BUTTON_TOKENS = {
   minHeightSm: '--pa-button-min-height-sm',
   minHeightMd: '--pa-button-min-height-md',
   minHeightLg: '--pa-button-min-height-lg',
+  /** Per-size min-width (Phase 3, additive — see design D4). */
+  minWidthSm: '--pa-button-min-width-sm',
+  minWidthMd: '--pa-button-min-width-md',
+  minWidthLg: '--pa-button-min-width-lg',
+  /** Per-size gap (Phase 3, additive — coexists with the unsized `gap` above). */
+  gapSm: '--pa-button-gap-sm',
+  gapMd: '--pa-button-gap-md',
+  gapLg: '--pa-button-gap-lg',
   focusRing: '--pa-button-focus-ring',
   hoverBg: '--pa-button-hover-bg',
   activeBg: '--pa-button-active-bg',
