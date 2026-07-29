@@ -28,7 +28,17 @@ const meta: Meta<PaButton> = {
   argTypes: {
     color: {
       control: 'select',
-      options: ['primary', 'success', 'danger', 'warning', 'neutral', 'brand'],
+      options: [
+        'primary',
+        'secondary',
+        'success',
+        'error',
+        'warning',
+        'alert',
+        'info',
+        'neutral',
+        'brand',
+      ],
       description:
         'Theme-registered color name. "brand" is a custom color registered via providePaTheme() for this story, proving the 4 host-bound variants derive from any registered color, not just the defaults.',
     },

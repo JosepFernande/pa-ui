@@ -2,10 +2,22 @@ import { DEFAULT_THEME } from './theme.tokens';
 import type { PaThemeConfig, PaThemeOptions, ResolvedTheme } from './theme.tokens';
 
 /**
- * The 5 base color keys every default palette must provide. Used to detect
+ * The base color keys every default palette must provide. Used to detect
  * gaps when `extendDefaults` is `false` (Requirement: Color Merge Behavior).
+ * Matches the `DEFAULT_THEME` roster's semantic set (design D3) — the
+ * literal brand hues (`dark-blue`/`light-blue`/`dark-green`/`light-green`)
+ * and the deprecated `danger` alias are deliberately NOT required here.
  */
-const BASE_COLOR_KEYS = ['primary', 'success', 'danger', 'warning', 'neutral'] as const;
+const BASE_COLOR_KEYS = [
+  'primary',
+  'secondary',
+  'success',
+  'error',
+  'warning',
+  'alert',
+  'info',
+  'neutral',
+] as const;
 
 /**
  * Pure, framework-free merge of consumer theme config over a default
@@ -19,7 +31,7 @@ const BASE_COLOR_KEYS = ['primary', 'success', 'danger', 'warning', 'neutral'] a
  *   `config.colors` merged over `defaults.colors`, consumer values winning
  *   on key collision.
  * - `extendDefaults` false → returns ONLY `config.colors`, with no fallback
- *   to `defaults` for absent keys. If any of the 5 base color keys is
+ *   to `defaults` for absent keys. If any of the 8 base color keys is
  *   missing from `config.colors`, emits a single `console.warn` naming the
  *   missing keys and returns the partial map — never throws, never
  *   backfills.
