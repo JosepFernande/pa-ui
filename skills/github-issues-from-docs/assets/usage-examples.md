@@ -23,27 +23,26 @@ revisar US-11
   → Tema: Theming, tokens, colores personalizados
 
 [3/9] Cargando índice desde Engram...
-  → mem_search("notion-docs/index")
-  → Índice encontrado: 17 documentos
-  → Última sincronización: 2026-07-14T00:40:00.000Z
+  → mem_search("wiki-docs/index")
+  → Índice encontrado: 17 páginas
+  → Última sincronización: 2026-07-29T00:40:00.000Z (HEAD a1b2c3d)
 
-[4/9] Filtrando documentos relevantes...
+[4/9] Filtrando páginas relevantes...
   → Match de keywords vs tags:
-    - "Theming Deep-Dive" → score: 0.8 (tags: theme-engine, providePaTheme, colores)
-    - "CSS Strategy" → score: 0.6 (tags: tokens, theme-engine)
-    - "Architecture & Foundation" → score: 0.5 (tags: tokens, arquitectura)
-  → Documentos seleccionados: 3
+    - "Theming-Deep-Dive" → score: 0.8 (tags: theme-engine, providePaTheme, colores)
+    - "CSS-Strategy-and-View-Encapsulation" → score: 0.6 (tags: tokens, theme-engine)
+    - "Architecture-and-Foundation" → score: 0.5 (tags: tokens, arquitectura)
+  → Páginas seleccionadas: 3
 
-[5/9] Validando frescura de documentos...
-  → retrieve-a-page para cada documento (solo metadata)
-  → "Theming Deep-Dive": last_edited igual → FRESCO
-  → "CSS Strategy": last_edited igual → FRESCO
-  → "Architecture & Foundation": last_edited igual → FRESCO
-  → Resultado: 0 documentos obsoletos
+[5/9] Validando frescura (HEAD SHA)...
+  → git -C .wiki-cache/pa-ui.wiki pull --ff-only
+  → git -C .wiki-cache/pa-ui.wiki rev-parse HEAD → a1b2c3d
+  → Comparación: HEAD actual == last_synced_head_sha cacheado
+  → Resultado: todo fresco, 0 páginas obsoletas (1 sola comparación de string)
 
 [6/9] Cargando contenido desde cache...
-  → mem_get_observation para cada documento
-  → 3 documentos cargados desde Engram (0 API calls adicionales a Notion)
+  → mem_get_observation para cada página
+  → 3 páginas cargadas desde Engram (0 lecturas de archivo adicionales)
 
 [7/9] Analizando issue contra documentación...
   → Comparando criterios del issue #11 vs documentación:
@@ -68,15 +67,15 @@ revisar US-11
 
 [Resumen]
   ✓ Issue #11 (US-11) revisado y actualizado en GitHub
-  ✓ Documentos consultados: 3 (todos desde cache)
-  ✓ API calls a Notion: 3 (solo validaciones de frescura)
-  ✓ Tokens usados: ~2500
-  ✓ Tokens ahorrados vs. leer siempre: ~3500 (58%)
+  ✓ Páginas consultadas: 3 (todas desde cache)
+  ✓ Operaciones git: 2 (pull + rev-parse, para validar frescura)
+  ✓ Tokens usados: ~2000
+  ✓ Tokens ahorrados vs. leer siempre: ~3500 (~64%)
   ✓ Gaps encontrados: 5
   ✓ Criterios agregados: 11
 ```
 
-## Ejemplo 2: Revisar issue con documento de referencia obsoleto
+## Ejemplo 2: Revisar issue con página de referencia obsoleta
 
 ### Input del usuario
 
@@ -98,32 +97,32 @@ revisar issue #8
   → Tema: Tooling, linting, validación de código
 
 [3/9] Cargando índice desde Engram...
-  → Índice encontrado: 17 documentos
+  → Índice encontrado: 17 páginas (last_synced_head_sha: a1b2c3d)
 
-[4/9] Filtrando documentos relevantes...
-  → Documentos seleccionados: 4
-    - "CSS Strategy" (tags: stylelint, eslint, custom-rules)
-    - "Architecture & Foundation" (tags: arquitectura)
-    - "CI/CD Pipeline" (tags: ci, pre-commit)
-    - "Contribution Guidelines" (tags: code-review)
+[4/9] Filtrando páginas relevantes...
+  → Páginas seleccionadas: 4
+    - "CSS-Strategy-and-View-Encapsulation" (tags: stylelint, eslint, custom-rules)
+    - "Architecture-and-Foundation" (tags: arquitectura)
+    - "CI-CD-Pipeline" (tags: ci, pre-commit)
+    - "Contribution-PR-Code-Review-Guidelines" (tags: code-review)
 
-[5/9] Validando frescura...
-  → "CSS Strategy": last_edited DIFERENTE → OBSOLETO
-    - Engram: 2026-06-19T15:28:00.000Z
-    - Notion: 2026-07-13T10:15:00.000Z
-  → "Architecture & Foundation": FRESCO
-  → "CI/CD Pipeline": FRESCO
-  → "Contribution Guidelines": FRESCO
-  → Resultado: 1 documento obsoleto
+[5/9] Validando frescura (HEAD SHA)...
+  → git -C .wiki-cache/pa-ui.wiki pull --ff-only
+  → git -C .wiki-cache/pa-ui.wiki rev-parse HEAD → f9e8d7c (cambió)
+  → HEAD actual != last_synced_head_sha cacheado (a1b2c3d)
+  → git -C .wiki-cache/pa-ui.wiki diff --name-only a1b2c3d f9e8d7c -- '*.md'
+    → CSS-Strategy-and-View-Encapsulation.md
+  → Resultado: 1 página obsoleta (de las 4 relevantes)
 
-[6/9] Sincronizando documento obsoleto...
-  → retrieve-page-markdown("CSS Strategy")
+[6/9] Sincronizando página obsoleta...
+  → Read(.wiki-cache/pa-ui.wiki/CSS-Strategy-and-View-Encapsulation.md)
   → Contenido actualizado: 15000 caracteres
+  → git log -1 --format=%H -- CSS-Strategy-and-View-Encapsulation.md → f9e8d7c
   → Guardando en Engram...
   → Cache actualizado
 
 [7/9] Cargando contenido...
-  → 4 documentos cargados (1 desde Notion, 3 desde cache)
+  → 4 páginas cargadas (1 desde el clone local recién actualizado, 3 desde cache)
 
 [8/9] Analizando issue...
   → Gaps encontrados:
@@ -139,10 +138,10 @@ revisar issue #8
 
 [Resumen]
   ✓ Issue #8 revisado y actualizado en GitHub
-  ✓ Documentos consultados: 4 (3 desde cache, 1 re-leído)
-  ✓ API calls a Notion: 5 (4 validaciones + 1 re-lectura)
+  ✓ Páginas consultadas: 4 (3 desde cache, 1 re-leída del clone local)
+  ✓ Operaciones git: 4 (pull + rev-parse + diff + log -1 de la página re-leída)
   ✓ Tokens usados: ~3200
-  ✓ Tokens ahorrados vs. leer siempre: ~2800 (47%)
+  ✓ Tokens ahorrados vs. leer siempre: ~2800 (~47%)
   ✓ Gaps encontrados: 4
   ✓ Criterios agregados: 9
 ```
@@ -163,13 +162,13 @@ crear issue para componente Avatar
 [1/5] Recopilando requisitos...
   → Usuario: "componente Avatar con imagen, iniciales, tamaños y colores dinámicos"
 
-[2/5] Cargando documentos relevantes...
+[2/5] Cargando páginas relevantes...
   → Keywords: "Avatar", "componente", "imagen", "tamaños", "colores"
-  → Documentos seleccionados: 3
-    - "Architecture & Foundation" (componentes, tokens)
-    - "CSS Strategy" (BEM, ViewEncapsulation, tokens)
-    - "Theming Deep-Dive" (colores dinámicos)
-  → Todos frescos, cargados desde cache
+  → Páginas seleccionadas: 3
+    - "Architecture-and-Foundation" (componentes, tokens)
+    - "CSS-Strategy-and-View-Encapsulation" (BEM, ViewEncapsulation, tokens)
+    - "Theming-Deep-Dive" (colores dinámicos)
+  → HEAD sin cambios respecto al último sync, todas frescas, cargadas desde cache
 
 [3/5] Generando body del issue alineado con documentación...
   → Analizando patrones de issues previos (Button, Badge)
@@ -200,9 +199,9 @@ crear issue para componente Avatar
 
 [Resumen]
   ✓ Issue #15 creado exitosamente en GitHub
-  ✓ Alineado con: Architecture Foundation, CSS Strategy, Theming Deep-Dive
-  ✓ Documentos consultados: 3 (todos desde cache)
-  ✓ API calls a Notion: 0 (documentación 100% desde cache)
+  ✓ Alineado con: Architecture-and-Foundation, CSS-Strategy-and-View-Encapsulation, Theming-Deep-Dive
+  ✓ Páginas consultadas: 3 (todas desde cache)
+  ✓ Operaciones git: 1 (rev-parse para confirmar que el HEAD no cambió)
   ✓ Tokens usados: ~1800
   ✓ Criterios generados: 11
 ```
@@ -221,29 +220,32 @@ revisar US-4
 [Skill] Iniciando revisión de US-4 (issue #4)...
 [Skill] Índice de documentación no encontrado en Engram. Ejecutando sincronización inicial...
 
-[SYNC] Sincronizando documentos de referencia de Notion...
-  → Leyendo lista de documentos desde Notion...
-  → 17 documentos encontrados
+[SYNC] Sincronizando páginas de referencia del Wiki...
+  → .wiki-cache/pa-ui.wiki no existe, clonando...
+  → git clone https://github.com/JosepFernande/pa-ui.wiki.git .wiki-cache/pa-ui.wiki
+  → 17 páginas encontradas (excluyendo Home.md y páginas especiales con
+    prefijo _, como _Sidebar.md y _Footer.md)
 
-  [1/17] Architecture & Foundation...
-    → retrieve-page-markdown... 12500 caracteres
+  [1/17] Architecture-and-Foundation.md...
+    → Read(.wiki-cache/pa-ui.wiki/Architecture-and-Foundation.md)... 12500 caracteres
     → Generando tags... 8 tags
     → Guardando en Engram...
 
-  [2/17] CSS Strategy & View Encapsulation...
-    → retrieve-page-markdown... 15000 caracteres
+  [2/17] CSS-Strategy-and-View-Encapsulation.md...
+    → Read(...)... 15000 caracteres
     → Generando tags... 10 tags
     → Guardando en Engram...
 
-  ... (15 documentos más) ...
+  ... (15 páginas más) ...
 
-  [17/17] AI Code Review with gga...
-    → retrieve-page-markdown... 3000 caracteres
+  [17/17] AI-Code-Review-with-gga.md...
+    → Read(...)... 3000 caracteres
     → Generando tags... 5 tags
     → Guardando en Engram...
 
-  → Guardando índice en Engram...
-  → Sincronización completada: 17 documentos, 120 tags generados
+  → git rev-parse HEAD → a1b2c3d
+  → Guardando índice en Engram (last_synced_head_sha: a1b2c3d)...
+  → Sincronización completada: 17 páginas, 120 tags generados
 
 [Skill] Continuando con revisión del issue #4...
 
@@ -255,16 +257,16 @@ revisar US-4
   → Keywords: "Button", "variantes", "tamaños", "colores"
 
 [3/9] Cargando índice desde Engram...
-  → Índice encontrado: 17 documentos
+  → Índice encontrado: 17 páginas
 
-[4/9] Filtrando documentos relevantes...
-  → Documentos seleccionados: 3
+[4/9] Filtrando páginas relevantes...
+  → Páginas seleccionadas: 3
 
-[5/9] Validando frescura...
-  → Todos frescos (acaban de ser sincronizados)
+[5/9] Validando frescura (HEAD SHA)...
+  → Todas frescas (acaban de ser sincronizadas en este mismo paso)
 
 [6/9] Cargando contenido desde cache...
-  → 3 documentos cargados desde Engram
+  → 3 páginas cargadas desde Engram
 
 [7/9] Analizando issue...
   → Gaps encontrados:
@@ -285,11 +287,11 @@ revisar US-4
 
 [Resumen]
   ✓ Issue #4 (US-4) revisado y actualizado en GitHub
-  ✓ Sincronización inicial de documentación: 17 documentos (primera vez)
-  ✓ Documentos consultados: 3 (todos desde cache tras el sync)
-  ✓ API calls a Notion: 34 (17×2 sincronización, 0 validaciones adicionales)
-  ✓ Tokens usados: ~8500 (sincronización) + ~2000 (revisión) = ~10500
-  ✓ Tokens ahorrados en futuras ejecuciones: ~60% por revisión
+  ✓ Sincronización inicial de documentación: 17 páginas (primera vez, incluye 1 clone)
+  ✓ Páginas consultadas: 3 (todas desde cache tras el sync)
+  ✓ Operaciones git: 1 clone + 17 lecturas de archivo (sincronización), 0 adicionales para la revisión
+  ✓ Tokens usados: ~8000 (sincronización) + ~2000 (revisión) = ~10000
+  ✓ Tokens ahorrados en futuras ejecuciones: ~98% en el chequeo de frescura
   ✓ Gaps encontrados: 5
   ✓ Criterios actualizados: 5 → 10
 ```
@@ -299,7 +301,7 @@ revisar US-4
 ### Input del usuario
 
 ```
-/sync-notion-docs --incremental
+/sync-wiki-docs --incremental
 ```
 
 ### Flujo de ejecución
@@ -308,48 +310,46 @@ revisar US-4
 [Skill] Iniciando sincronización incremental...
 
 [1/3] Cargando índice desde Engram...
-  → Índice encontrado: 17 documentos
-  → Última sincronización: 2026-07-14T00:40:00.000Z
+  → Índice encontrado: 17 páginas
+  → Última sincronización: 2026-07-29T00:40:00.000Z (HEAD a1b2c3d)
 
-[2/3] Validando frescura de todos los documentos...
-  → retrieve-a-page para cada documento (solo metadata)
-  → [1/17] Architecture & Foundation: FRESCO
-  → [2/17] CSS Strategy: FRESCO
-  → [3/17] Versioning & Breaking Changes: OBSOLETO
-    - Engram: 2026-06-19T19:44:00.000Z
-    - Notion: 2026-07-14T15:30:00.000Z
-  → [4/17] Testing Strategy: FRESCO
-  → ... (13 documentos más) ...
-  → [17/17] AI Code Review: FRESCO
+[2/3] Validando frescura (HEAD SHA)...
+  → git -C .wiki-cache/pa-ui.wiki pull --ff-only
+  → git -C .wiki-cache/pa-ui.wiki rev-parse HEAD → f9e8d7c
+  → HEAD actual != last_synced_head_sha cacheado
+  → git -C .wiki-cache/pa-ui.wiki diff --name-only a1b2c3d f9e8d7c -- '*.md'
+    → Versioning-and-Breaking-Changes.md
+  → Resultado: 1 página obsoleta (de 17), detectada en una sola operación diff
 
-  → Resultado: 1 documento obsoleto
-
-[3/3] Sincronizando documentos obsoletos...
-  → [1/1] Versioning & Breaking Changes...
-    → retrieve-page-markdown... 8500 caracteres
+[3/3] Sincronizando página obsoleta...
+  → [1/1] Versioning-and-Breaking-Changes.md...
+    → Read(.wiki-cache/pa-ui.wiki/Versioning-and-Breaking-Changes.md)... 8500 caracteres
     → Generando tags... 7 tags
+    → git log -1 --format=%H -- Versioning-and-Breaking-Changes.md → f9e8d7c
     → Actualizando cache en Engram...
-    → Actualizando índice...
+    → Actualizando índice (last_synced_head_sha: f9e8d7c)...
 
 [Resumen]
   ✓ Sincronización incremental completada
-  ✓ Documentos validados: 17
-  ✓ Documentos actualizados: 1
-  ✓ API calls a Notion: 18 (17 validaciones + 1 re-lectura)
-  ✓ Tiempo total: ~20 segundos
+  ✓ Páginas en el índice: 17
+  ✓ Páginas actualizadas: 1
+  ✓ Operaciones git: 4 (pull + rev-parse + diff + log -1 de la página cambiada)
+  ✓ Tiempo total: ~8 segundos
 ```
 
 ## Comparación de escenarios
 
-| Escenario                             | API calls a Notion | Tokens | Tiempo | Cache hit rate |
-| ------------------------------------- | ------------------ | ------ | ------ | -------------- |
-| Revisar issue (todo fresco)           | 3-5                | ~2500  | 10-15s | 100%           |
-| Revisar issue (1 doc obsoleto)        | 5-8                | ~3200  | 15-25s | 75%            |
-| Crear nuevo issue                     | 0-3                | ~1800  | 5-10s  | 100%           |
-| Primera ejecución (sin cache)         | 34+                | ~10500 | 60-90s | 0% → 100%      |
-| Sincronización incremental (1 cambio) | 18                 | ~4000  | 20s    | 94%            |
-| Sincronización completa (forzada)     | 34                 | ~8000  | 60s    | 0% → 100%      |
+| Escenario                             | Operaciones git       | Tokens | Tiempo | Cache hit rate |
+| ------------------------------------- | --------------------- | ------ | ------ | -------------- |
+| Revisar issue (todo fresco)           | 2 (pull + rev-parse)  | ~2000  | 5-10s  | 100%           |
+| Revisar issue (1 página obsoleta)     | 4 (+ diff + log -1)   | ~3200  | 10-15s | 75%            |
+| Crear nuevo issue                     | 0-1                   | ~1800  | 3-8s   | 100%           |
+| Primera ejecución (sin cache)         | 1 clone + 17 lecturas | ~10000 | 20-40s | 0% → 100%      |
+| Sincronización incremental (1 cambio) | 4                     | ~4000  | ~8s    | 94%            |
+| Sincronización completa (forzada)     | 1 pull + 17 lecturas  | ~8000  | 20-40s | 0% → 100%      |
 
-**Promedio de ahorro:** 60-80% menos tokens vs. leer siempre desde Notion.
-Ninguna de estas operaciones escribe en Notion — la creación/actualización de
-issues ocurre exclusivamente vía `gh` CLI.
+**Ahorro dominante:** el chequeo de frescura pasa de O(N) llamadas a una API
+externa (~150 tokens por página, ~2550 tokens para 17 páginas) a O(1) — una sola
+comparación de HEAD SHA (~20-30 tokens) — sin importar cuántas páginas tenga el
+Wiki. Ninguna de estas operaciones escribe en el repo del Wiki — la
+creación/actualización de issues ocurre exclusivamente vía `gh` CLI.

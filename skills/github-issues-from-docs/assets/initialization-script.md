@@ -1,11 +1,12 @@
-# Script de Inicialización: Sincronización de Documentos de Notion
+# Script de Inicialización: Sincronización de Páginas del Wiki
 
 ## Propósito
 
 Este script se ejecuta automáticamente la primera vez que se usa la skill
-`github-issues-from-docs` o manualmente con el comando `/sync-notion-docs`. Solo
-sincroniza documentación de referencia de Notion (lectura); nunca escribe en
-Notion.
+`github-issues-from-docs` o manualmente con el comando `/sync-wiki-docs`. Solo
+sincroniza documentación de referencia desde el repo git del Wiki
+(`https://github.com/JosepFernande/pa-ui.wiki.git`, lectura); nunca hace
+`git push` a ese repo.
 
 ## Flujo de ejecución
 
@@ -13,66 +14,73 @@ Notion.
 
 ```typescript
 const indexSearch = await mem_search({
-  query: 'notion-docs/index',
+  query: 'wiki-docs/index',
   project: 'pa-ui',
 });
 
 if (indexSearch && indexSearch.length > 0) {
   console.log(
-    'Índice ya existe en Engram. Usar /sync-notion-docs para forzar actualización.',
+    'Índice ya existe en Engram. Usar /sync-wiki-docs para forzar actualización.',
   );
   return;
 }
 ```
 
-### Paso 2: Obtener lista de documentos de Notion
+### Paso 2: Asegurar el clone local del Wiki
 
-```typescript
-const blocks =
-  (await notion_API) -
-  get -
-  block -
-  children({
-    block_id: '35f80bf9-7f94-80d7-83ff-e06cb99a1505', // Documentacion page
-  });
-
-const documents = [];
-
-for (const block of blocks.results) {
-  if (block.type === 'child_page') {
-    documents.push({
-      id: block.id,
-      title: block.child_page.title,
-    });
-  }
-}
+```bash
+# Si el clone no existe todavía
+if [ ! -d .wiki-cache/pa-ui.wiki ]; then
+  git clone https://github.com/JosepFernande/pa-ui.wiki.git .wiki-cache/pa-ui.wiki
+else
+  git -C .wiki-cache/pa-ui.wiki pull --ff-only
+fi
 ```
 
-### Paso 3: Para cada documento, leer metadata y contenido
+### Paso 3: Listar las páginas del Wiki
+
+```bash
+# Todas las páginas .md, excluyendo Home y cualquier página especial con
+# prefijo "_" (convención de Gollum/GitHub Wiki para metadata de navegación:
+# _Sidebar, _Footer, _Header, etc. — no son documentación de referencia)
+find .wiki-cache/pa-ui.wiki -maxdepth 1 -name '*.md' \
+  ! -name 'Home.md' ! -name '_*.md'
+```
+
+```typescript
+const documents = pageFiles.map((file) => ({
+  page: file.replace(/\.md$/, ''),
+  file,
+}));
+```
+
+### Paso 4: Para cada página, leer contenido y generar tags
 
 ```typescript
 for (const doc of documents) {
-  // 3a. Obtener metadata
-  const metadata =
-    (await notion_API) - retrieve - a - page({ page_id: doc.id });
+  // 4a. Leer contenido con la tool Read
+  const markdown = await Read({
+    file_path: `.wiki-cache/pa-ui.wiki/${doc.file}`,
+  });
 
-  // 3b. Obtener contenido completo
-  const markdown =
-    (await notion_API) - retrieve - page - markdown({ page_id: doc.id });
+  // 4b. Obtener el commit SHA en que se modificó por última vez este archivo
+  const lastCommitSha = await bash(
+    `git -C .wiki-cache/pa-ui.wiki log -1 --format=%H -- "${doc.file}"`,
+  );
 
-  // 3c. Generar tags automáticos
-  const tags = generateTags(markdown, metadata.title);
+  // 4c. Generar tags automáticos
+  const tags = generateTags(markdown, doc.page);
 
-  // 3d. Guardar contenido en Engram
+  // 4d. Guardar contenido en Engram
   await mem_save({
-    title: `Notion Doc: ${metadata.title}`,
+    title: `Wiki Doc: ${doc.page}`,
     type: 'architecture',
     project: 'pa-ui',
-    topic_key: `notion-docs/${doc.id}`,
+    topic_key: `wiki-docs/${doc.page}`,
     content: JSON.stringify({
-      id: doc.id,
-      title: metadata.title,
-      last_edited: metadata.last_edited_time,
+      page: doc.page,
+      file: doc.file,
+      last_commit_sha: lastCommitSha,
       cached_at: new Date().toISOString(),
       content: markdown,
       markdown_length: markdown.length,
@@ -81,36 +89,39 @@ for (const doc of documents) {
     capture_prompt: false,
   });
 
-  // 3e. Agregar al índice
-  doc.last_edited = metadata.last_edited_time;
+  // 4e. Agregar al índice
+  doc.last_commit_sha = lastCommitSha;
   doc.tags = tags;
 }
 ```
 
-### Paso 4: Guardar índice en Engram
+### Paso 5: Guardar índice en Engram
 
 ```typescript
+const headSha = await bash('git -C .wiki-cache/pa-ui.wiki rev-parse HEAD');
+
 await mem_save({
-  title: 'Notion Documentation Index',
+  title: 'Wiki Documentation Index',
   type: 'config',
   project: 'pa-ui',
-  topic_key: 'notion-docs/index',
+  topic_key: 'wiki-docs/index',
   content: JSON.stringify({
-    parent_page_id: '35f80bf9-7f94-80d7-83ff-e06cb99a1505',
-    parent_page_title: 'Documentacion',
-    last_synced: new Date().toISOString(),
+    repo: 'https://github.com/JosepFernande/pa-ui.wiki.git',
+    local_clone_path: '.wiki-cache/pa-ui.wiki',
+    last_synced_head_sha: headSha,
+    last_synced_at: new Date().toISOString(),
     documents: documents,
   }),
   capture_prompt: false,
 });
 ```
 
-### Paso 5: Reportar resultados
+### Paso 6: Reportar resultados
 
 ```typescript
 console.log(`Sincronización completada:`);
-console.log(`- Documentos sincronizados: ${documents.length}`);
-console.log(`- Última sincronización: ${new Date().toISOString()}`);
+console.log(`- Páginas sincronizadas: ${documents.length}`);
+console.log(`- HEAD sincronizado: ${headSha}`);
 console.log(
   `- Tags generados: ${documents.reduce((sum, doc) => sum + doc.tags.length, 0)}`,
 );
@@ -119,18 +130,18 @@ console.log(
 ## Algoritmo de generación de tags
 
 ```typescript
-function generateTags(content: string, title: string): string[] {
+function generateTags(content: string, page: string): string[] {
   const tags = new Set<string>();
 
-  // 1. Tags basados en título
-  const titleLower = title.toLowerCase();
-  if (titleLower.includes('architecture')) tags.add('arquitectura');
-  if (titleLower.includes('css')) tags.add('css');
-  if (titleLower.includes('theme')) tags.add('theme-engine');
-  if (titleLower.includes('test')) tags.add('testing');
-  if (titleLower.includes('version')) tags.add('versioning');
-  if (titleLower.includes('release')) tags.add('release');
-  if (titleLower.includes('ci/cd')) tags.add('ci');
+  // 1. Tags basados en el nombre de la página
+  const pageLower = page.toLowerCase();
+  if (pageLower.includes('architecture')) tags.add('arquitectura');
+  if (pageLower.includes('css')) tags.add('css');
+  if (pageLower.includes('theming')) tags.add('theme-engine');
+  if (pageLower.includes('testing')) tags.add('testing');
+  if (pageLower.includes('versioning')) tags.add('versioning');
+  if (pageLower.includes('release')) tags.add('release');
+  if (pageLower.includes('ci-cd')) tags.add('ci');
 
   // 2. Tags basados en contenido
   const contentLower = content.toLowerCase();
@@ -179,30 +190,30 @@ function generateTags(content: string, title: string): string[] {
 }
 ```
 
-## Comando: `/sync-notion-docs`
+## Comando: `/sync-wiki-docs`
 
 ### Uso
 
 ```
-/sync-notion-docs              # Sincronización completa
-/sync-notion-docs --force      # Forzar re-lectura de todos los documentos
-/sync-notion-docs --incremental # Solo documentos que cambiaron
+/sync-wiki-docs              # Sincronización completa
+/sync-wiki-docs --force      # Forzar re-lectura de todas las páginas
+/sync-wiki-docs --incremental # Solo páginas que cambiaron
 ```
 
 ### Implementación
 
 ```typescript
-async function syncNotionDocs(options: {
+async function syncWikiDocs(options: {
   force?: boolean;
   incremental?: boolean;
 }) {
   if (options.incremental) {
-    // Solo validar documentos que cambiaron
+    // Solo re-leer páginas que cambiaron entre el HEAD cacheado y el actual
     return await syncChangedDocs();
   }
 
   if (options.force) {
-    // Forzar re-lectura de todos los documentos
+    // Forzar re-lectura de todas las páginas
     return await syncAllDocs({ force: true });
   }
 
@@ -213,37 +224,59 @@ async function syncNotionDocs(options: {
 
 ## Manejo de errores
 
-### Error: Página no encontrada
+### Error: el clone falla (repo no encontrado)
+
+```bash
+git clone https://github.com/JosepFernande/pa-ui.wiki.git .wiki-cache/pa-ui.wiki
+# fatal: repository 'https://github.com/JosepFernande/pa-ui.wiki.git/' not found
+```
+
+Un Wiki de GitHub no existe como repo git hasta que se crea al menos una página
+manualmente desde la UI. En `pa-ui` el Wiki ya está poblado (17 páginas de
+referencia + `Home.md` + páginas especiales con prefijo `_` como `_Sidebar.md` y
+`_Footer.md`), así que este error solo debería reaparecer si el Wiki se elimina
+y recrea desde cero. Ver `references/wiki-git-patterns.md` para el detalle.
+
+```typescript
+if (cloneFailed) {
+  console.error(
+    'No se pudo clonar el Wiki. Verificar que exista al menos una página en ' +
+      'https://github.com/JosepFernande/pa-ui/wiki',
+  );
+  throw new Error('wiki_clone_failed');
+}
+```
+
+### Error: `git pull` no es fast-forward
 
 ```typescript
 try {
-  const markdown =
-    (await notion_API) - retrieve - page - markdown({ page_id: doc.id });
+  await bash('git -C .wiki-cache/pa-ui.wiki pull --ff-only');
 } catch (error) {
-  if (error.code === 'object_not_found') {
-    console.warn(`Página ${doc.id} no encontrada. Saltando.`);
-    return null;
+  if (error.message.includes('not possible to fast-forward')) {
+    console.warn(
+      'El clone local diverge del remoto. Recreando el clone desde cero.',
+    );
+    await bash('rm -rf .wiki-cache/pa-ui.wiki');
+    await bash(
+      'git clone https://github.com/JosepFernande/pa-ui.wiki.git .wiki-cache/pa-ui.wiki',
+    );
+    return;
   }
   throw error;
 }
 ```
 
-### Error: Rate limiting
+### Error: archivo no encontrado en el clone local
 
 ```typescript
-async function withRetry<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T> {
-  for (let i = 0; i < maxRetries; i++) {
-    try {
-      return await fn();
-    } catch (error) {
-      if (error.code === 'rate_limited' && i < maxRetries - 1) {
-        await sleep(1000 * (i + 1)); // Exponential backoff
-        continue;
-      }
-      throw error;
-    }
-  }
-  throw new Error('Max retries exceeded');
+try {
+  const markdown = await Read({
+    file_path: `.wiki-cache/pa-ui.wiki/${doc.file}`,
+  });
+} catch (error) {
+  console.warn(`Página ${doc.file} no encontrada en el clone local. Saltando.`);
+  return null;
 }
 ```
 
@@ -260,15 +293,22 @@ try {
 
 ## Métricas de performance
 
-| Operación                                     | Tiempo estimado | API calls                     |
-| --------------------------------------------- | --------------- | ----------------------------- |
-| Sincronización completa (18 docs)             | 60-90s          | 36 (18 metadata + 18 content) |
-| Sincronización incremental (3 docs cambiados) | 15-25s          | 6-9                           |
-| Validación de frescura (5 docs)               | 5-10s           | 5                             |
+| Operación                                        | Tiempo estimado | Operaciones git / lecturas                 |
+| ------------------------------------------------ | --------------- | ------------------------------------------ |
+| Sincronización completa (17 páginas)             | 20-40s          | 1 clone + 17 lecturas (Read tool)          |
+| Sincronización incremental (3 páginas cambiadas) | 10-15s          | 1 pull + 1 rev-parse + 1 diff + 3 lecturas |
+| Chequeo de frescura (todo fresco)                | 2-5s            | 1 pull + 1 rev-parse (~20-30 tokens)       |
+
+Comparado con el mecanismo anterior basado en llamadas a una API externa, el
+chequeo de frescura pasa de ~17 llamadas (~150 tokens c/u, ~2550 tokens totales)
+a una única comparación de HEAD SHA (~20-30 tokens), sin importar cuántas
+páginas tenga el Wiki.
 
 ## Recomendaciones
 
-1. **Ejecutar `/sync-notion-docs` semanalmente** para mantener el cache fresco
-2. **Ejecutar después de cambios masivos** en la documentación de Notion
-3. **No ejecutar en cada sesión** (la validación de frescura es suficiente)
-4. **Monitorear uso de API de Notion** para evitar rate limiting
+1. **Ejecutar `/sync-wiki-docs` semanalmente** para mantener el cache fresco
+2. **Ejecutar después de cambios masivos** en la documentación del Wiki
+3. **No ejecutar en cada sesión** (el chequeo de frescura por HEAD SHA ya es
+   prácticamente gratuito)
+4. **No hay rate limiting que gestionar**: solo hay una operación de red
+   (`git pull`) por ejecución, no una llamada por página
