@@ -1,12 +1,13 @@
 {
-  "parent_page_id": "35f80bf9-7f94-80d7-83ff-e06cb99a1505",
-  "parent_page_title": "Documentacion",
-  "last_synced": null,
+  "repo": "https://github.com/JosepFernande/pa-ui.wiki.git",
+  "local_clone_path": ".wiki-cache/pa-ui.wiki",
+  "last_synced_head_sha": null,
+  "last_synced_at": null,
   "documents": [
     {
-      "id": "35f80bf9-7f94-814a-96d6-ccb90055e545",
-      "title": "Architecture & Foundation",
-      "last_edited": null,
+      "page": "Architecture-and-Foundation",
+      "file": "Architecture-and-Foundation.md",
+      "last_commit_sha": null,
       "tags": [
         "arquitectura",
         "tokens",
@@ -20,9 +21,9 @@
       ]
     },
     {
-      "id": "35f80bf9-7f94-8149-80a0-ede8a524fad9",
-      "title": "CSS Strategy & View Encapsulation",
-      "last_edited": null,
+      "page": "CSS-Strategy-and-View-Encapsulation",
+      "file": "CSS-Strategy-and-View-Encapsulation.md",
+      "last_commit_sha": null,
       "tags": [
         "css",
         "view-encapsulation",
@@ -36,9 +37,9 @@
       ]
     },
     {
-      "id": "35f80bf9-7f94-818c-8821-d58a5dec897d",
-      "title": "Versioning & Breaking Changes",
-      "last_edited": null,
+      "page": "Versioning-and-Breaking-Changes",
+      "file": "Versioning-and-Breaking-Changes.md",
+      "last_commit_sha": null,
       "tags": [
         "versioning",
         "semver",
@@ -50,9 +51,9 @@
       ]
     },
     {
-      "id": "35f80bf9-7f94-815c-84f2-c8e280615a14",
-      "title": "Testing Strategy",
-      "last_edited": null,
+      "page": "Testing-Strategy",
+      "file": "Testing-Strategy.md",
+      "last_commit_sha": null,
       "tags": [
         "testing",
         "jest",
@@ -64,9 +65,9 @@
       ]
     },
     {
-      "id": "35f80bf9-7f94-81f2-bfb6-f880540f44b0",
-      "title": "ControlValueAccessor (CVA)",
-      "last_edited": null,
+      "page": "ControlValueAccessor-CVA",
+      "file": "ControlValueAccessor-CVA.md",
+      "last_commit_sha": null,
       "tags": [
         "cva",
         "forms",
@@ -78,15 +79,15 @@
       ]
     },
     {
-      "id": "38480bf9-7f94-819b-a53f-c134e4a12791",
-      "title": "Nx Workspace Setup",
-      "last_edited": null,
+      "page": "Nx-Workspace-Setup",
+      "file": "Nx-Workspace-Setup.md",
+      "last_commit_sha": null,
       "tags": ["nx", "workspace", "monorepo", "build", "cache", "project-structure", "libs", "apps"]
     },
     {
-      "id": "38480bf9-7f94-8147-9d93-c098b127f7dc",
-      "title": "CI/CD Pipeline",
-      "last_edited": null,
+      "page": "CI-CD-Pipeline",
+      "file": "CI-CD-Pipeline.md",
+      "last_commit_sha": null,
       "tags": [
         "ci",
         "cd",
@@ -100,9 +101,9 @@
       ]
     },
     {
-      "id": "38480bf9-7f94-812c-8506-fcd10d91144e",
-      "title": "Release & Publishing",
-      "last_edited": null,
+      "page": "Release-and-Publishing",
+      "file": "Release-and-Publishing.md",
+      "last_commit_sha": null,
       "tags": [
         "release",
         "publishing",
@@ -117,15 +118,15 @@
       ]
     },
     {
-      "id": "38480bf9-7f94-811c-9be2-f61e6bfbe385",
-      "title": "Showcase App Guidelines",
-      "last_edited": null,
+      "page": "Showcase-App-Guidelines",
+      "file": "Showcase-App-Guidelines.md",
+      "last_commit_sha": null,
       "tags": ["showcase", "playground", "demo", "examples", "storybook"]
     },
     {
-      "id": "38480bf9-7f94-812c-a909-e1d7f457e8df",
-      "title": "Theming Deep-Dive",
-      "last_edited": null,
+      "page": "Theming-Deep-Dive",
+      "file": "Theming-Deep-Dive.md",
+      "last_commit_sha": null,
       "tags": [
         "theme-engine",
         "providePaTheme",
@@ -139,15 +140,15 @@
       ]
     },
     {
-      "id": "38480bf9-7f94-8135-83a1-f2af8d95d068",
-      "title": "Storybook Setup",
-      "last_edited": null,
+      "page": "Storybook-Setup",
+      "file": "Storybook-Setup.md",
+      "last_commit_sha": null,
       "tags": ["storybook", "stories", "documentation", "playground", "visual-tests"]
     },
     {
-      "id": "38480bf9-7f94-8128-9d61-c622586adaf6",
-      "title": "Performance Budgets",
-      "last_edited": null,
+      "page": "Performance-Budgets",
+      "file": "Performance-Budgets.md",
+      "last_commit_sha": null,
       "tags": [
         "performance",
         "bundle-size",
@@ -158,33 +159,33 @@
       ]
     },
     {
-      "id": "38480bf9-7f94-8179-8025-d0c378a83fb5",
-      "title": "Contribution / PR / Code Review Guidelines",
-      "last_edited": null,
+      "page": "Contribution-PR-Code-Review-Guidelines",
+      "file": "Contribution-PR-Code-Review-Guidelines.md",
+      "last_commit_sha": null,
       "tags": ["contributing", "pr", "code-review", "guidelines", "process", "approval"]
     },
     {
-      "id": "38480bf9-7f94-81af-b72b-d254c4a27c22",
-      "title": "Icons Library",
-      "last_edited": null,
+      "page": "Icons-Library",
+      "file": "Icons-Library.md",
+      "last_commit_sha": null,
       "tags": ["icons", "svg", "icon-library", "custom-icons"]
     },
     {
-      "id": "38480bf9-7f94-810f-9e9b-d9d28c659906",
-      "title": "Internationalization (i18n)",
-      "last_edited": null,
+      "page": "Internationalization-i18n",
+      "file": "Internationalization-i18n.md",
+      "last_commit_sha": null,
       "tags": ["i18n", "internationalization", "translations", "locale", "multi-language"]
     },
     {
-      "id": "38480bf9-7f94-81b2-9d42-d65d041b4aa9",
-      "title": "Browser Support",
-      "last_edited": null,
+      "page": "Browser-Support",
+      "file": "Browser-Support.md",
+      "last_commit_sha": null,
       "tags": ["browser", "support", "compatibility", "polyfills", "browserslist"]
     },
     {
-      "id": "38f80bf9-7f94-80da-bb56-f6880b256385",
-      "title": "AI Code Review with gga",
-      "last_edited": null,
+      "page": "AI-Code-Review-with-gga",
+      "file": "AI-Code-Review-with-gga.md",
+      "last_commit_sha": null,
       "tags": ["ai", "code-review", "gga", "gentleman-guardian-angel", "automation"]
     }
   ]

@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Definir cómo generar tags/keywords para cada documento de referencia de Notion,
+Definir cómo generar tags/keywords para cada página de referencia del Wiki,
 permitiendo matching rápido con issues de GitHub sin leer el contenido completo.
 
 ## Reglas de Tagging
@@ -112,7 +112,7 @@ Tags se regeneran cuando:
 
 - Documento se sincroniza por primera vez
 - Documento cambia (timestamp diferente)
-- Usuario ejecuta `/sync-notion-docs --reindex`
+- Usuario ejecuta `/sync-wiki-docs --reindex`
 
 Tags NO se regeneran en:
 
