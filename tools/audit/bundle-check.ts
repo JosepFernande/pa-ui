@@ -28,13 +28,14 @@ const __dirname = dirname(__filename);
 // Types
 // ----------------------------------------------------------------------
 
-type BudgetStatus = 'pass' | 'fail' | 'missing';
+type BudgetStatus = 'pass' | 'warn' | 'fail' | 'missing';
 
 interface BudgetResult {
   package: string;
   file: string;
   gzipBytes: number;
   maxGzipBytes: number;
+  warnGzipBytes?: number;
   status: BudgetStatus;
   reason?: string;
 }
@@ -77,12 +78,19 @@ export function checkBudget(budget: PackageBudget, repoRoot: string): BudgetResu
   }
 
   const gzipBytes = measureGzip(filePath);
+  const status: BudgetStatus =
+    gzipBytes > budget.maxGzipBytes
+      ? 'fail'
+      : budget.warnGzipBytes !== undefined && gzipBytes > budget.warnGzipBytes
+        ? 'warn'
+        : 'pass';
   return {
     package: budget.name,
     file: budget.file,
     gzipBytes,
     maxGzipBytes: budget.maxGzipBytes,
-    status: gzipBytes > budget.maxGzipBytes ? 'fail' : 'pass',
+    warnGzipBytes: budget.warnGzipBytes,
+    status,
   };
 }
 
@@ -91,12 +99,12 @@ export function checkBudgets(repoRoot: string): BudgetResult[] {
   return PACKAGE_BUDGETS.map((budget) => checkBudget(budget, repoRoot));
 }
 
-/** Aggregate per-package results into a report. */
+/** Aggregate per-package results into a report. `warn` is non-blocking — only `fail`/`missing` fail the report. */
 export function generateBundleReport(results: BudgetResult[]): BundleCheckReport {
   return {
     timestamp: new Date().toISOString(),
     results,
-    status: results.some((r) => r.status !== 'pass') ? 'fail' : 'pass',
+    status: results.some((r) => r.status === 'fail' || r.status === 'missing') ? 'fail' : 'pass',
   };
 }
 
@@ -104,6 +112,10 @@ export function generateBundleReport(results: BudgetResult[]): BundleCheckReport
 export function formatResult(r: BudgetResult): string {
   if (r.status === 'missing') {
     return `❌ ${r.package}: ${r.reason}`;
+  }
+  if (r.status === 'warn') {
+    const pct = Math.round((r.gzipBytes / r.maxGzipBytes) * 100);
+    return `⚠️  ${r.package}: ${r.gzipBytes} B > warn threshold ${r.warnGzipBytes} B (${pct}% of ${r.maxGzipBytes} B hard budget) — ${r.file}`;
   }
   const pct = Math.round((r.gzipBytes / r.maxGzipBytes) * 100);
   const comparison = r.status === 'fail' ? '>' : '≤';
@@ -126,18 +138,23 @@ function main(): void {
     const line = formatResult(r);
     if (r.status === 'pass') {
       console.log(line);
+    } else if (r.status === 'warn') {
+      console.warn(line);
     } else {
       console.error(line);
     }
   }
 
-  const failed = results.filter((r) => r.status !== 'pass').length;
+  const failed = results.filter((r) => r.status === 'fail' || r.status === 'missing').length;
+  const warned = results.filter((r) => r.status === 'warn').length;
   if (report.status === 'pass') {
-    console.log(`✅ bundle-check complete — all ${results.length} package(s) within budget`);
-  } else {
-    console.error(
-      `❌ bundle-check failed — ${failed} package(s) over budget or missing`,
+    console.log(
+      warned > 0
+        ? `✅ bundle-check complete — all ${results.length} package(s) within hard budget (${warned} warning(s), see above)`
+        : `✅ bundle-check complete — all ${results.length} package(s) within budget`,
     );
+  } else {
+    console.error(`❌ bundle-check failed — ${failed} package(s) over budget or missing`);
   }
   console.log(`Report written to ${join(__dirname, 'bundle-report.json')}`);
 

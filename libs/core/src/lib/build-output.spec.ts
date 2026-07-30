@@ -66,6 +66,28 @@ describe('Build-output verification', () => {
     });
   });
 
+  describe('Foundation CSS asset (D1)', () => {
+    it('dist/libs/core/theme.css exists after a production build', () => {
+      const cssPath = path.resolve(distDir(), 'theme.css');
+      expect(fs.existsSync(cssPath)).toBe(true);
+    });
+
+    it('dist/libs/core/theme.css contains the :root Foundation artifact, not an empty/truncated file', () => {
+      const cssPath = path.resolve(distDir(), 'theme.css');
+      const content = fs.readFileSync(cssPath, 'utf-8');
+      expect(content).toContain(':root');
+      expect(content).toContain('--pa-button-bg');
+    });
+
+    it("dist package.json exports['./theme.css'] survives the production build", () => {
+      const pkg = readJson(path.resolve(distDir(), 'package.json'));
+      const exports = pkg['exports'] as Record<string, unknown> | undefined;
+      expect(exports).toBeDefined();
+      expect(exports!['./theme.css']).toBeDefined();
+      expect((exports!['./theme.css'] as Record<string, unknown>)['default']).toBe('./theme.css');
+    });
+  });
+
   describe('tree-shaking proxy', () => {
     it('fesm2022 bundle does not import @angular/cdk', () => {
       const mjsPath = path.resolve(distDir(), 'fesm2022', 'pa-ui-core.mjs');

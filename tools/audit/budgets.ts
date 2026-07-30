@@ -25,8 +25,17 @@ export interface PackageBudget {
    * the umbrella `@pa-ui/angular` barrel ships only `dist/libs/pa-ui/index.mjs`.
    */
   file: string;
-  /** Maximum allowed gzip byte length. */
+  /** Maximum allowed gzip byte length — exceeding this fails CI (real regression territory). */
   maxGzipBytes: number;
+  /**
+   * Optional lower threshold — exceeding this prints a non-blocking ⚠️ instead
+   * of failing CI. For packages expected to grow with normal feature work
+   * (e.g. `core`, which gains a `--pa-<component>-*` default set per new
+   * component), this surfaces growth for review without treating "the
+   * library grew because we shipped more" as the same failure class as an
+   * actual bundle regression.
+   */
+  warnGzipBytes?: number;
   /** Measured gzip baseline (bytes) the budget was calibrated against. */
   baselineBytes: number;
 }
@@ -37,8 +46,14 @@ export const PACKAGE_BUDGETS: readonly PackageBudget[] = [
   {
     name: '@pa-ui/core',
     file: 'dist/libs/core/fesm2022/pa-ui-core.mjs',
-    maxGzipBytes: 8 * KB,
-    baselineBytes: 6743,
+    // core carries the Foundation layer (palette + typography/spacing/icon
+    // scales + a --pa-<component>-* default set per component), so it grows
+    // with every new component by design — unlike button/input's thin
+    // per-component footprint. maxGzipBytes stays a real regression guard;
+    // warnGzipBytes flags that growth for review without failing CI on it.
+    maxGzipBytes: 16 * KB,
+    warnGzipBytes: 8 * KB,
+    baselineBytes: 12174,
   },
   {
     name: '@pa-ui/button',
