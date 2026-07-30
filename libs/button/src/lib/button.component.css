@@ -13,7 +13,9 @@
  *   --pa-button-font-sm        → font-size (sm)
  *   --pa-button-font-md        → font-size (md)
  *   --pa-button-font-lg        → font-size (lg)
- *   --pa-button-min-height     → min-height
+ *   --pa-button-min-height-*   → min-height (sm/md/lg)
+ *   --pa-button-min-width-*    → min-width (sm/md/lg, Phase 3)
+ *   --pa-button-gap-*          → gap (sm/md/lg, Phase 3; overrides the unsized base --pa-button-gap)
  *   --pa-button-focus-ring     → box-shadow for focus-visible
  *   --pa-button-hover-bg       → background-color on hover
  *   --pa-button-active-bg      → background-color on active
@@ -51,14 +53,10 @@
   color: var(--pa-button-color);
 
   transition:
-    background-color var(--pa-button-transition-duration)
-      var(--pa-button-transition-easing),
-    border-color var(--pa-button-transition-duration)
-      var(--pa-button-transition-easing),
-    color var(--pa-button-transition-duration)
-      var(--pa-button-transition-easing),
-    box-shadow var(--pa-button-transition-duration)
-      var(--pa-button-transition-easing);
+    background-color var(--pa-button-transition-duration) var(--pa-button-transition-easing),
+    border-color var(--pa-button-transition-duration) var(--pa-button-transition-easing),
+    color var(--pa-button-transition-duration) var(--pa-button-transition-easing),
+    box-shadow var(--pa-button-transition-duration) var(--pa-button-transition-easing);
 }
 
 /* ------------------------------------------------------------------ */
@@ -106,18 +104,24 @@
   padding: var(--pa-button-padding-sm);
   font-size: var(--pa-button-font-sm);
   min-height: var(--pa-button-min-height-sm);
+  min-width: var(--pa-button-min-width-sm);
+  gap: var(--pa-button-gap-sm);
 }
 
 .pa-button--md {
   padding: var(--pa-button-padding-md);
   font-size: var(--pa-button-font-md);
   min-height: var(--pa-button-min-height-md);
+  min-width: var(--pa-button-min-width-md);
+  gap: var(--pa-button-gap-md);
 }
 
 .pa-button--lg {
   padding: var(--pa-button-padding-lg);
   font-size: var(--pa-button-font-lg);
   min-height: var(--pa-button-min-height-lg);
+  min-width: var(--pa-button-min-width-lg);
+  gap: var(--pa-button-gap-lg);
 }
 
 /* ------------------------------------------------------------------ */
