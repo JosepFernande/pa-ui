@@ -281,16 +281,15 @@ pa-ui/
 ├── libs/
 │   ├── button/          # @pa-ui/button — PaButton component
 │   ├── input/           # @pa-ui/input — Input tokens and types
-│   ├── pa-ui/           # pa-ui — Umbrella package (re-exports)
-│   ├── themes/          # @pa-ui/themes — Theme Engine (providePaTheme)
-│   ├── tokens/          # @pa-ui/tokens — Foundation & semantic tokens
-│   ├── core/            # @pa-ui/core — Shared utilities and CDK wrappers
-│   ├── styles/          # @pa-ui/styles — Base styles and resets
-│   └── utils/           # @pa-ui/utils — Pure helper functions
+│   ├── core/            # @pa-ui/core — Theme Engine (providePaTheme) + Foundation layer
+│   └── pa-ui/           # pa-ui — Umbrella package (re-exports)
 ├── apps/
 │   └── showcase/        # Demo app with live examples
 └── skills/              # AI agent skills for architecture enforcement
 ```
+
+> See [Components](https://github.com/JosepFernande/pa-ui/wiki/Components) for
+> the full component catalog, each linked to its `libs/` folder.
 
 ---
 
@@ -298,6 +297,7 @@ pa-ui/
 
 | Resource                                                                              | Description                                               |
 | ------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| [Components](https://github.com/JosepFernande/pa-ui/wiki/Components)                  | Component catalog, each linked to its `libs/` folder      |
 | [Architecture & Foundation](https://github.com/JosepFernande/pa-ui/wiki/Architecture) | The 6 hard rules, token system, and decision gates        |
 | [CSS Strategy](./docs/css-strategy.md)                                                | Token reference, override patterns, and theming guide     |
 | [Accessibility](./docs/accessibility.md)                                              | A11y checklist, ARIA patterns, and testing approach       |
