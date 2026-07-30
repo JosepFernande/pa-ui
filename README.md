@@ -3,7 +3,7 @@
 > Accessible, token-driven Angular 19 component library with a 3-layer CSS
 > variable architecture.
 
-[![npm version](https://img.shields.io/npm/v/pa-ui)](https://www.npmjs.com/package/pa-ui)
+[![npm version](https://img.shields.io/npm/v/pa-ui)](https://www.npmjs.com/package/@pa-ui/angular)
 [![license](https://img.shields.io/github/license/JosepFernande/pa-ui)](./LICENSE)
 [![build](https://img.shields.io/github/actions/workflow/status/JosepFernande/pa-ui/ci.yml?label=build)](https://github.com/JosepFernande/pa-ui/actions)
 
