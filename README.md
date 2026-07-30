@@ -22,7 +22,7 @@ npm install pa-ui @pa-ui/button @angular/cdk
 ```typescript
 // app.config.ts
 import { ApplicationConfig } from '@angular/core';
-import { providePaTheme } from '@pa-ui/themes';
+import { providePaTheme } from '@pa-ui/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,7 +31,24 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-### 3. Use a Component
+### 3. Import the Foundation CSS
+
+One explicit CSS import, in addition to `providePaTheme()`, is required consumer
+setup — it ships the static Foundation/Semantic/Component defaults (spacing,
+radius, typography, icon sizes, component-token defaults) that make `PaButton`
+render fully styled out of the box:
+
+```css
+/* styles.css (or any global stylesheet entry point) */
+@import '@pa-ui/core/theme.css';
+```
+
+Forgetting this import does not break the app — components fall back to unstyled
+`--pa-*` custom properties until it is added. See
+[CSS Strategy](./docs/css-strategy.md) for the full layering and distribution
+rationale.
+
+### 4. Use a Component
 
 ```typescript
 // app.component.ts
@@ -55,7 +72,8 @@ export class AppComponent {
 }
 ```
 
-That's it. No NgModules, no global styles to import, no configuration required.
+That's it. No NgModules, no configuration required — just the one CSS import
+above.
 
 ---
 
@@ -97,7 +115,7 @@ customization.
 ### Default Theme (zero config)
 
 ```typescript
-import { providePaTheme } from '@pa-ui/themes';
+import { providePaTheme } from '@pa-ui/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [providePaTheme()],
