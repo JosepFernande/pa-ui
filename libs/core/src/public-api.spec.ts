@@ -118,7 +118,7 @@ describe('public-api — Foundation surface (pa-default-theme, Phase 2)', () => 
         Object.keys(publicApi.PA_FOUNDATION_PALETTE[family]).sort((a, b) => Number(a) - Number(b)),
       ).toEqual(['25', '50', '100', '200', '300', '400', '500', '600', '700', '800', '900']);
     }
-    expect(publicApi.PA_FOUNDATION_PALETTE['dark-blue'][500]).toBe('#0A4F6B');
+    expect(publicApi.PA_FOUNDATION_PALETTE['dark-blue'][500]).toBe('#0a4f6b');
   });
 
   it('exports PA_SPACING_SCALE, PA_GAP_SCALE, PA_RADIUS_SCALE, PA_ICON_SIZE_SCALE with all 5 size steps', () => {
