@@ -16,12 +16,20 @@ describe('public-api — theme engine surface (Issue #46)', () => {
     expect(typeof publicApi.PaThemeService).toBe('function');
   });
 
-  it('exports DEFAULT_THEME with the 5 default color keys', () => {
+  it('exports DEFAULT_THEME with the full color roster (literals + primary/secondary variants + semantic set + deprecated danger alias)', () => {
     expect(publicApi.DEFAULT_THEME.colors).toEqual({
-      primary: expect.any(String),
+      'dark-blue': expect.any(String),
+      'light-blue': expect.any(String),
+      'dark-green': expect.any(String),
+      'light-green': expect.any(String),
+      primary: { base: expect.any(String), hover: expect.any(String) },
+      secondary: { base: expect.any(String), hover: expect.any(String) },
       success: expect.any(String),
+      error: expect.any(String),
       danger: expect.any(String),
       warning: expect.any(String),
+      alert: expect.any(String),
+      info: expect.any(String),
       neutral: expect.any(String),
     });
   });

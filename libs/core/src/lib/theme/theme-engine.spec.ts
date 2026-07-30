@@ -25,8 +25,8 @@ describe('mergeTheme', () => {
 
     it('returns a fresh copy, never the DEFAULT_THEME reference — mutating the result must not corrupt the shared singleton', () => {
       const result = mergeTheme(undefined, undefined);
-      result.colors['primary'] = 'mutated';
-      expect(DEFAULT_THEME.colors['primary']).toBe('#2563eb');
+      result.colors['success'] = 'mutated';
+      expect(DEFAULT_THEME.colors['success']).toBe('#8fbf21');
     });
   });
 
@@ -56,6 +56,15 @@ describe('mergeTheme', () => {
       mergeTheme({ colors: { primary: '#f00' } }, undefined);
       expect(warnSpy).not.toHaveBeenCalled();
     });
+
+    it('Task 1.6 — includes a custom "brand" color alongside every entry of the new full DEFAULT_THEME roster', () => {
+      const config: PaThemeConfig = { colors: { brand: '#ec4899' } };
+      const result = mergeTheme(config, undefined);
+      expect(result.colors['brand']).toBe('#ec4899');
+      for (const key of Object.keys(DEFAULT_THEME.colors)) {
+        expect(result.colors[key]).toEqual(DEFAULT_THEME.colors[key]);
+      }
+    });
   });
 
   describe('open color dictionary', () => {
@@ -77,32 +86,27 @@ describe('mergeTheme', () => {
     });
   });
 
-  describe('extendDefaults false with all 5 base colors given', () => {
+  describe('extendDefaults false with all 8 base colors given', () => {
+    const fullBaseConfig: PaThemeConfig = {
+      colors: {
+        primary: '#111111',
+        secondary: '#222222',
+        success: '#333333',
+        error: '#444444',
+        warning: '#555555',
+        alert: '#666666',
+        info: '#777777',
+        neutral: '#888888',
+      },
+    };
+
     it('returns ONLY the given keys, with no defaults merged in', () => {
-      const config: PaThemeConfig = {
-        colors: {
-          primary: '#111111',
-          success: '#222222',
-          danger: '#333333',
-          warning: '#444444',
-          neutral: '#555555',
-        },
-      };
-      const result = mergeTheme(config, { extendDefaults: false });
-      expect(result.colors).toEqual(config.colors);
+      const result = mergeTheme(fullBaseConfig, { extendDefaults: false });
+      expect(result.colors).toEqual(fullBaseConfig.colors);
     });
 
     it('does not emit a console.warn', () => {
-      const config: PaThemeConfig = {
-        colors: {
-          primary: '#111111',
-          success: '#222222',
-          danger: '#333333',
-          warning: '#444444',
-          neutral: '#555555',
-        },
-      };
-      mergeTheme(config, { extendDefaults: false });
+      mergeTheme(fullBaseConfig, { extendDefaults: false });
       expect(warnSpy).not.toHaveBeenCalled();
     });
   });
@@ -112,9 +116,12 @@ describe('mergeTheme', () => {
       const config: PaThemeConfig = { colors: { primary: '#f00' } };
       const result = mergeTheme(config, { extendDefaults: false });
       expect(result.colors).toEqual({ primary: '#f00' });
+      expect(result.colors['secondary']).toBeUndefined();
       expect(result.colors['success']).toBeUndefined();
-      expect(result.colors['danger']).toBeUndefined();
+      expect(result.colors['error']).toBeUndefined();
       expect(result.colors['warning']).toBeUndefined();
+      expect(result.colors['alert']).toBeUndefined();
+      expect(result.colors['info']).toBeUndefined();
       expect(result.colors['neutral']).toBeUndefined();
     });
 
@@ -123,11 +130,14 @@ describe('mergeTheme', () => {
       mergeTheme(config, { extendDefaults: false });
       expect(warnSpy).toHaveBeenCalledTimes(1);
       const [message] = warnSpy.mock.calls[0] as [string];
+      expect(message).toEqual(expect.stringContaining('secondary'));
       expect(message).toEqual(expect.stringContaining('success'));
-      expect(message).toEqual(expect.stringContaining('danger'));
+      expect(message).toEqual(expect.stringContaining('error'));
       expect(message).toEqual(expect.stringContaining('warning'));
+      expect(message).toEqual(expect.stringContaining('alert'));
+      expect(message).toEqual(expect.stringContaining('info'));
       expect(message).toEqual(expect.stringContaining('neutral'));
-      expect(message).not.toEqual(expect.stringContaining('primary'));
+      expect(message).not.toEqual(expect.stringContaining('primary,'));
     });
 
     it('does not throw', () => {
@@ -135,16 +145,36 @@ describe('mergeTheme', () => {
       expect(() => mergeTheme(config, { extendDefaults: false })).not.toThrow();
     });
 
-    it('emits console.warn even when colors is an empty object, naming all 5 base keys', () => {
+    it('emits console.warn even when colors is an empty object, naming all 8 base keys', () => {
       const config: PaThemeConfig = { colors: {} };
       mergeTheme(config, { extendDefaults: false });
       expect(warnSpy).toHaveBeenCalledTimes(1);
       const [message] = warnSpy.mock.calls[0] as [string];
       expect(message).toEqual(expect.stringContaining('primary'));
+      expect(message).toEqual(expect.stringContaining('secondary'));
       expect(message).toEqual(expect.stringContaining('success'));
-      expect(message).toEqual(expect.stringContaining('danger'));
+      expect(message).toEqual(expect.stringContaining('error'));
       expect(message).toEqual(expect.stringContaining('warning'));
+      expect(message).toEqual(expect.stringContaining('alert'));
+      expect(message).toEqual(expect.stringContaining('info'));
       expect(message).toEqual(expect.stringContaining('neutral'));
+    });
+
+    it('does NOT require the deprecated "danger" alias key (D3 — deprecated aliases are deliberately not required)', () => {
+      const config: PaThemeConfig = {
+        colors: {
+          primary: '#111111',
+          secondary: '#222222',
+          success: '#333333',
+          error: '#444444',
+          warning: '#555555',
+          alert: '#666666',
+          info: '#777777',
+          neutral: '#888888',
+        },
+      };
+      mergeTheme(config, { extendDefaults: false });
+      expect(warnSpy).not.toHaveBeenCalled();
     });
   });
 

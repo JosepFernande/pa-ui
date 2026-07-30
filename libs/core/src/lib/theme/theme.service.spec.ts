@@ -2,7 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DEFAULT_THEME, PA_THEME_TOKEN } from './theme.tokens';
-import type { PaThemeConfig, PaThemeOptions } from './theme.tokens';
+import type { PaColorVariants, PaThemeConfig, PaThemeOptions } from './theme.tokens';
 import { providePaTheme } from './theme-provider';
 import { PaThemeService } from './theme.service';
 
@@ -197,7 +197,14 @@ describe('PaThemeService', () => {
   describe('getColor convenience getter', () => {
     it('returns the color value for a known key synchronously', () => {
       const service = configureTestBed();
-      expect(service.getColor('primary')).toBe(DEFAULT_THEME.colors['primary']);
+      expect(service.getColor('success')).toBe(DEFAULT_THEME.colors['success']);
+    });
+
+    it('normalizes the default bootstrap `primary` object-shaped entry to its base hex string', () => {
+      const service = configureTestBed();
+      expect(service.getColor('primary')).toBe(
+        (DEFAULT_THEME.colors['primary'] as PaColorVariants).base,
+      );
     });
 
     it('returns undefined for an unknown color key without throwing', () => {
