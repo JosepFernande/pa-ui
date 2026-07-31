@@ -1,5 +1,14 @@
 # @pa-ui/button
 
+## 19.1.0-alpha.2
+
+### Patch Changes
+
+- fa81f68: Publish the default theme palette, Foundation tokens, and Button
+  color and dimension updates.
+- Updated dependencies [fa81f68]
+  - @pa-ui/core@19.1.0-alpha.2
+
 ## 19.1.0-alpha.1
 
 ### Minor Changes

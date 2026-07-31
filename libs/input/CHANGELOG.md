@@ -1,5 +1,12 @@
 # @pa-ui/input
 
+## 19.1.0-alpha.2
+
+### Patch Changes
+
+- Updated dependencies [fa81f68]
+  - @pa-ui/core@19.1.0-alpha.2
+
 ## 19.1.0-alpha.1
 
 ### Minor Changes
