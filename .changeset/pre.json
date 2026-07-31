@@ -8,6 +8,6 @@
     "@pa-ui/input": "19.0.1-alpha.0"
   },
   "changesets": [
-    "packaging-opcion2"
+    "clean-buttons-theme"
   ]
 }
