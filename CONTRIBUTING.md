@@ -125,26 +125,43 @@ this file with your changes.
 
 ## Release Process
 
-Releases are automated via GitHub Actions. When a PR with changesets is merged
-to `main`:
+Releases are automated via GitHub Actions (`.github/workflows/release.yml`), but
+publishing a changeset takes **two merges to `main`**, not one:
 
-1. The `release.yml` workflow runs
-2. `changeset version` consumes all pending changesets, bumps package versions,
-   and updates changelogs
-3. A version commit is pushed back to `main`
-4. `changeset publish --tag alpha` publishes the updated packages to npm
+1. Merging a PR with changesets to `main` triggers the `release.yml` workflow.
+2. It runs `changeset version` (bumps versions, updates changelogs) and opens an
+   automated **"chore(release): version packages"** PR. This PR must be reviewed
+   and merged like any other PR — it does not merge itself.
+3. Merging that version-packages PR triggers the workflow again. This time there
+   is nothing new to version, so it runs `changeset publish` (tagged with
+   whatever `.changeset/pre.json`'s `tag` field says — currently `alpha`),
+   creates a git tag, and publishes a GitHub Release.
+
+If you don't see a publish after merging your changeset PR, check whether the
+version-packages PR was opened and merged — that second merge is what actually
+publishes to npm.
 
 ### Pre-release (Alpha)
 
-During the alpha phase, all packages are published under the `alpha` dist-tag.
-Consumers install with:
+The repo is in Changesets prerelease mode (`.changeset/pre.json`,
+`"mode": "pre"`). While this is active, all packages are published under the
+`alpha` dist-tag. Consumers install with:
 
 ```bash
 npm install @pa-ui/core@alpha
 ```
 
-Once stable, the release workflow will switch from
-`changeset publish --tag alpha` to `changeset publish` (latest dist-tag).
+**This also means `changeset version` intentionally never deletes consumed `.md`
+files from `.changeset/`** — they stay there for the whole alpha cycle by design
+(Changesets uses them to reconstruct the full changelog whenever
+`changeset pre exit` eventually runs). Seeing old changeset files still present
+in `.changeset/` after a release is expected, not a bug. Whether a changeset is
+actually pending is tracked via `.changeset/pre.json`'s `changesets` array, not
+by file presence.
+
+Exiting prerelease mode (`changeset pre exit`) for the first stable release is a
+deliberate, separate decision — not something to do as part of routine
+maintenance.
 
 ## Code Conventions
 

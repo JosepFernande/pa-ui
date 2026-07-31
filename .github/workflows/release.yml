@@ -34,10 +34,22 @@ jobs:
       - name: Check for changesets
         id: changesets
         run: |
-          if [ -n "$(ls -A .changeset/*.md 2>/dev/null | grep -v -E '(pre.json|README.md)$')" ]; then
-            echo "has_changesets=true" >> $GITHUB_OUTPUT
+          # In prerelease mode (.changeset/pre.json present), `changeset version`
+          # intentionally never deletes consumed .md files, so a plain `ls` always
+          # finds them. A changeset only counts as pending if it isn't yet listed
+          # in pre.json's `changesets` array (which mirrors the last `version` run).
+          md_ids=$(ls .changeset/*.md 2>/dev/null | xargs -n1 basename 2>/dev/null | sed 's/\.md$//' | grep -vx 'README' || true)
+
+          if [ -f .changeset/pre.json ]; then
+            pending=$(comm -23 <(echo "$md_ids" | sed '/^$/d' | sort -u) <(jq -r '.changesets[]' .changeset/pre.json | sort -u))
           else
-            echo "has_changesets=false" >> $GITHUB_OUTPUT
+            pending="$md_ids"
+          fi
+
+          if [ -n "$pending" ]; then
+            echo "has_changesets=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changesets=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Version packages
@@ -71,9 +83,13 @@ jobs:
         id: publish
         if: steps.changesets.outputs.has_changesets == 'false'
         run: |
+          tag_flag=""
+          if [ -f .changeset/pre.json ]; then
+            tag_flag="--tag $(jq -r '.tag' .changeset/pre.json)"
+          fi
           before_tags="$(git tag --list | sort)"
           set +e
-          npx changeset publish
+          npx changeset publish $tag_flag
           publish_exit=$?
           set -e
           after_tags="$(git tag --list | sort)"
