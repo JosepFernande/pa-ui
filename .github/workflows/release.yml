@@ -83,22 +83,42 @@ jobs:
         id: publish
         if: steps.changesets.outputs.has_changesets == 'false'
         run: |
-          tag_flag=""
-          if [ -f .changeset/pre.json ]; then
-            tag_flag="--tag $(jq -r '.tag' .changeset/pre.json)"
-          fi
+          # `changeset publish` refuses an explicit --tag while in prerelease mode
+          # (it throws "Releasing under custom tag is not allowed in pre mode"),
+          # so the tag has to be left to Changesets' own default resolution.
+          # Packages that have never had a non-prerelease release get published
+          # under `latest` instead of the prerelease tag — that's Changesets'
+          # documented behavior for "only-pre" packages, not something a flag
+          # can override.
           before_tags="$(git tag --list | sort)"
           set +e
-          npx changeset publish $tag_flag
+          npx changeset publish
           publish_exit=$?
           set -e
           after_tags="$(git tag --list | sort)"
           if [ "$before_tags" != "$after_tags" ]; then
             echo "published=true" >> "$GITHUB_OUTPUT"
+            comm -13 <(echo "$before_tags") <(echo "$after_tags") > /tmp/newly_published.txt
           else
             echo "published=false" >> "$GITHUB_OUTPUT"
+            : > /tmp/newly_published.txt
           fi
           exit "$publish_exit"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Point the alpha dist-tag at what just published
+        if: steps.publish.outputs.published == 'true' && hashFiles('.changeset/pre.json') != ''
+        run: |
+          # `changeset publish` tags each release as <pkg>@<version> locally.
+          # Use that diff to explicitly move the prerelease dist-tag forward,
+          # since Changesets won't touch it for "only-pre" packages on its own.
+          alpha_tag="$(jq -r '.tag' .changeset/pre.json)"
+          while IFS= read -r pkg_tag; do
+            [ -n "$pkg_tag" ] || continue
+            echo "npm dist-tag add \"$pkg_tag\" \"$alpha_tag\""
+            npm dist-tag add "$pkg_tag" "$alpha_tag"
+          done < /tmp/newly_published.txt
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
