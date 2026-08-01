@@ -84,14 +84,24 @@ gh release list --limit 5                  # a GitHub Release should exist for t
    see the un-deleted prerelease changesets and loop forever on the
    "version" branch, never reaching publish. Fixed by comparing against
    `pre.json.changesets` (see above).
-2. **Publish without an explicit `--tag`**: if none of a package's published
-   versions have ever been a real (non-prerelease) release, Changesets
-   defaults to publishing under `latest` instead of the prerelease tag —
-   even while `pre.json.mode` is `"pre"`. This already happened once: `latest`
-   ended up pointing at an alpha version while the `alpha` tag itself went
-   stale. Always derive `--tag` from `.changeset/pre.json`'s `tag` field
-   explicitly in the publish step; never rely on the implicit default while
-   no package has ever had a stable release.
+2. **`changeset publish --tag <anything>` in pre mode always throws.** Source:
+   `changesets-cli.cjs.js`, `publish()` — `if (releaseTag && preState &&
+   preState.mode === "pre") throw ...`. There is no flag that overrides this;
+   an earlier attempt to pass `--tag alpha` here broke the release job
+   outright ("Releasing under custom tag is not allowed in pre mode"). Never
+   pass `--tag` to `changeset publish` while `.changeset/pre.json` exists.
+
+   Left with no `--tag`, Changesets' own default only tags a release `alpha`
+   if that package has had a real, non-prerelease release before. None of
+   `@pa-ui/core`, `@pa-ui/button`, `@pa-ui/input`, `@pa-ui/angular` ever have,
+   so every publish lands on `latest` instead of `alpha` — and `alpha` goes
+   stale. `release.yml` compensates with a separate step, gated on the publish
+   step actually publishing, that diffs git tags before/after `changeset
+   publish` (each successful release creates a local `<pkg>@<version>` tag)
+   and runs `npm dist-tag add <pkg>@<version> alpha` for each one — a plain
+   npm command, not subject to the pre-mode restriction above. `latest` will
+   still point at the same prerelease version until a real stable release
+   ships; that part has no workaround short of exiting prerelease mode.
 
 ## Never publish manually
 
