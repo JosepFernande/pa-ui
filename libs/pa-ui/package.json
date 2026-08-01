@@ -1,6 +1,6 @@
 {
   "name": "@pa-ui/angular",
-  "version": "19.1.0-alpha.2",
+  "version": "19.1.0-alpha.3",
   "license": "MIT",
   "description": "Accessible, token-driven Angular 19 UI component library — umbrella package",
   "keywords": [
@@ -35,9 +35,9 @@
     }
   },
   "dependencies": {
-    "@pa-ui/button": "19.1.0-alpha.2",
-    "@pa-ui/core": "19.1.0-alpha.2",
-    "@pa-ui/input": "19.1.0-alpha.2"
+    "@pa-ui/button": "19.1.0-alpha.3",
+    "@pa-ui/core": "19.1.0-alpha.3",
+    "@pa-ui/input": "19.1.0-alpha.3"
   },
   "peerDependencies": {
     "@angular/common": "^19.2.0",
