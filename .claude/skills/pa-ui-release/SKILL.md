@@ -7,7 +7,7 @@ description:
 license: MIT
 metadata:
   author: JosepFernande
-  version: '1.0'
+  version: '1.1'
   project: pa-ui
 ---
 
@@ -78,7 +78,7 @@ npm view @pa-ui/<pkg> dist-tags --json     # `alpha` should point at the new ver
 gh release list --limit 5                  # a GitHub Release should exist for the new tag
 ```
 
-## Two bugs already found and fixed here — don't reintroduce them
+## Three bugs already found and fixed here — don't reintroduce them
 
 1. **Naive `has_changesets` check**: a plain `ls .changeset/*.md` will always
    see the un-deleted prerelease changesets and loop forever on the
@@ -102,6 +102,64 @@ gh release list --limit 5                  # a GitHub Release should exist for t
    npm command, not subject to the pre-mode restriction above. `latest` will
    still point at the same prerelease version until a real stable release
    ships; that part has no workaround short of exiting prerelease mode.
+
+3. **`changeset publish` discovers packages via root `workspaces`
+   (`["libs/*"]`), so it always published each lib's SOURCE `package.json`
+   — the one `ng-packagr` never touches — instead of the real build output in
+   `dist/{projectRoot}`.** Source publishes have no `main`/`module`/`exports`/
+   `typings`, so every consumer import failed with `TS2307: Cannot find
+   module '@pa-ui/button'`. This shipped broken to npm for at least two alpha
+   versions before being caught (see "Post-publish consumer verification"
+   below — this is exactly the class of bug that check exists to catch).
+   Fixed (#85) by replacing `npx changeset publish` with a loop that, per
+   `libs/*/package.json`, resolves `dist/libs/<pkg>`, skips versions already
+   on npm (`npm view "$name@$version" version`), and runs
+   `npm publish "$dist_dir"` directly — tagging `<name>@<version>` by hand
+   since it no longer goes through `@changesets/git`'s internal tagging.
+   `@pa-ui/angular` (`libs/pa-ui`) needed a companion fix: its build target is
+   a plain `nx:run-commands` copy (no `ng-packagr`), so it never gets
+   `main`/`exports` unless they're added directly to its source
+   `package.json`.
+
+## Post-publish consumer verification (do this for every release, not just when something looks wrong)
+
+A green `release.yml` run and a `latest`/`alpha` dist-tag pointing at the new
+version are **necessary but not sufficient**. Bug 3 above published green for
+two whole alpha cycles while being completely unusable — nothing in the
+pipeline ever installed the package and tried to use it. Two more real bugs
+(#88) were found the same way: `@pa-ui/button`'s `loading` input rejects the
+bare-attribute usage its own README documents, and no README mentions that
+`@pa-ui/core/theme.css` must be imported separately or the button renders
+with correct colors but no padding/height/font/gap/radius — `providePaTheme()`
+only ever writes color variables at runtime; every other design token is a
+static CSS file the consumer has to opt into.
+
+Until #78's automated harness exists, do this by hand as part of reviewing
+any release (the version-packages PR merge, or right after `release.yml`
+finishes publishing):
+
+```bash
+# 1. The tarball must contain the ng-packagr build, not source
+npm pack @pa-ui/<pkg>@<new-version>
+tar -tzf pa-ui-<pkg>-<new-version>.tgz   # expect fesm2022/*.mjs + *.d.ts, NOT src/*.ts
+tar -xzOf pa-ui-<pkg>-<new-version>.tgz package/package.json \
+  | jq '{main, module, exports, typings}'  # must be non-null/populated
+
+# 2. Internal deps must point at the new version too (updateInternalDependencies)
+npm view @pa-ui/<pkg>@<new-version> dependencies --json
+
+# 3. A REAL consumer must actually build against it — not just resolve it.
+#    In a scratch Angular app (or a disposable one kept around for this):
+npm install @pa-ui/angular@<new-version>
+npx ng build   # or ng serve — TS2307 here means bug 3 regressed
+```
+
+For anything touching the button specifically, also render it with every
+documented attribute from `libs/button/README.md` verbatim (including
+`providePaTheme()` with no extra setup) and confirm computed styles actually
+show non-default padding/height/font — not just that it compiles. A component
+that compiles but renders unstyled is exactly what bug from #88 looked like:
+no error anywhere, just a button that "looks almost right."
 
 ## Never publish manually
 
