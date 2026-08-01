@@ -133,9 +133,8 @@ publishing a changeset takes **two merges to `main`**, not one:
    automated **"chore(release): version packages"** PR. This PR must be reviewed
    and merged like any other PR — it does not merge itself.
 3. Merging that version-packages PR triggers the workflow again. This time there
-   is nothing new to version, so it runs `changeset publish` (tagged with
-   whatever `.changeset/pre.json`'s `tag` field says — currently `alpha`),
-   creates a git tag, and publishes a GitHub Release.
+   is nothing new to version, so it runs `changeset publish`, creates a git tag,
+   and publishes a GitHub Release.
 
 If you don't see a publish after merging your changeset PR, check whether the
 version-packages PR was opened and merged — that second merge is what actually
@@ -144,12 +143,22 @@ publishes to npm.
 ### Pre-release (Alpha)
 
 The repo is in Changesets prerelease mode (`.changeset/pre.json`,
-`"mode": "pre"`). While this is active, all packages are published under the
-`alpha` dist-tag. Consumers install with:
+`"mode": "pre"`). Consumers who want the alpha builds install with:
 
 ```bash
 npm install @pa-ui/core@alpha
 ```
+
+**Important caveat**: `changeset publish` refuses an explicit `--tag` while in
+prerelease mode (it exits with "Releasing under custom tag is not allowed in pre
+mode" — there's no flag to override this). Left to its own default, it only tags
+a package `alpha` if that package has had a real, non-prerelease release before;
+none of `@pa-ui/core`, `@pa-ui/button`, `@pa-ui/input`, or `@pa-ui/angular` ever
+have, so `changeset publish` tags every one of their releases `latest` instead.
+`release.yml` compensates with a dedicated step that runs
+`npm dist-tag add <pkg>@<version> alpha` right after a successful publish, so
+the `alpha` tag also advances — but `latest` will keep pointing at the same
+(prerelease) version until the first real stable release ships.
 
 **This also means `changeset version` intentionally never deletes consumed `.md`
 files from `.changeset/`** — they stay there for the whole alpha cycle by design
