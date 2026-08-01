@@ -19,6 +19,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Configure git identity
+        run: |
+          # Needed before anything creates an annotated tag (`git tag -m`)
+          # in this job — including changeset publish's internal per-package
+          # tagging. Without it, `git tag -m` fails with "Committer identity
+          # unknown" (exit 128), and because @changesets/git swallows that
+          # failure silently, the tags just never get created — no error
+          # shown anywhere, but before/after tag diffs downstream stay empty.
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -125,8 +136,6 @@ jobs:
       - name: Create release tag
         if: steps.publish.outputs.published == 'true'
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
           TAG="release-$(date +%Y%m%d)-${GITHUB_SHA::7}"
           git tag -a "$TAG" -m "Release $TAG"
           git push origin "$TAG"
