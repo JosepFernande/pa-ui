@@ -90,31 +90,48 @@ jobs:
         if: steps.changesets.outputs.has_changesets == 'false'
         run: npm audit --omit=dev --audit-level=critical
 
-      - name: Publish to npm with changeset
+      - name: Publish to npm from dist
         id: publish
         if: steps.changesets.outputs.has_changesets == 'false'
         run: |
-          # `changeset publish` refuses an explicit --tag while in prerelease mode
-          # (it throws "Releasing under custom tag is not allowed in pre mode"),
-          # so the tag has to be left to Changesets' own default resolution.
-          # Packages that have never had a non-prerelease release get published
-          # under `latest` instead of the prerelease tag — that's Changesets'
-          # documented behavior for "only-pre" packages, not something a flag
-          # can override.
-          before_tags="$(git tag --list | sort)"
-          set +e
-          npx changeset publish
-          publish_exit=$?
-          set -e
-          after_tags="$(git tag --list | sort)"
-          if [ "$before_tags" != "$after_tags" ]; then
-            echo "published=true" >> "$GITHUB_OUTPUT"
-            comm -13 <(echo "$before_tags") <(echo "$after_tags") > /tmp/newly_published.txt
-          else
-            echo "published=false" >> "$GITHUB_OUTPUT"
-            : > /tmp/newly_published.txt
-          fi
-          exit "$publish_exit"
+          # `changeset publish` discovers publishable packages via the root
+          # `workspaces` field (libs/*), so it always publishes the raw
+          # library SOURCE package.json — the one ng-packagr never touches,
+          # which has no main/module/exports/typings. The real, installable
+          # package (fesm bundles + .d.ts + a package.json with proper entry
+          # points) only exists under dist/{projectRoot}, produced by the
+          # "Build" step above. So publish runs directly per-package against
+          # dist/, using each libs/*/package.json purely as the source of
+          # truth for name + version (already bumped by the prior `changeset
+          # version` run).
+          #
+          # No --tag is passed, same as before: a package with no prior
+          # non-prerelease release always lands on npm's `latest` by default,
+          # and the "Point the alpha dist-tag" step below still moves `alpha`
+          # forward afterward.
+          : > /tmp/newly_published.txt
+          published=false
+          for src_pkg in libs/*/package.json; do
+            lib_dir="$(dirname "$src_pkg")"
+            dist_dir="dist/$lib_dir"
+            [ -f "$dist_dir/package.json" ] || continue
+
+            name="$(node -p "require('./$src_pkg').name")"
+            version="$(node -p "require('./$src_pkg').version")"
+
+            if npm view "${name}@${version}" version >/dev/null 2>&1; then
+              echo "skip: ${name}@${version} already on npm"
+              continue
+            fi
+
+            npm publish "$dist_dir" --access public
+            git tag -a "${name}@${version}" -m "${name}@${version}"
+            git push origin "${name}@${version}"
+
+            echo "${name}@${version}" >> /tmp/newly_published.txt
+            published=true
+          done
+          echo "published=$published" >> "$GITHUB_OUTPUT"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

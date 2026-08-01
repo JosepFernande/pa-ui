@@ -25,6 +25,15 @@
   "publishConfig": {
     "access": "public"
   },
+  "main": "./index.mjs",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "default": "./index.mjs"
+    }
+  },
   "dependencies": {
     "@pa-ui/button": "19.1.0-alpha.2",
     "@pa-ui/core": "19.1.0-alpha.2",
