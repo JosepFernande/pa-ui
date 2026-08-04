@@ -3,6 +3,18 @@ name: Release
 on:
   push:
     branches: [main]
+    paths:
+      # Only run when the push can change a release outcome. A docs-only
+      # merge would otherwise burn a full npm ci + build + audit for nothing.
+      # The version-packages PR merge touches libs/*/package.json and
+      # libs/*/CHANGELOG.md, so libs/** must stay covered — the "Check for
+      # changesets" step remains the single source of truth for whether this
+      # run actually publishes.
+      - 'libs/**'
+      - '.changeset/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/release.yml'
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -14,6 +26,9 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    # Normal runs take 3-5 min; 30 min covers worst case without letting a
+    # hung npm ci/publish block the release-main concurrency for hours.
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -22,11 +37,10 @@ jobs:
       - name: Configure git identity
         run: |
           # Needed before anything creates an annotated tag (`git tag -m`)
-          # in this job — including changeset publish's internal per-package
-          # tagging. Without it, `git tag -m` fails with "Committer identity
-          # unknown" (exit 128), and because @changesets/git swallows that
-          # failure silently, the tags just never get created — no error
-          # shown anywhere, but before/after tag diffs downstream stay empty.
+          # in this job — the publish loop below tags each package manually
+          # and the release tag step does too. Without it, `git tag -m` fails
+          # with "Committer identity unknown" (exit 128) and the tags just
+          # never get created.
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
@@ -88,27 +102,37 @@ jobs:
 
       - name: Audit production dependencies
         if: steps.changesets.outputs.has_changesets == 'false'
-        run: npm audit --omit=dev --audit-level=critical
+        # Non-blocking by design: an advisory unrelated to the change being
+        # published must not kill the release. The exit code is recorded as a
+        # failed step (visible in the run) but never blocks the publish — the
+        # report is uploaded as an artifact so the finding stays actionable.
+        continue-on-error: true
+        run: npm audit --omit=dev --audit-level=critical --json > /tmp/npm-audit-report.json
+
+      - name: Upload npm audit report
+        if: steps.changesets.outputs.has_changesets == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-report
+          path: /tmp/npm-audit-report.json
+          if-no-files-found: ignore
 
       - name: Publish to npm from dist
         id: publish
         if: steps.changesets.outputs.has_changesets == 'false'
         run: |
-          # `changeset publish` discovers publishable packages via the root
-          # `workspaces` field (libs/*), so it always publishes the raw
-          # library SOURCE package.json — the one ng-packagr never touches,
-          # which has no main/module/exports/typings. The real, installable
-          # package (fesm bundles + .d.ts + a package.json with proper entry
-          # points) only exists under dist/{projectRoot}, produced by the
-          # "Build" step above. So publish runs directly per-package against
-          # dist/, using each libs/*/package.json purely as the source of
-          # truth for name + version (already bumped by the prior `changeset
-          # version` run).
+          # Publish the real build output: the installable package (fesm
+          # bundles + .d.ts + a package.json with proper entry points) only
+          # exists under dist/{projectRoot}, produced by the "Build" step
+          # above. Publishing the libs/* sources directly would ship a package
+          # with no main/module/exports/typings. Each libs/*/package.json is
+          # used purely as the source of truth for name + version, already
+          # bumped by the prior `changeset version` run.
           #
-          # No --tag is passed, same as before: a package with no prior
-          # non-prerelease release always lands on npm's `latest` by default,
-          # and the "Point the alpha dist-tag" step below still moves `alpha`
-          # forward afterward.
+          # No --tag is passed: none of these packages has had a real
+          # non-prerelease release, so npm tags them `latest` by default. The
+          # "Point the alpha dist-tag" step below moves `alpha` forward
+          # afterward.
           : > /tmp/newly_published.txt
           published=false
           for src_pkg in libs/*/package.json; do
@@ -138,9 +162,13 @@ jobs:
       - name: Point the alpha dist-tag at what just published
         if: steps.publish.outputs.published == 'true' && hashFiles('.changeset/pre.json') != ''
         run: |
-          # `changeset publish` tags each release as <pkg>@<version> locally.
-          # Use that diff to explicitly move the prerelease dist-tag forward,
-          # since Changesets won't touch it for "only-pre" packages on its own.
+          # The publish loop above records every newly published
+          # <name>@<version> in /tmp/newly_published.txt, one per line.
+          # Because none of these packages has a prior non-prerelease
+          # release, npm tagged them `latest` by default and `alpha` would go
+          # stale. This step reads that list and explicitly moves the
+          # prerelease dist-tag (alpha, from .changeset/pre.json) forward for
+          # each one.
           alpha_tag="$(jq -r '.tag' .changeset/pre.json)"
           while IFS= read -r pkg_tag; do
             [ -n "$pkg_tag" ] || continue
