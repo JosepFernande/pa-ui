@@ -59,13 +59,21 @@ jobs:
       - name: Check for changesets
         id: changesets
         run: |
-          # In prerelease mode (.changeset/pre.json present), `changeset version`
-          # intentionally never deletes consumed .md files, so a plain `ls` always
-          # finds them. A changeset only counts as pending if it isn't yet listed
-          # in pre.json's `changesets` array (which mirrors the last `version` run).
+          # In prerelease mode (.changeset/pre.json present with mode "pre"),
+          # `changeset version` intentionally never deletes consumed .md files,
+          # so a plain `ls` always finds them. A changeset only counts as
+          # pending if it isn't yet listed in pre.json's `changesets` array
+          # (which mirrors the last `version` run).
+          #
+          # Once pre.json is in mode "exit" (`changeset pre exit` already ran),
+          # that array-diff no longer applies: the next `version` run isn't
+          # another prerelease bump, it's the final consolidation that deletes
+          # pre.json and cuts a stable release. Any leftover .md file must
+          # count as pending regardless of the array, or this step reports
+          # has_changesets=false forever and the exit never completes.
           md_ids=$(ls .changeset/*.md 2>/dev/null | xargs -n1 basename 2>/dev/null | sed 's/\.md$//' | grep -vx 'README' || true)
 
-          if [ -f .changeset/pre.json ]; then
+          if [ -f .changeset/pre.json ] && [ "$(jq -r '.mode' .changeset/pre.json)" = "pre" ]; then
             pending=$(comm -23 <(echo "$md_ids" | sed '/^$/d' | sort -u) <(jq -r '.changesets[]' .changeset/pre.json | sort -u))
           else
             pending="$md_ids"
