@@ -1,0 +1,35 @@
+name: Smoke
+
+# Post-merge smoke build. The full CI pipeline already ran on the PR, and
+# branch protection requires strict: true (the PR branch must be up to date
+# with main before merging), so the commit reaching main was validated in
+# exactly that state. Re-running lint/stylelint/test/audit on push would be
+# pure duplication. This single lightweight job only verifies what the PR
+# could not: environment-level failures (registry down, rotated secret,
+# runner drift) that are independent of the code.
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+      - run: npm ci
+        env:
+          HUSKY: '0'
+      - name: Restore Nx cache
+        uses: actions/cache@v4
+        with:
+          path: .nx/cache
+          key: nx-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+      - run: npx nx run-many -t build
