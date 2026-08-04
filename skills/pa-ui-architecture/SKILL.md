@@ -13,9 +13,19 @@ metadata:
 
 ## Activation Contract
 
-Load this skill whenever work targets the `pa-ui` repository: any `sdd-*` phase
-(explore, propose, spec, design, tasks, apply, verify) or any direct
+Load this skill whenever work targets the `pa-ui` repository: any
 implementation, refactor, or review of Angular components, theming, or tokens.
+This applies **unconditionally**, regardless of whether the collaborator uses
+the SDD workflow — the architecture rules below are a project constraint, not a
+byproduct of any particular process.
+
+SDD is optional per collaborator. If a contributor runs an `sdd-*` phase
+(explore, propose, spec, design, tasks, apply, verify), this skill also governs
+that phase's output — the phase structure doesn't replace the rules, it's just
+one way of organizing work that happens to also be bound by them. A contributor
+who never touches `sdd-*` is bound by the same rules just the same, applied
+directly to their implementation, refactor, or review.
+
 The skill is the operational contract for the architecture documented in Notion.
 It does not replace reading the source Notion page when a decision is
 non-obvious.
@@ -70,8 +80,10 @@ hover, active, and contrast variants from user-registered colors.
 
 ## Execution Steps
 
-1. Confirm the change targets the `pa-ui` repo and identify which artifacts you
-   own (spec, design, task, implementation, verification).
+1. Confirm the change targets the `pa-ui` repo. If the collaborator is running
+   an SDD phase, identify which artifact you own for that phase (spec, design,
+   task, implementation, verification). If not, apply the rules directly to the
+   implementation, refactor, or review at hand — no phase breakdown required.
 2. Re-read the Notion source of truth if any rule application is ambiguous. Do
    not invent.
 3. Apply the hard rules to your output: spec criteria, design decisions, task
