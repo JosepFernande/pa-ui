@@ -1,5 +1,18 @@
 # @pa-ui/core
 
+## 19.1.0
+
+### Patch Changes
+
+- fa81f68: Publish the default theme palette, Foundation tokens, and Button
+  color and dimension updates.
+- baf595b: Fix the release pipeline so npm publishes come from the ng-packagr
+  `dist/` output instead of each library's source `package.json`. Previously
+  published versions of `@pa-ui/button`, `@pa-ui/core`, `@pa-ui/input`, and
+  `@pa-ui/angular` were missing `main`/`module`/`exports`/`typings`, making them
+  unresolvable by any consumer (`TS2307: Cannot find module`). This releases the
+  first consumable build of all four packages.
+
 ## 19.1.0-alpha.3
 
 ### Patch Changes
