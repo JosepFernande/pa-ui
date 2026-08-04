@@ -1,5 +1,5 @@
 {
-  "mode": "pre",
+  "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
     "@pa-ui/angular": "19.0.1-alpha.0",
@@ -7,8 +7,5 @@
     "@pa-ui/core": "19.0.1-alpha.0",
     "@pa-ui/input": "19.0.1-alpha.0"
   },
-  "changesets": [
-    "clean-buttons-theme",
-    "publish-from-dist"
-  ]
+  "changesets": ["clean-buttons-theme", "publish-from-dist"]
 }
