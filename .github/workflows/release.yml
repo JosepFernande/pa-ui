@@ -189,14 +189,88 @@ jobs:
       - name: Create release tag
         if: steps.publish.outputs.published == 'true'
         run: |
-          TAG="release-$(date +%Y%m%d)-${GITHUB_SHA::7}"
-          git tag -a "$TAG" -m "Release $TAG"
+          # The run-level tag is versioned instead of stamped with date+sha
+          # (issue #92), so the GitHub Release identifies the published semver
+          # at a glance. All packages in a changesets release usually share one
+          # version; when they don't, the first published package's version is
+          # used for the tag and the body below still lists every
+          # package+version precisely. The per-package <name>@<version> tags
+          # created by the publish step are left untouched.
+          versions="$(while IFS= read -r pkg_tag; do
+            [ -n "$pkg_tag" ] || continue
+            echo "${pkg_tag##*@}"
+          done < /tmp/newly_published.txt | sort -u)"
+          count="$(printf '%s\n' "$versions" | sed '/^$/d' | wc -l | tr -d ' ')"
+          if [ "$count" -eq 1 ]; then
+            version="$versions"
+          else
+            version="$(sed '/^$/d' /tmp/newly_published.txt | head -n1)"
+            version="${version##*@}"
+          fi
+          if [ -z "$version" ]; then
+            echo "::error::could not derive the published version from /tmp/newly_published.txt"
+            exit 1
+          fi
+
+          TAG="release-v${version}"
+          git tag -a "$TAG" -m "Release ${version}"
           git push origin "$TAG"
-          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+
+          # Stable releases surface as Latest; a release is marked prerelease
+          # only in the exceptional case where the repo is back in changesets
+          # pre mode (.changeset/pre.json with mode "pre"). In that case the
+          # version label already carries the alpha suffix, so tag and name
+          # stay correct.
+          if [ -f .changeset/pre.json ] && [ "$(jq -r '.mode' .changeset/pre.json)" = "pre" ]; then
+            echo "PRERELEASE=true" >> "$GITHUB_ENV"
+          else
+            echo "PRERELEASE=false" >> "$GITHUB_ENV"
+          fi
+
+          # Build the release body: published packages + the matching latest
+          # CHANGELOG entries. generate_release_notes in the next step
+          # prepends this body to the auto-generated PR notes.
+          {
+            echo "## Published"
+            while IFS= read -r pkg_tag; do
+              [ -n "$pkg_tag" ] || continue
+              echo "- \`${pkg_tag}\`"
+            done < /tmp/newly_published.txt
+            echo
+            echo "## CHANGELOG"
+            echo
+          } > /tmp/release-body.md
+
+          for src_pkg in libs/*/package.json; do
+            lib_dir="$(dirname "$src_pkg")"
+            name="$(node -p "require('./$src_pkg').name")"
+            pkg_version="$(node -p "require('./$src_pkg').version")"
+            grep -qx "${name}@${pkg_version}" /tmp/newly_published.txt || continue
+            changelog="$lib_dir/CHANGELOG.md"
+            [ -f "$changelog" ] || continue
+
+            echo "### ${name} ${pkg_version}" >> /tmp/release-body.md
+            echo >> /tmp/release-body.md
+            awk -v v="## ${pkg_version}" '
+              $0 == v { found = 1; print; next }
+              found && $0 ~ /^## / { exit }
+              found { print }
+            ' "$changelog" >> /tmp/release-body.md
+            echo "- [Full CHANGELOG](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/blob/${GITHUB_SHA}/${changelog})" >> /tmp/release-body.md
+            echo >> /tmp/release-body.md
+          done
 
       - name: Create GitHub Release
         if: steps.publish.outputs.published == 'true'
-        uses: softprops/action-gh-release@v2
+        # v3: v2.6.2 is the final v2 release and runs on the deprecated Node 20
+        # runtime. Behavior for body_path + generate_release_notes is unchanged
+        # (body is prepended to the auto-generated notes).
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ env.TAG }}
+          name: pa-ui ${{ env.VERSION }}
+          body_path: /tmp/release-body.md
           generate_release_notes: true
+          prerelease: ${{ env.PRERELEASE == 'true' }}
