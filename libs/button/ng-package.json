@@ -4,5 +4,12 @@
   "allowedNonPeerDependencies": ["@pa-ui/core"],
   "lib": {
     "entryFile": "src/index.ts"
-  }
+  },
+  "assets": [
+    {
+      "glob": "README.md",
+      "input": ".",
+      "output": "."
+    }
+  ]
 }
