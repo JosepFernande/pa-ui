@@ -1,0 +1,11 @@
+---
+'@pa-ui/input': minor
+---
+
+Implement the real `pa-input` component (issue #106, alternative 1): standalone,
+signals-first, token-driven Angular 19 input with `ControlValueAccessor` forms
+integration (`[formControl]`/`formControlName`/`[(ngModel)]`), CDK
+`FocusMonitor` keyboard-focus ring, error state (`invalid && touched` →
+`.pa-input--error` + `aria-invalid`), and accessible-name support (`aria-label`,
+`aria-describedby`). `--pa-input-*` defaults ship via `@pa-ui/core/theme.css`,
+so no consumer tokens are required.
