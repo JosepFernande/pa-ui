@@ -265,4 +265,48 @@
   --pa-button-sr-only-width: 1px;
   --pa-button-sr-only-height: 1px;
   --pa-button-sr-only-margin: -1px;
+
+  /* ------------------------------------------------------------------ */
+  /* Component defaults — Input (PA_INPUT_TOKEN_DEFAULTS)                */
+  /* ------------------------------------------------------------------ */
+
+  --pa-input-bg: var(--neutral-50);
+  --pa-input-color: var(--neutral-900);
+  --pa-input-border: 1px solid var(--neutral-200);
+  --pa-input-radius: var(--radius-sm);
+  --pa-input-font-family: var(--font-family);
+  --pa-input-font-weight: var(--font-weight-regular);
+  --pa-input-line-height: var(--line-height-body);
+
+  /* All dimensions sourced from PA_INPUT_PROVISIONAL_DIMENSIONS — NO Figma source for Input */
+  --pa-input-padding-sm: 0 12px; /* provisional: pending design validation */
+  --pa-input-padding-md: 0 16px; /* provisional: pending design validation */
+  --pa-input-padding-lg: 0 20px; /* provisional: pending design validation */
+
+  --pa-input-font-sm: var(--font-size-small-body);
+  --pa-input-font-md: var(--font-size-body);
+  --pa-input-font-lg: var(--font-size-body);
+
+  --pa-input-min-height-sm: 40px; /* provisional: pending design validation */
+  --pa-input-min-height-md: 48px; /* provisional: pending design validation */
+  --pa-input-min-height-lg: 56px; /* provisional: pending design validation */
+
+  --pa-input-focus-ring: 0 0 0 3px var(--pa-primary-hover);
+  --pa-input-focus-border: var(--pa-primary);
+  --pa-input-error-border: 1px solid var(--pa-danger);
+  --pa-input-error-color: var(--pa-danger);
+  --pa-input-error-icon-color: var(--pa-danger);
+  --pa-input-disabled-bg: var(--neutral-200);
+  --pa-input-disabled-color: var(--neutral-500);
+  --pa-input-disabled-opacity: 0.6;
+  --pa-input-readonly-bg: var(--neutral-50);
+  --pa-input-readonly-border: 1px solid var(--neutral-200);
+  --pa-input-hint-color: var(--neutral-500);
+  --pa-input-hint-font-size: var(--font-size-caption);
+  --pa-input-label-color: var(--neutral-700);
+  --pa-input-label-font-size: var(--font-size-small-body);
+  --pa-input-label-font-weight: var(--font-weight-semibold);
+  --pa-input-transition-duration: 150ms;
+  --pa-input-transition-easing: ease-in-out;
+  --pa-input-placeholder-color: var(--neutral-500);
 }

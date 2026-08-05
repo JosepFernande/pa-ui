@@ -1,25 +1,25 @@
 /**
  * Component-level token DEFAULTS shipped in `theme.css` — the values that
- * make `var(--pa-button-*)` resolve to something real out of the box
+ * make `var(--pa-*-*)` resolve to something real out of the box
  * (Requirement: consumer imports foundation CSS, zero authored tokens).
  * Every value is a CSS-valid string: either a literal, or a `var(--x)`
  * reference into the foundation (unprefixed) or semantic (`--pa-*`) color
  * layer — component defaults are the one place foundation refs are used
  * directly, mirroring the Data Flow diagram in `design.md`.
  *
- * Scope note (deviation from a literal reading of D4's file table): only
- * `--pa-button-*` defaults are populated. `--pa-input-*` is deferred —
- * `libs/input/src/lib/` only declares `PA_INPUT_TOKENS` names; there is no
- * `input.component.css` consuming them yet (verified: no `.css` file under
- * `libs/input/src/lib/`), so there is no rendering surface to validate
- * invented Input defaults against. Populating ~30 Input CSS values with no
- * design source and no consumer would be speculative engineering; it is
- * intentionally left for whichever change actually ships an Input template.
+ * Scope note: both `--pa-button-*` and `--pa-input-*` defaults are populated
+ * here. The `--pa-input-*` defaults were previously deferred until a real
+ * Input template shipped — that deferral ends with the `PaInput` component
+ * (`libs/input/src/lib/input.component.css`). ALL Input dimensions
+ * (`padding-*`, `min-height-*`) come from `PA_INPUT_PROVISIONAL_DIMENSIONS`
+ * — assistant-authored, pending design validation (no Figma source exists
+ * for Input), unlike Button whose `md` row is Figma-confirmed.
  */
 import {
   PA_BUTTON_FIGMA_DIMENSIONS,
   PA_BUTTON_PROVISIONAL_DIMENSIONS,
 } from './button-dimensions.tokens';
+import { PA_INPUT_PROVISIONAL_DIMENSIONS } from './input-dimensions.tokens';
 
 /**
  * Every `--pa-button-*` custom property currently referenced by
@@ -77,6 +77,55 @@ const PA_BUTTON_TOKEN_DEFAULTS: Readonly<Record<string, string>> = {
   '--pa-button-sr-only-margin': '-1px',
 };
 
+/**
+ * Every `--pa-input-*` custom property referenced by
+ * `libs/input/src/lib/input.component.css`. Values mirror the Button
+ * defaults where the semantics match (font/transition/disabled) and use
+ * foundation + semantic references otherwise. Dimension values (padding,
+ * min-height) come from `PA_INPUT_PROVISIONAL_DIMENSIONS`.
+ */
+const PA_INPUT_TOKEN_DEFAULTS: Readonly<Record<string, string>> = {
+  '--pa-input-bg': 'var(--neutral-50)',
+  '--pa-input-color': 'var(--neutral-900)',
+  '--pa-input-border': '1px solid var(--neutral-200)',
+  '--pa-input-radius': 'var(--radius-sm)',
+  '--pa-input-font-family': 'var(--font-family)',
+  '--pa-input-font-weight': 'var(--font-weight-regular)',
+  '--pa-input-line-height': 'var(--line-height-body)',
+
+  '--pa-input-padding-sm': `0 ${PA_INPUT_PROVISIONAL_DIMENSIONS.sm.paddingX}`,
+  '--pa-input-padding-md': `0 ${PA_INPUT_PROVISIONAL_DIMENSIONS.md.paddingX}`,
+  '--pa-input-padding-lg': `0 ${PA_INPUT_PROVISIONAL_DIMENSIONS.lg.paddingX}`,
+
+  '--pa-input-font-sm': 'var(--font-size-small-body)',
+  '--pa-input-font-md': 'var(--font-size-body)',
+  '--pa-input-font-lg': 'var(--font-size-body)',
+
+  '--pa-input-min-height-sm': PA_INPUT_PROVISIONAL_DIMENSIONS.sm.minHeight,
+  '--pa-input-min-height-md': PA_INPUT_PROVISIONAL_DIMENSIONS.md.minHeight,
+  '--pa-input-min-height-lg': PA_INPUT_PROVISIONAL_DIMENSIONS.lg.minHeight,
+
+  '--pa-input-focus-ring': '0 0 0 3px var(--pa-primary-hover)',
+  '--pa-input-focus-border': 'var(--pa-primary)',
+  '--pa-input-error-border': '1px solid var(--pa-danger)',
+  '--pa-input-error-color': 'var(--pa-danger)',
+  '--pa-input-error-icon-color': 'var(--pa-danger)',
+  '--pa-input-disabled-bg': 'var(--neutral-200)',
+  '--pa-input-disabled-color': 'var(--neutral-500)',
+  '--pa-input-disabled-opacity': '0.6',
+  '--pa-input-readonly-bg': 'var(--neutral-50)',
+  '--pa-input-readonly-border': '1px solid var(--neutral-200)',
+  '--pa-input-hint-color': 'var(--neutral-500)',
+  '--pa-input-hint-font-size': 'var(--font-size-caption)',
+  '--pa-input-label-color': 'var(--neutral-700)',
+  '--pa-input-label-font-size': 'var(--font-size-small-body)',
+  '--pa-input-label-font-weight': 'var(--font-weight-semibold)',
+  '--pa-input-transition-duration': '150ms',
+  '--pa-input-transition-easing': 'ease-in-out',
+  '--pa-input-placeholder-color': 'var(--neutral-500)',
+};
+
 export const PA_COMPONENT_TOKEN_DEFAULTS: Readonly<Record<string, string>> = {
   ...PA_BUTTON_TOKEN_DEFAULTS,
+  ...PA_INPUT_TOKEN_DEFAULTS,
 };
