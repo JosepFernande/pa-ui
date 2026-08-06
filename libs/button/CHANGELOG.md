@@ -1,5 +1,12 @@
 # @pa-ui/button
 
+## 19.2.0
+
+### Patch Changes
+
+- Updated dependencies [de29d2e]
+  - @pa-ui/core@19.2.0
+
 ## 19.1.0
 
 ### Patch Changes
