@@ -136,3 +136,38 @@ describe('Provisional dimension markers (D5)', () => {
     }
   });
 });
+
+describe('Input provisional dimension markers', () => {
+  function findDeclarationLine(css: string, key: string): string {
+    const lineRegex = new RegExp(`${key}\\s*:[^;]+;[^\\n]*`);
+    const match = css.match(lineRegex);
+    if (!match) {
+      throw new Error(`theme.css: no declaration found for ${key}`);
+    }
+    return match[0];
+  }
+
+  it('every input dimension sourced from PA_INPUT_PROVISIONAL_DIMENSIONS carries a provisional comment', () => {
+    const css = readThemeCss();
+    for (const key of [
+      '--pa-input-min-height-sm',
+      '--pa-input-min-height-md',
+      '--pa-input-min-height-lg',
+      '--pa-input-padding-sm',
+      '--pa-input-padding-md',
+      '--pa-input-padding-lg',
+      '--pa-input-radius-sm',
+      '--pa-input-radius-md',
+      '--pa-input-radius-lg',
+    ]) {
+      expect(findDeclarationLine(css, key)).toContain('provisional');
+    }
+  });
+
+  it('non-dimension input keys are NOT marked provisional', () => {
+    const css = readThemeCss();
+    for (const key of ['--pa-input-bg', '--pa-input-error-border']) {
+      expect(findDeclarationLine(css, key)).not.toContain('provisional');
+    }
+  });
+});
