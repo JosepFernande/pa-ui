@@ -125,6 +125,15 @@ jobs:
           path: /tmp/npm-audit-report.json
           if-no-files-found: ignore
 
+      - name: Validate packages before publish
+        if: steps.changesets.outputs.has_changesets == 'false'
+        # Issue #78: fail the release (never silently PASS) if a publishable
+        # package's dist/libs/<lib>/package.json lost its main/exports["."]/
+        # typings entry points, or if this workflow stopped publishing from
+        # dist/$lib_dir (the #85 source-publish regression). Validates the
+        # output of the "Build" step above; blocks "Publish to npm from dist".
+        run: npm run validate:packages
+
       - name: Publish to npm from dist
         id: publish
         if: steps.changesets.outputs.has_changesets == 'false'

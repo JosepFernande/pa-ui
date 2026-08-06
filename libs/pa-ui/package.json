@@ -26,11 +26,14 @@
     "access": "public"
   },
   "main": "./index.mjs",
+  "types": "./index.d.mts",
+  "typings": "./index.d.mts",
   "exports": {
     "./package.json": {
       "default": "./package.json"
     },
     ".": {
+      "types": "./index.d.mts",
       "default": "./index.mjs"
     }
   },

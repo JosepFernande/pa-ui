@@ -3,11 +3,12 @@ name: pa-ui-release
 description:
   'Trigger: hacer un release, publicar a npm, por qué no se publicó, trabajar
   con .changeset/, revisar el workflow release.yml. Checklist operativo para
-  el pipeline de release de pa-ui en modo prerelease (alpha).'
+  el pipeline de release de pa-ui en modo prerelease (alpha), validar
+  paquetes antes del publish (validate-packages).'
 license: MIT
 metadata:
   author: JosepFernande
-  version: '1.1'
+  version: '1.2'
   project: pa-ui
 ---
 
@@ -121,6 +122,37 @@ gh release list --limit 5                  # a GitHub Release should exist for t
    `main`/`exports` unless they're added directly to its source
    `package.json`.
 
+## Pre-publish validation (issue #78) — `validate-packages`
+
+`release.yml` runs **`Validate packages before publish`** inside the
+`has_changesets == 'false'` branch, right before `Publish to npm from dist`.
+It blocks the publish (exit != 0) instead of letting a broken package ship
+green. Local command: `npm run validate:packages` (run after `nx build`, before
+opening a PR with a changeset).
+
+It enforces the two guarantees that would have caught the #85 regression:
+
+1. **Entry points exist in what actually gets published.** For every
+   publishable lib under `libs/*` (`publishConfig.access === "public"`), the
+   dist `package.json` at `dist/libs/<lib>/package.json` must expose a runtime
+   entry (`main` and/or `exports["."]`) and a types entry (`typings`/`types`),
+   all non-null — and the dist package itself must exist (a publishable lib
+   with no dist build means the publish loop silently skips it).
+2. **The validated directory is the published directory.** The script parses
+   `.github/workflows/release.yml`, extracts the `Publish to npm from dist`
+   step, and asserts it still derives `dist_dir="dist/$lib_dir"` and runs
+   `npm publish "$dist_dir"`. If that step ever points back at the source
+   (`npm publish "$lib_dir"`) or reverts to `changeset publish` (the old
+   workspaces-based source publish), validation fails explicitly — no silent
+   PASS on a dist/ nobody publishes.
+
+`@pa-ui/angular` (`libs/pa-ui`) is special: its build is a plain
+`nx:run-commands` copy, not ng-packagr, so **entry points AND types are
+maintained by hand** in `libs/pa-ui/package.json` (`main`, `types`/`typings`,
+`exports["."].types`) plus `src/index.mjs` + `src/index.d.mts`, all copied by
+its build target. The harness catches a missing `types` here the same way it
+catches the ng-packagr packages missing `typings`.
+
 ## Post-publish consumer verification (do this for every release, not just when something looks wrong)
 
 A green `release.yml` run and a `latest`/`alpha` dist-tag pointing at the new
@@ -134,9 +166,10 @@ with correct colors but no padding/height/font/gap/radius — `providePaTheme()`
 only ever writes color variables at runtime; every other design token is a
 static CSS file the consumer has to opt into.
 
-Until #78's automated harness exists, do this by hand as part of reviewing
-any release (the version-packages PR merge, or right after `release.yml`
-finishes publishing):
+The pre-publish harness above checks entry points and the publish-directory
+invariant. It intentionally does NOT cover runtime/API/docs correctness — the
+#88 class — so still do this by hand as part of reviewing any release (the
+version-packages PR merge, or right after `release.yml` finishes publishing):
 
 ```bash
 # 1. The tarball must contain the ng-packagr build, not source

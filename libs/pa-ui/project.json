@@ -24,6 +24,7 @@
           "mkdir -p dist/libs/pa-ui",
           "cp libs/pa-ui/package.json dist/libs/pa-ui/package.json",
           "cp libs/pa-ui/src/index.mjs dist/libs/pa-ui/index.mjs",
+          "cp libs/pa-ui/src/index.d.mts dist/libs/pa-ui/index.d.mts",
           "cp README.md dist/libs/pa-ui/README.md"
         ],
         "parallel": false
