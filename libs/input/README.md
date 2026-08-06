@@ -6,12 +6,13 @@ Accessible, token-driven Angular 19 input component with forms integration.
 
 - **Tokens first** — Every value comes from `var(--pa-input-*)` CSS custom
   properties. Zero hardcoded colors, spacing, or radii. `@pa-ui/core/theme.css`
-  ships defaults for all 34 input tokens, so no tokens need to be authored by
+  ships defaults for all 36 input tokens, so no tokens need to be authored by
   the consumer.
 - **Standalone only** — No NgModule. Component is `standalone: true`.
 - **Signals first** — All inputs are signals; derived state via `computed()`.
 - **CDK over custom** — Uses `FocusMonitor` from `@angular/cdk/a11y` for
-  focus-origin tracking (`cdk-keyboard-focused` ring).
+  focus-origin tracking (`pa-input--focused` ring, applied on any focus origin —
+  mouse, touch, keyboard, or program).
 - **ControlValueAccessor** — Forms integration via `NG_VALUE_ACCESSOR`.
   Compatible with both reactive form controls (`[formControl]`,
   `formControlName`) and template-driven `[(ngModel)]`.
@@ -75,11 +76,11 @@ class Example {
 <input pa-input [(ngModel)]="name" aria-label="Name" name="name" />
 ```
 
-### Size, type, placeholder, disabled, readonly
+### Size, placeholder, disabled, readonly
 
 ```html
 <input pa-input size="sm" />
-<input pa-input size="lg" type="email" placeholder="you@example.com" />
+<input pa-input size="lg" placeholder="you@example.com" />
 <input pa-input [disabled]="true" value="Locked" />
 <input pa-input [readonly]="true" value="Read only" />
 ```
@@ -95,28 +96,25 @@ When the bound control is `invalid && touched`, the input renders
 <input
   pa-input
   id="email"
-  type="email"
   [formControl]="email"
   [ariaDescribedBy]="'email-hint'"
 />
 <small id="email-hint">We never share your email.</small>
 ```
 
-> `type="number"` inputs yield **string** values through the
-> `ControlValueAccessor` (the native input's `value` is always a string) — parse
-> with `Number()` where a numeric model is required.
-
 ## API
 
-| Input             | Type                                          | Default  | Description                                           |
-| ----------------- | --------------------------------------------- | -------- | ----------------------------------------------------- |
-| `size`            | `'sm' \| 'md' \| 'lg'`                        | `'md'`   | Size preset                                           |
-| `type`            | `'text' \| 'password' \| 'email' \| 'number'` | `'text'` | Native input type                                     |
-| `disabled`        | `boolean`                                     | `false`  | Disabled state (combined with the form control state) |
-| `readonly`        | `boolean`                                     | `false`  | Read-only state                                       |
-| `placeholder`     | `string`                                      | `''`     | Placeholder text (attribute removed when empty)       |
-| `ariaLabel`       | `string`                                      | `''`     | Accessible label (`aria-label`)                       |
-| `ariaDescribedBy` | `string`                                      | `''`     | Hint/description ids (`aria-describedby`)             |
+The component is text-only — any `type` attribute on the host is overridden to
+`"text"`. Password, email, and number inputs are separate components.
+
+| Input             | Type                   | Default | Description                                           |
+| ----------------- | ---------------------- | ------- | ----------------------------------------------------- |
+| `size`            | `'sm' \| 'md' \| 'lg'` | `'md'`  | Size preset                                           |
+| `disabled`        | `boolean`              | `false` | Disabled state (combined with the form control state) |
+| `readonly`        | `boolean`              | `false` | Read-only state                                       |
+| `placeholder`     | `string`               | `''`    | Placeholder text (attribute removed when empty)       |
+| `ariaLabel`       | `string`               | `''`    | Accessible label (`aria-label`)                       |
+| `ariaDescribedBy` | `string`               | `''`    | Hint/description ids (`aria-describedby`)             |
 
 ## Running unit tests
 

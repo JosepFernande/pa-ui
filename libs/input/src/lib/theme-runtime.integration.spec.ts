@@ -43,13 +43,13 @@ describe('Theme runtime integration — Foundation theme.css ships Input default
     const rootStyle = getComputedStyle(document.documentElement);
 
     expect(rootStyle.getPropertyValue('--pa-input-bg').trim()).toBe('var(--neutral-50)');
-    expect(rootStyle.getPropertyValue('--pa-input-error-border').trim()).toBe(
-      '1px solid var(--pa-danger)',
-    );
-    expect(rootStyle.getPropertyValue('--pa-input-radius').trim()).toBe('var(--radius-sm)');
+    expect(rootStyle.getPropertyValue('--pa-input-error-border').trim()).toBe('var(--pa-danger)');
+    expect(rootStyle.getPropertyValue('--pa-input-radius-sm').trim()).toBe('6px');
+    expect(rootStyle.getPropertyValue('--pa-input-radius-md').trim()).toBe('4px');
+    expect(rootStyle.getPropertyValue('--pa-input-radius-lg').trim()).toBe('8px');
   });
 
-  it('marks ALL input dimension declarations (padding sm/md/lg + min-height sm/md/lg) as provisional', () => {
+  it('marks ALL input dimension declarations (padding sm/md/lg + min-height sm/md/lg + radius sm/md/lg) as provisional', () => {
     const css = readFoundationThemeCss();
     for (const key of [
       '--pa-input-padding-sm',
@@ -58,6 +58,9 @@ describe('Theme runtime integration — Foundation theme.css ships Input default
       '--pa-input-min-height-sm',
       '--pa-input-min-height-md',
       '--pa-input-min-height-lg',
+      '--pa-input-radius-sm',
+      '--pa-input-radius-md',
+      '--pa-input-radius-lg',
     ]) {
       const lineRegex = new RegExp(`${key}\\s*:[^;]+;[^\\n]*`);
       const match = css.match(lineRegex);
@@ -82,14 +85,15 @@ describe('Theme runtime integration — input.component.css wires per-size token
       expect(block).toMatch(new RegExp(`padding:\\s*var\\(--pa-input-padding-${size}\\)`));
       expect(block).toMatch(new RegExp(`min-height:\\s*var\\(--pa-input-min-height-${size}\\)`));
       expect(block).toMatch(new RegExp(`font-size:\\s*var\\(--pa-input-font-${size}\\)`));
+      expect(block).toMatch(new RegExp(`border-radius:\\s*var\\(--pa-input-radius-${size}\\)`));
     }
   });
 
-  it('wires the keyboard-focused rule to --pa-input-focus-border and --pa-input-focus-ring', () => {
+  it('wires the focused-state rule to --pa-input-focus-border only (no box-shadow ring)', () => {
     const css = readInputComponentCss();
-    const focusBlock = css.match(/\.pa-input\.cdk-keyboard-focused\s*\{([^}]*)\}/);
+    const focusBlock = css.match(/\.pa-input--focused\s*\{([^}]*)\}/);
     expect(focusBlock).not.toBeNull();
     expect(focusBlock![1]).toMatch(/border-color:\s*var\(--pa-input-focus-border\)/);
-    expect(focusBlock![1]).toMatch(/box-shadow:\s*var\(--pa-input-focus-ring\)/);
+    expect(focusBlock![1]).not.toMatch(/box-shadow/);
   });
 });

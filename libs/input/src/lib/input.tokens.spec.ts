@@ -7,7 +7,9 @@ describe('Input Tokens', () => {
     expect(PA_INPUT_TOKENS.bg).toBe('--pa-input-bg');
     expect(PA_INPUT_TOKENS.color).toBe('--pa-input-color');
     expect(PA_INPUT_TOKENS.border).toBe('--pa-input-border');
-    expect(PA_INPUT_TOKENS.radius).toBe('--pa-input-radius');
+    expect(PA_INPUT_TOKENS.radiusSm).toBe('--pa-input-radius-sm');
+    expect(PA_INPUT_TOKENS.radiusMd).toBe('--pa-input-radius-md');
+    expect(PA_INPUT_TOKENS.radiusLg).toBe('--pa-input-radius-lg');
   });
 
   it('should include all required token keys from the design spec', () => {
@@ -16,7 +18,6 @@ describe('Input Tokens', () => {
       'bg',
       'color',
       'border',
-      'radius',
       'fontFamily',
       'fontWeight',
       'lineHeight',
@@ -29,7 +30,9 @@ describe('Input Tokens', () => {
       'minHeightSm',
       'minHeightMd',
       'minHeightLg',
-      'focusRing',
+      'radiusSm',
+      'radiusMd',
+      'radiusLg',
       'focusBorder',
       'errorBorder',
       'errorColor',

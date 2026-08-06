@@ -272,8 +272,7 @@
 
   --pa-input-bg: var(--neutral-50);
   --pa-input-color: var(--neutral-900);
-  --pa-input-border: 1px solid var(--neutral-200);
-  --pa-input-radius: var(--radius-sm);
+  --pa-input-border: 1px solid var(--neutral-700);
   --pa-input-font-family: var(--font-family);
   --pa-input-font-weight: var(--font-weight-regular);
   --pa-input-line-height: var(--line-height-body);
@@ -287,13 +286,16 @@
   --pa-input-font-md: var(--font-size-body);
   --pa-input-font-lg: var(--font-size-body);
 
-  --pa-input-min-height-sm: 40px; /* provisional: pending design validation */
+  --pa-input-min-height-sm: 33px; /* provisional: pending design validation */
   --pa-input-min-height-md: 48px; /* provisional: pending design validation */
   --pa-input-min-height-lg: 56px; /* provisional: pending design validation */
 
-  --pa-input-focus-ring: 0 0 0 3px var(--pa-primary-hover);
+  --pa-input-radius-sm: 6px; /* provisional: pending design validation */
+  --pa-input-radius-md: 4px; /* provisional: pending design validation */
+  --pa-input-radius-lg: 8px; /* provisional: pending design validation */
+
   --pa-input-focus-border: var(--pa-primary);
-  --pa-input-error-border: 1px solid var(--pa-danger);
+  --pa-input-error-border: var(--pa-danger);
   --pa-input-error-color: var(--pa-danger);
   --pa-input-error-icon-color: var(--pa-danger);
   --pa-input-disabled-bg: var(--neutral-200);

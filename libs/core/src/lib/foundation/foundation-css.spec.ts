@@ -156,6 +156,9 @@ describe('Input provisional dimension markers', () => {
       '--pa-input-padding-sm',
       '--pa-input-padding-md',
       '--pa-input-padding-lg',
+      '--pa-input-radius-sm',
+      '--pa-input-radius-md',
+      '--pa-input-radius-lg',
     ]) {
       expect(findDeclarationLine(css, key)).toContain('provisional');
     }
@@ -163,7 +166,7 @@ describe('Input provisional dimension markers', () => {
 
   it('non-dimension input keys are NOT marked provisional', () => {
     const css = readThemeCss();
-    for (const key of ['--pa-input-bg', '--pa-input-error-border', '--pa-input-radius']) {
+    for (const key of ['--pa-input-bg', '--pa-input-error-border']) {
       expect(findDeclarationLine(css, key)).not.toContain('provisional');
     }
   });

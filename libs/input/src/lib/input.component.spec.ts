@@ -15,7 +15,7 @@ const { axe, toHaveNoViolations } = require('jest-axe') as {
 };
 
 import { PaInput } from './input.component';
-import { PaInputSize, PaInputType } from './input.types';
+import { PaInputSize } from './input.types';
 
 expect.extend(toHaveNoViolations);
 
@@ -44,7 +44,6 @@ declare global {
       id="pa-input-test"
       [formControl]="control"
       [size]="size"
-      [type]="type"
       [placeholder]="placeholder"
       [disabled]="disabled"
       [readonly]="readonly"
@@ -55,7 +54,6 @@ declare global {
 class TestHost {
   control = new FormControl<string>('');
   size: PaInputSize = 'md';
-  type: PaInputType = 'text';
   placeholder = '';
   disabled = false;
   readonly = false;
@@ -148,6 +146,14 @@ describe('PaInput', () => {
 
       expect(inputEl.getAttribute('id')).toBe('pa-input-test');
     });
+
+    it('should always render a text input, overriding any consumer-set type attribute', () => {
+      const { fixture, inputEl } = createTestHost();
+      inputEl.setAttribute('type', 'number');
+      fixture.detectChanges();
+
+      expect(inputEl.getAttribute('type')).toBe('text');
+    });
   });
 
   // -----------------------------------------------------------------------
@@ -192,50 +198,6 @@ describe('PaInput', () => {
 
       expect(inputEl.classList.contains('pa-input--md')).toBe(false);
       expect(inputEl.classList.contains('pa-input--lg')).toBe(false);
-    });
-  });
-
-  // -----------------------------------------------------------------------
-  // Type attribute
-  // -----------------------------------------------------------------------
-  describe('type attribute', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
-    it('should default to type="text"', () => {
-      const { fixture, host, inputEl } = createTestHost();
-      host.type = 'text';
-      fixture.detectChanges();
-
-      expect(inputEl.getAttribute('type')).toBe('text');
-    });
-
-    it('should set type="password" when type input is password', () => {
-      const { fixture, host, inputEl } = createTestHost();
-      host.type = 'password';
-      fixture.detectChanges();
-
-      expect(inputEl.getAttribute('type')).toBe('password');
-    });
-
-    it('should set type="email" when type input is email', () => {
-      const { fixture, host, inputEl } = createTestHost();
-      host.type = 'email';
-      fixture.detectChanges();
-
-      expect(inputEl.getAttribute('type')).toBe('email');
-    });
-
-    it('should set type="number" when type input is number', () => {
-      const { fixture, host, inputEl } = createTestHost();
-      host.type = 'number';
-      fixture.detectChanges();
-
-      expect(inputEl.getAttribute('type')).toBe('number');
     });
   });
 
@@ -484,37 +446,37 @@ describe('PaInput', () => {
       expect(focusMonitorMock.monitor).toHaveBeenCalledTimes(1);
     });
 
-    it('should apply cdk-keyboard-focused class on keyboard focus', () => {
+    it('should apply pa-input--focused class on keyboard focus', () => {
       const { fixture, inputEl } = createTestHost();
       fixture.detectChanges();
 
       focusOrigin$.next('keyboard');
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('cdk-keyboard-focused')).toBe(true);
+      expect(inputEl.classList.contains('pa-input--focused')).toBe(true);
     });
 
-    it('should NOT apply cdk-keyboard-focused on mouse focus', () => {
+    it('should also apply pa-input--focused class on mouse focus (any origin shows the focus color, not just keyboard)', () => {
       const { fixture, inputEl } = createTestHost();
       fixture.detectChanges();
 
       focusOrigin$.next('mouse');
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('cdk-keyboard-focused')).toBe(false);
+      expect(inputEl.classList.contains('pa-input--focused')).toBe(true);
     });
 
-    it('should remove cdk-keyboard-focused when focus is lost (null origin)', () => {
+    it('should remove pa-input--focused when focus is lost (null origin)', () => {
       const { fixture, inputEl } = createTestHost();
       fixture.detectChanges();
 
       focusOrigin$.next('keyboard');
       fixture.detectChanges();
-      expect(inputEl.classList.contains('cdk-keyboard-focused')).toBe(true);
+      expect(inputEl.classList.contains('pa-input--focused')).toBe(true);
 
       focusOrigin$.next(null);
       fixture.detectChanges();
-      expect(inputEl.classList.contains('cdk-keyboard-focused')).toBe(false);
+      expect(inputEl.classList.contains('pa-input--focused')).toBe(false);
     });
 
     it('should call focusMonitor.stopMonitoring on destroy', () => {
@@ -562,12 +524,12 @@ describe('PaInput', () => {
       const { fixture, host } = createTestHost();
       fixture.detectChanges();
 
-      host.type = 'email';
+      host.placeholder = 'Search';
       fixture.detectChanges();
 
       const inputEl = fixture.debugElement.query(By.css('input'))!
         .nativeElement as HTMLInputElement;
-      expect(inputEl.getAttribute('type')).toBe('email');
+      expect(inputEl.getAttribute('placeholder')).toBe('Search');
     });
   });
 

@@ -87,8 +87,7 @@ const PA_BUTTON_TOKEN_DEFAULTS: Readonly<Record<string, string>> = {
 const PA_INPUT_TOKEN_DEFAULTS: Readonly<Record<string, string>> = {
   '--pa-input-bg': 'var(--neutral-50)',
   '--pa-input-color': 'var(--neutral-900)',
-  '--pa-input-border': '1px solid var(--neutral-200)',
-  '--pa-input-radius': 'var(--radius-sm)',
+  '--pa-input-border': '1px solid var(--neutral-700)',
   '--pa-input-font-family': 'var(--font-family)',
   '--pa-input-font-weight': 'var(--font-weight-regular)',
   '--pa-input-line-height': 'var(--line-height-body)',
@@ -105,9 +104,12 @@ const PA_INPUT_TOKEN_DEFAULTS: Readonly<Record<string, string>> = {
   '--pa-input-min-height-md': PA_INPUT_PROVISIONAL_DIMENSIONS.md.minHeight,
   '--pa-input-min-height-lg': PA_INPUT_PROVISIONAL_DIMENSIONS.lg.minHeight,
 
-  '--pa-input-focus-ring': '0 0 0 3px var(--pa-primary-hover)',
+  '--pa-input-radius-sm': PA_INPUT_PROVISIONAL_DIMENSIONS.sm.radius,
+  '--pa-input-radius-md': PA_INPUT_PROVISIONAL_DIMENSIONS.md.radius,
+  '--pa-input-radius-lg': PA_INPUT_PROVISIONAL_DIMENSIONS.lg.radius,
+
   '--pa-input-focus-border': 'var(--pa-primary)',
-  '--pa-input-error-border': '1px solid var(--pa-danger)',
+  '--pa-input-error-border': 'var(--pa-danger)',
   '--pa-input-error-color': 'var(--pa-danger)',
   '--pa-input-error-icon-color': 'var(--pa-danger)',
   '--pa-input-disabled-bg': 'var(--neutral-200)',

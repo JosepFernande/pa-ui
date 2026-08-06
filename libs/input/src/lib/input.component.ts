@@ -17,10 +17,11 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FocusMonitor, FocusOrigin } from '@angular/cdk/a11y';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
-import type { PaInputSize, PaInputType } from './input.types';
+import type { PaInputSize } from './input.types';
 
 /**
  * Accessible, token-driven native text input (selector `input[pa-input]`).
+ * Text-only: password, email, and number inputs are separate components.
  *
  * The host IS the native `<input>` element (mirroring `button[pa-button]`),
  * so the component renders no template content and carries no element of its
@@ -59,7 +60,10 @@ import type { PaInputSize, PaInputType } from './input.types';
     '[attr.aria-label]': 'ariaLabel() || null',
     '[attr.aria-describedby]': 'ariaDescribedBy() || null',
     '[attr.placeholder]': 'placeholder() || null',
-    '[attr.type]': 'type()',
+    // The component always renders a text input — any consumer-supplied
+    // `type` attribute is overridden, because other input kinds (password,
+    // email, number) are separate components.
+    '[attr.type]': '"text"',
     '(input)': 'onInput($event)',
     '(blur)': 'onBlur()',
   },
@@ -67,9 +71,6 @@ import type { PaInputSize, PaInputType } from './input.types';
 export class PaInput implements ControlValueAccessor, OnInit, OnDestroy {
   /** Size preset: sm, md, or lg. */
   readonly size = input<PaInputSize>('md');
-
-  /** Native input type: text, password, email, or number. */
-  readonly type = input<PaInputType>('text');
 
   /** Whether the input is disabled. Overridden by the form control when disabled. */
   readonly disabled = input(false);
@@ -137,7 +138,7 @@ export class PaInput implements ControlValueAccessor, OnInit, OnDestroy {
       this.effectiveDisabled() ? 'pa-input--disabled' : '',
       this.readonly() ? 'pa-input--readonly' : '',
       this.hasError() ? 'pa-input--error' : '',
-      this.focusOrigin() === 'keyboard' ? 'cdk-keyboard-focused' : '',
+      this.focusOrigin() !== null ? 'pa-input--focused' : '',
     ]
       .filter(Boolean)
       .join(' '),

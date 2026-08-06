@@ -9,7 +9,7 @@
  *   --pa-input-color              → color (text)
  *   --pa-input-bg                 → background-color
  *   --pa-input-border             → border shorthand
- *   --pa-input-radius             → border-radius
+ *   --pa-input-radius-sm/md/lg    → border-radius (per size)
  *   --pa-input-padding-sm         → padding (sm)
  *   --pa-input-padding-md         → padding (md)
  *   --pa-input-padding-lg         → padding (lg)
@@ -27,8 +27,7 @@
  *   --pa-input-readonly-border    → border when readonly
  *   --pa-input-error-border       → border-color when error
  *   --pa-input-error-color        → color when error
- *   --pa-input-focus-border       → border-color when keyboard-focused
- *   --pa-input-focus-ring         → box-shadow when keyboard-focused
+ *   --pa-input-focus-border       → border-color when focused (any origin)
  *   --pa-input-transition-duration → transition duration
  *   --pa-input-transition-easing  → transition easing
  */
@@ -49,7 +48,6 @@
   color: var(--pa-input-color);
   background-color: var(--pa-input-bg);
   border: var(--pa-input-border);
-  border-radius: var(--pa-input-radius);
 
   transition:
     background-color var(--pa-input-transition-duration) var(--pa-input-transition-easing),
@@ -70,18 +68,21 @@
   padding: var(--pa-input-padding-sm);
   font-size: var(--pa-input-font-sm);
   min-height: var(--pa-input-min-height-sm);
+  border-radius: var(--pa-input-radius-sm);
 }
 
 .pa-input--md {
   padding: var(--pa-input-padding-md);
   font-size: var(--pa-input-font-md);
   min-height: var(--pa-input-min-height-md);
+  border-radius: var(--pa-input-radius-md);
 }
 
 .pa-input--lg {
   padding: var(--pa-input-padding-lg);
   font-size: var(--pa-input-font-lg);
   min-height: var(--pa-input-min-height-lg);
+  border-radius: var(--pa-input-radius-lg);
 }
 
 /* ------------------------------------------------------------------ */
@@ -114,12 +115,11 @@
 }
 
 /* ------------------------------------------------------------------ */
-/* Focus (CDK FocusMonitor)                                            */
+/* Focus (CDK FocusMonitor) — any origin: mouse, touch, keyboard, program */
 /* ------------------------------------------------------------------ */
 
-.pa-input.cdk-keyboard-focused {
+.pa-input--focused {
   border-color: var(--pa-input-focus-border);
-  box-shadow: var(--pa-input-focus-ring);
   outline: none;
 }
 
