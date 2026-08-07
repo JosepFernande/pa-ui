@@ -1,73 +1,95 @@
-# Contributing to pa-ui
+# Cómo contribuir a pa-ui
 
-Thanks for your interest in contributing! This document covers the development
-workflow, PR process, changeset conventions, and release process.
+¡Gracias por tu interés en contribuir! Este documento cubre el flujo de
+desarrollo, el proceso de PR, las convenciones de changesets y el proceso de
+release.
 
-## Development Setup
+## Configuración de desarrollo
 
 ```bash
-# Install dependencies
+# Instalar dependencias
 npm ci
 
-# Build all libraries
+# Compilar todas las librerías
 npx nx run-many -t build
 
-# Run tests
+# Correr todos los tests
 npx nx run-many -t test
 
-# Run linting
+# Correr linting (ESLint) en todos los proyectos
 npx nx run-many -t lint
 
-# Run a single library's tests
+# Correr stylelint (CSS/SCSS) en todos los proyectos
+npm run lint:css
+
+# Correr los tests de una sola librería
 npx nx test core
 npx nx test button
 npx nx test input
+npx nx test pa-ui   # paquete umbrella @pa-ui/angular
 ```
 
-### Useful Nx Commands
+### Comandos nx útiles
 
-| Command                    | Description                        |
-| -------------------------- | ---------------------------------- |
-| `npx nx graph`             | Visualize project dependency graph |
-| `npx nx reset`             | Clear Nx cache                     |
-| `npx nx build <project>`   | Build a single project             |
-| `npx nx test <project>`    | Test a single project              |
-| `npx nx lint <project>`    | Lint a single project              |
-| `npx nx run-many -t build` | Build all projects                 |
-| `npx nx run-many -t test`  | Test all projects                  |
+| Comando                        | Descripción                         |
+| ------------------------------ | ----------------------------------- |
+| `npx nx graph`                 | Visualizar el grafo de dependencias |
+| `npx nx reset`                 | Limpiar la caché de Nx              |
+| `npx nx build <project>`       | Compilar un solo proyecto           |
+| `npx nx test <project>`        | Testear un solo proyecto            |
+| `npx nx lint <project>`        | Lintear un solo proyecto            |
+| `npx nx run-many -t build`     | Compilar todos los proyectos        |
+| `npx nx run-many -t test`      | Testear todos los proyectos         |
+| `npx nx run-many -t lint`      | Lintear todos los proyectos         |
+| `npx nx run-many -t stylelint` | Stylelint en todos los proyectos    |
 
-## Branch Strategy
+## Estrategia de ramas
 
-- **Feature branches**: `feat/<description>` or `fix/<description>`
-- **Base branch**: `main`
-- Keep branches focused on a single change or feature
-- Rebase onto `main` before opening a PR
+- **Ramas de feature**: `feat/<descripción>` o `fix/<descripción>`
+- **Rama base**: `main`
+- Mantené las ramas enfocadas en un solo cambio o feature
+- Hacé rebase sobre `main` antes de abrir un PR
 
-## PR Process
+## Proceso de PR
 
-1. Create a branch from `main`
-2. Make your changes following the [code conventions](./AGENTS.md)
-3. Add or update tests for your changes
-4. Create a changeset if your change affects a published package (see below)
-5. Open a PR against `main`
-6. Ensure all CI checks pass (lint, test, build, gga-review)
-7. Request review from a maintainer
+1. Creá una rama desde `main`
+2. Hacé tus cambios siguiendo las
+   [convenciones de código](#convenciones-de-código)
+3. Agregá o actualizá tests para tus cambios
+4. Creá un changeset si tu cambio afecta un paquete publicable (ver más abajo)
+5. Abrí un PR contra `main`
+6. Asegurate de que el CI pase. El job `summary` bloquea el merge si alguno de
+   estos falla: `lint` (ESLint), `stylelint`, `test`, `build` o `audit` (chequeo
+   de bundle/entry points sobre el output de `build`). El job `gga-review`
+   (revisión automatizada con IA) corre en paralelo pero es informativo, no
+   bloqueante.
+7. Pedí revisión a un mantenedor
 
-### Commit Conventions
+Además del CI de PR, existen otros dos workflows que no forman parte del
+checklist de un PR individual:
 
-We use [Conventional Commits](https://www.conventionalcommits.org/). Every
-commit message must follow this pattern:
+- **`smoke.yml`**: corre solo en push a `main` (post-merge). Es un build-only
+  liviano — no repite lint/test/audit porque branch protection ya los validó en
+  el PR.
+- **`storybook-build.yml`**: corre en PR, pero solo cuando el diff toca paths de
+  `showcase`, `button`, `core` o stories.
+
+### Convenciones de commits
+
+Usamos [Conventional Commits](https://www.conventionalcommits.org/). Todo
+mensaje de commit debe seguir este patrón:
 
 ```
-<type>(<scope>): <description>
+<tipo>(<scope>): <descripción>
 ```
 
-**Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`,
+**Tipos** (validados por `commitlint.config.js`): `feat`, `fix`, `docs`,
+`style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
+
+**Scopes sugeridos**: `core`, `button`, `input`, `angular`, `showcase`, `repo`,
 `ci`
 
-**Scopes**: `core`, `button`, `input`, `showcase`, `repo`, `ci`
-
-Examples:
+Ejemplos:
 
 ```
 feat(button): add loading state with spinner
@@ -75,115 +97,126 @@ fix(core): resolve token inheritance for nested themes
 chore(repo): update nx to latest version
 ```
 
-## Changeset Workflow
+> Nota: los mensajes de commit, títulos/descripciones de PR e issues, y los
+> comentarios de PR/issue se escriben en español neutro/profesional en este
+> repo. El código, identificadores, comentarios de código y tests se mantienen
+> en inglés — ver [convenciones de código](#convenciones-de-código).
 
-We use [Changesets](https://github.com/changesets/changesets) to manage
-versioning and changelogs.
+## Flujo de changesets
 
-### When a Changeset is Required
+Usamos [Changesets](https://github.com/changesets/changesets) para manejar
+versionado y changelogs.
 
-A changeset is required whenever your PR changes a **publishable package**
-(`@pa-ui/core`, `@pa-ui/button`, `@pa-ui/input`). This includes:
+### Cuándo se requiere un changeset
 
-- Adding new features or components
-- Changing or removing public APIs
-- Bug fixes that affect consumer behavior
-- Dependency updates that change peer dependency ranges
+Se requiere un changeset siempre que tu PR modifique un **paquete publicable**
+(`@pa-ui/core`, `@pa-ui/button`, `@pa-ui/input`, `@pa-ui/angular`). Esto
+incluye:
 
-A changeset is **not** required for:
+- Agregar nuevas features o componentes
+- Cambiar o remover APIs públicas
+- Bug fixes que afectan el comportamiento del consumidor
+- Actualizaciones de dependencias que cambian los rangos de peer dependencies
 
-- Internal refactors that don't change public API
-- Test-only changes
-- Documentation updates (unless they warrant a changelog entry)
-- Changes to the showcase app
+Un changeset **no** es necesario para:
 
-### How to Create a Changeset
+- Refactors internos que no cambian la API pública
+- Cambios solo de tests
+- Actualizaciones de documentación (salvo que merezcan una entrada de changelog)
+- Cambios en la app showcase
+
+### Cómo crear un changeset
 
 ```bash
 npx changeset
 ```
 
-The CLI will prompt you to:
+La CLI te va a pedir:
 
-1. Select which packages are affected (space to select, enter to confirm)
-2. Choose a **bump type** for each:
-   - `major` — breaking changes
-   - `minor` — new features (backward compatible)
-   - `patch` — bug fixes (backward compatible)
-3. Write a summary of the change
+1. Seleccionar qué paquetes están afectados (espacio para seleccionar, enter
+   para confirmar)
+2. Elegir un **tipo de bump** para cada uno:
+   - `major` — cambios que rompen compatibilidad
+   - `minor` — nuevas features (compatibles hacia atrás)
+   - `patch` — bug fixes (compatibles hacia atrás)
+3. Escribir un resumen del cambio
 
-This creates a `.md` file in `.changeset/` with a unique random name. Commit
-this file with your changes.
+Esto crea un archivo `.md` en `.changeset/` con un nombre aleatorio único.
+Commiteá ese archivo junto con tus cambios.
 
-### Bump Types
+Los cuatro paquetes publicables están configurados como `fixed` en
+`.changeset/config.json`: siempre se versionan juntos con el mismo número,
+aunque el changeset solo mencione a uno de ellos.
 
-| Type      | When to use                                                                        |
-| --------- | ---------------------------------------------------------------------------------- |
-| **major** | Breaking API changes, removed features, changed component selectors/inputs/outputs |
-| **minor** | New components, new features, new inputs/outputs (backward compatible)             |
-| **patch** | Bug fixes, performance improvements, dependency bumps (no API change)              |
+### Tipos de bump
 
-## Release Process
+| Tipo      | Cuándo usarlo                                                                                                      |
+| --------- | ------------------------------------------------------------------------------------------------------------------ |
+| **major** | Cambios de API que rompen compatibilidad, features removidas, selectores/inputs/outputs de componentes modificados |
+| **minor** | Nuevos componentes, nuevas features, nuevos inputs/outputs (compatibles hacia atrás)                               |
+| **patch** | Bug fixes, mejoras de performance, bumps de dependencias (sin cambio de API)                                       |
 
-Releases are automated via GitHub Actions (`.github/workflows/release.yml`), but
-publishing a changeset takes **two merges to `main`**, not one:
+## Proceso de release
 
-1. Merging a PR with changesets to `main` triggers the `release.yml` workflow.
-2. It runs `changeset version` (bumps versions, updates changelogs) and opens an
-   automated **"chore(release): version packages"** PR. This PR must be reviewed
-   and merged like any other PR — it does not merge itself.
-3. Merging that version-packages PR triggers the workflow again. This time there
-   is nothing new to version, so it runs `changeset publish`, creates a git tag,
-   and publishes a GitHub Release.
+Los releases se automatizan vía GitHub Actions
+(`.github/workflows/release.yml`), pero publicar un changeset toma **dos merges
+a `main`**, no uno:
 
-If you don't see a publish after merging your changeset PR, check whether the
-version-packages PR was opened and merged — that second merge is what actually
-publishes to npm.
+1. Mergear un PR con changesets a `main` dispara el workflow `release.yml`.
+2. Corre `changeset version` (bumpea versiones, actualiza changelogs) y abre un
+   PR automático **"chore(release): version packages"**. Ese PR debe ser
+   revisado y mergeado como cualquier otro — no se mergea solo.
+3. Mergear ese PR de version-packages dispara el workflow otra vez. Esta vez no
+   hay nada nuevo para versionar, así que corre:
+   - `npm audit --omit=dev --audit-level=critical` sobre las dependencias de
+     producción (**no bloqueante** — es advisory, se sube como artifact)
+   - `npm run validate:packages` (**bloqueante** — falla el release si el
+     `package.json` de algún paquete en `dist/` perdió su entry point
+     `main`/`exports["."]`/`typings`, o si el workflow dejó de publicar desde
+     `dist/<lib>`)
+   - `changeset publish`, que crea el tag git y publica el GitHub Release
 
-### Pre-release (Alpha)
+Si no ves una publicación después de mergear tu PR con changesets, revisá si se
+abrió el PR de version-packages y si ya fue mergeado — ese segundo merge es el
+que efectivamente publica a npm.
 
-The repo is in Changesets prerelease mode (`.changeset/pre.json`,
-`"mode": "pre"`). Consumers who want the alpha builds install with:
+### Estado actual: release estable (fuera de modo prerelease)
+
+El repo salió del modo prerelease de Changesets (`changeset pre exit`) y ya no
+usa `.changeset/pre.json`. Los cuatro paquetes (`@pa-ui/core`, `@pa-ui/button`,
+`@pa-ui/input`, `@pa-ui/angular`) tienen releases estables reales y se instalan
+sin ningún tag especial:
 
 ```bash
-npm install @pa-ui/core@alpha
+npm install @pa-ui/core
 ```
 
-**Important caveat**: `changeset publish` refuses an explicit `--tag` while in
-prerelease mode (it exits with "Releasing under custom tag is not allowed in pre
-mode" — there's no flag to override this). Left to its own default, it only tags
-a package `alpha` if that package has had a real, non-prerelease release before;
-none of `@pa-ui/core`, `@pa-ui/button`, `@pa-ui/input`, or `@pa-ui/angular` ever
-have, so `changeset publish` tags every one of their releases `latest` instead.
-`release.yml` compensates with a dedicated step that runs
-`npm dist-tag add <pkg>@<version> alpha` right after a successful publish, so
-the `alpha` tag also advances — but `latest` will keep pointing at the same
-(prerelease) version until the first real stable release ships.
+`release.yml` conserva lógica condicional para el caso en que el repo vuelva a
+entrar en modo `pre` en el futuro (dist-tag `alpha`, marcar el GitHub Release
+como prerelease). Mientras `.changeset/pre.json` no exista, esas ramas del
+workflow no se ejecutan y no aplican.
 
-**This also means `changeset version` intentionally never deletes consumed `.md`
-files from `.changeset/`** — they stay there for the whole alpha cycle by design
-(Changesets uses them to reconstruct the full changelog whenever
-`changeset pre exit` eventually runs). Seeing old changeset files still present
-in `.changeset/` after a release is expected, not a bug. Whether a changeset is
-actually pending is tracked via `.changeset/pre.json`'s `changesets` array, not
-by file presence.
+## Convenciones de código
 
-Exiting prerelease mode (`changeset pre exit`) for the first stable release is a
-deliberate, separate decision — not something to do as part of routine
-maintenance.
+`AGENTS.md` es un **índice de skills**, no un documento de convenciones en sí
+mismo. Para las reglas completas, consultá:
 
-## Code Conventions
+- [`skills/pa-ui-architecture/SKILL.md`](skills/pa-ui-architecture/SKILL.md) —
+  arquitectura, tokens, theming
+- [`skills/pa-ui-coding-standards/SKILL.md`](skills/pa-ui-coding-standards/SKILL.md)
+  — estructura de archivos, inputs/outputs, signals, CSS
+- [`skills/pa-ui-testing/SKILL.md`](skills/pa-ui-testing/SKILL.md) — patrones de
+  testing, a11y, coverage
 
-See [AGENTS.md](./AGENTS.md) for the full code conventions and architectural
-rules. Key highlights:
+Puntos clave:
 
-- **Standalone components only** — no NgModules
-- **Signals first** — use Angular Signals for local state, not RxJS
-- **Tokens first** — no hardcoded colors, spacing, or radii
-- **CSS variables first** — prefer native CSS custom properties over SCSS
-- **CDK over custom** — use Angular CDK for overlays, focus, a11y
-- **`pa-` prefix** — all component selectors use the `pa-` prefix
+- **Solo standalone components** — sin NgModules
+- **Signals primero** — usá Angular Signals para estado local, no RxJS
+- **Tokens primero** — sin colores, spacing o radios hardcodeados
+- **CSS variables primero** — preferí custom properties nativas sobre SCSS
+- **CDK sobre custom** — usá Angular CDK para overlays, focus, a11y
+- **Prefijo `pa-`** — todos los selectores de componentes usan el prefijo `pa-`
 
-## Questions?
+## ¿Preguntas?
 
-Open an issue or start a discussion — we're happy to help!
+Abrí un issue o iniciá una discusión — ¡con gusto te ayudamos!
