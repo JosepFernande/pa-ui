@@ -26,8 +26,8 @@ one way of organizing work that happens to also be bound by them. A contributor
 who never touches `sdd-*` is bound by the same rules just the same, applied
 directly to their implementation, refactor, or review.
 
-The skill is the operational contract for the architecture documented in Notion.
-It does not replace reading the source Notion page when a decision is
+The skill is the operational contract for the architecture documented in the
+GitHub Wiki. It does not replace reading the source Wiki page when a decision is
 non-obvious.
 
 ## Hard Rules (non-negotiable)
@@ -84,8 +84,8 @@ hover, active, and contrast variants from user-registered colors.
    an SDD phase, identify which artifact you own for that phase (spec, design,
    task, implementation, verification). If not, apply the rules directly to the
    implementation, refactor, or review at hand — no phase breakdown required.
-2. Re-read the Notion source of truth if any rule application is ambiguous. Do
-   not invent.
+2. Re-read the Wiki source of truth if any rule application is ambiguous. Do not
+   invent.
 3. Apply the hard rules to your output: spec criteria, design decisions, task
    acceptance, code, and verification checklist must reference these rules
    explicitly.
@@ -111,6 +111,7 @@ Every phase or direct implementation must return:
 
 ## References
 
-- Notion — Architecture & Foundation: `35f80bf9-7f94-814a-96d6-ccb90055e545`
-- Notion — Documentacion hub: `35f80bf9-7f94-80d7-83ff-e06cb99a1505`
+- Wiki — Architecture & Foundation:
+  `https://github.com/JosepFernande/pa-ui/wiki/Architecture-and-Foundation`
+- Wiki — Home: `https://github.com/JosepFernande/pa-ui/wiki`
 - Repo: `https://github.com/JosepFernande/pa-ui`
