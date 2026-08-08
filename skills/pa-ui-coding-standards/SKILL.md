@@ -241,8 +241,10 @@ approve with the justification.
 ## References
 
 - Architecture skill: `pa-ui-architecture`
-- Notion — Architecture & Foundation: `35f80bf9-7f94-814a-96d6-ccb90055e545`
-- Notion — AI Code Review with gga: `35f80bf9-7f94-8179-8025-d0c378a83fb5`
-- Notion — Contribution / PR / Code Review Guidelines:
-  `35f80bf9-7f94-8179-8025-d0c378a83fb5`
+- Wiki — Architecture & Foundation:
+  `https://github.com/JosepFernande/pa-ui/wiki/Architecture-and-Foundation`
+- Wiki — AI Code Review with gga:
+  `https://github.com/JosepFernande/pa-ui/wiki/AI-Code-Review-with-gga`
+- Wiki — Contribution / PR / Code Review Guidelines:
+  `https://github.com/JosepFernande/pa-ui/wiki/Contribution-PR-Code-Review-Guidelines`
 - Repo: `https://github.com/JosepFernande/pa-ui`
