@@ -1,5 +1,11 @@
 # @pa-ui/input
 
+## 19.2.1
+
+### Patch Changes
+
+- @pa-ui/core@19.2.1
+
 ## 19.2.0
 
 ### Minor Changes
