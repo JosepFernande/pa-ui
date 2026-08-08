@@ -67,6 +67,19 @@ class TestHost {
   }
 }
 
+/**
+ * Test host reproducing the README's documented "bare" attribute usage:
+ * `<button pa-button loading>` with no binding, no `[loading]`.
+ */
+@Component({
+  selector: 'pa-test-host-bare-loading',
+  standalone: true,
+  imports: [PaButton],
+  encapsulation: ViewEncapsulation.None,
+  template: `<button pa-button loading>Bare Loading</button>`,
+})
+class BareLoadingTestHost {}
+
 describe('PaButton', () => {
   let focusOrigin$: Subject<FocusOrigin>;
   let focusMonitorMock: { monitor: jest.Mock; stopMonitoring: jest.Mock };
@@ -543,6 +556,29 @@ describe('PaButton', () => {
 
       expect(buttonEl.disabled).toBe(true);
       expect(buttonEl.getAttribute('aria-busy')).toBe('true');
+    });
+  });
+
+  // -----------------------------------------------------------------------
+  // Loading — bare attribute (booleanAttribute transform, issue #88)
+  // -----------------------------------------------------------------------
+  describe('loading bare attribute', () => {
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        imports: [BareLoadingTestHost],
+        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
+      }).compileComponents();
+    });
+
+    it('should coerce `<button pa-button loading>` (no binding) to true', () => {
+      const fixture = TestBed.createComponent(BareLoadingTestHost);
+      fixture.detectChanges();
+
+      const buttonEl = fixture.debugElement.query(By.css('button'))!
+        .nativeElement as HTMLButtonElement;
+
+      expect(buttonEl.getAttribute('aria-busy')).toBe('true');
+      expect(buttonEl.disabled).toBe(true);
     });
   });
 
