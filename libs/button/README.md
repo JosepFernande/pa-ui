@@ -1,16 +1,39 @@
 # @pa-ui/button
 
-Standalone Angular 19 button component — variants, sizes, color, disabled, and loading states. Token-driven styling via CSS custom properties with CDK a11y primitives.
+Standalone Angular 19 button component — variants, sizes, color, disabled, and
+loading states. Token-driven styling via CSS custom properties with CDK a11y
+primitives.
 
 ## Architecture
 
-- **Tokens first** — Every value comes from `var(--pa-button-*)` CSS custom properties. Zero hardcoded colors, spacing, or radii.
+- **Tokens first** — Every value comes from `var(--pa-button-*)` CSS custom
+  properties. Zero hardcoded colors, spacing, or radii.
 - **Standalone only** — No NgModule. Component is `standalone: true`.
 - **Signals first** — All inputs are signals; computed state via `computed()`.
-- **CDK over custom** — Uses `FocusMonitor` from `@angular/cdk/a11y` for focus-origin tracking.
-- **Native button host** — Selector is `button[pa-button]`. Free semantics, keyboard, focus, and form integration.
+- **CDK over custom** — Uses `FocusMonitor` from `@angular/cdk/a11y` for
+  focus-origin tracking.
+- **Native button host** — Selector is `button[pa-button]`. Free semantics,
+  keyboard, focus, and form integration.
 
 ## Usage
+
+`@pa-ui/button` only renders correctly when both theming pieces from
+`@pa-ui/core` are set up:
+
+```ts
+// app.config.ts
+providers: [providePaTheme()];
+```
+
+```css
+/* styles.css (global stylesheet) */
+@import '@pa-ui/core/theme.css';
+```
+
+`providePaTheme()` alone only writes the runtime color variables. The `@import`
+is required for padding, font-size, min-height, gap, and radius — without it the
+button renders with correct colors but looks "half broken" (no
+padding/height/font/gap/radius), with no error in the console.
 
 ```html
 <button pa-button>Solid Primary</button>
@@ -20,14 +43,14 @@ Standalone Angular 19 button component — variants, sizes, color, disabled, and
 
 ## API
 
-| Input | Type | Default | Description |
-|-------|------|---------|-------------|
-| `variant` | `'solid' \| 'outline' \| 'ghost'` | `'solid'` | Visual variant |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size preset |
-| `color` | `string` | `'primary'` | Theme color (maps to `var(--pa-{color})`) |
-| `disabled` | `boolean` | `false` | Disabled state |
-| `loading` | `boolean` | `false` | Loading state (shows spinner, suppresses click) |
-| `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | Native button type |
+| Input      | Type                              | Default     | Description                                     |
+| ---------- | --------------------------------- | ----------- | ----------------------------------------------- |
+| `variant`  | `'solid' \| 'outline' \| 'ghost'` | `'solid'`   | Visual variant                                  |
+| `size`     | `'sm' \| 'md' \| 'lg'`            | `'md'`      | Size preset                                     |
+| `color`    | `string`                          | `'primary'` | Theme color (maps to `var(--pa-{color})`)       |
+| `disabled` | `boolean`                         | `false`     | Disabled state                                  |
+| `loading`  | `boolean`                         | `false`     | Loading state (shows spinner, suppresses click) |
+| `type`     | `'button' \| 'submit' \| 'reset'` | `'button'`  | Native button type                              |
 
 ## Running unit tests
 
