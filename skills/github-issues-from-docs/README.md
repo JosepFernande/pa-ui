@@ -12,8 +12,9 @@ para integrarse de forma nativa con PRs.
 
 ## Características
 
-- **Cache híbrido inteligente**: Combina cache local en Engram con validación de
-  frescura vía el HEAD SHA del repo git del Wiki
+- **Cache híbrido inteligente**: Combina un índice + contenido cacheados en un
+  archivo JSON local (`.wiki-cache/index.json`) con validación de frescura vía
+  el HEAD SHA del repo git del Wiki
 - **Ahorro de tokens**: 60-80% menos tokens vs. leer siempre desde el clone del
   Wiki, y prácticamente 0 tokens en el chequeo de frescura cuando nada cambió
 - **Sincronización incremental**: Solo re-lee páginas que cambiaron (vía
@@ -39,7 +40,7 @@ alinear issue #42 con documentación
 1. Lee el issue desde GitHub:
    `gh issue view <number> --json title,body,labels,comments`
 2. Determina temas relevantes (tokens, Theme Engine, colores, etc.)
-3. Carga índice de documentación desde Engram (local)
+3. Carga índice de documentación desde `.wiki-cache/index.json` (local)
 4. Asegura el clone local del Wiki (`git clone` o `git pull --ff-only`) y
    compara el HEAD actual contra `last_synced_head_sha` (1 comparación de
    string, no una llamada por página)
@@ -64,7 +65,8 @@ crear issue para componente Avatar
    Como/Quiero/Para + criterios de aceptación, o la plantilla de
    `.github/ISSUE_TEMPLATE` si existe)
 4. Crea el issue con `gh issue create --title ... --body ... --label ...`
-5. Guarda learnings en Engram
+5. Guarda learnings en Engram (opcional, best-effort: solo si el MCP está
+   disponible; su ausencia no bloquea la creación del issue)
 
 ### Sincronizar documentos de referencia
 
@@ -93,8 +95,9 @@ crear issue para componente Avatar
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
-│ 4. Cargar índice desde Engram (local, 0 operaciones git)    │
-│    - mem_search("wiki-docs/index")                          │
+│ 4. Cargar índice desde .wiki-cache/index.json (local, 0 ops │
+│    git)                                                      │
+│    - Read(.wiki-cache/index.json)                            │
 │    - Obtener: ~17 páginas con tags y last_commit_sha        │
 └─────────────────────────────────────────────────────────────┘
                             ↓
@@ -118,7 +121,8 @@ crear issue para componente Avatar
 │ 7. Sincronizar páginas obsoletas (0-N lecturas de archivo)   │
 │    - Solo re-leer las páginas listadas en el diff            │
 │    - Read tool sobre el archivo .md en el clone local         │
-│    - Actualizar cache en Engram                              │
+│    - Actualizar la entrada de esa página en                  │
+│      .wiki-cache/index.json (Write)                          │
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
@@ -168,13 +172,14 @@ skills/github-issues-from-docs/
 │   └── usage-examples.md                # Ejemplos de flujo completo
 └── references/
     ├── wiki-git-patterns.md             # Patrones de git sobre el Wiki (solo lectura)
-    └── engram-cache-patterns.md         # Patrones de cache en Engram
+    └── wiki-cache-patterns.md           # Patrones de cache local (.wiki-cache/index.json)
 ```
 
-El clone local del Wiki vive en `.wiki-cache/pa-ui.wiki` (raíz del repo,
-ignorado por git).
+El clone local del Wiki vive en `.wiki-cache/pa-ui.wiki`, y el índice/cache en
+`.wiki-cache/index.json` (ambos en la raíz del repo, ignorados por git —
+`.wiki-cache/` ya está en `.gitignore`).
 
-## Estructura del cache en Engram
+## Estructura del cache local (`.wiki-cache/index.json`)
 
 ### Índice de páginas
 
@@ -208,7 +213,12 @@ ignorado por git).
 }
 ```
 
-### Análisis de issues (Engram)
+### Análisis de issues (Engram, opcional / best-effort)
+
+Este bloque es independiente del mecanismo de cache de arriba: es una anotación
+de memoria cross-session que solo se guarda si el MCP de Engram está disponible.
+Si no lo está, se omite sin afectar la creación/actualización del issue en
+GitHub.
 
 ```json
 {
@@ -270,7 +280,9 @@ depende de una API externa de terceros.
 ### ¿Por qué tags y no búsqueda full-text?
 
 - Tags permiten matching semántico rápido
-- Búsqueda full-text en Engram es lenta para ~17 páginas
+- Con ~17 páginas, comparar contra un diccionario de tags conocidos es más
+  simple y predecible que implementar búsqueda full-text sobre el archivo JSON
+  local
 - Tags se generan automáticamente del contenido
 
 ## Limitaciones
@@ -379,4 +391,4 @@ jfernandezo
 
 ## Versión
 
-3.0
+4.0
