@@ -1,5 +1,7 @@
 # @pa-ui/core
 
+## 19.2.1
+
 ## 19.2.0
 
 ### Minor Changes
