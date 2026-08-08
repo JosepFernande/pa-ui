@@ -3,6 +3,7 @@ import {
   OnInit,
   OnDestroy,
   ElementRef,
+  booleanAttribute,
   computed,
   input,
   signal,
@@ -47,7 +48,7 @@ export class PaButton implements OnInit, OnDestroy {
   readonly disabled = input(false);
 
   /** Whether the button shows a loading spinner. */
-  readonly loading = input(false);
+  readonly loading = input(false, { transform: booleanAttribute });
 
   /** Native button type: button, submit, or reset. */
   readonly type = input<'button' | 'submit' | 'reset'>('button');
