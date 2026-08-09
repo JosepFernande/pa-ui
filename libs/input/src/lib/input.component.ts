@@ -6,7 +6,6 @@ import {
   ElementRef,
   Injector,
   OnInit,
-  OnDestroy,
   computed,
   forwardRef,
   inject,
@@ -17,6 +16,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FocusMonitor, FocusOrigin } from '@angular/cdk/a11y';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
+import { withFocusMonitor } from '@pa-ui/core';
 import type { PaInputSize } from './input.types';
 
 /**
@@ -68,7 +68,7 @@ import type { PaInputSize } from './input.types';
     '(blur)': 'onBlur()',
   },
 })
-export class PaInput implements ControlValueAccessor, OnInit, OnDestroy {
+export class PaInput implements ControlValueAccessor, OnInit {
   /** Size preset: sm, md, or lg. */
   readonly size = input<PaInputSize>('md');
 
@@ -157,25 +157,21 @@ export class PaInput implements ControlValueAccessor, OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.focusMonitor.monitor(this.elementRef.nativeElement, true).subscribe((origin) => {
-      this.focusOrigin.set(origin);
+    withFocusMonitor(this.elementRef, this.focusMonitor, this.destroyRef, this.focusOrigin, {
+      extras: () => {
+        // `control.invalid`/`control.touched` are not signals, so a `computed()`
+        // reading them would be cached forever (verified against Angular 19: a
+        // computed with no signal deps is evaluated once). Subscribing to the
+        // control's `events` stream (covers touched, status, AND value changes —
+        // `statusChanges` alone misses the blur/touch transition) invalidates
+        // `hasError` whenever the form state that drives it changes.
+        const control = this.ngControl?.control;
+        control?.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+          this.validityVersion.update((version) => version + 1);
+          this.cdr.markForCheck();
+        });
+      },
     });
-
-    // `control.invalid`/`control.touched` are not signals, so a `computed()`
-    // reading them would be cached forever (verified against Angular 19: a
-    // computed with no signal deps is evaluated once). Subscribing to the
-    // control's `events` stream (covers touched, status, AND value changes —
-    // `statusChanges` alone misses the blur/touch transition) invalidates
-    // `hasError` whenever the form state that drives it changes.
-    const control = this.ngControl?.control;
-    control?.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.validityVersion.update((version) => version + 1);
-      this.cdr.markForCheck();
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.focusMonitor.stopMonitoring(this.elementRef.nativeElement);
   }
 
   /** ControlValueAccessor: writes a model value into the native input. */
