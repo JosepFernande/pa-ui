@@ -244,9 +244,8 @@ Every pa-ui component is built with accessibility as a first-class concern:
 - **`prefers-reduced-motion`** — Animations respect the user's motion
   preference.
 
-> See the
-> [Testing Strategy](https://github.com/JosepFernande/pa-ui/wiki/Testing-Strategy)
-> wiki page for the full a11y checklist and testing approach.
+> See the [Testing Strategy](./docs/testing-strategy.md) doc for the full a11y
+> checklist and testing approach.
 
 ---
 
@@ -325,32 +324,34 @@ pa-ui/
 └── skills/              # AI agent skills for architecture enforcement
 ```
 
-> See [Components](https://github.com/JosepFernande/pa-ui/wiki/Components) for
-> the full component catalog, each linked to its `libs/` folder.
+> See [Components](./docs/components.md) for the full component catalog, each
+> linked to its `libs/` folder.
 
 ---
 
 ## Documentation
 
-The [project wiki](https://github.com/JosepFernande/pa-ui/wiki) is the source of
-truth for architecture, testing, and process docs. Highlights:
+`docs/` in this repo is the source of truth for architecture, testing, and
+process docs, and the one guaranteed to be available to anyone (or any AI agent)
+cloning the repo without network access. The
+[project wiki](https://github.com/JosepFernande/pa-ui/wiki) is kept as a
+historical mirror going forward; new documentation changes land in `docs/`
+first.
 
-| Resource                                                                                                             | Description                                               |
-| -------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| [Components](https://github.com/JosepFernande/pa-ui/wiki/Components)                                                 | Component catalog, each linked to its `libs/` folder      |
-| [Architecture & Foundation](https://github.com/JosepFernande/pa-ui/wiki/Architecture-and-Foundation)                 | The 6 hard rules, token system, and decision gates        |
-| [CSS Strategy & View Encapsulation](https://github.com/JosepFernande/pa-ui/wiki/CSS-Strategy-and-View-Encapsulation) | Encapsulation, BEM, Theme Engine                          |
-| [Theming Deep-Dive](https://github.com/JosepFernande/pa-ui/wiki/Theming-Deep-Dive)                                   | Full technical reference for the Theme Engine             |
-| [ControlValueAccessor (CVA)](https://github.com/JosepFernande/pa-ui/wiki/ControlValueAccessor-CVA)                   | How components integrate with Angular forms               |
-| [Testing Strategy](https://github.com/JosepFernande/pa-ui/wiki/Testing-Strategy)                                     | Testing levels, coverage, and accessibility checklist     |
-| [Storybook Setup](https://github.com/JosepFernande/pa-ui/wiki/Storybook-Setup)                                       | Storybook configuration in `apps/showcase/`               |
-| [CI/CD Pipeline](https://github.com/JosepFernande/pa-ui/wiki/CI-CD-Pipeline)                                         | GitHub Actions workflows                                  |
-| [Release and Publishing](https://github.com/JosepFernande/pa-ui/wiki/Release-and-Publishing)                         | npm publishing, Trusted Publishing                        |
-| [Contribution & PR Guidelines](https://github.com/JosepFernande/pa-ui/wiki/Contribution-PR-Code-Review-Guidelines)   | How to contribute and what gets reviewed in a PR          |
-| [CSS Strategy (local)](./docs/css-strategy.md)                                                                       | Token reference and override patterns, kept in-repo       |
-| [Storybook (local)](./docs/storybook.md)                                                                             | Running Storybook locally and adding a new story          |
-| [Showcase App](./apps/showcase/)                                                                                     | Live component playground                                 |
-| [Contributing](./CONTRIBUTING.md)                                                                                    | How to contribute, PR guidelines, and code review process |
+| Resource                                                                         | Description                                               |
+| -------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| [Components](./docs/components.md)                                               | Component catalog, each linked to its `libs/` folder      |
+| [Architecture & Foundation](./docs/architecture-and-foundation.md)               | The 6 hard rules, token system, and decision gates        |
+| [Theming Deep-Dive](./docs/theming-deep-dive.md)                                 | Full technical reference for the Theme Engine             |
+| [ControlValueAccessor (CVA)](./docs/control-value-accessor-cva.md)               | How components integrate with Angular forms               |
+| [Testing Strategy](./docs/testing-strategy.md)                                   | Testing levels, coverage, and accessibility checklist     |
+| [Storybook](./docs/storybook.md)                                                 | Storybook configuration in `apps/showcase/`               |
+| [CI/CD Pipeline](./docs/ci-cd-pipeline.md)                                       | GitHub Actions workflows                                  |
+| [Release and Publishing](./docs/release-and-publishing.md)                       | npm publishing, Trusted Publishing                        |
+| [Contribution & PR Guidelines](./docs/contribution-pr-code-review-guidelines.md) | How to contribute and what gets reviewed in a PR          |
+| [CSS Strategy](./docs/css-strategy.md)                                           | Token reference and override patterns                     |
+| [Showcase App](./apps/showcase/)                                                 | Live component playground                                 |
+| [Contributing](./CONTRIBUTING.md)                                                | How to contribute, PR guidelines, and code review process |
 
 ---
 
