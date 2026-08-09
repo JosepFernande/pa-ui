@@ -12,8 +12,9 @@
  */
 
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
-import { join, extname, resolve, dirname } from 'node:path';
+import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { getEncapsulationStatus } from '../shared/encapsulation-detect.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -77,25 +78,6 @@ export function parseTokens(cssContent: string): string[] {
 // Pure functions — TypeScript parsing
 // ----------------------------------------------------------------------
 
-/** Check if a TypeScript source has ViewEncapsulation.None in its @Component decorator. */
-export function getEncapsulationStatus(tsContent: string): 'None' | 'missing' | 'wrong' {
-  // Find @Component decorator block
-  const compMatch = tsContent.match(/@Component\(\s*\{[\s\S]*?\}\)\s*\n\s*(?:export\s+)?class\b/);
-  if (!compMatch) return 'missing';
-
-  const block = compMatch[0];
-
-  if (!/encapsulation\s*:\s*/g.test(block)) {
-    return 'missing';
-  }
-
-  if (/encapsulation\s*:\s*ViewEncapsulation\.None\b/.test(block)) {
-    return 'None';
-  }
-
-  return 'wrong';
-}
-
 /** Extract the selector from a @Component decorator. */
 export function getComponentSelector(tsContent: string): string | null {
   const selMatch = tsContent.match(/selector\s*:\s*['"]([^'"]+)['"]/);
@@ -130,8 +112,6 @@ export function walkLibs(basePath: string): ComponentData[] {
       if (stat.isDirectory() && entry !== 'node_modules' && entry !== 'dist') {
         walk(fullPath);
       } else if (stat.isFile()) {
-        const ext = extname(entry);
-
         // Match .component.ts files
         if (entry.endsWith('.component.ts') && !entry.endsWith('.spec.ts')) {
           const tsContent = readFileSync(fullPath, 'utf-8');
