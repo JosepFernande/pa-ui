@@ -78,6 +78,20 @@ describe('PaThemeService', () => {
 
       expect(setPropertySpy).toHaveBeenCalledWith('--pa-primary', '#111111');
     });
+
+    it('propagates a custom error color to the signal and the --pa-error semantic var (REQ-4 transitive chain)', () => {
+      // Mirror of the primary test above: `--pa-input-error-border`,
+      // `--pa-input-error-color` and `--pa-input-error-icon-color` all
+      // resolve to `var(--pa-error)` (asserted in theme-runtime
+      // integration), so a custom error color reaching `--pa-error` in the
+      // DOM is the jsdom-feasible proof of REQ-4.
+      const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');
+
+      const service = configureTestBed('browser', { colors: { error: '#8b0000' } });
+
+      expect(service.theme().colors['error']).toBe('#8b0000');
+      expect(setPropertySpy).toHaveBeenCalledWith('--pa-error', '#8b0000');
+    });
   });
 
   describe('applyTheme (Req: applyTheme Merges Overrides and Re-Derives)', () => {
