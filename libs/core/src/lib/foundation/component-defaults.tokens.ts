@@ -109,9 +109,9 @@ const PA_INPUT_TOKEN_DEFAULTS: Readonly<Record<string, string>> = {
   '--pa-input-radius-lg': PA_INPUT_PROVISIONAL_DIMENSIONS.lg.radius,
 
   '--pa-input-focus-border': 'var(--pa-primary)',
-  '--pa-input-error-border': 'var(--pa-danger)',
-  '--pa-input-error-color': 'var(--pa-danger)',
-  '--pa-input-error-icon-color': 'var(--pa-danger)',
+  '--pa-input-error-border': 'var(--pa-error)',
+  '--pa-input-error-color': 'var(--pa-error)',
+  '--pa-input-error-icon-color': 'var(--pa-error)',
   '--pa-input-disabled-bg': 'var(--neutral-200)',
   '--pa-input-disabled-color': 'var(--neutral-500)',
   '--pa-input-disabled-opacity': '0.6',
