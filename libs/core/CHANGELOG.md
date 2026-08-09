@@ -1,5 +1,14 @@
 # @pa-ui/core
 
+## 19.2.2
+
+### Patch Changes
+
+- 7a72d32: Fix PaInput error tokens referencing the deprecated `--pa-danger`
+  alias instead of the canonical `--pa-error` semantic token. A consumer calling
+  `providePaTheme({ colors: { error: '#custom' } })` now recolors the input
+  error border, text, and icon consistently with every other error surface.
+
 ## 19.2.1
 
 ## 19.2.0
