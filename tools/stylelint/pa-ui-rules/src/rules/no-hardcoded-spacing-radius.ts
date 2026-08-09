@@ -60,7 +60,7 @@ export function ruleFunction(root: Root, result: Result): void {
       const trimmed = part.trim().replace(/[,;)]+$/, '');
 
       // Allow zero values (unit independent)
-      if (trimmed === '0') continue;
+      if (/^-?0(\.0+)?(px|rem|em)?$/.test(trimmed)) continue;
 
       // Allow var() references
       if (trimmed.startsWith('var(')) continue;
