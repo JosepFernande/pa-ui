@@ -14,7 +14,7 @@
 ### 1. Install
 
 ```bash
-npm install pa-ui @pa-ui/button @angular/cdk
+npm install @pa-ui/button @angular/cdk
 ```
 
 ### 2. Configure the Theme Engine
