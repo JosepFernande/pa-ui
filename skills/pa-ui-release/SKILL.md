@@ -3,12 +3,12 @@ name: pa-ui-release
 description:
   'Trigger: hacer un release, publicar a npm, por qué no se publicó, trabajar
   con .changeset/, revisar el workflow release.yml. Checklist operativo para el
-  pipeline de release de pa-ui en modo prerelease (alpha), validar paquetes
-  antes del publish (validate-packages).'
+  pipeline de release de pa-ui, validar paquetes antes del publish
+  (validate-packages).'
 license: MIT
 metadata:
   author: JosepFernande
-  version: '1.2'
+  version: '1.3'
   project: pa-ui
 ---
 
@@ -16,10 +16,10 @@ metadata:
 
 Load this skill before touching anything related to releasing or publishing
 `pa-ui` packages: creating/reviewing a changeset, diagnosing why a package
-didn't reach npm, or modifying `.github/workflows/release.yml`. The release
-pipeline has non-obvious behavior in prerelease mode that has already caused
-confusion twice — read this before assuming the workflow is broken or that a
-manual `npm publish` is the fix.
+didn't reach npm, or modifying `.github/workflows/release.yml`. The pipeline has
+non-obvious behavior around changeset consumption and where packages actually
+get published from — already caused confusion twice — read this before assuming
+the workflow is broken or that a manual `npm publish` is the fix.
 
 ## The real flow (two merges, not one)
 
@@ -40,32 +40,20 @@ is whether the version-packages PR exists and got merged:
 gh pr list --state all --search "version packages" --json number,state,mergedAt
 ```
 
-## The repo is in permanent prerelease (alpha) mode
+## Current release mode: stable (not prerelease)
 
-`.changeset/pre.json` has `"mode": "pre"`. This is a deliberate, ongoing choice
-— the project isn't ready for a stable semver commitment yet. Do not suggest
-`changeset pre exit` as a routine fix; that's a product decision, not a
-maintenance task.
+The repo exited Changesets' prerelease mode on 2026-08-04 (`c8891bc` "salir del
+modo pre de changesets", consolidated by `ee53fbd`). `.changeset/pre.json` no
+longer exists. `@pa-ui/core`, `@pa-ui/button`, `@pa-ui/input`, and
+`@pa-ui/angular` are on real stable versions (e.g. `@pa-ui/core@19.2.1`) and
+publish under npm's default `latest` tag — there is no `alpha` tag anymore.
 
-**Consequence you must know**: in prerelease mode, `changeset version`
-intentionally never deletes the `.md` files in `.changeset/` (verified in
-`@changesets/apply-release-plan`'s source — the delete-on-consume logic is gated
-on `preState === undefined || preState.mode === "exit"`). Seeing old `.md` files
-still sitting in `.changeset/` after a release is expected, not a bug.
-
-Whether a changeset is genuinely pending (not yet versioned) is tracked in
-`.changeset/pre.json`'s `changesets` array, which always mirrors the set of
-`.md` files present as of the last `changeset version` run. To check by hand:
-
-```bash
-git show origin/main:.changeset/pre.json | jq -r '.changesets[]'   # already consumed
-ls .changeset/*.md | xargs -n1 basename | sed 's/\.md$//'          # currently present
-```
-
-If every `.md` id is already in `pre.json.changesets` → nothing pending, ready
-to publish. If any `.md` id is missing from that list → still needs a `version`
-run. `release.yml`'s `Check for changesets` step encodes exactly this comparison
-— don't replace it with a naive `ls`.
+`release.yml` still carries two branches gated on `.changeset/pre.json` existing
+(the `Check for changesets` step's array-diff, and the
+`Point the alpha dist-tag` step) in case the project re-enters prerelease mode
+for a future initiative. Both are self-documenting inline in the workflow — if
+`.changeset/pre.json` reappears, read those comments directly instead of
+re-deriving the mechanics; don't assume they're dead code to delete.
 
 ## Verifying a publish actually happened
 
@@ -74,53 +62,27 @@ job skip publish/tag/release steps without failing. Confirm directly:
 
 ```bash
 gh run list --workflow=release.yml --limit 3 --json databaseId,conclusion,createdAt
-npm view @pa-ui/<pkg> dist-tags --json     # `alpha` should point at the new version
+npm view @pa-ui/<pkg> dist-tags --json     # `latest` should point at the new version
 gh release list --limit 5                  # a GitHub Release should exist for the new tag
 ```
 
-## Three bugs already found and fixed here — don't reintroduce them
+## A bug already found and fixed here — don't reintroduce it
 
-1. **Naive `has_changesets` check**: a plain `ls .changeset/*.md` will always
-   see the un-deleted prerelease changesets and loop forever on the "version"
-   branch, never reaching publish. Fixed by comparing against
-   `pre.json.changesets` (see above).
-2. **`changeset publish --tag <anything>` in pre mode always throws.** Source:
-   `changesets-cli.cjs.js`, `publish()` —
-   `if (releaseTag && preState && preState.mode === "pre") throw ...`. There is
-   no flag that overrides this; an earlier attempt to pass `--tag alpha` here
-   broke the release job outright ("Releasing under custom tag is not allowed in
-   pre mode"). Never pass `--tag` to `changeset publish` while
-   `.changeset/pre.json` exists.
-
-   Left with no `--tag`, Changesets' own default only tags a release `alpha` if
-   that package has had a real, non-prerelease release before. None of
-   `@pa-ui/core`, `@pa-ui/button`, `@pa-ui/input`, `@pa-ui/angular` ever have,
-   so every publish lands on `latest` instead of `alpha` — and `alpha` goes
-   stale. `release.yml` compensates with a separate step, gated on the publish
-   step actually publishing, that diffs git tags before/after
-   `changeset publish` (each successful release creates a local
-   `<pkg>@<version>` tag) and runs `npm dist-tag add <pkg>@<version> alpha` for
-   each one — a plain npm command, not subject to the pre-mode restriction
-   above. `latest` will still point at the same prerelease version until a real
-   stable release ships; that part has no workaround short of exiting prerelease
-   mode.
-
-3. **`changeset publish` discovers packages via root `workspaces`
-   (`["libs/*"]`), so it always published each lib's SOURCE `package.json` — the
-   one `ng-packagr` never touches — instead of the real build output in
-   `dist/{projectRoot}`.** Source publishes have no `main`/`module`/`exports`/
-   `typings`, so every consumer import failed with
-   `TS2307: Cannot find module '@pa-ui/button'`. This shipped broken to npm for
-   at least two alpha versions before being caught (see "Post-publish consumer
-   verification" below — this is exactly the class of bug that check exists to
-   catch). Fixed (#85) by replacing `npx changeset publish` with a loop that,
-   per `libs/*/package.json`, resolves `dist/libs/<pkg>`, skips versions already
-   on npm (`npm view "$name@$version" version`), and runs
-   `npm publish "$dist_dir"` directly — tagging `<name>@<version>` by hand since
-   it no longer goes through `@changesets/git`'s internal tagging.
-   `@pa-ui/angular` (`libs/pa-ui`) needed a companion fix: its build target is a
-   plain `nx:run-commands` copy (no `ng-packagr`), so it never gets
-   `main`/`exports` unless they're added directly to its source `package.json`.
+`changeset publish` discovers packages via root `workspaces` (`["libs/*"]`), so
+it once published each lib's SOURCE `package.json` — the one `ng-packagr` never
+touches — instead of the real build output in `dist/{projectRoot}`. Source
+publishes have no `main`/`module`/`exports`/`typings`, so every consumer import
+failed with `TS2307: Cannot find module '@pa-ui/button'`. This shipped broken to
+npm for two releases before being caught (see "Post-publish consumer
+verification" below — that check exists because of this exact bug). Fixed (#85)
+by replacing `npx changeset publish` with the per-package publish loop currently
+in `release.yml`'s `Publish to npm from dist` step, which resolves
+`dist/libs/<pkg>`, skips versions already on npm, and runs
+`npm publish "$dist_dir"` directly. `@pa-ui/angular` (`libs/pa-ui`) needs its
+entry points maintained by hand in source (`main`, `types`, `exports["."]`)
+since its build is a plain `nx:run-commands` copy, not `ng-packagr` — see
+`validate-packages` below, which now catches this class of regression
+automatically.
 
 ## Pre-publish validation (issue #78) — `validate-packages`
 
@@ -155,9 +117,9 @@ catches the ng-packagr packages missing `typings`.
 
 ## Post-publish consumer verification (do this for every release, not just when something looks wrong)
 
-A green `release.yml` run and a `latest`/`alpha` dist-tag pointing at the new
-version are **necessary but not sufficient**. Bug 3 above published green for
-two whole alpha cycles while being completely unusable — nothing in the pipeline
+A green `release.yml` run and a `latest` dist-tag pointing at the new version
+are **necessary but not sufficient**. The dist-vs-source bug above published
+green for two releases while being completely unusable — nothing in the pipeline
 ever installed the package and tried to use it. Two more real bugs (#88) were
 found the same way: `@pa-ui/button`'s `loading` input rejects the bare-attribute
 usage its own README documents, and no README mentions that
@@ -184,7 +146,7 @@ npm view @pa-ui/<pkg>@<new-version> dependencies --json
 # 3. A REAL consumer must actually build against it — not just resolve it.
 #    In a scratch Angular app (or a disposable one kept around for this):
 npm install @pa-ui/angular@<new-version>
-npx ng build   # or ng serve — TS2307 here means bug 3 regressed
+npx ng build   # or ng serve — TS2307 here means the dist-vs-source bug regressed
 ```
 
 For anything touching the button specifically, also render it with every
