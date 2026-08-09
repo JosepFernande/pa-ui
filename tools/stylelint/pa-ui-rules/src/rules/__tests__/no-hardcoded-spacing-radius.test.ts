@@ -59,6 +59,37 @@ describe('no-hardcoded-spacing-radius', () => {
     expect(result.messages).toHaveLength(0);
   });
 
+  it('should allow zero with px unit', async () => {
+    const result = await run('.pa-button { margin: 0px; }');
+    expect(result.messages).toHaveLength(0);
+  });
+
+  it('should allow zero with em unit', async () => {
+    const result = await run('.pa-button { gap: 0em; }');
+    expect(result.messages).toHaveLength(0);
+  });
+
+  it('should allow zero with rem unit', async () => {
+    const result = await run('.pa-button { padding: 0rem; }');
+    expect(result.messages).toHaveLength(0);
+  });
+
+  it('should allow negative zero with unit', async () => {
+    const result = await run('.pa-button { border-radius: -0px; }');
+    expect(result.messages).toHaveLength(0);
+  });
+
+  it('should allow decimal zero with unit', async () => {
+    const result = await run('.pa-button { margin: 0.0px; }');
+    expect(result.messages).toHaveLength(0);
+  });
+
+  it('should flag non-zero part in mixed zero-with-unit shorthand', async () => {
+    const result = await run('.pa-button { margin: 0px 8px; }');
+    expect(result.messages).toHaveLength(1);
+    expect(result.messages[0].text).toContain('8px');
+  });
+
   // ================================================================
   // INVALID cases (warnings)
   // ================================================================
