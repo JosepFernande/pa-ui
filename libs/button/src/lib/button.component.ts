@@ -1,16 +1,18 @@
 import {
   Component,
   OnInit,
-  OnDestroy,
+  DestroyRef,
   ElementRef,
   booleanAttribute,
   computed,
+  inject,
   input,
   signal,
   ViewEncapsulation,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { FocusMonitor, FocusOrigin } from '@angular/cdk/a11y';
+import { withFocusMonitor } from '@pa-ui/core';
 import type { PaButtonVariant, PaButtonSize } from './button.types';
 
 @Component({
@@ -34,7 +36,7 @@ import type { PaButtonVariant, PaButtonSize } from './button.types';
     '[style.--pa-button-solid-color]': 'contrastVar()',
   },
 })
-export class PaButton implements OnInit, OnDestroy {
+export class PaButton implements OnInit {
   /** Visual variant: solid (filled), outline (bordered), or ghost (transparent). */
   readonly variant = input<PaButtonVariant>('solid');
 
@@ -55,6 +57,8 @@ export class PaButton implements OnInit, OnDestroy {
 
   /** CDK focus origin signal (keyboard, mouse, touch, program, or null). */
   protected readonly focusOrigin = signal<FocusOrigin>(null);
+
+  private readonly destroyRef = inject(DestroyRef);
 
   /** Computed: disabled OR loading — drives the native disabled attribute. */
   protected readonly effectiveDisabled = computed(() => this.disabled() || this.loading());
@@ -94,12 +98,6 @@ export class PaButton implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.focusMonitor.monitor(this.elementRef.nativeElement, true).subscribe((origin) => {
-      this.focusOrigin.set(origin);
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.focusMonitor.stopMonitoring(this.elementRef.nativeElement);
+    withFocusMonitor(this.elementRef, this.focusMonitor, this.destroyRef, this.focusOrigin);
   }
 }

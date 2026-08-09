@@ -65,6 +65,12 @@ describe('public-api — theme engine surface (Issue #46)', () => {
   });
 });
 
+describe('public-api — focus management surface (Issue #118)', () => {
+  it('exports withFocusMonitor as a function', () => {
+    expect(typeof publicApi.withFocusMonitor).toBe('function');
+  });
+});
+
 describe('public-api — HSL derivation surface (Issue #47, Task 3.2)', () => {
   it('exports every color-math conversion function', () => {
     expect(typeof publicApi.hexToRgb).toBe('function');

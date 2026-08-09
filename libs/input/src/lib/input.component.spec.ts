@@ -77,12 +77,16 @@ describe('PaInput', () => {
   let focusOrigin$: Subject<FocusOrigin>;
   let focusMonitorMock: { monitor: jest.Mock; stopMonitoring: jest.Mock };
 
-  beforeEach(() => {
+  beforeEach(async () => {
     focusOrigin$ = new Subject<FocusOrigin>();
     focusMonitorMock = {
       monitor: jest.fn().mockReturnValue(focusOrigin$.asObservable()),
       stopMonitoring: jest.fn(),
     };
+    await TestBed.configureTestingModule({
+      imports: [TestHost, StandaloneHost],
+      providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
+    }).compileComponents();
   });
 
   function createTestHost(): {
@@ -102,13 +106,6 @@ describe('PaInput', () => {
   // Rendering
   // -----------------------------------------------------------------------
   describe('rendering', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should render a native input element', () => {
       const { fixture, inputEl } = createTestHost();
       fixture.detectChanges();
@@ -160,13 +157,6 @@ describe('PaInput', () => {
   // Size classes
   // -----------------------------------------------------------------------
   describe('size classes', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should apply pa-input--md by default', () => {
       const { fixture, host, inputEl } = createTestHost();
       host.size = 'md';
@@ -205,13 +195,6 @@ describe('PaInput', () => {
   // Placeholder
   // -----------------------------------------------------------------------
   describe('placeholder', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should bind the placeholder attribute', () => {
       const { fixture, host, inputEl } = createTestHost();
       host.placeholder = 'Type here';
@@ -233,13 +216,6 @@ describe('PaInput', () => {
   // Disabled state
   // -----------------------------------------------------------------------
   describe('disabled state', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should set native disabled, aria-disabled and the class when [disabled] is true', () => {
       const { fixture, host, inputEl } = createTestHost();
       host.disabled = true;
@@ -291,13 +267,6 @@ describe('PaInput', () => {
   // Readonly state
   // -----------------------------------------------------------------------
   describe('readonly state', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should set readOnly, the readonly attribute and the class when [readonly] is true', () => {
       const { fixture, host, inputEl } = createTestHost();
       host.readonly = true;
@@ -323,13 +292,6 @@ describe('PaInput', () => {
   // Forms integration (ControlValueAccessor)
   // -----------------------------------------------------------------------
   describe('forms integration (ControlValueAccessor)', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost, StandaloneHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should write the model value into the native input (control.setValue)', () => {
       const { fixture, host, inputEl } = createTestHost();
       fixture.detectChanges();
@@ -378,13 +340,6 @@ describe('PaInput', () => {
   // Error state
   // -----------------------------------------------------------------------
   describe('error state', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should apply .pa-input--error and aria-invalid="true" when the control is invalid and touched', () => {
       const { fixture, host, inputEl } = createTestHost();
       fixture.detectChanges();
@@ -432,13 +387,6 @@ describe('PaInput', () => {
   // CDK FocusMonitor
   // -----------------------------------------------------------------------
   describe('FocusMonitor integration', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should call focusMonitor.monitor on init', () => {
       const { fixture } = createTestHost();
       fixture.detectChanges();
@@ -493,13 +441,6 @@ describe('PaInput', () => {
   // Standalone, OnPush, signal inputs (architectural compliance)
   // -----------------------------------------------------------------------
   describe('architectural compliance', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should be a standalone component', () => {
       const { fixture } = createTestHost();
       fixture.detectChanges();
@@ -537,13 +478,6 @@ describe('PaInput', () => {
   // Accessibility (jest-axe)
   // -----------------------------------------------------------------------
   describe('accessibility', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should have no accessibility violations in default state', async () => {
       const { fixture } = createTestHost();
       fixture.detectChanges();
