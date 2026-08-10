@@ -153,10 +153,10 @@
 
 /*
  * No `cursor: pointer`/`:hover` here: option selection is keyboard-driven
- * only (no click-to-select in this component's scope, per spec — see
- * `select.spec` Keyboard navigation matrix). `--active`/`--disabled`
- * variants are added in Phase 5 together with the `ActiveDescendantKeyManager`
- * wiring that actually drives them (`item.active()`/`item.disabled`).
+ * only (no click-to-select in this component's scope — the spec's Keyboard
+ * navigation matrix only defines keyboard commit, never mouse click).
+ * `--active` reflects the ActiveDescendantKeyManager's current item
+ * (`item.active()`); `--disabled` reflects `item.disabled`.
  */
 .pa-select__option {
   box-sizing: border-box;
@@ -170,10 +170,20 @@
   font-size: var(--pa-select-option-font-size);
 }
 
+.pa-select__option--active {
+  background-color: var(--pa-select-option-active-bg);
+  color: var(--pa-select-option-active-color);
+}
+
 .pa-select__option--selected {
   background-color: var(--pa-select-option-selected-bg);
   color: var(--pa-select-option-selected-color);
   font-weight: var(--pa-select-option-selected-font-weight);
+}
+
+.pa-select__option--disabled {
+  color: var(--pa-select-option-disabled-color);
+  opacity: var(--pa-select-option-disabled-opacity);
 }
 
 /* ------------------------------------------------------------------ */

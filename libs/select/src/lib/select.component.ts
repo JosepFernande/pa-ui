@@ -20,10 +20,16 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { CdkConnectedOverlay, Overlay } from '@angular/cdk/overlay';
+import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
 import type { PaSelectOption, PaSelectSize } from './select.types';
-import { PA_SELECT_POSITIONS, PA_SELECT_VIEWPORT_MARGIN } from './select.constants';
+import {
+  PA_SELECT_POSITIONS,
+  PA_SELECT_TYPEAHEAD_DEBOUNCE,
+  PA_SELECT_VIEWPORT_MARGIN,
+} from './select.constants';
 import { resolveSelectKeyIntent } from './select.keyboard';
-import { findOptionIndexByValue } from './select.utils';
+import { PaSelectOptionItem } from './select.option-item';
+import { findOptionIndexByValue, firstEnabledIndex, nextSelectId, optionId } from './select.utils';
 
 /**
  * Accessible, token-driven single-select combobox (custom element
@@ -35,12 +41,19 @@ import { findOptionIndexByValue } from './select.utils';
  * handled by the trigger itself, see `onTriggerKeydown`) that opens on
  * trigger click/Enter/Space/ArrowDown and closes on outside click, Escape,
  * or trigger blur, without changing the bound value. `aria-expanded`
- * mirrors the real `panelOpen()` state. Commit-on-select and
- * `ActiveDescendantKeyManager` wiring (arrow/Home/End/typeahead navigation,
- * `aria-activedescendant`) land in Phase 5 — until then, `Enter`/`Space`
- * while the panel is already open, and arrow/typeahead navigation, are
- * no-ops (`resolveSelectKeyIntent` resolves them to `'commit'`/`'delegate'`,
- * which `onTriggerKeydown` does not yet act on).
+ * mirrors the real `panelOpen()` state.
+ *
+ * Keyboard navigation and commit (D4, D6) are driven by an
+ * `ActiveDescendantKeyManager<PaSelectOptionItem>` built over a *signal*
+ * item source (`optionItems`) — no RxJS subscription needed. Arrow/Home/End/
+ * typeahead move `aria-activedescendant` only (navigate); Enter, Space, Tab,
+ * and Alt+ArrowUp commit the active option, write it through the CVA
+ * `onChange`, and close the panel. Escape cancels without committing.
+ * `withWrap(true)` is enabled so Arrow navigation wraps past disabled
+ * options at either end — this is a deliberate deviation from design
+ * decision D5 ("clamp, not wrap"): the spec's Keyboard navigation matrix
+ * requirement and its explicit "Arrow Down wraps past the last option"
+ * scenario mandate wrap-around, which D5 did not account for.
  *
  * Forms integration mirrors `PaInput`'s `NgControl` lazy-injection +
  * `validityVersion` idiom verbatim (D8,
@@ -84,7 +97,7 @@ export class PaSelect implements ControlValueAccessor, OnInit {
   /** Comma-separated ids referenced by `aria-describedby` (e.g. hint text). */
   readonly ariaDescribedBy = input('');
 
-  /** Emits the committed value whenever the selection changes (commit path wired in Phase 5). */
+  /** Emits the committed value whenever Enter/Space/Tab/Alt+ArrowUp commits the active option. */
   @Output() readonly valueChange = new EventEmitter<unknown>();
 
   /** Emits exactly once per open transition (click, opening key, or programmatic `open()`). */
@@ -99,22 +112,13 @@ export class PaSelect implements ControlValueAccessor, OnInit {
   /** Raw model value, exactly as written by `writeValue` — never normalized. */
   protected readonly valueState = signal<unknown>(null);
 
-  /**
-   * Whether the caller last requested the panel to open (via click or an
-   * opening key). Not the source of truth for rendering — see `panelOpen`
-   * (D3): readonly/disabled must structurally prevent the panel from
-   * actually opening even if this stays `true`.
-   */
+  /** Last open request (click/opening key). Not the render source of truth — see `panelOpen` (D3). */
   private readonly openRequested = signal(false);
 
   /** Reference to the trigger button — the overlay's connection origin. */
   protected readonly triggerRef = viewChild.required<ElementRef<HTMLButtonElement>>('trigger');
 
-  /**
-   * Width (px) applied to the overlay panel, measured from the trigger at
-   * open time. `0` before the first open is harmless: the overlay is only
-   * ever attached while `panelOpen()` is `true`.
-   */
+  /** Width (px) of the overlay panel, measured from the trigger at open time. `0` before the first open is harmless. */
   protected readonly triggerWidth = signal<number>(0);
 
   /** Connected-overlay fallback positions (D7). */
@@ -130,6 +134,32 @@ export class PaSelect implements ControlValueAccessor, OnInit {
 
   /** Tracks the last emitted open state so the transition effect below emits exactly once per transition. */
   private lastEmittedOpen = false;
+
+  /** Deterministic instance id (D10) — prefixes every option DOM id and the panel id. */
+  private readonly selectId = nextSelectId();
+
+  /** DOM id of the listbox panel, referenced by the trigger's `aria-controls`. */
+  protected readonly panelId = `${this.selectId}-panel`;
+
+  /** Computed: `Highlightable` wrappers per option (D4), passed as a signal to `ActiveDescendantKeyManager`. */
+  protected readonly optionItems = computed<PaSelectOptionItem[]>(() =>
+    this.options().map(
+      (option, index) => new PaSelectOptionItem(option, optionId(this.selectId, index)),
+    ),
+  );
+
+  /** Computed: the DOM id of the option the key manager currently considers active, or `null`. */
+  protected readonly activeDescendantId = computed(
+    () => this.optionItems().find((item) => item.active())?.id ?? null,
+  );
+
+  /**
+   * `ActiveDescendantKeyManager` over `optionItems` (D4). Built in the
+   * constructor body, NOT inside the `effect()` below: CDK's signal-source
+   * overload calls `effect()` internally, which throws NG0602 if nested
+   * inside another running effect.
+   */
+  private readonly keyManager: ActiveDescendantKeyManager<PaSelectOptionItem>;
 
   /**
    * Re-computation trigger for `hasError`: `control.invalid`/`control.touched`
@@ -154,11 +184,7 @@ export class PaSelect implements ControlValueAccessor, OnInit {
   /** Computed: disabled from the input OR from the bound form control. */
   protected readonly effectiveDisabled = computed(() => this.disabled() || this.formDisabled());
 
-  /**
-   * Computed: the actual open/rendered state (D3). Structurally impossible
-   * to be `true` while `readonly`/`disabled` — reopening never has to be
-   * special-cased when either toggles on while the panel is already open.
-   */
+  /** Computed: the actual open/rendered state (D3) — structurally never `true` while `readonly`/`disabled`. */
   protected readonly panelOpen = computed(
     () => this.openRequested() && !this.effectiveDisabled() && !this.readonly(),
   );
@@ -214,6 +240,18 @@ export class PaSelect implements ControlValueAccessor, OnInit {
   private onTouched: () => void = () => {};
 
   constructor(private readonly cdr: ChangeDetectorRef) {
+    // Built here, NOT inside the effect() below — see the `keyManager` field
+    // TSDoc for why (NG0602: nested effect() creation).
+    this.keyManager = new ActiveDescendantKeyManager<PaSelectOptionItem>(
+      this.optionItems,
+      this.injector,
+    )
+      .withVerticalOrientation(true)
+      .withWrap(true)
+      .withHomeAndEnd(true)
+      .withTypeAhead(PA_SELECT_TYPEAHEAD_DEBOUNCE);
+    this.destroyRef.onDestroy(() => this.keyManager.destroy());
+
     // One effect emitting `opened`/`closed` on every `panelOpen()` transition
     // (D3) — guarantees output/DOM parity instead of duplicating the
     // open/close decision at every call site that can change it (click,
@@ -226,6 +264,7 @@ export class PaSelect implements ControlValueAccessor, OnInit {
       this.lastEmittedOpen = isOpen;
       if (isOpen) {
         this.triggerWidth.set(this.triggerRef().nativeElement.offsetWidth);
+        this.seedActiveItem();
         this.opened.emit();
       } else {
         this.closed.emit();
@@ -277,10 +316,9 @@ export class PaSelect implements ControlValueAccessor, OnInit {
   }
 
   /**
-   * Host handler: resolves the keyboard intent (open/cancel here; commit/
-   * delegate are wired in Phase 5 once the key manager exists) and acts on
-   * it. `preventDefault` is honored exactly as the pure resolver decided
-   * (D6 — e.g. `Tab` never calls `preventDefault`).
+   * Host handler: resolves the keyboard intent and acts on it.
+   * `preventDefault` is honored exactly as the pure resolver decided (D6 —
+   * e.g. `Tab` never calls `preventDefault`, so focus can move on).
    */
   protected onTriggerKeydown(event: KeyboardEvent): void {
     const intent = resolveSelectKeyIntent(event, {
@@ -291,10 +329,21 @@ export class PaSelect implements ControlValueAccessor, OnInit {
     if (intent.preventDefault) {
       event.preventDefault();
     }
-    if (intent.kind === 'open') {
-      this.open();
-    } else if (intent.kind === 'cancel') {
-      this.close();
+    switch (intent.kind) {
+      case 'open':
+        this.open();
+        break;
+      case 'cancel':
+        this.close();
+        break;
+      case 'commit':
+        this.commitActive();
+        break;
+      case 'delegate':
+        this.keyManager.onKeydown(event);
+        break;
+      default:
+        break;
     }
   }
 
@@ -309,5 +358,34 @@ export class PaSelect implements ControlValueAccessor, OnInit {
   /** Requests the panel to close. Idempotent when already closed. */
   protected close(): void {
     this.openRequested.set(false);
+  }
+
+  /**
+   * Writes the key manager's current active option through the CVA
+   * `onChange`/`valueChange` path (D6 — navigate-then-commit) and closes the
+   * panel. A no-op commit (no active item, e.g. empty `options`) still
+   * closes the panel without emitting `valueChange`.
+   */
+  private commitActive(): void {
+    const activeItem = this.keyManager.activeItem;
+    if (activeItem) {
+      const value = activeItem.option.value;
+      this.valueState.set(value);
+      this.onChange(value);
+      this.valueChange.emit(value);
+    }
+    this.close();
+  }
+
+  /**
+   * Seeds the key manager's active item on open: the currently selected
+   * option if one matches, otherwise the first enabled option.
+   */
+  private seedActiveItem(): void {
+    const selectedIndex = findOptionIndexByValue(this.options(), this.valueState());
+    const activeIndex = selectedIndex !== -1 ? selectedIndex : firstEnabledIndex(this.options());
+    if (activeIndex !== -1) {
+      this.keyManager.setActiveItem(activeIndex);
+    }
   }
 }

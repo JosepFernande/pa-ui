@@ -1,9 +1,9 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { DOWN_ARROW, ENTER, ESCAPE, SPACE } from '@angular/cdk/keycodes';
+import { DOWN_ARROW, END, ENTER, ESCAPE, HOME, SPACE, TAB, UP_ARROW } from '@angular/cdk/keycodes';
 // jest-axe v10 has no TS declarations — use require()
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const { axe, toHaveNoViolations } = require('jest-axe') as {
@@ -31,10 +31,11 @@ function dispatchKeydown(
   key: string,
   keyCode: number,
   init: KeyboardEventInit = {},
-): void {
+): KeyboardEvent {
   const event = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true, ...init });
   Object.defineProperty(event, 'keyCode', { get: () => keyCode });
   el.dispatchEvent(event);
+  return event;
 }
 
 expect.extend(toHaveNoViolations);
@@ -52,6 +53,13 @@ const FRUIT_OPTIONS: PaSelectOption[] = [
   { label: 'Apple', value: 'apple' },
   { label: 'Banana', value: 'banana' },
   { label: 'Cherry', value: 'cherry', disabled: true },
+];
+
+/** Distinct first letters for the typeahead scenario (`select.spec` Keyboard navigation matrix). */
+const TYPEAHEAD_OPTIONS: PaSelectOption[] = [
+  { label: 'Apple', value: 'apple' },
+  { label: 'Banana', value: 'banana' },
+  { label: 'Apricot', value: 'apricot' },
 ];
 
 /**
@@ -379,6 +387,242 @@ describe('PaSelect', () => {
   });
 
   // -----------------------------------------------------------------------
+  // Keyboard navigation matrix + full ARIA wiring (Phase 5)
+  // -----------------------------------------------------------------------
+  describe('keyboard navigation matrix', () => {
+    let overlayContainer: OverlayContainer;
+    let containerEl: HTMLElement;
+
+    beforeEach(() => {
+      overlayContainer = TestBed.inject(OverlayContainer);
+      containerEl = overlayContainer.getContainerElement();
+    });
+
+    afterEach(() => {
+      overlayContainer.ngOnDestroy();
+    });
+
+    function getPanel(): HTMLElement | null {
+      return containerEl.querySelector('[role="listbox"]');
+    }
+
+    /** Resolves the currently active option's visible label via aria-activedescendant. */
+    function activeOptionLabel(triggerEl: HTMLButtonElement): string | null {
+      const activeId = triggerEl.getAttribute('aria-activedescendant');
+      if (!activeId) {
+        return null;
+      }
+      const optionEl = containerEl.querySelector(`#${activeId}`);
+      return optionEl ? (optionEl.textContent?.trim() ?? null) : null;
+    }
+
+    it('seeds the active option to the first enabled option when opened with no selection', () => {
+      const { fixture, triggerEl } = createTestHost();
+      fixture.detectChanges();
+
+      triggerEl.click();
+      fixture.detectChanges();
+
+      expect(activeOptionLabel(triggerEl)).toBe('Apple');
+    });
+
+    it('seeds the active option to the currently selected option when opened (triangulation)', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      host.control.setValue('banana');
+      fixture.detectChanges();
+
+      triggerEl.click();
+      fixture.detectChanges();
+
+      expect(activeOptionLabel(triggerEl)).toBe('Banana');
+    });
+
+    it('sets aria-controls on the trigger to the id of the open panel', () => {
+      const { fixture, triggerEl } = createTestHost();
+      fixture.detectChanges();
+
+      triggerEl.click();
+      fixture.detectChanges();
+
+      const panel = getPanel();
+      expect(triggerEl.getAttribute('aria-controls')).toBe(panel!.id);
+    });
+
+    it('ArrowDown moves the active option forward, skipping disabled options', () => {
+      const { fixture, triggerEl } = createTestHost();
+      fixture.detectChanges();
+      triggerEl.click();
+      fixture.detectChanges();
+      expect(activeOptionLabel(triggerEl)).toBe('Apple');
+
+      dispatchKeydown(triggerEl, 'ArrowDown', DOWN_ARROW);
+      fixture.detectChanges();
+
+      expect(activeOptionLabel(triggerEl)).toBe('Banana');
+    });
+
+    it('ArrowDown wraps past the last enabled option to the first', () => {
+      const { fixture, triggerEl } = createTestHost();
+      fixture.detectChanges();
+      triggerEl.click();
+      fixture.detectChanges();
+      dispatchKeydown(triggerEl, 'ArrowDown', DOWN_ARROW);
+      fixture.detectChanges();
+      expect(activeOptionLabel(triggerEl)).toBe('Banana');
+
+      dispatchKeydown(triggerEl, 'ArrowDown', DOWN_ARROW);
+      fixture.detectChanges();
+
+      expect(activeOptionLabel(triggerEl)).toBe('Apple');
+    });
+
+    it('ArrowUp wraps from the first enabled option to the last enabled option', () => {
+      const { fixture, triggerEl } = createTestHost();
+      fixture.detectChanges();
+      triggerEl.click();
+      fixture.detectChanges();
+      expect(activeOptionLabel(triggerEl)).toBe('Apple');
+
+      dispatchKeydown(triggerEl, 'ArrowUp', UP_ARROW);
+      fixture.detectChanges();
+
+      expect(activeOptionLabel(triggerEl)).toBe('Banana');
+    });
+
+    it('Home activates the first enabled option', () => {
+      const { fixture, triggerEl } = createTestHost();
+      fixture.detectChanges();
+      triggerEl.click();
+      fixture.detectChanges();
+      dispatchKeydown(triggerEl, 'ArrowDown', DOWN_ARROW);
+      fixture.detectChanges();
+      expect(activeOptionLabel(triggerEl)).toBe('Banana');
+
+      dispatchKeydown(triggerEl, 'Home', HOME);
+      fixture.detectChanges();
+
+      expect(activeOptionLabel(triggerEl)).toBe('Apple');
+    });
+
+    it('End activates the last enabled option', () => {
+      const { fixture, triggerEl } = createTestHost();
+      fixture.detectChanges();
+      triggerEl.click();
+      fixture.detectChanges();
+      expect(activeOptionLabel(triggerEl)).toBe('Apple');
+
+      dispatchKeydown(triggerEl, 'End', END);
+      fixture.detectChanges();
+
+      expect(activeOptionLabel(triggerEl)).toBe('Banana');
+    });
+
+    it('Enter commits the active option, closes the panel, and keeps focus on the trigger', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      fixture.detectChanges();
+      triggerEl.click();
+      fixture.detectChanges();
+      dispatchKeydown(triggerEl, 'ArrowDown', DOWN_ARROW);
+      fixture.detectChanges();
+      triggerEl.focus();
+
+      dispatchKeydown(triggerEl, 'Enter', ENTER);
+      fixture.detectChanges();
+
+      expect(host.control.value).toBe('banana');
+      expect(getPanel()).toBeNull();
+      expect(document.activeElement).toBe(triggerEl);
+    });
+
+    it('Space commits the active option (triangulation with a different option/value)', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      fixture.detectChanges();
+      triggerEl.click();
+      fixture.detectChanges();
+
+      dispatchKeydown(triggerEl, ' ', SPACE);
+      fixture.detectChanges();
+
+      expect(host.control.value).toBe('apple');
+      expect(getPanel()).toBeNull();
+    });
+
+    it('Escape cancels without changing the value even when an option is active', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      fixture.detectChanges();
+      triggerEl.click();
+      fixture.detectChanges();
+      dispatchKeydown(triggerEl, 'ArrowDown', DOWN_ARROW);
+      fixture.detectChanges();
+
+      dispatchKeydown(triggerEl, 'Escape', ESCAPE);
+      fixture.detectChanges();
+
+      expect(host.control.value).toBeNull();
+      expect(getPanel()).toBeNull();
+    });
+
+    it('Tab commits the active option, closes the panel, and does NOT call preventDefault', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      fixture.detectChanges();
+      triggerEl.click();
+      fixture.detectChanges();
+
+      const event = dispatchKeydown(triggerEl, 'Tab', TAB);
+      fixture.detectChanges();
+
+      expect(host.control.value).toBe('apple');
+      expect(getPanel()).toBeNull();
+      expect(event.defaultPrevented).toBe(false);
+    });
+
+    it('Alt+ArrowUp commits the active option and closes the panel', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      fixture.detectChanges();
+      triggerEl.click();
+      fixture.detectChanges();
+      dispatchKeydown(triggerEl, 'ArrowDown', DOWN_ARROW);
+      fixture.detectChanges();
+      expect(activeOptionLabel(triggerEl)).toBe('Banana');
+
+      dispatchKeydown(triggerEl, 'ArrowUp', UP_ARROW, { altKey: true });
+      fixture.detectChanges();
+
+      expect(host.control.value).toBe('banana');
+      expect(getPanel()).toBeNull();
+    });
+
+    it('typeahead jumps the active option to the next label starting with the typed character, debounced', fakeAsync(() => {
+      const { fixture, host, triggerEl } = createTestHost();
+      host.options = TYPEAHEAD_OPTIONS;
+      fixture.detectChanges();
+      triggerEl.click();
+      fixture.detectChanges();
+      expect(activeOptionLabel(triggerEl)).toBe('Apple');
+
+      dispatchKeydown(triggerEl, 'a', 65);
+      fixture.detectChanges();
+      expect(activeOptionLabel(triggerEl)).toBe('Apple');
+
+      tick(200);
+      fixture.detectChanges();
+
+      expect(activeOptionLabel(triggerEl)).toBe('Apricot');
+    }));
+
+    it('is a no-op for an irrelevant key while closed (e.g. a modifier-only key like Escape)', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      fixture.detectChanges();
+
+      dispatchKeydown(triggerEl, 'Escape', ESCAPE);
+      fixture.detectChanges();
+
+      expect(getPanel()).toBeNull();
+      expect(host.openedCount).toBe(0);
+    });
+  });
+
+  // -----------------------------------------------------------------------
   // Size classes
   // -----------------------------------------------------------------------
   describe('size classes', () => {
@@ -635,6 +879,27 @@ describe('PaSelect', () => {
 
       const results = await axe(fixture.nativeElement);
       expect(results).toHaveNoViolations();
+    });
+
+    it('should have no accessibility violations when the panel is open', async () => {
+      const overlayContainer = TestBed.inject(OverlayContainer);
+      const { fixture, triggerEl } = createTestHost();
+      fixture.detectChanges();
+
+      triggerEl.click();
+      fixture.detectChanges();
+
+      // Scoped to document.body (NOT fixture.nativeElement): aria-controls and
+      // aria-activedescendant reference ids inside the CDK overlay container,
+      // which renders outside the fixture root — scoping to the fixture alone
+      // yields false aria-valid-attr-value violations. The "region" rule is
+      // disabled because it flags the whole page (Karma/Jest test root has no
+      // <main>/<nav> landmarks) — a full-page-layout concern unrelated to
+      // PaSelect's own accessibility contract, which is asserted below.
+      const results = await axe(document.body, { rules: { region: { enabled: false } } });
+      expect(results).toHaveNoViolations();
+
+      overlayContainer.ngOnDestroy();
     });
   });
 });

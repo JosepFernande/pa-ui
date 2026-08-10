@@ -5,6 +5,8 @@
   role="combobox"
   aria-haspopup="listbox"
   [attr.aria-expanded]="panelOpen() ? 'true' : 'false'"
+  [attr.aria-controls]="panelOpen() ? panelId : null"
+  [attr.aria-activedescendant]="panelOpen() ? activeDescendantId() : null"
   [disabled]="effectiveDisabled()"
   [attr.aria-disabled]="effectiveDisabled() ? 'true' : null"
   [attr.aria-invalid]="hasError() ? 'true' : null"
@@ -28,15 +30,19 @@
   [cdkConnectedOverlayWidth]="triggerWidth()"
   (overlayOutsideClick)="close()"
 >
-  <ul class="pa-select__panel" role="listbox">
-    @for (option of options(); track option.value) {
+  <ul class="pa-select__panel" role="listbox" [id]="panelId">
+    @for (item of optionItems(); track item.id) {
       <li
         class="pa-select__option"
         role="option"
-        [attr.aria-selected]="isSelected(option) ? 'true' : 'false'"
-        [class.pa-select__option--selected]="isSelected(option)"
+        [id]="item.id"
+        [attr.aria-selected]="isSelected(item.option) ? 'true' : 'false'"
+        [attr.aria-disabled]="item.disabled ? 'true' : null"
+        [class.pa-select__option--selected]="isSelected(item.option)"
+        [class.pa-select__option--active]="item.active()"
+        [class.pa-select__option--disabled]="item.disabled"
       >
-        {{ option.label }}
+        {{ item.option.label }}
       </li>
     }
   </ul>
