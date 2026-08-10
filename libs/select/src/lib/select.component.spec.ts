@@ -2,6 +2,8 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { OverlayContainer } from '@angular/cdk/overlay';
+import { DOWN_ARROW, ENTER, ESCAPE, SPACE } from '@angular/cdk/keycodes';
 // jest-axe v10 has no TS declarations — use require()
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const { axe, toHaveNoViolations } = require('jest-axe') as {
@@ -14,6 +16,26 @@ const { axe, toHaveNoViolations } = require('jest-axe') as {
 
 import { PaSelect } from './select.component';
 import type { PaSelectOption, PaSelectSize } from './select.types';
+
+/**
+ * Dispatches a synthetic `keydown` event with a working `keyCode` (task 3.2,
+ * deferred from Phase 3 — see apply-progress Deviation #1). jsdom drops
+ * `keyCode` from `KeyboardEventInit`, and `ListKeyManager.onKeydown` /
+ * `Typeahead.handleKey` both read `event.keyCode` as a fallback, so it must
+ * be patched onto the event instance directly. `@angular/cdk/testing` is
+ * harness-only (banned by the testing skill) and `dispatchKeyboardEvent`
+ * lives in the unpublished `testing/private`.
+ */
+function dispatchKeydown(
+  el: HTMLElement,
+  key: string,
+  keyCode: number,
+  init: KeyboardEventInit = {},
+): void {
+  const event = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true, ...init });
+  Object.defineProperty(event, 'keyCode', { get: () => keyCode });
+  el.dispatchEvent(event);
+}
 
 expect.extend(toHaveNoViolations);
 
@@ -52,6 +74,8 @@ const FRUIT_OPTIONS: PaSelectOption[] = [
       [readonly]="readonly"
       [ariaLabel]="ariaLabel"
       [ariaDescribedBy]="ariaDescribedBy"
+      (opened)="onOpened()"
+      (closed)="onClosed()"
     ></pa-select>
   `,
 })
@@ -64,6 +88,14 @@ class TestHost {
   readonly = false;
   ariaLabel = 'Fruit';
   ariaDescribedBy = '';
+  openedCount = 0;
+  closedCount = 0;
+  onOpened(): void {
+    this.openedCount++;
+  }
+  onClosed(): void {
+    this.closedCount++;
+  }
 }
 
 /**
@@ -136,7 +168,7 @@ describe('PaSelect', () => {
       expect(triggerEl.textContent?.trim()).toBe('Banana');
     });
 
-    it('should have aria-haspopup listbox and aria-expanded false (no overlay wired yet)', () => {
+    it('should have aria-haspopup listbox and aria-expanded false by default (panel closed)', () => {
       const { fixture, triggerEl } = createTestHost();
       fixture.detectChanges();
 
@@ -151,11 +183,198 @@ describe('PaSelect', () => {
       expect(triggerEl.getAttribute('aria-label')).toBe('Fruit');
     });
 
-    it('should never render an overlay/listbox panel in this phase', () => {
+    it('should not render the overlay/listbox panel while closed', () => {
       const { fixture } = createTestHost();
       fixture.detectChanges();
 
       expect(document.querySelector('[role="listbox"]')).toBeNull();
+    });
+  });
+
+  // -----------------------------------------------------------------------
+  // Overlay open/close (Phase 4)
+  // -----------------------------------------------------------------------
+  describe('overlay open/close', () => {
+    let overlayContainer: OverlayContainer;
+    let containerEl: HTMLElement;
+
+    beforeEach(() => {
+      overlayContainer = TestBed.inject(OverlayContainer);
+      containerEl = overlayContainer.getContainerElement();
+    });
+
+    afterEach(() => {
+      overlayContainer.ngOnDestroy();
+    });
+
+    function getPanel(): HTMLElement | null {
+      return containerEl.querySelector('[role="listbox"]');
+    }
+
+    it('opens the panel and emits opened when the trigger is clicked', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      fixture.detectChanges();
+      expect(getPanel()).toBeNull();
+
+      triggerEl.click();
+      fixture.detectChanges();
+
+      expect(getPanel()).not.toBeNull();
+      expect(host.openedCount).toBe(1);
+    });
+
+    it('opens the panel when Enter is pressed while closed', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      fixture.detectChanges();
+
+      dispatchKeydown(triggerEl, 'Enter', ENTER);
+      fixture.detectChanges();
+
+      expect(getPanel()).not.toBeNull();
+      expect(host.openedCount).toBe(1);
+    });
+
+    it('opens the panel when Space is pressed while closed', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      fixture.detectChanges();
+
+      dispatchKeydown(triggerEl, ' ', SPACE);
+      fixture.detectChanges();
+
+      expect(getPanel()).not.toBeNull();
+      expect(host.openedCount).toBe(1);
+    });
+
+    it('opens the panel when ArrowDown is pressed while closed', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      fixture.detectChanges();
+
+      dispatchKeydown(triggerEl, 'ArrowDown', DOWN_ARROW);
+      fixture.detectChanges();
+
+      expect(getPanel()).not.toBeNull();
+      expect(host.openedCount).toBe(1);
+    });
+
+    it('closes the panel and emits closed on outside click, without changing the value', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      fixture.detectChanges();
+      triggerEl.click();
+      fixture.detectChanges();
+      expect(getPanel()).not.toBeNull();
+
+      document.body.click();
+      fixture.detectChanges();
+
+      expect(getPanel()).toBeNull();
+      expect(host.closedCount).toBe(1);
+      expect(host.control.value).toBeNull();
+    });
+
+    it('closes the panel on Escape without changing the value', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      fixture.detectChanges();
+      triggerEl.click();
+      fixture.detectChanges();
+      expect(getPanel()).not.toBeNull();
+
+      dispatchKeydown(triggerEl, 'Escape', ESCAPE);
+      fixture.detectChanges();
+
+      expect(getPanel()).toBeNull();
+      expect(host.closedCount).toBe(1);
+      expect(host.control.value).toBeNull();
+    });
+
+    it('closes the panel when the trigger blurs while open', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      fixture.detectChanges();
+      triggerEl.click();
+      fixture.detectChanges();
+      expect(getPanel()).not.toBeNull();
+
+      triggerEl.dispatchEvent(new Event('blur'));
+      fixture.detectChanges();
+
+      expect(getPanel()).toBeNull();
+      expect(host.closedCount).toBe(1);
+    });
+
+    it('opens an empty panel with zero role="option" elements when options is empty', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      host.options = [];
+      fixture.detectChanges();
+
+      triggerEl.click();
+      fixture.detectChanges();
+
+      const panel = getPanel();
+      expect(panel).not.toBeNull();
+      expect(panel!.querySelectorAll('[role="option"]')).toHaveLength(0);
+    });
+
+    it('renders one role="option" element per option when the panel is open (triangulation)', () => {
+      const { fixture, triggerEl } = createTestHost();
+      fixture.detectChanges();
+
+      triggerEl.click();
+      fixture.detectChanges();
+
+      const panel = getPanel();
+      expect(panel!.querySelectorAll('[role="option"]')).toHaveLength(FRUIT_OPTIONS.length);
+    });
+
+    it('sets aria-selected="true" only on the option matching the current value', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      host.control.setValue('banana');
+      fixture.detectChanges();
+
+      triggerEl.click();
+      fixture.detectChanges();
+
+      const panel = getPanel();
+      const selectedFlags = Array.from(panel!.querySelectorAll('[role="option"]')).map((el) =>
+        el.getAttribute('aria-selected'),
+      );
+      expect(selectedFlags).toEqual(['false', 'true', 'false']);
+    });
+
+    it('sets aria-selected="false" on every option when no value is selected (triangulation)', () => {
+      const { fixture, triggerEl } = createTestHost();
+      fixture.detectChanges();
+
+      triggerEl.click();
+      fixture.detectChanges();
+
+      const panel = getPanel();
+      const selectedFlags = Array.from(panel!.querySelectorAll('[role="option"]')).map((el) =>
+        el.getAttribute('aria-selected'),
+      );
+      expect(selectedFlags).toEqual(['false', 'false', 'false']);
+    });
+
+    it('does not open the panel when disabled', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      host.disabled = true;
+      fixture.detectChanges();
+
+      triggerEl.click();
+      fixture.detectChanges();
+
+      expect(getPanel()).toBeNull();
+      expect(host.openedCount).toBe(0);
+    });
+
+    it('does not open the panel when readonly', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      host.readonly = true;
+      fixture.detectChanges();
+
+      triggerEl.click();
+      fixture.detectChanges();
+
+      expect(getPanel()).toBeNull();
+      expect(host.openedCount).toBe(0);
     });
   });
 

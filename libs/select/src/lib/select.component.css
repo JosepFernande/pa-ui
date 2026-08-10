@@ -129,6 +129,54 @@
 }
 
 /* ------------------------------------------------------------------ */
+/* Panel (rendered inside the CDK overlay, in document.body)          */
+/* ------------------------------------------------------------------ */
+
+.pa-select__panel {
+  box-sizing: border-box;
+  margin: 0;
+  margin-top: var(--pa-select-panel-offset);
+  padding: var(--pa-select-panel-padding-y) 0;
+  list-style: none;
+  overflow-y: auto;
+  max-height: var(--pa-select-panel-max-height);
+
+  background-color: var(--pa-select-panel-bg);
+  border: var(--pa-select-panel-border);
+  border-radius: var(--pa-select-panel-radius);
+  box-shadow: var(--pa-select-panel-shadow);
+}
+
+/* ------------------------------------------------------------------ */
+/* Options                                                             */
+/* ------------------------------------------------------------------ */
+
+/*
+ * No `cursor: pointer`/`:hover` here: option selection is keyboard-driven
+ * only (no click-to-select in this component's scope, per spec — see
+ * `select.spec` Keyboard navigation matrix). `--active`/`--disabled`
+ * variants are added in Phase 5 together with the `ActiveDescendantKeyManager`
+ * wiring that actually drives them (`item.active()`/`item.disabled`).
+ */
+.pa-select__option {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  min-height: var(--pa-select-option-min-height);
+  padding: var(--pa-select-option-padding-y) var(--pa-select-option-padding-x);
+
+  color: var(--pa-select-option-color);
+  background-color: var(--pa-select-option-bg);
+  font-size: var(--pa-select-option-font-size);
+}
+
+.pa-select__option--selected {
+  background-color: var(--pa-select-option-selected-bg);
+  color: var(--pa-select-option-selected-color);
+  font-weight: var(--pa-select-option-selected-font-weight);
+}
+
+/* ------------------------------------------------------------------ */
 /* Reduced motion                                                      */
 /* ------------------------------------------------------------------ */
 

@@ -1,15 +1,43 @@
 <button
+  #trigger
   type="button"
   class="pa-select__trigger"
   role="combobox"
   aria-haspopup="listbox"
-  aria-expanded="false"
+  [attr.aria-expanded]="panelOpen() ? 'true' : 'false'"
   [disabled]="effectiveDisabled()"
   [attr.aria-disabled]="effectiveDisabled() ? 'true' : null"
   [attr.aria-invalid]="hasError() ? 'true' : null"
   [attr.aria-label]="ariaLabel() || null"
   [attr.aria-describedby]="ariaDescribedBy() || null"
+  (click)="onTriggerClick()"
+  (keydown)="onTriggerKeydown($event)"
   (blur)="onTriggerBlur()"
 >
   <span class="pa-select__label" [class.pa-select__label--placeholder]="!selectedOption()">{{ triggerLabel() }}</span>
 </button>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="triggerRef()"
+  [cdkConnectedOverlayOpen]="panelOpen()"
+  [cdkConnectedOverlayDisableClose]="true"
+  [cdkConnectedOverlayPositions]="positions"
+  [cdkConnectedOverlayViewportMargin]="viewportMargin"
+  [cdkConnectedOverlayScrollStrategy]="scrollStrategy"
+  [cdkConnectedOverlayWidth]="triggerWidth()"
+  (overlayOutsideClick)="close()"
+>
+  <ul class="pa-select__panel" role="listbox">
+    @for (option of options(); track option.value) {
+      <li
+        class="pa-select__option"
+        role="option"
+        [attr.aria-selected]="isSelected(option) ? 'true' : 'false'"
+        [class.pa-select__option--selected]="isSelected(option)"
+      >
+        {{ option.label }}
+      </li>
+    }
+  </ul>
+</ng-template>
