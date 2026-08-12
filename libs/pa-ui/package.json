@@ -40,7 +40,8 @@
   "dependencies": {
     "@pa-ui/button": "19.2.2",
     "@pa-ui/core": "19.2.2",
-    "@pa-ui/input": "19.2.2"
+    "@pa-ui/input": "19.2.2",
+    "@pa-ui/select": "19.2.2"
   },
   "peerDependencies": {
     "@angular/common": "^19.2.0",

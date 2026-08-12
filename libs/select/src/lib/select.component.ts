@@ -47,20 +47,18 @@ import { findOptionIndexByValue, firstEnabledIndex, nextSelectId, optionId } fro
  * `ActiveDescendantKeyManager<PaSelectOptionItem>` built over a *signal*
  * item source (`optionItems`) — no RxJS subscription needed. Arrow/Home/End/
  * typeahead move `aria-activedescendant` only (navigate); Enter, Space, Tab,
- * and Alt+ArrowUp commit the active option, write it through the CVA
- * `onChange`, and close the panel. Escape cancels without committing.
+ * Alt+ArrowUp, and clicking an enabled option all commit (D6), writing
+ * through the CVA `onChange` and closing the panel. Escape cancels without
+ * committing.
  * `withWrap(true)` is enabled so Arrow navigation wraps past disabled
- * options at either end — this is a deliberate deviation from design
- * decision D5 ("clamp, not wrap"): the spec's Keyboard navigation matrix
- * requirement and its explicit "Arrow Down wraps past the last option"
- * scenario mandate wrap-around, which D5 did not account for.
+ * options at either end — a deliberate deviation from design decision D5
+ * ("clamp, not wrap"): the spec's keyboard matrix mandates wrap-around.
  *
  * Forms integration mirrors `PaInput`'s `NgControl` lazy-injection +
- * `validityVersion` idiom verbatim (D8,
- * `libs/input/src/lib/input.component.ts:103-175`): the bound form
- * directive on this same host also injects `NG_VALUE_ACCESSOR` (this
- * component), so resolving `NgControl` at construction time would throw
- * NG0200. Resolving lazily inside `hasError` breaks the cycle.
+ * `validityVersion` idiom (D8, `libs/input/src/lib/input.component.ts:103-175`):
+ * the bound form directive also injects `NG_VALUE_ACCESSOR` (this component),
+ * so resolving `NgControl` eagerly would throw NG0200; resolving lazily
+ * inside `hasError` breaks the cycle.
  */
 @Component({
   selector: 'pa-select',
@@ -97,7 +95,7 @@ export class PaSelect implements ControlValueAccessor, OnInit {
   /** Comma-separated ids referenced by `aria-describedby` (e.g. hint text). */
   readonly ariaDescribedBy = input('');
 
-  /** Emits the committed value whenever Enter/Space/Tab/Alt+ArrowUp commits the active option. */
+  /** Emits the committed value whenever Enter/Space/Tab/Alt+ArrowUp or a click commits an option. */
   @Output() readonly valueChange = new EventEmitter<unknown>();
 
   /** Emits exactly once per open transition (click, opening key, or programmatic `open()`). */
@@ -355,26 +353,36 @@ export class PaSelect implements ControlValueAccessor, OnInit {
     this.openRequested.set(true);
   }
 
-  /** Requests the panel to close. Idempotent when already closed. */
+  /** Closes the panel and marks the control touched (CVA sketch: touched on blur AND on close). Idempotent when already closed. */
   protected close(): void {
     this.openRequested.set(false);
+    this.onTouched();
   }
 
-  /**
-   * Writes the key manager's current active option through the CVA
-   * `onChange`/`valueChange` path (D6 — navigate-then-commit) and closes the
-   * panel. A no-op commit (no active item, e.g. empty `options`) still
-   * closes the panel without emitting `valueChange`.
-   */
+  /** Shared commit primitive (D6) — writes `value` through `onChange`/`valueChange`. Called by both `commitActive` and `onOptionClick`, never duplicated. */
+  private commit(value: unknown): void {
+    this.valueState.set(value);
+    this.onChange(value);
+    this.valueChange.emit(value);
+  }
+
+  /** Commits the key manager's active option via `commit` (D6) and closes. A no-op commit (no active item) still closes without emitting. */
   private commitActive(): void {
     const activeItem = this.keyManager.activeItem;
     if (activeItem) {
-      const value = activeItem.option.value;
-      this.valueState.set(value);
-      this.onChange(value);
-      this.valueChange.emit(value);
+      this.commit(activeItem.option.value);
     }
     this.close();
+  }
+
+  /** Host handler: click-commits `item` via `commit` (D6), closes, and refocuses the trigger. Disabled options are a no-op. */
+  protected onOptionClick(item: PaSelectOptionItem): void {
+    if (item.disabled) {
+      return;
+    }
+    this.commit(item.option.value);
+    this.close();
+    this.triggerRef().nativeElement.focus();
   }
 
   /**

@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { DOWN_ARROW, END, ENTER, ESCAPE, HOME, SPACE, TAB, UP_ARROW } from '@angular/cdk/keycodes';
 // jest-axe v10 has no TS declarations — use require()
@@ -121,10 +121,31 @@ class StandaloneHost {
   options: PaSelectOption[] = FRUIT_OPTIONS;
 }
 
+/**
+ * Template-driven forms host — proves `[(ngModel)]` round-trips (spec
+ * scenario "Template-driven `ngModel` round-trips"), NOT merely documented
+ * in README. Uses `FormsModule`, deliberately no `ReactiveFormsModule`.
+ */
+@Component({
+  selector: 'pa-select-ngmodel-test-host',
+  standalone: true,
+  imports: [PaSelect, FormsModule],
+  encapsulation: ViewEncapsulation.None,
+  template: `<pa-select
+    [(ngModel)]="selected"
+    [options]="options"
+    placeholder="Select a fruit"
+  ></pa-select>`,
+})
+class NgModelTestHost {
+  selected: unknown = null;
+  options: PaSelectOption[] = FRUIT_OPTIONS;
+}
+
 describe('PaSelect', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestHost, StandaloneHost],
+      imports: [TestHost, StandaloneHost, NgModelTestHost],
     }).compileComponents();
   });
 
@@ -140,6 +161,19 @@ describe('PaSelect', () => {
       .nativeElement as HTMLButtonElement;
     const hostEl = fixture.debugElement.query(By.directive(PaSelect)).nativeElement as HTMLElement;
     return { fixture, host, triggerEl, hostEl };
+  }
+
+  /**
+   * Subscribes a `jest.fn()` spy directly to the `PaSelect` instance's
+   * `valueChange` output. Every commit-path test MUST assert this spy in
+   * addition to `control.value` — `onChange` and `valueChange.emit` share a
+   * code path that line coverage marks green even if one call is dropped.
+   */
+  function spyOnValueChange(fixture: ComponentFixture<TestHost>): jest.Mock {
+    const spy = jest.fn();
+    const select = fixture.debugElement.query(By.directive(PaSelect)).componentInstance as PaSelect;
+    select.valueChange.subscribe(spy);
+    return spy;
   }
 
   // -----------------------------------------------------------------------
@@ -384,6 +418,76 @@ describe('PaSelect', () => {
       expect(getPanel()).toBeNull();
       expect(host.openedCount).toBe(0);
     });
+
+    it('marks a disabled option with aria-disabled="true"', () => {
+      const { fixture, triggerEl } = createTestHost();
+      fixture.detectChanges();
+
+      triggerEl.click();
+      fixture.detectChanges();
+
+      const panel = getPanel();
+      const cherryOption = panel!.querySelectorAll('[role="option"]')[2] as HTMLElement;
+      expect(cherryOption.textContent?.trim()).toBe('Cherry');
+      expect(cherryOption.getAttribute('aria-disabled')).toBe('true');
+    });
+  });
+
+  // -----------------------------------------------------------------------
+  // Mouse selection (click-to-commit) — spec R3 "Clicking an enabled option
+  // commits it"/"Clicking a disabled option is a no-op" scenarios.
+  // -----------------------------------------------------------------------
+  describe('mouse selection (click-to-commit)', () => {
+    let overlayContainer: OverlayContainer;
+    let containerEl: HTMLElement;
+
+    beforeEach(() => {
+      overlayContainer = TestBed.inject(OverlayContainer);
+      containerEl = overlayContainer.getContainerElement();
+    });
+
+    afterEach(() => {
+      overlayContainer.ngOnDestroy();
+    });
+
+    function getPanel(): HTMLElement | null {
+      return containerEl.querySelector('[role="listbox"]');
+    }
+
+    it('clicking an enabled option commits it, emits valueChange, closes the panel, and returns focus to the trigger', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      const valueChangeSpy = spyOnValueChange(fixture);
+      fixture.detectChanges();
+      triggerEl.click();
+      fixture.detectChanges();
+
+      const panel = getPanel();
+      const bananaOption = panel!.querySelectorAll('[role="option"]')[1] as HTMLElement;
+      bananaOption.click();
+      fixture.detectChanges();
+
+      expect(host.control.value).toBe('banana');
+      expect(valueChangeSpy).toHaveBeenCalledWith('banana');
+      expect(getPanel()).toBeNull();
+      expect(document.activeElement).toBe(triggerEl);
+    });
+
+    it('clicking a disabled option is a no-op: no value change, no valueChange emission, panel stays open', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      const valueChangeSpy = spyOnValueChange(fixture);
+      fixture.detectChanges();
+      triggerEl.click();
+      fixture.detectChanges();
+
+      const panel = getPanel();
+      const cherryOption = panel!.querySelectorAll('[role="option"]')[2] as HTMLElement;
+      cherryOption.click();
+      fixture.detectChanges();
+
+      expect(host.control.value).toBeNull();
+      expect(valueChangeSpy).not.toHaveBeenCalled();
+      expect(getPanel()).not.toBeNull();
+    });
   });
 
   // -----------------------------------------------------------------------
@@ -517,8 +621,9 @@ describe('PaSelect', () => {
       expect(activeOptionLabel(triggerEl)).toBe('Banana');
     });
 
-    it('Enter commits the active option, closes the panel, and keeps focus on the trigger', () => {
+    it('Enter commits the active option, emits valueChange, closes the panel, and keeps focus on the trigger', () => {
       const { fixture, host, triggerEl } = createTestHost();
+      const valueChangeSpy = spyOnValueChange(fixture);
       fixture.detectChanges();
       triggerEl.click();
       fixture.detectChanges();
@@ -530,12 +635,14 @@ describe('PaSelect', () => {
       fixture.detectChanges();
 
       expect(host.control.value).toBe('banana');
+      expect(valueChangeSpy).toHaveBeenCalledWith('banana');
       expect(getPanel()).toBeNull();
       expect(document.activeElement).toBe(triggerEl);
     });
 
-    it('Space commits the active option (triangulation with a different option/value)', () => {
+    it('Space commits the active option and emits valueChange (triangulation with a different option/value)', () => {
       const { fixture, host, triggerEl } = createTestHost();
+      const valueChangeSpy = spyOnValueChange(fixture);
       fixture.detectChanges();
       triggerEl.click();
       fixture.detectChanges();
@@ -544,6 +651,7 @@ describe('PaSelect', () => {
       fixture.detectChanges();
 
       expect(host.control.value).toBe('apple');
+      expect(valueChangeSpy).toHaveBeenCalledWith('apple');
       expect(getPanel()).toBeNull();
     });
 
@@ -562,8 +670,24 @@ describe('PaSelect', () => {
       expect(getPanel()).toBeNull();
     });
 
-    it('Tab commits the active option, closes the panel, and does NOT call preventDefault', () => {
+    it('keeps focus on the trigger after Escape closes the panel', () => {
+      const { fixture, triggerEl } = createTestHost();
+      fixture.detectChanges();
+      triggerEl.click();
+      fixture.detectChanges();
+      triggerEl.focus();
+      expect(document.activeElement).toBe(triggerEl);
+
+      dispatchKeydown(triggerEl, 'Escape', ESCAPE);
+      fixture.detectChanges();
+
+      expect(getPanel()).toBeNull();
+      expect(document.activeElement).toBe(triggerEl);
+    });
+
+    it('Tab commits the active option before moving focus: value updates, valueChange emits, panel closes, and preventDefault is NOT called', () => {
       const { fixture, host, triggerEl } = createTestHost();
+      const valueChangeSpy = spyOnValueChange(fixture);
       fixture.detectChanges();
       triggerEl.click();
       fixture.detectChanges();
@@ -572,12 +696,14 @@ describe('PaSelect', () => {
       fixture.detectChanges();
 
       expect(host.control.value).toBe('apple');
+      expect(valueChangeSpy).toHaveBeenCalledWith('apple');
       expect(getPanel()).toBeNull();
       expect(event.defaultPrevented).toBe(false);
     });
 
-    it('Alt+ArrowUp commits the active option and closes the panel', () => {
+    it('Alt+ArrowUp commits the active option, emits valueChange, and closes the panel', () => {
       const { fixture, host, triggerEl } = createTestHost();
+      const valueChangeSpy = spyOnValueChange(fixture);
       fixture.detectChanges();
       triggerEl.click();
       fixture.detectChanges();
@@ -589,6 +715,7 @@ describe('PaSelect', () => {
       fixture.detectChanges();
 
       expect(host.control.value).toBe('banana');
+      expect(valueChangeSpy).toHaveBeenCalledWith('banana');
       expect(getPanel()).toBeNull();
     });
 
@@ -765,6 +892,19 @@ describe('PaSelect', () => {
       expect(host.control.touched).toBe(true);
     });
 
+    it('should mark the control touched when the panel closes without a blur (e.g. Escape)', () => {
+      const { fixture, host, triggerEl } = createTestHost();
+      fixture.detectChanges();
+      triggerEl.click();
+      fixture.detectChanges();
+      expect(host.control.touched).toBe(false);
+
+      dispatchKeydown(triggerEl, 'Escape', ESCAPE);
+      fixture.detectChanges();
+
+      expect(host.control.touched).toBe(true);
+    });
+
     it('should work outside a form control (standalone host, ngControl null, no errors)', () => {
       const fixture = TestBed.createComponent(StandaloneHost);
       fixture.detectChanges();
@@ -774,6 +914,34 @@ describe('PaSelect', () => {
       ) as HTMLButtonElement;
       expect(triggerEl).not.toBeNull();
       expect(triggerEl.textContent?.trim()).toBe('Pick one');
+    });
+  });
+
+  // -----------------------------------------------------------------------
+  // Template-driven forms (ngModel) — spec scenario "Template-driven
+  // `ngModel` round-trips" (R2-S4), previously untested (no FormsModule/
+  // ngModel anywhere in this suite).
+  // -----------------------------------------------------------------------
+  describe('template-driven forms (ngModel)', () => {
+    it('round-trips [(ngModel)]: selecting an option updates the bound property and the trigger reflects the new label', () => {
+      const fixture = TestBed.createComponent(NgModelTestHost);
+      const host = fixture.componentInstance;
+      fixture.detectChanges();
+
+      const triggerEl = fixture.debugElement.query(By.css('[role="combobox"]'))
+        .nativeElement as HTMLButtonElement;
+      expect(triggerEl.textContent?.trim()).toBe('Select a fruit');
+
+      triggerEl.click();
+      fixture.detectChanges();
+      dispatchKeydown(triggerEl, 'ArrowDown', DOWN_ARROW);
+      fixture.detectChanges();
+
+      dispatchKeydown(triggerEl, 'Enter', ENTER);
+      fixture.detectChanges();
+
+      expect(host.selected).toBe('banana');
+      expect(triggerEl.textContent?.trim()).toBe('Banana');
     });
   });
 
