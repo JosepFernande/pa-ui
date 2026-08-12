@@ -1,6 +1,6 @@
 {
   "name": "@pa-ui/button",
-  "version": "19.2.2",
+  "version": "19.3.0",
   "license": "MIT",
   "description": "Accessible, token-driven Angular 19 button component",
   "keywords": [
@@ -25,7 +25,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@pa-ui/core": "19.2.2"
+    "@pa-ui/core": "19.3.0"
   },
   "peerDependencies": {
     "@angular/common": "^19.2.0",
