@@ -1,15 +1,49 @@
 <button
+  #trigger
   type="button"
   class="pa-select__trigger"
   role="combobox"
   aria-haspopup="listbox"
-  aria-expanded="false"
+  [attr.aria-expanded]="panelOpen() ? 'true' : 'false'"
+  [attr.aria-controls]="panelOpen() ? panelId : null"
+  [attr.aria-activedescendant]="panelOpen() ? activeDescendantId() : null"
   [disabled]="effectiveDisabled()"
   [attr.aria-disabled]="effectiveDisabled() ? 'true' : null"
   [attr.aria-invalid]="hasError() ? 'true' : null"
   [attr.aria-label]="ariaLabel() || null"
   [attr.aria-describedby]="ariaDescribedBy() || null"
+  (click)="onTriggerClick()"
+  (keydown)="onTriggerKeydown($event)"
   (blur)="onTriggerBlur()"
 >
   <span class="pa-select__label" [class.pa-select__label--placeholder]="!selectedOption()">{{ triggerLabel() }}</span>
 </button>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="triggerRef()"
+  [cdkConnectedOverlayOpen]="panelOpen()"
+  [cdkConnectedOverlayDisableClose]="true"
+  [cdkConnectedOverlayPositions]="positions"
+  [cdkConnectedOverlayViewportMargin]="viewportMargin"
+  [cdkConnectedOverlayScrollStrategy]="scrollStrategy"
+  [cdkConnectedOverlayWidth]="triggerWidth()"
+  (overlayOutsideClick)="close()"
+>
+  <ul class="pa-select__panel" role="listbox" [id]="panelId">
+    @for (item of optionItems(); track item.id) {
+      <li
+        class="pa-select__option"
+        role="option"
+        [id]="item.id"
+        [attr.aria-selected]="isSelected(item.option) ? 'true' : 'false'"
+        [attr.aria-disabled]="item.disabled ? 'true' : null"
+        [class.pa-select__option--selected]="isSelected(item.option)"
+        [class.pa-select__option--active]="item.active()"
+        [class.pa-select__option--disabled]="item.disabled"
+      >
+        {{ item.option.label }}
+      </li>
+    }
+  </ul>
+</ng-template>
