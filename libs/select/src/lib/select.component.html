@@ -41,6 +41,7 @@
         [class.pa-select__option--selected]="isSelected(item.option)"
         [class.pa-select__option--active]="item.active()"
         [class.pa-select__option--disabled]="item.disabled"
+        (click)="onOptionClick(item)"
       >
         {{ item.option.label }}
       </li>

@@ -152,9 +152,10 @@
 /* ------------------------------------------------------------------ */
 
 /*
- * No `cursor: pointer`/`:hover` here: option selection is keyboard-driven
- * only (no click-to-select in this component's scope — the spec's Keyboard
- * navigation matrix only defines keyboard commit, never mouse click).
+ * Options are selectable by keyboard AND mouse click (D6): `cursor: pointer`
+ * and hover background apply only to enabled options
+ * (`:not(.pa-select__option--disabled)`) — disabled options intentionally
+ * get no pointer/hover affordance, since clicking one is a no-op.
  * `--active` reflects the ActiveDescendantKeyManager's current item
  * (`item.active()`); `--disabled` reflects `item.disabled`.
  */
@@ -168,6 +169,14 @@
   color: var(--pa-select-option-color);
   background-color: var(--pa-select-option-bg);
   font-size: var(--pa-select-option-font-size);
+}
+
+.pa-select__option:not(.pa-select__option--disabled) {
+  cursor: pointer;
+}
+
+.pa-select__option:not(.pa-select__option--disabled):hover {
+  background-color: var(--pa-select-option-hover-bg);
 }
 
 .pa-select__option--active {

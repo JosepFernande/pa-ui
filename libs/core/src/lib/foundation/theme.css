@@ -352,8 +352,6 @@
   --pa-select-transition-duration: 150ms;
   --pa-select-transition-easing: ease-in-out;
   --pa-select-gap: var(--gap-sm);
-  --pa-select-icon-color: var(--neutral-700);
-  --pa-select-icon-size: var(--icon-size-sm);
 
   /* Panel — no dimension here is sourced from PA_INPUT_PROVISIONAL_DIMENSIONS, so none are marked provisional */
   --pa-select-panel-bg: var(--neutral-50);
