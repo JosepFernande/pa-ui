@@ -1,7 +1,7 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/libs/pa-ui",
-  "allowedNonPeerDependencies": ["@pa-ui/button", "@pa-ui/core", "@pa-ui/input"],
+  "allowedNonPeerDependencies": ["@pa-ui/button", "@pa-ui/core", "@pa-ui/input", "@pa-ui/select"],
   "lib": {
     "entryFile": "src/index.ts"
   }

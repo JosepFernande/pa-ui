@@ -57,6 +57,12 @@ describe('Umbrella packaging contract — source-level', () => {
       expect(deps).toBeDefined();
       expect(deps!['@pa-ui/input']).toBeDefined();
     });
+
+    it('dependencies include @pa-ui/select', () => {
+      const deps = pkg['dependencies'] as Record<string, string> | undefined;
+      expect(deps).toBeDefined();
+      expect(deps!['@pa-ui/select']).toBeDefined();
+    });
   });
 
   describe('umbrella re-exports', () => {
@@ -76,6 +82,52 @@ describe('Umbrella packaging contract — source-level', () => {
       const publicApiPath = path.resolve(libRoot(), 'src', 'public-api.ts');
       const content = fs.readFileSync(publicApiPath, 'utf-8');
       expect(content).toContain("export * from '@pa-ui/input'");
+    });
+
+    it('public-api.ts re-exports from @pa-ui/select', () => {
+      const publicApiPath = path.resolve(libRoot(), 'src', 'public-api.ts');
+      const content = fs.readFileSync(publicApiPath, 'utf-8');
+      expect(content).toContain("export * from '@pa-ui/select'");
+    });
+  });
+
+  describe('hand-maintained index.mjs / index.d.mts (nx:run-commands build, no ng-packagr)', () => {
+    it('index.mjs re-exports from @pa-ui/select', () => {
+      const indexMjsPath = path.resolve(libRoot(), 'src', 'index.mjs');
+      const content = fs.readFileSync(indexMjsPath, 'utf-8');
+      expect(content).toContain("export * from '@pa-ui/select'");
+    });
+
+    it('index.d.mts re-exports from @pa-ui/select', () => {
+      const indexDMtsPath = path.resolve(libRoot(), 'src', 'index.d.mts');
+      const content = fs.readFileSync(indexDMtsPath, 'utf-8');
+      expect(content).toContain("export * from '@pa-ui/select'");
+    });
+  });
+
+  describe('libs/select project.json target parity with libs/input (spec R7-S19)', () => {
+    const selectProjectJson = readJson(path.resolve(libRoot(), '..', 'select', 'project.json'));
+    const inputProjectJson = readJson(path.resolve(libRoot(), '..', 'input', 'project.json'));
+
+    it('defines the same build/test/lint/stylelint target names as libs/input/project.json', () => {
+      const selectTargets = Object.keys(selectProjectJson['targets'] as Record<string, unknown>);
+      const inputTargets = Object.keys(inputProjectJson['targets'] as Record<string, unknown>);
+
+      for (const target of ['build', 'test', 'lint', 'stylelint']) {
+        expect(inputTargets).toContain(target);
+        expect(selectTargets).toContain(target);
+      }
+    });
+  });
+
+  describe('.changeset/config.json fixed group (spec R7-S20)', () => {
+    it('includes @pa-ui/select in the fixed group so it version-bumps with the rest of the umbrella', () => {
+      const changesetConfigPath = path.resolve(libRoot(), '..', '..', '.changeset', 'config.json');
+      const changesetConfig = readJson(changesetConfigPath);
+      const fixedGroups = changesetConfig['fixed'] as string[][];
+
+      const includesSelect = fixedGroups.some((group) => group.includes('@pa-ui/select'));
+      expect(includesSelect).toBe(true);
     });
   });
 });

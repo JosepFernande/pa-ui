@@ -180,8 +180,6 @@ const PA_SELECT_TOKEN_DEFAULTS: Readonly<Record<string, string>> = {
   '--pa-select-transition-duration': '150ms',
   '--pa-select-transition-easing': 'ease-in-out',
   '--pa-select-gap': 'var(--gap-sm)',
-  '--pa-select-icon-color': 'var(--neutral-700)',
-  '--pa-select-icon-size': 'var(--icon-size-sm)',
 
   '--pa-select-panel-bg': 'var(--neutral-50)',
   '--pa-select-panel-border': '1px solid var(--neutral-200)',
