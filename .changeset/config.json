@@ -2,7 +2,7 @@
   "$schema": "https://unpkg.com/@changesets/config@3.1.4/schema.json",
   "changelog": "@changesets/cli/changelog",
   "commit": false,
-  "fixed": [["@pa-ui/core", "@pa-ui/button", "@pa-ui/input", "@pa-ui/angular"]],
+  "fixed": [["@pa-ui/core", "@pa-ui/button", "@pa-ui/input", "@pa-ui/select", "@pa-ui/angular"]],
   "linked": [],
   "access": "public",
   "baseBranch": "main",

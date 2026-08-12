@@ -1,0 +1,15 @@
+<button
+  type="button"
+  class="pa-select__trigger"
+  role="combobox"
+  aria-haspopup="listbox"
+  aria-expanded="false"
+  [disabled]="effectiveDisabled()"
+  [attr.aria-disabled]="effectiveDisabled() ? 'true' : null"
+  [attr.aria-invalid]="hasError() ? 'true' : null"
+  [attr.aria-label]="ariaLabel() || null"
+  [attr.aria-describedby]="ariaDescribedBy() || null"
+  (blur)="onTriggerBlur()"
+>
+  <span class="pa-select__label" [class.pa-select__label--placeholder]="!selectedOption()">{{ triggerLabel() }}</span>
+</button>
