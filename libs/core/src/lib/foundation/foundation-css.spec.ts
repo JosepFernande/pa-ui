@@ -171,3 +171,43 @@ describe('Input provisional dimension markers', () => {
     }
   });
 });
+
+describe('Select provisional dimension markers', () => {
+  function findDeclarationLine(css: string, key: string): string {
+    const lineRegex = new RegExp(`${key}\\s*:[^;]+;[^\\n]*`);
+    const match = css.match(lineRegex);
+    if (!match) {
+      throw new Error(`theme.css: no declaration found for ${key}`);
+    }
+    return match[0];
+  }
+
+  it('every select trigger dimension sourced from PA_INPUT_PROVISIONAL_DIMENSIONS carries a provisional comment', () => {
+    const css = readThemeCss();
+    for (const key of [
+      '--pa-select-padding-sm',
+      '--pa-select-padding-md',
+      '--pa-select-padding-lg',
+      '--pa-select-min-height-sm',
+      '--pa-select-min-height-md',
+      '--pa-select-min-height-lg',
+      '--pa-select-radius-sm',
+      '--pa-select-radius-md',
+      '--pa-select-radius-lg',
+    ]) {
+      expect(findDeclarationLine(css, key)).toContain('provisional');
+    }
+  });
+
+  it('non-dimension select keys (trigger, panel, option) are NOT marked provisional', () => {
+    const css = readThemeCss();
+    for (const key of [
+      '--pa-select-bg',
+      '--pa-select-error-border',
+      '--pa-select-panel-shadow',
+      '--pa-select-option-hover-bg',
+    ]) {
+      expect(findDeclarationLine(css, key)).not.toContain('provisional');
+    }
+  });
+});

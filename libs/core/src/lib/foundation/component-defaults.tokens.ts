@@ -127,7 +127,88 @@ const PA_INPUT_TOKEN_DEFAULTS: Readonly<Record<string, string>> = {
   '--pa-input-placeholder-color': 'var(--neutral-500)',
 };
 
+/**
+ * Every `--pa-select-*` custom property named by `PA_SELECT_TOKENS`
+ * (`libs/select/src/lib/select.tokens.ts`). Trigger `padding*`/`min-height*`/
+ * `radius*` reuse `PA_INPUT_PROVISIONAL_DIMENSIONS` verbatim (a select
+ * trigger MUST match input field metrics exactly; a copied table would
+ * drift). Panel/option defaults are literals or foundation/semantic
+ * references — none of them are sourced from `PA_INPUT_PROVISIONAL_DIMENSIONS`,
+ * so none of them carry the provisional marker in `theme.css`.
+ * `--pa-select-panel-shadow` has no foundation shadow token to reference —
+ * it ships as a literal (precedent: `--pa-button-focus-ring`), flagged for
+ * designer validation in `design.md`'s Open Questions.
+ * `--pa-select-panel-max-height` and `--pa-select-option-min-height` are
+ * likewise structural literals with no matching foundation scale entry —
+ * same class as `--pa-button-spinner-size`/`--pa-button-sr-only-width`
+ * above, which ship as fixed literals for the same reason. Both are v1
+ * defaults, flagged for designer validation alongside the panel shadow.
+ */
+const PA_SELECT_TOKEN_DEFAULTS: Readonly<Record<string, string>> = {
+  '--pa-select-bg': 'var(--neutral-50)',
+  '--pa-select-color': 'var(--neutral-900)',
+  '--pa-select-border': '1px solid var(--neutral-700)',
+  '--pa-select-font-family': 'var(--font-family)',
+  '--pa-select-font-weight': 'var(--font-weight-regular)',
+  '--pa-select-line-height': 'var(--line-height-body)',
+
+  '--pa-select-padding-sm': `0 ${PA_INPUT_PROVISIONAL_DIMENSIONS.sm.paddingX}`,
+  '--pa-select-padding-md': `0 ${PA_INPUT_PROVISIONAL_DIMENSIONS.md.paddingX}`,
+  '--pa-select-padding-lg': `0 ${PA_INPUT_PROVISIONAL_DIMENSIONS.lg.paddingX}`,
+
+  '--pa-select-font-sm': 'var(--font-size-small-body)',
+  '--pa-select-font-md': 'var(--font-size-body)',
+  '--pa-select-font-lg': 'var(--font-size-body)',
+
+  '--pa-select-min-height-sm': PA_INPUT_PROVISIONAL_DIMENSIONS.sm.minHeight,
+  '--pa-select-min-height-md': PA_INPUT_PROVISIONAL_DIMENSIONS.md.minHeight,
+  '--pa-select-min-height-lg': PA_INPUT_PROVISIONAL_DIMENSIONS.lg.minHeight,
+
+  '--pa-select-radius-sm': PA_INPUT_PROVISIONAL_DIMENSIONS.sm.radius,
+  '--pa-select-radius-md': PA_INPUT_PROVISIONAL_DIMENSIONS.md.radius,
+  '--pa-select-radius-lg': PA_INPUT_PROVISIONAL_DIMENSIONS.lg.radius,
+
+  '--pa-select-placeholder-color': 'var(--neutral-500)',
+  '--pa-select-focus-border': 'var(--pa-primary)',
+  '--pa-select-error-border': 'var(--pa-error)',
+  '--pa-select-error-color': 'var(--pa-error)',
+  '--pa-select-disabled-bg': 'var(--neutral-200)',
+  '--pa-select-disabled-color': 'var(--neutral-500)',
+  '--pa-select-disabled-opacity': '0.6',
+  '--pa-select-readonly-bg': 'var(--neutral-50)',
+  '--pa-select-readonly-border': '1px solid var(--neutral-200)',
+  '--pa-select-transition-duration': '150ms',
+  '--pa-select-transition-easing': 'ease-in-out',
+  '--pa-select-gap': 'var(--gap-sm)',
+  '--pa-select-icon-color': 'var(--neutral-700)',
+  '--pa-select-icon-size': 'var(--icon-size-sm)',
+
+  '--pa-select-panel-bg': 'var(--neutral-50)',
+  '--pa-select-panel-border': '1px solid var(--neutral-200)',
+  '--pa-select-panel-radius': 'var(--radius-sm)',
+  '--pa-select-panel-shadow': '0 4px 12px rgba(0, 0, 0, 0.15)',
+  '--pa-select-panel-max-height': '320px', // v1 literal, no foundation scale match (see file banner)
+  '--pa-select-panel-padding-y': 'var(--gap-xs)',
+  '--pa-select-panel-offset': 'var(--gap-xs)',
+
+  '--pa-select-option-color': 'var(--neutral-900)',
+  '--pa-select-option-bg': 'transparent',
+  '--pa-select-option-padding-x': 'var(--spacing-md)',
+  '--pa-select-option-padding-y': 'var(--spacing-sm)',
+  '--pa-select-option-min-height': '40px', // v1 literal, no foundation scale match (see file banner)
+  '--pa-select-option-font-size': 'var(--font-size-body)',
+  '--pa-select-option-hover-bg': 'var(--neutral-200)',
+  '--pa-select-option-active-bg': 'var(--neutral-200)',
+  '--pa-select-option-active-color': 'var(--neutral-900)',
+  '--pa-select-option-selected-bg': 'var(--pa-primary-hover)',
+  '--pa-select-option-selected-color': 'var(--pa-primary-contrast)',
+  '--pa-select-option-selected-font-weight': 'var(--font-weight-semibold)',
+  '--pa-select-option-disabled-color': 'var(--neutral-500)',
+  '--pa-select-option-disabled-opacity': '0.6',
+};
+
 export const PA_COMPONENT_TOKEN_DEFAULTS: Readonly<Record<string, string>> = {
   ...PA_BUTTON_TOKEN_DEFAULTS,
   ...PA_INPUT_TOKEN_DEFAULTS,
+  ...PA_SELECT_TOKEN_DEFAULTS,
 };

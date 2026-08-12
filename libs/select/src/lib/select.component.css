@@ -1,0 +1,139 @@
+/*
+ * PaSelect — BEM CSS classes
+ * Every value comes from a --pa-select-* custom property. Zero hardcoded
+ * colors, spacing, or radii.
+ *
+ * Host (`pa-select`) carries size/state modifier classes; the trigger
+ * (`.pa-select__trigger`) is the visible, styled `<button role="combobox">`
+ * rendered inside — unlike `PaButton`/`PaInput`, the host is a genuine
+ * custom element, not an attribute selector on a native control.
+ *
+ * Token mapping:
+ *   --pa-select-font-family        -> font-family
+ *   --pa-select-font-weight        -> font-weight
+ *   --pa-select-line-height       -> line-height
+ *   --pa-select-color              -> color (text)
+ *   --pa-select-bg                 -> background-color
+ *   --pa-select-border             -> border shorthand
+ *   --pa-select-gap                -> gap between label and (future) icon
+ *   --pa-select-radius-sm/md/lg    -> border-radius (per size)
+ *   --pa-select-padding-sm/md/lg   -> padding (per size)
+ *   --pa-select-font-sm/md/lg      -> font-size (per size)
+ *   --pa-select-min-height-sm/md/lg -> min-height (per size)
+ *   --pa-select-placeholder-color  -> label color while unselected
+ *   --pa-select-disabled-*         -> disabled state
+ *   --pa-select-readonly-*         -> readonly state
+ *   --pa-select-error-*            -> error state
+ *   --pa-select-focus-border       -> border-color on focus
+ *   --pa-select-transition-*       -> transition duration/easing
+ */
+
+/* ------------------------------------------------------------------ */
+/* Host                                                                */
+/* ------------------------------------------------------------------ */
+
+.pa-select {
+  display: block;
+  width: 100%;
+}
+
+/* ------------------------------------------------------------------ */
+/* Trigger — base                                                      */
+/* ------------------------------------------------------------------ */
+
+.pa-select__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  width: 100%;
+
+  font-family: var(--pa-select-font-family);
+  font-weight: var(--pa-select-font-weight);
+  line-height: var(--pa-select-line-height);
+
+  color: var(--pa-select-color);
+  background-color: var(--pa-select-bg);
+  border: var(--pa-select-border);
+  gap: var(--pa-select-gap);
+  cursor: pointer;
+
+  transition:
+    background-color var(--pa-select-transition-duration) var(--pa-select-transition-easing),
+    border-color var(--pa-select-transition-duration) var(--pa-select-transition-easing),
+    color var(--pa-select-transition-duration) var(--pa-select-transition-easing);
+}
+
+.pa-select__trigger:focus-visible {
+  outline: none;
+  border-color: var(--pa-select-focus-border);
+}
+
+.pa-select__label--placeholder {
+  color: var(--pa-select-placeholder-color);
+}
+
+/* ------------------------------------------------------------------ */
+/* Sizes                                                               */
+/* ------------------------------------------------------------------ */
+
+.pa-select--sm .pa-select__trigger {
+  padding: var(--pa-select-padding-sm);
+  font-size: var(--pa-select-font-sm);
+  min-height: var(--pa-select-min-height-sm);
+  border-radius: var(--pa-select-radius-sm);
+}
+
+.pa-select--md .pa-select__trigger {
+  padding: var(--pa-select-padding-md);
+  font-size: var(--pa-select-font-md);
+  min-height: var(--pa-select-min-height-md);
+  border-radius: var(--pa-select-radius-md);
+}
+
+.pa-select--lg .pa-select__trigger {
+  padding: var(--pa-select-padding-lg);
+  font-size: var(--pa-select-font-lg);
+  min-height: var(--pa-select-min-height-lg);
+  border-radius: var(--pa-select-radius-lg);
+}
+
+/* ------------------------------------------------------------------ */
+/* Disabled                                                            */
+/* ------------------------------------------------------------------ */
+
+.pa-select--disabled .pa-select__trigger {
+  opacity: var(--pa-select-disabled-opacity);
+  cursor: not-allowed;
+  background-color: var(--pa-select-disabled-bg);
+  color: var(--pa-select-disabled-color);
+}
+
+/* ------------------------------------------------------------------ */
+/* Readonly                                                            */
+/* ------------------------------------------------------------------ */
+
+.pa-select--readonly .pa-select__trigger {
+  background-color: var(--pa-select-readonly-bg);
+  border: var(--pa-select-readonly-border);
+  cursor: default;
+}
+
+/* ------------------------------------------------------------------ */
+/* Error                                                               */
+/* ------------------------------------------------------------------ */
+
+.pa-select--error .pa-select__trigger {
+  border-color: var(--pa-select-error-border);
+  color: var(--pa-select-error-color);
+}
+
+/* ------------------------------------------------------------------ */
+/* Reduced motion                                                      */
+/* ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .pa-select__trigger {
+    transition: none;
+  }
+}
