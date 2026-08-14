@@ -1,0 +1,31 @@
+<section class="select-page__section">
+  <h2>Sizes</h2>
+  <div class="select-page__row">
+    @for (size of sizes; track size) {
+      <pa-select [options]="fruitOptions" [size]="size" placeholder="Choose a fruit" />
+    }
+  </div>
+</section>
+
+<section class="select-page__section">
+  <h2>States</h2>
+  <div class="select-page__row">
+    <pa-select [options]="fruitOptions" [disabled]="true" placeholder="Disabled" />
+    <pa-select [options]="fruitOptions" [readonly]="true" placeholder="Read-only" />
+  </div>
+</section>
+
+<section class="select-page__section">
+  <h2>Events</h2>
+  <div class="select-page__row">
+    <pa-select
+      [options]="fruitOptions"
+      placeholder="Choose a fruit"
+      (valueChange)="onValueChange($event)"
+      (opened)="onOpened()"
+      (closed)="onClosed()"
+    />
+  </div>
+  <p>Selected value: {{ selectedValue() }}</p>
+  <p>Panel open: {{ panelOpen() }}</p>
+</section>
