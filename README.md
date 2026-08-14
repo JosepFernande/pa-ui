@@ -345,7 +345,7 @@ first.
 | [Theming Deep-Dive](./docs/theming-deep-dive.md)                                 | Full technical reference for the Theme Engine             |
 | [ControlValueAccessor (CVA)](./docs/control-value-accessor-cva.md)               | How components integrate with Angular forms               |
 | [Testing Strategy](./docs/testing-strategy.md)                                   | Testing levels, coverage, and accessibility checklist     |
-| [Storybook](./docs/storybook.md)                                                 | Storybook configuration in `apps/showcase/`               |
+| [Showcase](./docs/showcase.md)                                                   | Component playground app in `apps/showcase/`              |
 | [CI/CD Pipeline](./docs/ci-cd-pipeline.md)                                       | GitHub Actions workflows                                  |
 | [Release and Publishing](./docs/release-and-publishing.md)                       | npm publishing, Trusted Publishing                        |
 | [Contribution & PR Guidelines](./docs/contribution-pr-code-review-guidelines.md) | How to contribute and what gets reviewed in a PR          |
@@ -375,17 +375,18 @@ nx run lint:css
 npm run format:check
 ```
 
-### Storybook
+### Showcase
 
 ```bash
-# Start the dev server (http://localhost:4400)
-npx nx run showcase:storybook
+# Start the dev server
+npx nx serve showcase
 
-# Build the static site (output: dist/storybook/showcase/)
-npx nx run showcase:build-storybook
+# Build it
+npx nx build showcase
 ```
 
-See [docs/storybook.md](./docs/storybook.md) for how to add a new story.
+See [docs/showcase.md](./docs/showcase.md) for how to add a route for a new
+component.
 
 ---
 
