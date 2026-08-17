@@ -215,7 +215,8 @@ approve with the justification.
 
 - [ ] Unit tests cover inputs, outputs, signals, state changes.
 - [ ] A11y test with `jest-axe` exists.
-- [ ] Storybook story exists with all variants and at least one custom color.
+- [ ] Showcase route added/updated with all variants and at least one custom
+      color.
 - [ ] Interaction tests for state changes (where applicable).
 - [ ] Coverage thresholds met (80/80/90/80).
 
@@ -223,8 +224,7 @@ approve with the justification.
 
 - [ ] Public API documented in TSDoc.
 - [ ] `README.md` of the affected lib is updated (if user-facing change).
-- [ ] Storybook autodocs generated.
-- [ ] The showcase is updated (if user-facing).
+- [ ] Showcase route added/updated (if user-facing).
 
 ### Performance
 

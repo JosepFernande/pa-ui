@@ -1,16 +1,14 @@
 import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { PaUiComponent } from '@pa-ui/core';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
+/** Showcase shell: a simple nav between the component playground routes plus the router outlet. */
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, PaUiComponent],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {
-  title = 'pa-ui';
-}
+export class AppComponent {}

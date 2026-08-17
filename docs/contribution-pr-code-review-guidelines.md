@@ -35,13 +35,13 @@ One-paragraph description of what this PR does and why.
 
 - [ ] Added a changeset (if applicable)
 - [ ] Added/updated tests
-- [ ] Added/updated Storybook stories
-- [ ] Added/updated the showcase (if user-facing)
+- [ ] Added/updated the showcase route (if user-facing)
 - [ ] Ran `npx nx run-many -t lint` and `npm run lint:css` locally
 - [ ] Ran `npx nx run-many -t test` locally
 - [ ] Ran `npx nx run-many -t build` locally
 - [ ] The component file is under 400 lines
-- [ ] Verified the a11y panel in Storybook is green
+- [ ] Verified accessibility manually in the showcase route (jest-axe passes in
+      unit tests)
 - [ ] Verified the component works with at least one custom color
 
 ## Related
@@ -94,7 +94,7 @@ A reviewer should verify:
 
 - [ ] Unit tests cover inputs, outputs, signals, state changes.
 - [ ] An a11y test with `jest-axe` exists.
-- [ ] A Storybook story exists with every variant and at least one custom color.
+- [ ] A showcase route exists with every variant and at least one custom color.
 - [ ] Interaction tests for state changes exist (where applicable).
 - [ ] Coverage thresholds are met (80/80/90/80).
 
@@ -102,8 +102,7 @@ A reviewer should verify:
 
 - [ ] The public API is documented in TSDoc.
 - [ ] The affected lib's `README.md` is updated (if user-facing).
-- [ ] Storybook autodocs are generated.
-- [ ] The showcase is updated (if user-facing).
+- [ ] The showcase route is added/updated (if user-facing).
 
 ### Performance
 
