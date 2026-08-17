@@ -28,8 +28,8 @@ elsewhere.
 
 ## Workflow Overview
 
-There are four workflows in `.github/workflows/` (verified via
-`gh workflow list`: `CI`, `Release`, `Smoke`, `Storybook Build` — all `active`):
+There are three workflows in `.github/workflows/` (verified via
+`gh workflow list`: `CI`, `Release`, `Smoke` — all `active`):
 
 1. **`ci.yml`** — runs only on `pull_request` (not on push to `main`). Lint,
    stylelint, test, build, audit, gga-review. Must pass before merge (see branch
@@ -45,9 +45,6 @@ There are four workflows in `.github/workflows/` (verified via
    before merging, so re-running lint/test/audit would be pure duplication; this
    job only catches environment failures (registry down, rotated secret, runner
    drift) independent of the code.
-4. **`storybook-build.yml`** — runs on PRs touching `.storybook/**`,
-   `libs/button/**`, `libs/core/**`, or story files. Uploads the static
-   Storybook build as an artifact. Not a required check.
 
 ## `ci.yml` (PR checks)
 
@@ -211,15 +208,9 @@ commit landing on `main` was already validated in that exact state by the PR's
 CI. This job only covers what the PR can't: environment failures (npm registry
 down, rotated secret, runner drift).
 
-## `storybook-build.yml` (PR preview)
-
-**Trigger:** PRs touching `apps/showcase/.storybook/**`, `apps/showcase/**`,
-`libs/*/src/lib/**/*.stories.ts`, `libs/button/**`, or `libs/core/**`. Uploads
-the static Storybook build as an artifact — does not deploy publicly. Not a
-required status check in branch protection.
-
-See [Storybook](./storybook.md) for the Storybook configuration itself
-(centralized in `apps/showcase/.storybook/`).
+The `apps/showcase` app builds and lints alongside every other project as part
+of `ci.yml`'s regular `nx run-many` steps — there is no dedicated workflow for
+it. See [Showcase](./showcase.md).
 
 ## Required Secrets
 
@@ -363,7 +354,7 @@ the `OPENCODE_API_KEY` secret for model inference.
 - **Auto-label PRs** — GitHub Actions labeling by scope (`area:button`,
   `area:theme`, etc.)
 - **Performance budgets in CI** — fail if bundle size exceeds thresholds
-- **Visual regression** — Storybook Chromatic or similar
+- **Visual regression** — Chromatic, Percy, or similar
 - **Slack/Linear notifications** — on CI failure or release published
 
 ## Rules of the Team (enforced by CI)

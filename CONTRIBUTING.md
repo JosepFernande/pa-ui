@@ -65,14 +65,12 @@ npx nx test pa-ui   # paquete umbrella @pa-ui/angular
    bloqueante.
 7. Pedí revisión a un mantenedor
 
-Además del CI de PR, existen otros dos workflows que no forman parte del
-checklist de un PR individual:
+Además del CI de PR, existe otro workflow que no forma parte del checklist de un
+PR individual:
 
 - **`smoke.yml`**: corre solo en push a `main` (post-merge). Es un build-only
   liviano — no repite lint/test/audit porque branch protection ya los validó en
   el PR.
-- **`storybook-build.yml`**: corre en PR, pero solo cuando el diff toca paths de
-  `showcase`, `button`, `core` o stories.
 
 ### Convenciones de commits
 

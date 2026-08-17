@@ -30,8 +30,8 @@ a light bundle.
 **Core:** Angular 19+, standalone components, Signals, CSS variables, TypeScript
 strict mode.
 
-**Tools:** Angular CDK and Storybook for the UI foundation, Nx for the
-workspace, ng-packagr for packaging.
+**Tools:** Angular CDK for the UI foundation, Nx for the workspace, ng-packagr
+for packaging.
 
 ## Architecture Philosophy
 
@@ -266,9 +266,9 @@ checklist.
 
 ## Documentation Strategy
 
-Every component must have Storybook examples covering variants, playground
-controls, states, and accessibility notes. See [Storybook](./storybook.md) for
-the real (centralized) Storybook setup.
+Every component must have a showcase route (`apps/showcase`) covering variants,
+states, and accessibility notes. See [Showcase](./showcase.md) for the real
+(centralized) showcase setup.
 
 ## DX Philosophy
 

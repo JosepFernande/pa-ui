@@ -103,51 +103,37 @@ describe('PaButton', () => {
 
 ### Level 2 — Interaction Testing (roadmap)
 
-Test the component's visual and interactive behavior directly from Storybook —
-flows like opening a dialog, keyboard-navigating a dropdown, closing a toast.
-Neither `@storybook/addon-interactions` nor `@storybook/test` is installed today
-(only `@storybook/addon-essentials`, see [Storybook](./storybook.md)) — this
-layer is a reference design, not a pattern in active use. The
-`PaDialogComponent` example below is illustrative: `dialog` does not exist yet
-as a component.
-
-**Tools (to install when implemented):**
-
-- **Storybook Interactions** (`@storybook/addon-interactions`)
-- **`@storybook/test`** (includes `userEvent`, `expect`, `within`)
+Test the component's visual and interactive behavior end-to-end against the real
+showcase app (`apps/showcase`) — flows like opening a dialog,
+keyboard-navigating a dropdown, closing a toast. No interaction-testing tool is
+installed today — this layer is a reference design, not a pattern in active use.
+The `PaDialogComponent` example below is illustrative: `dialog` does not exist
+yet as a component, and the tooling (e.g. Playwright against the showcase app's
+dialog route) is undecided.
 
 **Illustrative example: Dialog (not yet implemented)**
 
 ```typescript
-// dialog.stories.ts
-import { Meta, StoryObj } from '@storybook/angular';
-import { within, userEvent, expect } from '@storybook/test';
-import { PaDialogComponent } from './dialog.component';
+// dialog-page.e2e.ts — illustrative Playwright test against the showcase route
+import { test, expect } from '@playwright/test';
 
-export default { component: PaDialogComponent } satisfies Meta;
-type Story = StoryObj<PaDialogComponent>;
+test('opens and closes the dialog', async ({ page }) => {
+  await page.goto('/dialog');
 
-export const OpenAndClose: Story = {
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  await page.getByRole('button', { name: 'Open Dialog' }).click();
+  await expect(page.getByRole('dialog')).toBeVisible();
 
-    await userEvent.click(canvas.getByRole('button', { name: 'Open Dialog' }));
-    await expect(canvas.getByRole('dialog')).toBeVisible();
+  await page.getByRole('button', { name: 'Close' }).click();
+  await expect(page.getByRole('dialog')).toBeHidden();
+});
 
-    await userEvent.click(canvas.getByRole('button', { name: 'Close' }));
-    await expect(canvas.queryByRole('dialog')).not.toBeInTheDocument();
-  },
-};
+test('closes the dialog with Escape', async ({ page }) => {
+  await page.goto('/dialog');
 
-export const CloseWithEscape: Story = {
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    await userEvent.click(canvas.getByRole('button', { name: 'Open Dialog' }));
-    await userEvent.keyboard('{Escape}');
-    await expect(canvas.queryByRole('dialog')).not.toBeInTheDocument();
-  },
-};
+  await page.getByRole('button', { name: 'Open Dialog' }).click();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).toBeHidden();
+});
 ```
 
 ### Level 3 — Accessibility Testing
@@ -158,7 +144,6 @@ accessibility is one of the library's core goals, this level is mandatory.
 **Tools:**
 
 - **jest-axe** — for unit tests
-- **@storybook/addon-a11y** — for Storybook (visual a11y panel)
 - **axe-playwright** — for e2e tests, if implemented in the future
 
 **Real example: axe in a unit test**
@@ -250,8 +235,8 @@ npx nx test button
 # Run tests with coverage
 npx nx test button --coverage
 
-# Run Storybook (see Storybook — no test-storybook target exists)
-npx nx run showcase:storybook
+# Run the showcase app (manual smoke-check playground)
+npx nx serve showcase
 ```
 
 ## Rules of the Team
@@ -272,4 +257,4 @@ npx nx run showcase:storybook
 - `pa-ui-testing` skill (`skills/pa-ui-testing/SKILL.md`) — operational
   patterns, CDK mocking, required `describe` blocks, gga review criteria
 - `jest.preset.cjs` — coverage thresholds and `collectCoverageFrom`
-- [Storybook](./storybook.md) — the real, centralized Storybook setup
+- [Showcase](./showcase.md) — the real, centralized component playground
