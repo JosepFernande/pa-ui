@@ -67,6 +67,7 @@ export default tseslint.config(
       'pa-ui/require-view-encapsulation-none': 'error',
       'pa-ui/no-color-literal-union': 'error',
       'pa-ui/max-component-lines': 'error',
+      'pa-ui/no-rxjs-local-state': 'warn',
     },
   },
   // Base TypeScript rules — applied to all TS files except generated/config.
@@ -91,6 +92,7 @@ export default tseslint.config(
       '@angular-eslint/no-output-native': 'error',
       '@angular-eslint/no-output-rename': 'error',
       '@angular-eslint/prefer-output-readonly': 'error',
+      '@angular-eslint/prefer-standalone': 'error',
       '@angular-eslint/use-component-selector': 'error',
       '@angular-eslint/use-lifecycle-interface': 'warn',
     },
