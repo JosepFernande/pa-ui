@@ -309,7 +309,7 @@ local development, which has its own constraints:
 [Gentleman Guardian Angel (gga)](https://github.com/Gentleman-Programming/gentleman-guardian-angel)
 — provider-agnostic AI code review.
 
-**Real provider:** `opencode:opencode/deepseek-v4-flash-free` (configured in
+**Real provider:** `opencode:opencode-go/deepseek-v4-flash` (configured in
 `.gga`) — **not** GitHub Models/`gpt-4o-mini`. `GITHUB_TOKEN` is only used to
 post the verdict comment on the PR (`gh pr comment`), not for model inference.
 
