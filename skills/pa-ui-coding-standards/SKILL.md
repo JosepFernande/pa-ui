@@ -256,10 +256,9 @@ approve with the justification.
 ## References
 
 - Architecture skill: `pa-ui-architecture`
-- Wiki — Architecture & Foundation:
-  `https://github.com/JosepFernande/pa-ui/wiki/Architecture-and-Foundation`
-- Wiki — AI Code Review with gga:
+- Architecture & Foundation: `../../docs/architecture-and-foundation.md`
+- Contribution / PR / Code Review Guidelines:
+  `../../docs/contribution-pr-code-review-guidelines.md`
+- Wiki — AI Code Review with gga (todavía no migrado a `docs/`):
   `https://github.com/JosepFernande/pa-ui/wiki/AI-Code-Review-with-gga`
-- Wiki — Contribution / PR / Code Review Guidelines:
-  `https://github.com/JosepFernande/pa-ui/wiki/Contribution-PR-Code-Review-Guidelines`
 - Repo: `https://github.com/JosepFernande/pa-ui`

@@ -111,7 +111,5 @@ Every phase or direct implementation must return:
 
 ## References
 
-- Wiki — Architecture & Foundation:
-  `https://github.com/JosepFernande/pa-ui/wiki/Architecture-and-Foundation`
-- Wiki — Home: `https://github.com/JosepFernande/pa-ui/wiki`
+- Architecture & Foundation: `../../docs/architecture-and-foundation.md`
 - Repo: `https://github.com/JosepFernande/pa-ui`
