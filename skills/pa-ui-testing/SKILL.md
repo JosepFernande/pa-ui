@@ -372,8 +372,7 @@ to catch by eye.
 
 - Architecture skill: `pa-ui-architecture`
 - Coding standards skill: `pa-ui-coding-standards`
-- Wiki — Architecture & Foundation:
-  `https://github.com/JosepFernande/pa-ui/wiki/Architecture-and-Foundation`
+- Architecture & Foundation: `../../docs/architecture-and-foundation.md`
 - jest-axe docs: https://github.com/nickcolley/jest-axe
 - jest-preset-angular docs: https://github.com/thymikee/jest-preset-angular
 - Repo: `https://github.com/JosepFernande/pa-ui`
