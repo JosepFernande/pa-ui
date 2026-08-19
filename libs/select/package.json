@@ -1,0 +1,39 @@
+{
+  "name": "@pa-ui/select",
+  "version": "19.3.0",
+  "license": "MIT",
+  "description": "Accessible, token-driven Angular 19 select component with forms integration",
+  "keywords": [
+    "angular",
+    "angular19",
+    "ui-library",
+    "pa-ui",
+    "select",
+    "combobox",
+    "forms",
+    "accessible"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JosepFernande/pa-ui",
+    "directory": "libs/select"
+  },
+  "bugs": {
+    "url": "https://github.com/JosepFernande/pa-ui/issues"
+  },
+  "homepage": "https://github.com/JosepFernande/pa-ui#readme",
+  "author": "JosepFernande",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@pa-ui/core": "19.3.0"
+  },
+  "peerDependencies": {
+    "@angular/core": "^19.2.0",
+    "@angular/forms": "^19.2.0",
+    "@angular/cdk": "^19.2.0"
+  },
+  "sideEffects": false,
+  "type": "module"
+}

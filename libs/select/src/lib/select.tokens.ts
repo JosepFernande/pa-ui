@@ -1,0 +1,63 @@
+/**
+ * `--pa-select-*` component tokens (51 keys), following the same
+ * camelCase-key -> kebab-name convention and per-size suffix scheme as
+ * `PA_INPUT_TOKENS`. Grouped as trigger (30), panel (7), and option (14).
+ */
+export const PA_SELECT_TOKENS = {
+  // Trigger (30)
+  bg: '--pa-select-bg',
+  color: '--pa-select-color',
+  border: '--pa-select-border',
+  fontFamily: '--pa-select-font-family',
+  fontWeight: '--pa-select-font-weight',
+  lineHeight: '--pa-select-line-height',
+  paddingSm: '--pa-select-padding-sm',
+  paddingMd: '--pa-select-padding-md',
+  paddingLg: '--pa-select-padding-lg',
+  fontSm: '--pa-select-font-sm',
+  fontMd: '--pa-select-font-md',
+  fontLg: '--pa-select-font-lg',
+  minHeightSm: '--pa-select-min-height-sm',
+  minHeightMd: '--pa-select-min-height-md',
+  minHeightLg: '--pa-select-min-height-lg',
+  radiusSm: '--pa-select-radius-sm',
+  radiusMd: '--pa-select-radius-md',
+  radiusLg: '--pa-select-radius-lg',
+  placeholderColor: '--pa-select-placeholder-color',
+  focusBorder: '--pa-select-focus-border',
+  errorBorder: '--pa-select-error-border',
+  errorColor: '--pa-select-error-color',
+  disabledBg: '--pa-select-disabled-bg',
+  disabledColor: '--pa-select-disabled-color',
+  disabledOpacity: '--pa-select-disabled-opacity',
+  readonlyBg: '--pa-select-readonly-bg',
+  readonlyBorder: '--pa-select-readonly-border',
+  transitionDuration: '--pa-select-transition-duration',
+  transitionEasing: '--pa-select-transition-easing',
+  gap: '--pa-select-gap',
+
+  // Panel (7)
+  panelBg: '--pa-select-panel-bg',
+  panelBorder: '--pa-select-panel-border',
+  panelRadius: '--pa-select-panel-radius',
+  panelShadow: '--pa-select-panel-shadow',
+  panelMaxHeight: '--pa-select-panel-max-height',
+  panelPaddingY: '--pa-select-panel-padding-y',
+  panelOffset: '--pa-select-panel-offset',
+
+  // Option (14)
+  optionColor: '--pa-select-option-color',
+  optionBg: '--pa-select-option-bg',
+  optionPaddingX: '--pa-select-option-padding-x',
+  optionPaddingY: '--pa-select-option-padding-y',
+  optionMinHeight: '--pa-select-option-min-height',
+  optionFontSize: '--pa-select-option-font-size',
+  optionHoverBg: '--pa-select-option-hover-bg',
+  optionActiveBg: '--pa-select-option-active-bg',
+  optionActiveColor: '--pa-select-option-active-color',
+  optionSelectedBg: '--pa-select-option-selected-bg',
+  optionSelectedColor: '--pa-select-option-selected-color',
+  optionSelectedFontWeight: '--pa-select-option-selected-font-weight',
+  optionDisabledColor: '--pa-select-option-disabled-color',
+  optionDisabledOpacity: '--pa-select-option-disabled-opacity',
+} as const;

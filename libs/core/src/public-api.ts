@@ -61,3 +61,5 @@ export {
 } from './lib/foundation/button-dimensions.tokens';
 
 export { PA_COMPONENT_TOKEN_DEFAULTS } from './lib/foundation/component-defaults.tokens';
+
+export { withFocusMonitor } from './lib/focus/with-focus-monitor';

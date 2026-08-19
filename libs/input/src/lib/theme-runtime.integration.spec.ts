@@ -43,7 +43,11 @@ describe('Theme runtime integration — Foundation theme.css ships Input default
     const rootStyle = getComputedStyle(document.documentElement);
 
     expect(rootStyle.getPropertyValue('--pa-input-bg').trim()).toBe('var(--neutral-50)');
-    expect(rootStyle.getPropertyValue('--pa-input-error-border').trim()).toBe('var(--pa-danger)');
+    expect(rootStyle.getPropertyValue('--pa-input-error-border').trim()).toBe('var(--pa-error)');
+    expect(rootStyle.getPropertyValue('--pa-input-error-color').trim()).toBe('var(--pa-error)');
+    expect(rootStyle.getPropertyValue('--pa-input-error-icon-color').trim()).toBe(
+      'var(--pa-error)',
+    );
     expect(rootStyle.getPropertyValue('--pa-input-radius-sm').trim()).toBe('6px');
     expect(rootStyle.getPropertyValue('--pa-input-radius-md').trim()).toBe('4px');
     expect(rootStyle.getPropertyValue('--pa-input-radius-lg').trim()).toBe('8px');

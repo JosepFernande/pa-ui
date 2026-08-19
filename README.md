@@ -14,7 +14,7 @@
 ### 1. Install
 
 ```bash
-npm install pa-ui @pa-ui/button @angular/cdk
+npm install @pa-ui/button @angular/cdk
 ```
 
 ### 2. Configure the Theme Engine
@@ -69,6 +69,26 @@ import { PaButton } from '@pa-ui/button';
 })
 export class AppComponent {
   isLoading = signal(false);
+}
+```
+
+`PaInput` follows the same pattern — it's a host directive on the native
+`<input>` element, so it wires directly into Angular forms:
+
+```typescript
+import { PaInput } from '@pa-ui/input';
+import { ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
+
+@Component({
+  imports: [PaInput, ReactiveFormsModule],
+  template: `<input
+    pa-input
+    [formControl]="email"
+    placeholder="you@company.com"
+  />`,
+})
+export class LoginFormComponent {
+  email = new FormControl('', { validators: Validators.required });
 }
 ```
 
@@ -224,17 +244,17 @@ Every pa-ui component is built with accessibility as a first-class concern:
 - **`prefers-reduced-motion`** — Animations respect the user's motion
   preference.
 
-> See [Accessibility Documentation](./docs/accessibility.md) for the full a11y
+> See the [Testing Strategy](./docs/testing-strategy.md) doc for the full a11y
 > checklist and testing approach.
 
 ---
 
 ## Phase 1 Components
 
-| Package         | Component  | Status           | Description                                                      |
-| --------------- | ---------- | ---------------- | ---------------------------------------------------------------- |
-| `@pa-ui/button` | `PaButton` | **Available**    | Button with variants, sizes, color, disabled, and loading states |
-| `@pa-ui/input`  | `PaInput`  | **Tokens ready** | Text input with label, hint, error, and validation states        |
+| Package         | Component  | Status        | Description                                                              |
+| --------------- | ---------- | ------------- | ------------------------------------------------------------------------ |
+| `@pa-ui/button` | `PaButton` | **Available** | Button with variants, sizes, color, disabled, and loading states         |
+| `@pa-ui/input`  | `PaInput`  | **Available** | Text-only input with sizes, disabled/readonly, and CVA forms integration |
 
 ### PaButton API
 
@@ -261,15 +281,31 @@ Every pa-ui component is built with accessibility as a first-class concern:
 | `loading`  | `boolean`                         | `false`     | Shows spinner, disables interaction |
 | `type`     | `'button' \| 'submit' \| 'reset'` | `'button'`  | Native button type                  |
 
-### PaInput Tokens
+### PaInput API
 
-The input component tokens are defined and ready for implementation:
+```html
+<input pa-input size="md" placeholder="you@company.com" [formControl]="email" />
+```
+
+| Input             | Type                   | Default | Description                                           |
+| ----------------- | ---------------------- | ------- | ----------------------------------------------------- |
+| `size`            | `'sm' \| 'md' \| 'lg'` | `'md'`  | Size preset                                           |
+| `disabled`        | `boolean`              | `false` | Disabled state (also driven by a bound `FormControl`) |
+| `readonly`        | `boolean`              | `false` | Read-only state                                       |
+| `placeholder`     | `string`               | `''`    | Placeholder text                                      |
+| `ariaLabel`       | `string`               | `''`    | Accessible label (`aria-label`)                       |
+| `ariaDescribedBy` | `string`               | `''`    | Ids for `aria-describedby` (e.g. hint/error text)     |
+
+`PaInput` is text-only by design — password, email, and number inputs are
+planned as separate components. It implements `ControlValueAccessor`, so a
+touched, invalid `FormControl` automatically drives `.pa-input--error` and
+`aria-invalid`; there is no separate `error` input to set manually.
 
 ```typescript
 import { PA_INPUT_TOKENS } from '@pa-ui/input';
 
 // Available tokens: --pa-input-bg, --pa-input-color, --pa-input-border,
-// --pa-input-radius, --pa-input-focus-ring, --pa-input-error-border, ...
+// --pa-input-focus-border, --pa-input-error-border, --pa-input-disabled-bg, ...
 ```
 
 ---
@@ -280,7 +316,7 @@ import { PA_INPUT_TOKENS } from '@pa-ui/input';
 pa-ui/
 ├── libs/
 │   ├── button/          # @pa-ui/button — PaButton component
-│   ├── input/           # @pa-ui/input — Input tokens and types
+│   ├── input/           # @pa-ui/input — PaInput component
 │   ├── core/            # @pa-ui/core — Theme Engine (providePaTheme) + Foundation layer
 │   └── pa-ui/           # pa-ui — Umbrella package (re-exports)
 ├── apps/
@@ -288,22 +324,34 @@ pa-ui/
 └── skills/              # AI agent skills for architecture enforcement
 ```
 
-> See [Components](https://github.com/JosepFernande/pa-ui/wiki/Components) for
-> the full component catalog, each linked to its `libs/` folder.
+> See [Components](./docs/components.md) for the full component catalog, each
+> linked to its `libs/` folder.
 
 ---
 
 ## Documentation
 
-| Resource                                                                              | Description                                               |
-| ------------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| [Components](https://github.com/JosepFernande/pa-ui/wiki/Components)                  | Component catalog, each linked to its `libs/` folder      |
-| [Architecture & Foundation](https://github.com/JosepFernande/pa-ui/wiki/Architecture) | The 6 hard rules, token system, and decision gates        |
-| [CSS Strategy](./docs/css-strategy.md)                                                | Token reference, override patterns, and theming guide     |
-| [Accessibility](./docs/accessibility.md)                                              | A11y checklist, ARIA patterns, and testing approach       |
-| [Storybook](./docs/storybook.md)                                                      | Running Storybook locally and adding a new story          |
-| [Showcase App](./apps/showcase/)                                                      | Live component playground                                 |
-| [Contributing](./CONTRIBUTING.md)                                                     | How to contribute, PR guidelines, and code review process |
+`docs/` in this repo is the source of truth for architecture, testing, and
+process docs, and the one guaranteed to be available to anyone (or any AI agent)
+cloning the repo without network access. The
+[project wiki](https://github.com/JosepFernande/pa-ui/wiki) is kept as a
+historical mirror going forward; new documentation changes land in `docs/`
+first.
+
+| Resource                                                                         | Description                                               |
+| -------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| [Components](./docs/components.md)                                               | Component catalog, each linked to its `libs/` folder      |
+| [Architecture & Foundation](./docs/architecture-and-foundation.md)               | The 6 hard rules, token system, and decision gates        |
+| [Theming Deep-Dive](./docs/theming-deep-dive.md)                                 | Full technical reference for the Theme Engine             |
+| [ControlValueAccessor (CVA)](./docs/control-value-accessor-cva.md)               | How components integrate with Angular forms               |
+| [Testing Strategy](./docs/testing-strategy.md)                                   | Testing levels, coverage, and accessibility checklist     |
+| [Showcase](./docs/showcase.md)                                                   | Component playground app in `apps/showcase/`              |
+| [CI/CD Pipeline](./docs/ci-cd-pipeline.md)                                       | GitHub Actions workflows                                  |
+| [Release and Publishing](./docs/release-and-publishing.md)                       | npm publishing, Trusted Publishing                        |
+| [Contribution & PR Guidelines](./docs/contribution-pr-code-review-guidelines.md) | How to contribute and what gets reviewed in a PR          |
+| [CSS Strategy](./docs/css-strategy.md)                                           | Token reference and override patterns                     |
+| [Showcase App](./apps/showcase/)                                                 | Live component playground                                 |
+| [Contributing](./CONTRIBUTING.md)                                                | How to contribute, PR guidelines, and code review process |
 
 ---
 
@@ -327,17 +375,18 @@ nx run lint:css
 npm run format:check
 ```
 
-### Storybook
+### Showcase
 
 ```bash
-# Start the dev server (http://localhost:4400)
-npx nx run showcase:storybook
+# Start the dev server
+npx nx serve showcase
 
-# Build the static site (output: dist/storybook/showcase/)
-npx nx run showcase:build-storybook
+# Build it
+npx nx build showcase
 ```
 
-See [docs/storybook.md](./docs/storybook.md) for how to add a new story.
+See [docs/showcase.md](./docs/showcase.md) for how to add a route for a new
+component.
 
 ---
 

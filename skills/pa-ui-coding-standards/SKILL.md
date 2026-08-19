@@ -95,19 +95,34 @@ effect(() => {
 When gga reviews a PR, it checks for violations of:
 
 1. **Hardcoded values** in `.component.css` — any `#hex`, `rgb()`, `px`, `rem`,
-   `em` for colors/spacing/radius
-2. **Missing `standalone: true`** on components, directives, pipes
+   `em` for colors/spacing/radius. **YA CUBIERTO** por lint determinista:
+   `pa-ui/no-hardcoded-colors` y `pa-ui/no-hardcoded-spacing-radius`.
+2. **Missing `standalone: true`** on components, directives, pipes. **YA
+   CUBIERTO** por `@angular-eslint/prefer-standalone` (ESLint).
 3. **RxJS imports** (`BehaviorSubject`, `Subject`, `Observable`, `Subscription`,
-   operators) used for local state
+   operators) used for local state. **PARCIALMENTE CUBIERTO** por
+   `pa-ui/no-rxjs-local-state` (ESLint, nivel `warn`) para los imports directos
+   de `BehaviorSubject`/`Subject`/`Observable`/`Subscription` desde `rxjs` en
+   `*.component.ts`; el resto (uso de operadores, juicio sobre si un caso
+   concreto es realmente estado local vs. un stream async legítimo) sigue
+   requiriendo la revisión de gga (LLM).
 4. **SCSS features** (`@mixin`, `@include`, `@function`, nesting beyond 1 level,
    `&:`)
 5. **Custom overlay/focus/keyboard code** instead of CDK imports
-6. **Color input as enum** instead of `string`
-7. **Component files > 400 lines**
+6. **Color input as enum** instead of `string`. **YA CUBIERTO** por
+   `pa-ui/no-color-literal-union` (ESLint).
+7. **Component files > 400 lines**. **YA CUBIERTO** por
+   `pa-ui/max-component-lines` (ESLint).
 8. **Missing CDK imports** when overlay/a11y/focus/keyboard is needed
 9. **Global CSS selectors** (`::ng-deep`, `:host-context`, element selectors
-   outside `:host`)
+   outside `:host`). **YA CUBIERTO** por `pa-ui/no-ng-deep-host-context`
+   (ESLint).
 10. **Utility class frameworks** (Tailwind classes, Bootstrap classes)
+
+Reglas 1, 2, 6, 7 y 9 ya tienen chequeo determinista (ESLint/Stylelint) y no
+dependen del juicio del LLM. La revisión de gga debe enfocarse en las reglas que
+requieren juicio contextual real: 3 (parcialmente, ver
+`pa-ui/no-rxjs-local-state` arriba), 5, 8 y 10.
 
 ### Formato de respuesta esperado
 
@@ -215,7 +230,8 @@ approve with the justification.
 
 - [ ] Unit tests cover inputs, outputs, signals, state changes.
 - [ ] A11y test with `jest-axe` exists.
-- [ ] Storybook story exists with all variants and at least one custom color.
+- [ ] Showcase route added/updated with all variants and at least one custom
+      color.
 - [ ] Interaction tests for state changes (where applicable).
 - [ ] Coverage thresholds met (80/80/90/80).
 
@@ -223,8 +239,7 @@ approve with the justification.
 
 - [ ] Public API documented in TSDoc.
 - [ ] `README.md` of the affected lib is updated (if user-facing change).
-- [ ] Storybook autodocs generated.
-- [ ] The showcase is updated (if user-facing).
+- [ ] Showcase route added/updated (if user-facing).
 
 ### Performance
 
@@ -241,8 +256,10 @@ approve with the justification.
 ## References
 
 - Architecture skill: `pa-ui-architecture`
-- Notion — Architecture & Foundation: `35f80bf9-7f94-814a-96d6-ccb90055e545`
-- Notion — AI Code Review with gga: `35f80bf9-7f94-8179-8025-d0c378a83fb5`
-- Notion — Contribution / PR / Code Review Guidelines:
-  `35f80bf9-7f94-8179-8025-d0c378a83fb5`
+- Wiki — Architecture & Foundation:
+  `https://github.com/JosepFernande/pa-ui/wiki/Architecture-and-Foundation`
+- Wiki — AI Code Review with gga:
+  `https://github.com/JosepFernande/pa-ui/wiki/AI-Code-Review-with-gga`
+- Wiki — Contribution / PR / Code Review Guidelines:
+  `https://github.com/JosepFernande/pa-ui/wiki/Contribution-PR-Code-Review-Guidelines`
 - Repo: `https://github.com/JosepFernande/pa-ui`

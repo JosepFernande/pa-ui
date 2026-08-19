@@ -67,16 +67,33 @@ class TestHost {
   }
 }
 
+/**
+ * Test host reproducing the README's documented "bare" attribute usage:
+ * `<button pa-button loading>` with no binding, no `[loading]`.
+ */
+@Component({
+  selector: 'pa-test-host-bare-loading',
+  standalone: true,
+  imports: [PaButton],
+  encapsulation: ViewEncapsulation.None,
+  template: `<button pa-button loading>Bare Loading</button>`,
+})
+class BareLoadingTestHost {}
+
 describe('PaButton', () => {
   let focusOrigin$: Subject<FocusOrigin>;
   let focusMonitorMock: { monitor: jest.Mock; stopMonitoring: jest.Mock };
 
-  beforeEach(() => {
+  beforeEach(async () => {
     focusOrigin$ = new Subject<FocusOrigin>();
     focusMonitorMock = {
       monitor: jest.fn().mockReturnValue(focusOrigin$.asObservable()),
       stopMonitoring: jest.fn(),
     };
+    await TestBed.configureTestingModule({
+      imports: [TestHost],
+      providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
+    }).compileComponents();
   });
 
   function createTestHost(): {
@@ -96,13 +113,6 @@ describe('PaButton', () => {
   // Rendering
   // -----------------------------------------------------------------------
   describe('rendering', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should render a native button element', () => {
       const { fixture, buttonEl } = createTestHost();
       fixture.detectChanges();
@@ -163,13 +173,6 @@ describe('PaButton', () => {
   // Variant classes
   // -----------------------------------------------------------------------
   describe('variant classes', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should apply pa-button--solid by default', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.variant = 'solid';
@@ -208,13 +211,6 @@ describe('PaButton', () => {
   // Size classes
   // -----------------------------------------------------------------------
   describe('size classes', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should apply pa-button--md by default', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.size = 'md';
@@ -253,13 +249,6 @@ describe('PaButton', () => {
   // Color CSS variable
   // -----------------------------------------------------------------------
   describe('color CSS variable', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should resolve --pa-button-color to var(--pa-primary) by default', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.color = 'primary';
@@ -292,13 +281,6 @@ describe('PaButton', () => {
   // Theme-derived token variants (Issue #59)
   // -----------------------------------------------------------------------
   describe('theme-derived token variants', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should resolve --pa-button-bg to var(--pa-primary) for color=primary', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.color = 'primary';
@@ -359,13 +341,6 @@ describe('PaButton', () => {
   // Type attribute
   // -----------------------------------------------------------------------
   describe('type attribute', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should default to type="button"', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.type = 'button';
@@ -395,13 +370,6 @@ describe('PaButton', () => {
   // Disabled state
   // -----------------------------------------------------------------------
   describe('disabled state', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should set native disabled attribute when disabled is true', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.disabled = true;
@@ -464,13 +432,6 @@ describe('PaButton', () => {
   // Loading state
   // -----------------------------------------------------------------------
   describe('loading state', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should set aria-busy="true" when loading', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.loading = true;
@@ -547,16 +508,32 @@ describe('PaButton', () => {
   });
 
   // -----------------------------------------------------------------------
-  // US-4 outcome mapping (variant × color)
+  // Loading — bare attribute (booleanAttribute transform, issue #88)
   // -----------------------------------------------------------------------
-  describe('US-4 outcome mapping', () => {
+  describe('loading bare attribute', () => {
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        imports: [TestHost],
+        imports: [BareLoadingTestHost],
         providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
       }).compileComponents();
     });
 
+    it('should coerce `<button pa-button loading>` (no binding) to true', () => {
+      const fixture = TestBed.createComponent(BareLoadingTestHost);
+      fixture.detectChanges();
+
+      const buttonEl = fixture.debugElement.query(By.css('button'))!
+        .nativeElement as HTMLButtonElement;
+
+      expect(buttonEl.getAttribute('aria-busy')).toBe('true');
+      expect(buttonEl.disabled).toBe(true);
+    });
+  });
+
+  // -----------------------------------------------------------------------
+  // US-4 outcome mapping (variant × color)
+  // -----------------------------------------------------------------------
+  describe('US-4 outcome mapping', () => {
     it('should produce primary outcome: solid + primary', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.variant = 'solid';
@@ -606,13 +583,6 @@ describe('PaButton', () => {
   // CDK FocusMonitor
   // -----------------------------------------------------------------------
   describe('FocusMonitor integration', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should call focusMonitor.monitor on init', () => {
       const { fixture } = createTestHost();
       fixture.detectChanges();
@@ -669,13 +639,6 @@ describe('PaButton', () => {
   // Standalone, OnPush, ViewEncapsulation (architectural compliance)
   // -----------------------------------------------------------------------
   describe('architectural compliance', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should be a standalone component', () => {
       const { fixture } = createTestHost();
       fixture.detectChanges();
@@ -721,13 +684,6 @@ describe('PaButton', () => {
   // Accessibility (jest-axe)
   // -----------------------------------------------------------------------
   describe('accessibility', () => {
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [TestHost],
-        providers: [{ provide: FocusMonitor, useValue: focusMonitorMock }],
-      }).compileComponents();
-    });
-
     it('should have no accessibility violations in default state', async () => {
       const { fixture } = createTestHost();
       fixture.detectChanges();

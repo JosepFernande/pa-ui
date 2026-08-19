@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+
+.app-nav {
+  display: flex;
+  gap: var(--pa-gap-md);
+  padding: var(--pa-spacing-md);
+}
+
+.app-nav__link {
+  color: var(--pa-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.app-nav__link--active {
+  text-decoration: underline;
+}

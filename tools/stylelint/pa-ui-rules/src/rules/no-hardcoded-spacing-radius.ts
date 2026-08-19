@@ -46,7 +46,11 @@ export function ruleFunction(root: Root, result: Result): void {
     const value = rawValue.trim();
 
     // Only check spacing/radius properties
-    if (!SPACING_RADIUS_PROPS.has(prop) && !prop.startsWith('padding-') && !prop.startsWith('margin-')) {
+    if (
+      !SPACING_RADIUS_PROPS.has(prop) &&
+      !prop.startsWith('padding-') &&
+      !prop.startsWith('margin-')
+    ) {
       return;
     }
 
@@ -60,7 +64,7 @@ export function ruleFunction(root: Root, result: Result): void {
       const trimmed = part.trim().replace(/[,;)]+$/, '');
 
       // Allow zero values (unit independent)
-      if (trimmed === '0') continue;
+      if (/^-?0(\.0+)?(px|rem|em)?$/.test(trimmed)) continue;
 
       // Allow var() references
       if (trimmed.startsWith('var(')) continue;

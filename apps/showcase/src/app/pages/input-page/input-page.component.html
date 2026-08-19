@@ -1,0 +1,24 @@
+<section class="input-page__section">
+  <h2>Sizes</h2>
+  <div class="input-page__row">
+    @for (size of sizes; track size) {
+      <input pa-input [size]="size" [placeholder]="size" />
+    }
+  </div>
+</section>
+
+<section class="input-page__section">
+  <h2>States</h2>
+  <div class="input-page__row">
+    <input pa-input placeholder="Disabled" [disabled]="true" />
+    <input pa-input placeholder="Read-only" [readonly]="true" value="Read-only value" />
+  </div>
+</section>
+
+<section class="input-page__section">
+  <h2>Two-way binding</h2>
+  <div class="input-page__row">
+    <input pa-input placeholder="Type something" name="demoInput" [(ngModel)]="boundValue" />
+    <p>Current value: {{ boundValue }}</p>
+  </div>
+</section>

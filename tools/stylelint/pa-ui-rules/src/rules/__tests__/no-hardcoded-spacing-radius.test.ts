@@ -1,7 +1,6 @@
 import postcss from 'postcss';
 import type { Result } from 'postcss';
 
-// eslint-disable-next-line import/no-relative-packages -- local plugin rule under test
 import { ruleFunction } from '../no-hardcoded-spacing-radius';
 
 async function run(css: string): Promise<Result> {
@@ -57,6 +56,37 @@ describe('no-hardcoded-spacing-radius', () => {
   it('should allow var(--*) for height', async () => {
     const result = await run('.pa-button { min-height: var(--pa-button-min-height); }');
     expect(result.messages).toHaveLength(0);
+  });
+
+  it('should allow zero with px unit', async () => {
+    const result = await run('.pa-button { margin: 0px; }');
+    expect(result.messages).toHaveLength(0);
+  });
+
+  it('should allow zero with em unit', async () => {
+    const result = await run('.pa-button { gap: 0em; }');
+    expect(result.messages).toHaveLength(0);
+  });
+
+  it('should allow zero with rem unit', async () => {
+    const result = await run('.pa-button { padding: 0rem; }');
+    expect(result.messages).toHaveLength(0);
+  });
+
+  it('should allow negative zero with unit', async () => {
+    const result = await run('.pa-button { border-radius: -0px; }');
+    expect(result.messages).toHaveLength(0);
+  });
+
+  it('should allow decimal zero with unit', async () => {
+    const result = await run('.pa-button { margin: 0.0px; }');
+    expect(result.messages).toHaveLength(0);
+  });
+
+  it('should flag non-zero part in mixed zero-with-unit shorthand', async () => {
+    const result = await run('.pa-button { margin: 0px 8px; }');
+    expect(result.messages).toHaveLength(1);
+    expect(result.messages[0].text).toContain('8px');
   });
 
   // ================================================================
