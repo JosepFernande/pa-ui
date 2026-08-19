@@ -1,7 +1,6 @@
 import postcss from 'postcss';
 import type { Result } from 'postcss';
 
-// eslint-disable-next-line import/no-relative-packages -- local plugin rule under test
 import { ruleFunction } from '../no-hardcoded-spacing-radius';
 
 async function run(css: string): Promise<Result> {
