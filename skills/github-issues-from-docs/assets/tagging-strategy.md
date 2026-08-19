@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Definir cómo generar tags/keywords para cada página de referencia del Wiki,
+Definir cómo generar tags/keywords para cada archivo de referencia en `docs/`,
 permitiendo matching rápido con issues de GitHub sin leer el contenido completo.
 
 ## Reglas de Tagging
@@ -19,7 +19,7 @@ permitiendo matching rápido con issues de GitHub sin leer el contenido completo
 | CI/CD             | `ci`, `cd`, `pipeline`, `automatización`        |
 | Release           | `release`, `publicación`, `npm`, `versionado`   |
 | Performance       | `performance`, `optimización`, `bundle`         |
-| Documentación     | `documentación`, `storybook`, `ejemplos`        |
+| Documentación     | `documentación`, `showcase`, `ejemplos`         |
 
 ### 2. Tags por contenido específico
 
@@ -44,7 +44,6 @@ Extraer tags del contenido analizando:
 
 - `nx` → si usa Nx workspace
 - `changesets` → si usa changesets para versionado
-- `storybook` → si integra Storybook
 - `stylelint` → si configura Stylelint
 - `eslint` → si configura ESLint
 
@@ -52,8 +51,9 @@ Extraer tags del contenido analizando:
 
 - `button` → si documenta componente Button
 - `input` → si documenta componente Input
-- `badge` → si documenta componente Badge
-- `dialog` → si documenta componente Dialog
+- `select` → si documenta componente Select
+- `badge` → si documenta componente Badge (roadmap)
+- `dialog` → si documenta componente Dialog (roadmap)
 
 **Procesos:**
 
@@ -110,14 +110,15 @@ Foundation
 
 Tags se regeneran cuando:
 
-- Documento se sincroniza por primera vez
-- Documento cambia (timestamp diferente)
-- Usuario ejecuta `/sync-wiki-docs --reindex`
+- Se agrega un archivo nuevo a `docs/`
+- El contenido de un archivo existente cambia lo bastante como para que sus tags
+  queden desactualizados
+- Usuario ejecuta `/reindex-docs`
 
-Tags NO se regeneran en:
-
-- Validación de frescura (solo compara timestamps)
-- Lectura desde cache (usa tags existentes)
+`docs/` no requiere ningún chequeo de frescura: al ser parte del mismo checkout,
+siempre está en HEAD. La única razón para regenerar tags es que el **contenido**
+haya cambiado de tema, no que el archivo se haya "desincronizado" de ningún
+lado.
 
 ### 6. Diccionario de tags conocidos
 
@@ -140,18 +141,11 @@ Mantener en `assets/known-tags.json`:
     "ControlValueAccessor",
     "providePaComponents"
   ],
-  "tools": [
-    "nx",
-    "changesets",
-    "storybook",
-    "stylelint",
-    "eslint",
-    "jest",
-    "husky"
-  ],
+  "tools": ["nx", "changesets", "stylelint", "eslint", "jest", "husky"],
   "components": [
     "button",
     "input",
+    "select",
     "badge",
     "dialog",
     "tooltip",
