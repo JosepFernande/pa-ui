@@ -157,6 +157,11 @@ jobs:
       # (verificado en git ls-remote --tags). Actualizar deliberadamente cuando
       # se quiera adoptar una versión nueva.
       GGA_REF: 'v2.10.1'
+      # Bump manual cuando cambien los parches de abajo (parse_review_status o
+      # la plantilla de pr_mode.sh) para invalidar la cache y forzar un clone +
+      # re-parcheo; de lo contrario un cache-hit restaura el /tmp/gga ya
+      # parcheado con la versión vieja y el fix nunca se aplica.
+      GGA_PATCH_VERSION: '2'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -175,9 +180,9 @@ jobs:
           path: |
             /tmp/gga
             /usr/local/bin/opencode
-          key: gga-${{ runner.os }}-${{ env.GGA_REF }}
+          key: gga-${{ runner.os }}-${{ env.GGA_REF }}-${{ env.GGA_PATCH_VERSION }}
           restore-keys: |
-            gga-${{ runner.os }}-
+            gga-${{ runner.os }}-${{ env.GGA_REF }}-
       - name: Install opencode
         if: steps.gga-cache.outputs.cache-hit != 'true'
         run: |
@@ -261,7 +266,11 @@ jobs:
           marker = "**Begin with STATUS:**"
           block = """**FORMATO DE RESPUESTA OBLIGATORIO (en español, sin excepciones):**
 
-          Responde siempre en español neutro/profesional, sin importar el idioma de este prompt. Usa exactamente esta estructura, sin desviarte:
+          Tu respuesta debe empezar exactamente con una de estas dos líneas, tal cual (es un marcador que un script parsea, no lo traduzcas ni lo omitas):
+          STATUS: PASSED
+          STATUS: FAILED
+
+          Inmediatamente después de esa línea, responde siempre en español neutro/profesional, sin importar el idioma de este prompt. Usa exactamente esta estructura, sin desviarte:
 
           ### 🤖 Gentleman Guardian Angel — Revisión de PR
 
