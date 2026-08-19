@@ -1,7 +1,7 @@
 # pa-ui
 
-> Accessible, token-driven Angular 19 component library with a 3-layer CSS
-> variable architecture.
+> Librería de componentes Angular 19 accesible y basada en tokens, con una
+> arquitectura de variables CSS de 3 capas.
 
 [![npm version](https://img.shields.io/npm/v/pa-ui)](https://www.npmjs.com/package/@pa-ui/angular)
 [![license](https://img.shields.io/github/license/JosepFernande/pa-ui)](./LICENSE)
@@ -9,15 +9,15 @@
 
 ---
 
-## Quick Start — Under 5 Minutes
+## Inicio rápido — en menos de 5 minutos
 
-### 1. Install
+### 1. Instalar
 
 ```bash
-npm install @pa-ui/button @angular/cdk
+npm install @pa-ui/angular @angular/cdk
 ```
 
-### 2. Configure the Theme Engine
+### 2. Configurar el Theme Engine
 
 ```typescript
 // app.config.ts
@@ -26,90 +26,53 @@ import { providePaTheme } from '@pa-ui/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    providePaTheme(), // default theme — works out of the box
+    providePaTheme(), // tema por defecto — funciona sin configuración adicional
   ],
 };
 ```
 
-### 3. Import the Foundation CSS
+### 3. Importar el CSS de Foundation
 
-One explicit CSS import, in addition to `providePaTheme()`, is required consumer
-setup — it ships the static Foundation/Semantic/Component defaults (spacing,
-radius, typography, icon sizes, component-token defaults) that make `PaButton`
-render fully styled out of the box:
+Además de `providePaTheme()`, hace falta un import explícito de CSS — trae los
+valores por defecto estáticos de las capas Foundation/Semantic/Component
+(spacing, radius, tipografía, tamaños de íconos, defaults de tokens de
+componente) que hacen que los componentes se rendericen completamente
+estilizados sin configuración adicional:
 
 ```css
-/* styles.css (or any global stylesheet entry point) */
+/* styles.css (o cualquier hoja de estilos global) */
 @import '@pa-ui/core/theme.css';
 ```
 
-Forgetting this import does not break the app — components fall back to unstyled
-`--pa-*` custom properties until it is added. See
-[CSS Strategy](./docs/css-strategy.md) for the full layering and distribution
-rationale.
+Olvidar este import no rompe la app — los componentes quedan sin estilo, usando
+las custom properties `--pa-*` sin resolver, hasta que se agregue. Ver
+[CSS Strategy](./docs/css-strategy.md) para el detalle completo de las capas y
+la estrategia de distribución.
 
-### 4. Use a Component
+### 4. Usar un componente
 
-```typescript
-// app.component.ts
-import { Component } from '@angular/core';
-import { PaButton } from '@pa-ui/button';
+Cada componente en `libs/` tiene su propia implementación y ejemplos de uso
+documentados. Consultá el [catálogo de componentes](./docs/components.md) para
+encontrar el paquete que necesitás y cómo usarlo.
 
-@Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [PaButton],
-  template: `
-    <button pa-button>Solid Primary</button>
-    <button pa-button variant="outline" color="danger">Outline Danger</button>
-    <button pa-button variant="ghost" size="sm" [loading]="isLoading()">
-      Ghost Loading
-    </button>
-  `,
-})
-export class AppComponent {
-  isLoading = signal(false);
-}
-```
-
-`PaInput` follows the same pattern — it's a host directive on the native
-`<input>` element, so it wires directly into Angular forms:
-
-```typescript
-import { PaInput } from '@pa-ui/input';
-import { ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
-
-@Component({
-  imports: [PaInput, ReactiveFormsModule],
-  template: `<input
-    pa-input
-    [formControl]="email"
-    placeholder="you@company.com"
-  />`,
-})
-export class LoginFormComponent {
-  email = new FormControl('', { validators: Validators.required });
-}
-```
-
-That's it. No NgModules, no configuration required — just the one CSS import
-above.
+Eso es todo. No hay NgModules ni configuración adicional — solo los pasos de
+arriba.
 
 ---
 
-## Architecture Highlights
+## Puntos clave de la arquitectura
 
-| Principle                  | What it means                                                                    |
-| -------------------------- | -------------------------------------------------------------------------------- |
-| **Standalone only**        | Every component is `standalone: true`. No NgModules, ever.                       |
-| **Signals first**          | Reactive state via Angular Signals. RxJS reserved for streams and async events.  |
-| **3-layer token system**   | Foundation → Semantic → Component. Zero hardcoded values in component CSS.       |
-| **CSS Variables**          | Theming via native CSS custom properties. No SCSS mixins, no utility frameworks. |
-| **Accessibility with CDK** | `FocusMonitor`, `FocusTrap`, `Overlay` — Angular CDK handles the hard parts.     |
-| **Tree-shakable**          | `sideEffects: false` on every package. Import only what you use.                 |
-| **ViewEncapsulation.None** | Full CSS customization from your app. Override any token at any scope.           |
+| Principio                        | Qué significa                                                                                   |
+| -------------------------------- | ----------------------------------------------------------------------------------------------- |
+| **Solo standalone**              | Todo componente es `standalone: true`. Nunca NgModules.                                         |
+| **Signals primero**              | Estado reactivo vía Angular Signals. RxJS reservado para streams y eventos async.               |
+| **Sistema de tokens de 3 capas** | Foundation → Semantic → Component. Cero valores hardcodeados en el CSS de componentes.          |
+| **Variables CSS**                | Theming vía custom properties nativas de CSS. Sin mixins de SCSS, sin frameworks de utilidades. |
+| **Accesibilidad con CDK**        | `FocusMonitor`, `FocusTrap`, `Overlay` — Angular CDK se encarga de la parte difícil.            |
+| **Tree-shakable**                | `sideEffects: false` en cada paquete. Importá solo lo que uses.                                 |
+| **ViewEncapsulation.None**       | Personalización completa de CSS desde tu app. Sobreescribí cualquier token en cualquier scope.  |
 
-### 3-Layer Token Architecture
+### Arquitectura de tokens en 3 capas
 
 ```
 Foundation           Semantic              Component
@@ -120,19 +83,19 @@ Foundation           Semantic              Component
 --spacing-4     →    --pa-text        →    --pa-button-padding-md
 ```
 
-Components consume **only** semantic and component tokens. Foundation tokens are
-off-limits inside component CSS. This separation means you can rebrand the
-entire library by changing semantic mappings — without touching a single
-component.
+Los componentes consumen **únicamente** tokens semánticos y de componente. Los
+tokens de Foundation están prohibidos dentro del CSS de un componente. Esta
+separación permite rebrandear toda la librería cambiando los mapeos semánticos,
+sin tocar un solo componente.
 
 ---
 
 ## Theme Engine
 
-The Theme Engine (`providePaTheme()`) is the single entry point for all visual
-customization.
+El Theme Engine (`providePaTheme()`) es el único punto de entrada para toda
+personalización visual.
 
-### Default Theme (zero config)
+### Tema por defecto (sin configuración)
 
 ```typescript
 import { providePaTheme } from '@pa-ui/core';
@@ -142,10 +105,10 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-### Custom Colors
+### Colores personalizados
 
-Register domain-specific colors. The engine auto-derives hover, active, and
-contrast variants.
+Registrá colores específicos del dominio. El engine deriva automáticamente las
+variantes de hover, active y contraste.
 
 ```typescript
 providePaTheme({
@@ -158,17 +121,17 @@ providePaTheme({
 });
 ```
 
-Then use them in any component:
+Después usalos en cualquier componente:
 
 ```html
-<button pa-button color="treasury">Treasury Action</button>
-<button pa-button variant="outline" color="danger">Delete</button>
+<button pa-button color="treasury">Acción de tesorería</button>
+<button pa-button variant="outline" color="danger">Eliminar</button>
 ```
 
-### Exact Theme (no defaults)
+### Tema exacto (sin defaults)
 
-Use `extendDefaults: false` when you want full control — only your colors are
-registered.
+Usá `extendDefaults: false` cuando quieras control total — solo se registran tus
+colores.
 
 ```typescript
 providePaTheme({
@@ -183,30 +146,32 @@ providePaTheme({
 
 ---
 
-## Customization
+## Personalización
 
-### Override CSS Tokens
+### Sobreescribir tokens de CSS
 
-Every visual property is a CSS custom property. Override at any scope:
+Cada propiedad visual es una custom property de CSS. Sobreescribila en cualquier
+scope:
 
 ```css
-/* Global — affects all buttons */
+/* Global — afecta a todos los botones */
 :root {
   --pa-button-radius: 8px;
   --pa-button-font-weight: 600;
 }
 
-/* Scoped — affects buttons inside .admin-panel only */
+/* Con scope — afecta solo a los botones dentro de .admin-panel */
 .admin-panel {
   --pa-button-bg: var(--pa-treasury);
   --pa-button-hover-bg: color-mix(in srgb, var(--pa-treasury) 85%, black);
 }
 ```
 
-### Add Custom Colors Without Modifying Components
+### Agregar colores personalizados sin modificar componentes
 
-The `color` input on every component is a `string` (theme-registered), never a
-closed enum. Register a new color in the theme and it works everywhere:
+El input `color` de cada componente es un `string` (registrado en el tema),
+nunca un enum cerrado. Registrá un color nuevo en el tema y funciona en todos
+lados:
 
 ```typescript
 providePaTheme({
@@ -217,179 +182,120 @@ providePaTheme({
 ```
 
 ```html
-<button pa-button color="accounting">Approve</button>
+<button pa-button color="accounting">Aprobar</button>
 ```
 
-No component changes. No new variants. The Theme Engine derives hover, active,
-and disabled states automatically.
+Sin cambios en el componente. Sin variantes nuevas. El Theme Engine deriva
+automáticamente los estados de hover, active y disabled.
 
-> See [CSS Strategy](./docs/css-strategy.md) for the full token reference and
-> override patterns.
+> Ver [CSS Strategy](./docs/css-strategy.md) para la referencia completa de
+> tokens y patrones de sobreescritura.
 
 ---
 
-## Accessibility
+## Accesibilidad
 
-Every pa-ui component is built with accessibility as a first-class concern:
+Todo componente de pa-ui está construido con la accesibilidad como prioridad:
 
-- **Keyboard navigation** — All interactive elements are reachable and operable
-  via keyboard. CDK `FocusMonitor` tracks focus origin to show visible focus
-  rings only for keyboard users.
-- **ARIA attributes** — Correct `role`, `aria-disabled`, `aria-busy`, and other
-  ARIA states are applied automatically.
-- **Focus management** — Components use CDK `FocusTrap` for overlays and modals.
-  Focus is never lost during state changes.
-- **Screen reader support** — Loading states use visually-hidden text (`sr-only`
-  pattern) so screen readers announce state changes.
-- **`prefers-reduced-motion`** — Animations respect the user's motion
-  preference.
+- **Navegación por teclado** — Todos los elementos interactivos son alcanzables
+  y operables por teclado. `FocusMonitor` de CDK rastrea el origen del foco para
+  mostrar el anillo de foco solo a usuarios de teclado.
+- **Atributos ARIA** — Se aplican automáticamente `role`, `aria-disabled`,
+  `aria-busy` y otros estados ARIA correctos.
+- **Manejo de foco** — Los componentes usan `FocusTrap` de CDK para overlays y
+  modales. El foco nunca se pierde durante cambios de estado.
+- **Soporte de lectores de pantalla** — Los estados de carga usan texto
+  visualmente oculto (patrón `sr-only`) para que los lectores de pantalla
+  anuncien los cambios de estado.
+- **`prefers-reduced-motion`** — Las animaciones respetan la preferencia de
+  movimiento del usuario.
 
-> See the [Testing Strategy](./docs/testing-strategy.md) doc for the full a11y
-> checklist and testing approach.
-
----
-
-## Phase 1 Components
-
-| Package         | Component  | Status        | Description                                                              |
-| --------------- | ---------- | ------------- | ------------------------------------------------------------------------ |
-| `@pa-ui/button` | `PaButton` | **Available** | Button with variants, sizes, color, disabled, and loading states         |
-| `@pa-ui/input`  | `PaInput`  | **Available** | Text-only input with sizes, disabled/readonly, and CVA forms integration |
-
-### PaButton API
-
-```html
-<button
-  pa-button
-  variant="solid"
-  size="md"
-  color="primary"
-  [disabled]="false"
-  [loading]="false"
-  type="button"
->
-  Click me
-</button>
-```
-
-| Input      | Type                              | Default     | Description                         |
-| ---------- | --------------------------------- | ----------- | ----------------------------------- |
-| `variant`  | `'solid' \| 'outline' \| 'ghost'` | `'solid'`   | Visual variant                      |
-| `size`     | `'sm' \| 'md' \| 'lg'`            | `'md'`      | Size preset                         |
-| `color`    | `string`                          | `'primary'` | Theme-registered color name         |
-| `disabled` | `boolean`                         | `false`     | Disabled state                      |
-| `loading`  | `boolean`                         | `false`     | Shows spinner, disables interaction |
-| `type`     | `'button' \| 'submit' \| 'reset'` | `'button'`  | Native button type                  |
-
-### PaInput API
-
-```html
-<input pa-input size="md" placeholder="you@company.com" [formControl]="email" />
-```
-
-| Input             | Type                   | Default | Description                                           |
-| ----------------- | ---------------------- | ------- | ----------------------------------------------------- |
-| `size`            | `'sm' \| 'md' \| 'lg'` | `'md'`  | Size preset                                           |
-| `disabled`        | `boolean`              | `false` | Disabled state (also driven by a bound `FormControl`) |
-| `readonly`        | `boolean`              | `false` | Read-only state                                       |
-| `placeholder`     | `string`               | `''`    | Placeholder text                                      |
-| `ariaLabel`       | `string`               | `''`    | Accessible label (`aria-label`)                       |
-| `ariaDescribedBy` | `string`               | `''`    | Ids for `aria-describedby` (e.g. hint/error text)     |
-
-`PaInput` is text-only by design — password, email, and number inputs are
-planned as separate components. It implements `ControlValueAccessor`, so a
-touched, invalid `FormControl` automatically drives `.pa-input--error` and
-`aria-invalid`; there is no separate `error` input to set manually.
-
-```typescript
-import { PA_INPUT_TOKENS } from '@pa-ui/input';
-
-// Available tokens: --pa-input-bg, --pa-input-color, --pa-input-border,
-// --pa-input-focus-border, --pa-input-error-border, --pa-input-disabled-bg, ...
-```
+> Ver el doc de [Testing Strategy](./docs/testing-strategy.md) para el checklist
+> completo de accesibilidad y el enfoque de testing.
 
 ---
 
-## Project Structure
+## Estructura del proyecto
 
 ```
 pa-ui/
 ├── libs/
-│   ├── button/          # @pa-ui/button — PaButton component
-│   ├── input/           # @pa-ui/input — PaInput component
-│   ├── core/            # @pa-ui/core — Theme Engine (providePaTheme) + Foundation layer
-│   └── pa-ui/           # pa-ui — Umbrella package (re-exports)
+│   ├── button/          # @pa-ui/button — componente PaButton
+│   ├── input/           # @pa-ui/input — componente PaInput
+│   ├── select/          # @pa-ui/select — componente PaSelect
+│   ├── core/            # @pa-ui/core — Theme Engine (providePaTheme) + capa Foundation
+│   └── pa-ui/           # @pa-ui/angular — paquete umbrella (re-exporta el resto)
 ├── apps/
-│   └── showcase/        # Demo app with live examples
-└── skills/              # AI agent skills for architecture enforcement
+│   └── showcase/        # App de demo con ejemplos en vivo
+└── skills/              # Skills de agentes de IA para hacer cumplir la arquitectura
 ```
 
-> See [Components](./docs/components.md) for the full component catalog, each
-> linked to its `libs/` folder.
+> Ver [Componentes](./docs/components.md) para el catálogo completo, cada uno
+> enlazado a su carpeta en `libs/`.
 
 ---
 
-## Documentation
+## Documentación
 
-`docs/` in this repo is the source of truth for architecture, testing, and
-process docs, and the one guaranteed to be available to anyone (or any AI agent)
-cloning the repo without network access. The
-[project wiki](https://github.com/JosepFernande/pa-ui/wiki) is kept as a
-historical mirror going forward; new documentation changes land in `docs/`
-first.
+`docs/` en este repo es la fuente de verdad para arquitectura, testing y
+procesos, y la única garantizada disponible para cualquiera (o cualquier agente
+de IA) que clone el repo sin acceso a red. La
+[wiki del proyecto](https://github.com/JosepFernande/pa-ui/wiki) se mantiene
+como espejo histórico de acá en adelante; los cambios nuevos de documentación
+entran primero en `docs/`.
 
-| Resource                                                                         | Description                                               |
-| -------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| [Components](./docs/components.md)                                               | Component catalog, each linked to its `libs/` folder      |
-| [Architecture & Foundation](./docs/architecture-and-foundation.md)               | The 6 hard rules, token system, and decision gates        |
-| [Theming Deep-Dive](./docs/theming-deep-dive.md)                                 | Full technical reference for the Theme Engine             |
-| [ControlValueAccessor (CVA)](./docs/control-value-accessor-cva.md)               | How components integrate with Angular forms               |
-| [Testing Strategy](./docs/testing-strategy.md)                                   | Testing levels, coverage, and accessibility checklist     |
-| [Showcase](./docs/showcase.md)                                                   | Component playground app in `apps/showcase/`              |
-| [CI/CD Pipeline](./docs/ci-cd-pipeline.md)                                       | GitHub Actions workflows                                  |
-| [Release and Publishing](./docs/release-and-publishing.md)                       | npm publishing, Trusted Publishing                        |
-| [Contribution & PR Guidelines](./docs/contribution-pr-code-review-guidelines.md) | How to contribute and what gets reviewed in a PR          |
-| [CSS Strategy](./docs/css-strategy.md)                                           | Token reference and override patterns                     |
-| [Showcase App](./apps/showcase/)                                                 | Live component playground                                 |
-| [Contributing](./CONTRIBUTING.md)                                                | How to contribute, PR guidelines, and code review process |
+| Recurso                                                                          | Descripción                                                        |
+| -------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| [Componentes](./docs/components.md)                                              | Catálogo de componentes, cada uno enlazado a su carpeta en `libs/` |
+| [Architecture & Foundation](./docs/architecture-and-foundation.md)               | Las 6 reglas duras, el sistema de tokens y los decision gates      |
+| [Theming Deep-Dive](./docs/theming-deep-dive.md)                                 | Referencia técnica completa del Theme Engine                       |
+| [ControlValueAccessor (CVA)](./docs/control-value-accessor-cva.md)               | Cómo se integran los componentes con los forms de Angular          |
+| [Testing Strategy](./docs/testing-strategy.md)                                   | Niveles de testing, cobertura y checklist de accesibilidad         |
+| [Showcase](./docs/showcase.md)                                                   | App playground de componentes en `apps/showcase/`                  |
+| [CI/CD Pipeline](./docs/ci-cd-pipeline.md)                                       | Workflows de GitHub Actions                                        |
+| [Release and Publishing](./docs/release-and-publishing.md)                       | Publicación en npm, Trusted Publishing                             |
+| [Contribution & PR Guidelines](./docs/contribution-pr-code-review-guidelines.md) | Cómo contribuir y qué se revisa en un PR                           |
+| [CSS Strategy](./docs/css-strategy.md)                                           | Referencia de tokens y patrones de sobreescritura                  |
+| [Showcase App](./apps/showcase/)                                                 | Playground de componentes en vivo                                  |
+| [Contributing](./CONTRIBUTING.md)                                                | Cómo contribuir, guías de PR y proceso de code review              |
 
 ---
 
-## Development
+## Desarrollo
 
 ```bash
-# Install dependencies
+# Instalar dependencias
 npm install
 
-# Build all libraries
+# Compilar todas las librerías
 nx run-many -t build
 
-# Run tests
+# Correr los tests
 nx run-many -t test
 
 # Lint
 nx run-many -t lint
 nx run lint:css
 
-# Format check
+# Chequeo de formato
 npm run format:check
 ```
 
 ### Showcase
 
 ```bash
-# Start the dev server
+# Levantar el servidor de desarrollo
 npx nx serve showcase
 
-# Build it
+# Compilarlo
 npx nx build showcase
 ```
 
-See [docs/showcase.md](./docs/showcase.md) for how to add a route for a new
-component.
+Ver [docs/showcase.md](./docs/showcase.md) para saber cómo agregar una ruta para
+un componente nuevo.
 
 ---
 
-## License
+## Licencia
 
 MIT &copy; [JosepFernande](https://github.com/JosepFernande)
