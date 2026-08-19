@@ -46,7 +46,11 @@ export function ruleFunction(root: Root, result: Result): void {
     const value = rawValue.trim();
 
     // Only check spacing/radius properties
-    if (!SPACING_RADIUS_PROPS.has(prop) && !prop.startsWith('padding-') && !prop.startsWith('margin-')) {
+    if (
+      !SPACING_RADIUS_PROPS.has(prop) &&
+      !prop.startsWith('padding-') &&
+      !prop.startsWith('margin-')
+    ) {
       return;
     }
 
