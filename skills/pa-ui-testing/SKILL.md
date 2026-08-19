@@ -372,7 +372,8 @@ to catch by eye.
 
 - Architecture skill: `pa-ui-architecture`
 - Coding standards skill: `pa-ui-coding-standards`
-- Notion — Architecture & Foundation: `35f80bf9-7f94-814a-96d6-ccb90055e545`
+- Wiki — Architecture & Foundation:
+  `https://github.com/JosepFernande/pa-ui/wiki/Architecture-and-Foundation`
 - jest-axe docs: https://github.com/nickcolley/jest-axe
 - jest-preset-angular docs: https://github.com/thymikee/jest-preset-angular
 - Repo: `https://github.com/JosepFernande/pa-ui`

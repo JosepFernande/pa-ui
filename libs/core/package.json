@@ -1,6 +1,6 @@
 {
   "name": "@pa-ui/core",
-  "version": "19.2.0",
+  "version": "19.3.0",
   "license": "MIT",
   "description": "Accessible, token-driven Angular 19 UI component library with Theme Engine",
   "keywords": [

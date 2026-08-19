@@ -152,6 +152,11 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+    env:
+      # Pinneado a un release real de Gentleman-Programming/gentleman-guardian-angel
+      # (verificado en git ls-remote --tags). Actualizar deliberadamente cuando
+      # se quiera adoptar una versión nueva.
+      GGA_REF: 'v2.10.1'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -163,14 +168,26 @@ jobs:
       - run: npm ci
         env:
           HUSKY: '0'
+      - name: Restore gga/opencode cache
+        id: gga-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            /tmp/gga
+            /usr/local/bin/opencode
+          key: gga-${{ runner.os }}-${{ env.GGA_REF }}
+          restore-keys: |
+            gga-${{ runner.os }}-
       - name: Install opencode
+        if: steps.gga-cache.outputs.cache-hit != 'true'
         run: |
           curl -fsSL https://github.com/anomalyco/opencode/releases/latest/download/opencode-linux-x64.tar.gz -o /tmp/opencode.tar.gz
           tar -xzf /tmp/opencode.tar.gz -C /usr/local/bin
           chmod +x /usr/local/bin/opencode
       - name: Install gga
+        if: steps.gga-cache.outputs.cache-hit != 'true'
         run: |
-          git clone --depth 1 https://github.com/Gentleman-Programming/gentleman-guardian-angel.git /tmp/gga
+          git clone --depth 1 --branch "$GGA_REF" https://github.com/Gentleman-Programming/gentleman-guardian-angel.git /tmp/gga
           # Upstream's parse_review_status() only scans the first N lines of the
           # provider output for a `STATUS: PASSED|FAILED` line. The opencode
           # agent emits a verbose tool-call transcript (skill loads, glob/read/
@@ -268,6 +285,8 @@ jobs:
               content = content.replace(marker, block + marker, 1)
               path.write_text(content)
           PYEOF
+      - name: Set up gga binary
+        run: |
           bash /tmp/gga/install.sh
           echo "$HOME/.local/bin" >> $GITHUB_PATH
       - name: Ensure base branch is fetched locally

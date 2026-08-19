@@ -13,14 +13,11 @@ sincroniza documentación de referencia desde el repo git del Wiki
 ### Paso 1: Verificar si el índice ya existe
 
 ```typescript
-const indexSearch = await mem_search({
-  query: 'wiki-docs/index',
-  project: 'pa-ui',
-});
+const indexExists = await pathExists('.wiki-cache/index.json');
 
-if (indexSearch && indexSearch.length > 0) {
+if (indexExists) {
   console.log(
-    'Índice ya existe en Engram. Usar /sync-wiki-docs para forzar actualización.',
+    'Índice ya existe en .wiki-cache/index.json. Usar /sync-wiki-docs para forzar actualización.',
   );
   return;
 }
@@ -71,50 +68,41 @@ for (const doc of documents) {
   // 4c. Generar tags automáticos
   const tags = generateTags(markdown, doc.page);
 
-  // 4d. Guardar contenido en Engram
-  await mem_save({
-    title: `Wiki Doc: ${doc.page}`,
-    type: 'architecture',
-    project: 'pa-ui',
-    topic_key: `wiki-docs/${doc.page}`,
-    content: JSON.stringify({
-      page: doc.page,
-      file: doc.file,
-      last_commit_sha: lastCommitSha,
-      cached_at: new Date().toISOString(),
-      content: markdown,
-      markdown_length: markdown.length,
-      tags: tags,
-    }),
-    capture_prompt: false,
-  });
-
-  // 4e. Agregar al índice
+  // 4d. Adjuntar contenido y metadata al documento en memoria; se persiste
+  // todo junto en el Paso 5 (un único archivo .wiki-cache/index.json)
   doc.last_commit_sha = lastCommitSha;
   doc.tags = tags;
+  doc.content = markdown;
+  doc.markdown_length = markdown.length;
+  doc.cached_at = new Date().toISOString();
 }
 ```
 
-### Paso 5: Guardar índice en Engram
+### Paso 5: Escribir el índice en `.wiki-cache/index.json`
 
 ```typescript
 const headSha = await bash('git -C .wiki-cache/pa-ui.wiki rev-parse HEAD');
 
-await mem_save({
-  title: 'Wiki Documentation Index',
-  type: 'config',
-  project: 'pa-ui',
-  topic_key: 'wiki-docs/index',
-  content: JSON.stringify({
-    repo: 'https://github.com/JosepFernande/pa-ui.wiki.git',
-    local_clone_path: '.wiki-cache/pa-ui.wiki',
-    last_synced_head_sha: headSha,
-    last_synced_at: new Date().toISOString(),
-    documents: documents,
-  }),
-  capture_prompt: false,
+await Write({
+  file_path: '.wiki-cache/index.json',
+  content: JSON.stringify(
+    {
+      repo: 'https://github.com/JosepFernande/pa-ui.wiki.git',
+      local_clone_path: '.wiki-cache/pa-ui.wiki',
+      last_synced_head_sha: headSha,
+      last_synced_at: new Date().toISOString(),
+      documents: documents,
+    },
+    null,
+    2,
+  ),
 });
 ```
+
+`.wiki-cache/` ya está en `.gitignore` (línea `/.wiki-cache/`), así que este
+archivo es puramente local y nunca se versiona. Ver
+`references/wiki-cache-patterns.md` para el detalle de forma del archivo,
+validación de frescura y actualización parcial sin pisar otras páginas.
 
 ### Paso 6: Reportar resultados
 
@@ -280,14 +268,19 @@ try {
 }
 ```
 
-### Error: Engram no disponible
+### Error: falla la escritura de `.wiki-cache/index.json`
 
 ```typescript
 try {
-  await mem_save({ ... });
+  await Write({
+    file_path: '.wiki-cache/index.json',
+    content: JSON.stringify(index, null, 2),
+  });
 } catch (error) {
-  console.error('Error guardando en Engram:', error);
-  console.warn('Continuando sin cache. La próxima ejecución será más lenta.');
+  console.error('Error escribiendo .wiki-cache/index.json:', error);
+  console.warn(
+    'Continuando sin cache. La próxima ejecución repetirá la sincronización completa.',
+  );
 }
 ```
 

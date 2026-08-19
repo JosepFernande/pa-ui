@@ -1,0 +1,15 @@
+:host {
+  display: block;
+  padding: var(--pa-spacing-lg);
+}
+
+.select-page__section {
+  margin-block-end: var(--pa-spacing-lg);
+}
+
+.select-page__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--pa-gap-md);
+}

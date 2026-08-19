@@ -1,5 +1,27 @@
 # @pa-ui/core
 
+## 19.3.0
+
+### Minor Changes
+
+- a2e5582: Add `<pa-select>` (issue #125, alternative 1): standalone,
+  signals-first, token-driven single-select with `ControlValueAccessor` forms
+  integration, CDK Overlay panel, WAI-ARIA select-only combobox semantics, full
+  keyboard navigation including typeahead, and `readonly` distinct from
+  `disabled`. `--pa-select-*` defaults ship via `@pa-ui/core/theme.css`, so no
+  consumer tokens are required.
+
+## 19.2.2
+
+### Patch Changes
+
+- 7a72d32: Fix PaInput error tokens referencing the deprecated `--pa-danger`
+  alias instead of the canonical `--pa-error` semantic token. A consumer calling
+  `providePaTheme({ colors: { error: '#custom' } })` now recolors the input
+  error border, text, and icon consistently with every other error surface.
+
+## 19.2.1
+
 ## 19.2.0
 
 ### Minor Changes

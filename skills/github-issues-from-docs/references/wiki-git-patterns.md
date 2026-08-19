@@ -46,9 +46,9 @@ git -C .wiki-cache/pa-ui.wiki pull --ff-only
 ### 3. Obtener el HEAD actual (`rev-parse`)
 
 **Uso:** Chequeo de frescura — comparar contra `last_synced_head_sha` cacheado
-en Engram. Reemplaza las N validaciones de frescura por documento que requería
-el mecanismo anterior (1 llamada de API por página) por una sola comparación de
-string.
+en `.wiki-cache/index.json`. Reemplaza las N validaciones de frescura por
+documento que requería el mecanismo anterior (1 llamada de API por página) por
+una sola comparación de string.
 
 ```bash
 git -C .wiki-cache/pa-ui.wiki rev-parse HEAD
@@ -137,8 +137,8 @@ if (cloneFailed) {
 
 ### Archivo no encontrado en el clone local
 
-Puede pasar si el índice en Engram referencia una página que se renombró o borró
-en el Wiki.
+Puede pasar si el índice en `.wiki-cache/index.json` referencia una página que
+se renombró o borró en el Wiki.
 
 ```typescript
 try {
