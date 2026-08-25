@@ -261,7 +261,6 @@ export class PaSelect implements ControlValueAccessor, OnInit {
       }
       this.lastEmittedOpen = isOpen;
       if (isOpen) {
-        this.triggerWidth.set(this.triggerRef().nativeElement.offsetWidth);
         this.seedActiveItem();
         this.opened.emit();
       } else {
@@ -345,11 +344,12 @@ export class PaSelect implements ControlValueAccessor, OnInit {
     }
   }
 
-  /** Requests the panel to open. No-op when disabled or readonly (D3). */
+  /** Requests the panel to open. No-op when disabled or readonly (D3). Measures the trigger width first, since `cdkConnectedOverlayWidth` reads it in the same template pass that flips `cdkConnectedOverlayOpen`. */
   protected open(): void {
     if (this.effectiveDisabled() || this.readonly()) {
       return;
     }
+    this.triggerWidth.set(this.triggerRef().nativeElement.offsetWidth);
     this.openRequested.set(true);
   }
 

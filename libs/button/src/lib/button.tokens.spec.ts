@@ -31,6 +31,7 @@ describe('Button Tokens', () => {
       'minHeightMd',
       'minHeightLg',
       'focusRing',
+      'focusRingOffset',
       'hoverBg',
       'activeBg',
       'disabledBg',

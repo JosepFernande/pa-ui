@@ -9,10 +9,10 @@ describe('Select Tokens', () => {
     expect(PA_SELECT_TOKENS.optionHoverBg).toBe('--pa-select-option-hover-bg');
   });
 
-  it('should include the exact 51 token keys from the design spec', () => {
+  it('should include the exact 53 token keys from the design spec', () => {
     const keys = Object.keys(PA_SELECT_TOKENS);
     const required = [
-      // Trigger (30)
+      // Trigger (32)
       'bg',
       'color',
       'border',
@@ -33,6 +33,8 @@ describe('Select Tokens', () => {
       'radiusLg',
       'placeholderColor',
       'focusBorder',
+      'focusRing',
+      'focusRingOffset',
       'errorBorder',
       'errorColor',
       'disabledBg',
@@ -72,7 +74,7 @@ describe('Select Tokens', () => {
       expect(keys).toContain(key);
     }
     expect(keys).toHaveLength(required.length);
-    expect(keys).toHaveLength(51);
+    expect(keys).toHaveLength(53);
   });
 
   it('should have all values prefixed with --pa-select-', () => {

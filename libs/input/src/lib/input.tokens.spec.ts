@@ -34,6 +34,8 @@ describe('Input Tokens', () => {
       'radiusMd',
       'radiusLg',
       'focusBorder',
+      'focusRing',
+      'focusRingOffset',
       'errorBorder',
       'errorColor',
       'errorIconColor',
