@@ -1,0 +1,13 @@
+<div class="code-block">
+  <span class="code-block__label">{{ label() }}</span>
+  <div class="code-block__card">
+    <div class="code-block__bar">
+      <span class="code-block__lang">{{ language() }}</span>
+      <button type="button" class="code-block__copy" (click)="copy()">
+        <span aria-hidden="true">⧉</span>
+        {{ copied() ? 'Copiado' : 'Copiar' }}
+      </button>
+    </div>
+    <pre class="code-block__code">{{ code() }}</pre>
+  </div>
+</div>

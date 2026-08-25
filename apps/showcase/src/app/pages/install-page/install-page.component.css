@@ -1,0 +1,97 @@
+:host {
+  display: block;
+  padding: 48px 64px;
+}
+
+.install-page__title {
+  margin: 0;
+  font-size: var(--pa-font-size-h1);
+  font-weight: var(--pa-font-weight-h1);
+  line-height: var(--pa-line-height-h1);
+  color: var(--neutral-900);
+}
+
+.install-page__subtitle {
+  margin: var(--pa-gap-md) 0 0;
+  font-size: var(--pa-font-size-body);
+  font-weight: var(--pa-font-weight-body);
+  line-height: var(--pa-line-height-body);
+  color: var(--neutral-700);
+}
+
+.install-page__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin: var(--pa-gap-xl) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.install-page__step {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.install-page__step-number {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--pa-primary);
+  color: #ffffff;
+  font-size: var(--pa-font-size-body);
+  font-weight: var(--pa-font-weight-bold);
+}
+
+.install-page__step-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pa-gap-sm);
+  min-width: 0;
+}
+
+.install-page__step-title {
+  margin: 0;
+  font-size: var(--pa-font-size-h3);
+  font-weight: var(--pa-font-weight-h3);
+  line-height: var(--pa-line-height-h3);
+  color: var(--neutral-900);
+}
+
+.install-page__step-description {
+  margin: 0;
+  font-size: var(--pa-font-size-small-body);
+  font-weight: var(--pa-font-weight-small-body);
+  line-height: var(--pa-line-height-small-body);
+  color: var(--neutral-700);
+}
+
+.install-page__code {
+  margin: 0;
+  padding: var(--pa-spacing-md) 20px;
+  border-radius: var(--pa-radius-md);
+  background: var(--dark-blue-800);
+  color: var(--dark-blue-50);
+  font-family: Consolas, Monaco, monospace;
+  font-size: var(--pa-font-size-small-body);
+  line-height: var(--pa-line-height-small-body);
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.install-page__gallery-link {
+  align-self: flex-start;
+  color: var(--pa-primary);
+  font-size: var(--pa-font-size-small-body);
+  font-weight: var(--pa-font-weight-semibold);
+  text-decoration: none;
+}
+
+.install-page__gallery-link:hover {
+  text-decoration: underline;
+}

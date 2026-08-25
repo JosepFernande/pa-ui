@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, signal, ViewEncapsulation } from '@angular/core';
 import { PaSelect } from '@pa-ui/select';
 import type { PaSelectOption, PaSelectSize } from '@pa-ui/select';
+import { CodeBlockComponent } from '../../shared/code-block/code-block.component';
 
 /** Showcase playground for `pa-select` (`libs/select`): sizes, states, and its `valueChange`/`opened`/`closed` outputs. */
 @Component({
   selector: 'app-select-page',
   standalone: true,
-  imports: [PaSelect],
+  imports: [PaSelect, CodeBlockComponent],
   templateUrl: './select-page.component.html',
   styleUrl: './select-page.component.css',
   encapsulation: ViewEncapsulation.None,

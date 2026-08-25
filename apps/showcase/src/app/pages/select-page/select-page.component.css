@@ -1,6 +1,39 @@
 :host {
   display: block;
-  padding: var(--pa-spacing-lg);
+  padding: 40px 64px;
+}
+
+.select-page__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pa-gap-xs);
+  margin-block-end: var(--pa-gap-lg);
+}
+
+.select-page__title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: var(--pa-font-weight-bold);
+  color: var(--neutral-900);
+}
+
+.select-page__description {
+  margin: 0;
+  font-size: var(--pa-font-size-small-body);
+  line-height: var(--pa-line-height-small-body);
+  color: var(--neutral-700);
+}
+
+.select-page__description code {
+  font-family: Consolas, Monaco, monospace;
+  font-size: 0.9em;
+}
+
+.select-page__docs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pa-gap-md);
+  margin-block-end: var(--pa-spacing-xl);
 }
 
 .select-page__section {

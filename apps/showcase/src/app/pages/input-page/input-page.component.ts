@@ -2,12 +2,13 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
 import { FormsModule } from '@angular/forms';
 import { PaInput } from '@pa-ui/input';
 import type { PaInputSize } from '@pa-ui/input';
+import { CodeBlockComponent } from '../../shared/code-block/code-block.component';
 
 /** Showcase playground for `pa-input` (`libs/input`): sizes, states, and `[(ngModel)]` binding. */
 @Component({
   selector: 'app-input-page',
   standalone: true,
-  imports: [FormsModule, PaInput],
+  imports: [FormsModule, PaInput, CodeBlockComponent],
   templateUrl: './input-page.component.html',
   styleUrl: './input-page.component.css',
   encapsulation: ViewEncapsulation.None,
