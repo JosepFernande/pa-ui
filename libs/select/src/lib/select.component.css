@@ -178,6 +178,13 @@
  * get no pointer/hover affordance, since clicking one is a no-op.
  * `--active` reflects the ActiveDescendantKeyManager's current item
  * (`item.active()`); `--disabled` reflects `item.disabled`.
+ *
+ * `--active`/`--selected` double up the base class (`.pa-select__option.pa-
+ * select__option--active`) so their specificity ties the hover rule's
+ * (base class + one `:not()`) instead of losing to it; the tie is then
+ * broken by source order (declared after hover), so hovering an
+ * active/selected option keeps its own background instead of flashing the
+ * generic hover color.
  */
 .pa-select__option {
   box-sizing: border-box;
@@ -195,18 +202,16 @@
   cursor: pointer;
 }
 
-.pa-select__option:not(.pa-select__option--disabled):not(.pa-select__option--selected):not(
-    .pa-select__option--active
-  ):hover {
+.pa-select__option:not(.pa-select__option--disabled):hover {
   background-color: var(--pa-select-option-hover-bg);
 }
 
-.pa-select__option--active {
+.pa-select__option.pa-select__option--active {
   background-color: var(--pa-select-option-active-bg);
   color: var(--pa-select-option-active-color);
 }
 
-.pa-select__option--selected {
+.pa-select__option.pa-select__option--selected {
   background-color: var(--pa-select-option-selected-bg);
   color: var(--pa-select-option-selected-color);
   font-weight: var(--pa-select-option-selected-font-weight);
