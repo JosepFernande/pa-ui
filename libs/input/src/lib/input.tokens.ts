@@ -18,6 +18,8 @@ export const PA_INPUT_TOKENS = {
   radiusMd: '--pa-input-radius-md',
   radiusLg: '--pa-input-radius-lg',
   focusBorder: '--pa-input-focus-border',
+  focusRing: '--pa-input-focus-ring',
+  focusRingOffset: '--pa-input-focus-ring-offset',
   errorBorder: '--pa-input-error-border',
   errorColor: '--pa-input-error-color',
   errorIconColor: '--pa-input-error-icon-color',

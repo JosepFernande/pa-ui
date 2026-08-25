@@ -59,7 +59,8 @@ const PA_BUTTON_TOKEN_DEFAULTS: Readonly<Record<string, string>> = {
   '--pa-button-gap-md': PA_BUTTON_FIGMA_DIMENSIONS.md.gap,
   '--pa-button-gap-lg': PA_BUTTON_PROVISIONAL_DIMENSIONS.lg.gap,
 
-  '--pa-button-focus-ring': '0 0 0 3px var(--pa-primary-hover)',
+  '--pa-button-focus-ring': '2px solid var(--pa-primary-hover)',
+  '--pa-button-focus-ring-offset': '5px',
   '--pa-button-hover-bg': 'var(--pa-primary-hover)',
   '--pa-button-active-bg': 'var(--pa-primary-active)',
   '--pa-button-disabled-bg': 'var(--neutral-200)',
@@ -109,6 +110,8 @@ const PA_INPUT_TOKEN_DEFAULTS: Readonly<Record<string, string>> = {
   '--pa-input-radius-lg': PA_INPUT_PROVISIONAL_DIMENSIONS.lg.radius,
 
   '--pa-input-focus-border': 'var(--pa-primary)',
+  '--pa-input-focus-ring': '2px solid var(--pa-primary-hover)',
+  '--pa-input-focus-ring-offset': '5px',
   '--pa-input-error-border': 'var(--pa-error)',
   '--pa-input-error-color': 'var(--pa-error)',
   '--pa-input-error-icon-color': 'var(--pa-error)',
@@ -170,6 +173,8 @@ const PA_SELECT_TOKEN_DEFAULTS: Readonly<Record<string, string>> = {
 
   '--pa-select-placeholder-color': 'var(--neutral-500)',
   '--pa-select-focus-border': 'var(--pa-primary)',
+  '--pa-select-focus-ring': '2px solid var(--pa-primary-hover)',
+  '--pa-select-focus-ring-offset': '5px',
   '--pa-select-error-border': 'var(--pa-error)',
   '--pa-select-error-color': 'var(--pa-error)',
   '--pa-select-disabled-bg': 'var(--neutral-200)',

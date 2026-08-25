@@ -44,6 +44,10 @@ describe('Theme runtime integration — Foundation theme.css ships Select defaul
 
     expect(rootStyle.getPropertyValue('--pa-select-bg').trim()).toBe('var(--neutral-50)');
     expect(rootStyle.getPropertyValue('--pa-select-focus-border').trim()).toBe('var(--pa-primary)');
+    expect(rootStyle.getPropertyValue('--pa-select-focus-ring').trim()).toBe(
+      '2px solid var(--pa-primary-hover)',
+    );
+    expect(rootStyle.getPropertyValue('--pa-select-focus-ring-offset').trim()).toBe('5px');
     expect(rootStyle.getPropertyValue('--pa-select-error-border').trim()).toBe('var(--pa-error)');
     expect(rootStyle.getPropertyValue('--pa-select-error-color').trim()).toBe('var(--pa-error)');
     expect(rootStyle.getPropertyValue('--pa-select-radius-sm').trim()).toBe('6px');
@@ -94,11 +98,13 @@ describe('Theme runtime integration — select.component.css wires per-size toke
     }
   });
 
-  it('wires the focus-visible rule to --pa-select-focus-border only (no box-shadow ring)', () => {
+  it('wires the focus-visible rule to --pa-select-focus-border plus a keyboard-only outline ring (no box-shadow ring)', () => {
     const css = readSelectComponentCss();
     const focusBlock = css.match(/\.pa-select__trigger:focus-visible\s*\{([^}]*)\}/);
     expect(focusBlock).not.toBeNull();
     expect(focusBlock![1]).toMatch(/border-color:\s*var\(--pa-select-focus-border\)/);
+    expect(focusBlock![1]).toMatch(/outline:\s*var\(--pa-select-focus-ring\)/);
+    expect(focusBlock![1]).toMatch(/outline-offset:\s*var\(--pa-select-focus-ring-offset\)/);
     expect(focusBlock![1]).not.toMatch(/box-shadow/);
   });
 });

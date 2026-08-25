@@ -2,6 +2,7 @@
   #trigger
   type="button"
   class="pa-select__trigger"
+  [class.pa-select__trigger--open]="panelOpen()"
   role="combobox"
   aria-haspopup="listbox"
   [attr.aria-expanded]="panelOpen() ? 'true' : 'false'"
@@ -41,6 +42,7 @@
         [class.pa-select__option--selected]="isSelected(item.option)"
         [class.pa-select__option--active]="item.active()"
         [class.pa-select__option--disabled]="item.disabled"
+        (mousedown)="$event.preventDefault()"
         (click)="onOptionClick(item)"
       >
         {{ item.option.label }}

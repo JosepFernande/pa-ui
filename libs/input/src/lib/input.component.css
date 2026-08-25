@@ -28,6 +28,8 @@
  *   --pa-input-error-border       → border-color when error
  *   --pa-input-error-color        → color when error
  *   --pa-input-focus-border       → border-color when focused (any origin)
+ *   --pa-input-focus-ring         → outline for keyboard-only focus (CDK origin === 'keyboard')
+ *   --pa-input-focus-ring-offset  → outline-offset for keyboard-only focus
  *   --pa-input-transition-duration → transition duration
  *   --pa-input-transition-easing  → transition easing
  */
@@ -121,6 +123,12 @@
 .pa-input--focused {
   border-color: var(--pa-input-focus-border);
   outline: none;
+}
+
+/* Keyboard-only ring (CDK FocusMonitor origin === 'keyboard'), on top of the any-origin border above */
+.pa-input--keyboard-focused {
+  outline: var(--pa-input-focus-ring);
+  outline-offset: var(--pa-input-focus-ring-offset);
 }
 
 /* ------------------------------------------------------------------ */
