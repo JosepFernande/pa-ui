@@ -190,3 +190,17 @@
   outline: var(--pa-button-focus-ring);
   outline-offset: var(--pa-button-focus-ring-offset);
 }
+
+/* ------------------------------------------------------------------ */
+/* Reduced motion                                                      */
+/* ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .pa-button {
+    transition: none;
+  }
+
+  .pa-button__spinner {
+    animation: none;
+  }
+}

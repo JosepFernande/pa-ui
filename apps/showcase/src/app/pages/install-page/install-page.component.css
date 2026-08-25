@@ -1,6 +1,12 @@
 :host {
   display: block;
-  padding: 48px 64px;
+  padding: var(--pa-spacing-xl) calc(var(--pa-spacing-xl) * 2);
+
+  --install-page-title-color: var(--neutral-900);
+  --install-page-subtitle-color: var(--neutral-700);
+  --install-page-step-number-color: var(--neutral-50);
+  --install-page-code-bg: var(--dark-blue-800);
+  --install-page-code-color: var(--dark-blue-50);
 }
 
 .install-page__title {
@@ -8,7 +14,7 @@
   font-size: var(--pa-font-size-h1);
   font-weight: var(--pa-font-weight-h1);
   line-height: var(--pa-line-height-h1);
-  color: var(--neutral-900);
+  color: var(--install-page-title-color);
 }
 
 .install-page__subtitle {
@@ -16,13 +22,13 @@
   font-size: var(--pa-font-size-body);
   font-weight: var(--pa-font-weight-body);
   line-height: var(--pa-line-height-body);
-  color: var(--neutral-700);
+  color: var(--install-page-subtitle-color);
 }
 
 .install-page__steps {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: var(--pa-gap-xl);
   margin: var(--pa-gap-xl) 0 0;
   padding: 0;
   list-style: none;
@@ -31,7 +37,7 @@
 .install-page__step {
   display: flex;
   align-items: flex-start;
-  gap: 20px;
+  gap: var(--pa-gap-lg);
 }
 
 .install-page__step-number {
@@ -43,7 +49,7 @@
   height: 32px;
   border-radius: 50%;
   background: var(--pa-primary);
-  color: #ffffff;
+  color: var(--install-page-step-number-color);
   font-size: var(--pa-font-size-body);
   font-weight: var(--pa-font-weight-bold);
 }
@@ -60,7 +66,7 @@
   font-size: var(--pa-font-size-h3);
   font-weight: var(--pa-font-weight-h3);
   line-height: var(--pa-line-height-h3);
-  color: var(--neutral-900);
+  color: var(--install-page-title-color);
 }
 
 .install-page__step-description {
@@ -68,15 +74,15 @@
   font-size: var(--pa-font-size-small-body);
   font-weight: var(--pa-font-weight-small-body);
   line-height: var(--pa-line-height-small-body);
-  color: var(--neutral-700);
+  color: var(--install-page-subtitle-color);
 }
 
 .install-page__code {
   margin: 0;
-  padding: var(--pa-spacing-md) 20px;
+  padding: var(--pa-spacing-md) var(--pa-spacing-lg);
   border-radius: var(--pa-radius-md);
-  background: var(--dark-blue-800);
-  color: var(--dark-blue-50);
+  background: var(--install-page-code-bg);
+  color: var(--install-page-code-color);
   font-family: Consolas, Monaco, monospace;
   font-size: var(--pa-font-size-small-body);
   line-height: var(--pa-line-height-small-body);

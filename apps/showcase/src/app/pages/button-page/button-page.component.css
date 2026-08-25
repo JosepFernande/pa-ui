@@ -1,6 +1,9 @@
 :host {
   display: block;
-  padding: 40px 64px;
+  padding: var(--pa-spacing-xl) calc(var(--pa-spacing-xl) * 2);
+
+  --button-page-title-color: var(--neutral-900);
+  --button-page-description-color: var(--neutral-700);
 }
 
 .button-page__header {
@@ -12,16 +15,16 @@
 
 .button-page__title {
   margin: 0;
-  font-size: 1.75rem;
+  font-size: var(--pa-font-size-h1);
   font-weight: var(--pa-font-weight-bold);
-  color: var(--neutral-900);
+  color: var(--button-page-title-color);
 }
 
 .button-page__description {
   margin: 0;
   font-size: var(--pa-font-size-small-body);
   line-height: var(--pa-line-height-small-body);
-  color: var(--neutral-700);
+  color: var(--button-page-description-color);
 }
 
 .button-page__docs {

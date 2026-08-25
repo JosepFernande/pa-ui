@@ -1,6 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
+  inject,
   input,
   signal,
   ViewEncapsulation,
@@ -16,6 +18,8 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CodeBlockComponent {
+  private readonly destroyRef = inject(DestroyRef);
+
   readonly label = input.required<string>();
   readonly language = input.required<string>();
   readonly code = input.required<string>();
@@ -23,9 +27,15 @@ export class CodeBlockComponent {
   protected readonly copied = signal(false);
 
   protected copy(): void {
-    navigator.clipboard.writeText(this.code()).then(() => {
-      this.copied.set(true);
-      setTimeout(() => this.copied.set(false), 1500);
-    });
+    navigator.clipboard
+      .writeText(this.code())
+      .then(() => {
+        this.copied.set(true);
+        const timeoutId = setTimeout(() => this.copied.set(false), 1500);
+        this.destroyRef.onDestroy(() => clearTimeout(timeoutId));
+      })
+      .catch(() => {
+        this.copied.set(false);
+      });
   }
 }
