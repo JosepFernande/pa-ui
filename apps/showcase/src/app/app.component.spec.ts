@@ -23,7 +23,15 @@ describe('AppComponent', () => {
     const links = Array.from(compiled.querySelectorAll('nav a')).map((link) =>
       link.getAttribute('routerLink'),
     );
-    expect(links).toEqual(['/button', '/input', '/select']);
+    expect(links).toEqual([
+      '/instalacion',
+      '/instalacion',
+      '/configuracion',
+      '/componentes/boton',
+      '/componentes/input-text',
+      '/componentes/select',
+      '/componentes/boton',
+    ]);
   });
 
   it('should render the router outlet', () => {

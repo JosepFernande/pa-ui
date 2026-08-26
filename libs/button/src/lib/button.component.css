@@ -16,7 +16,8 @@
  *   --pa-button-min-height-*   → min-height (sm/md/lg)
  *   --pa-button-min-width-*    → min-width (sm/md/lg, Phase 3)
  *   --pa-button-gap-*          → gap (sm/md/lg, Phase 3; overrides the unsized base --pa-button-gap)
- *   --pa-button-focus-ring     → box-shadow for focus-visible
+ *   --pa-button-focus-ring     → outline for keyboard focus (CDK cdk-keyboard-focused)
+ *   --pa-button-focus-ring-offset → outline-offset for keyboard focus
  *   --pa-button-hover-bg       → background-color on hover
  *   --pa-button-active-bg      → background-color on active
  *   --pa-button-disabled-bg    → background-color when disabled
@@ -186,6 +187,20 @@
 /* ------------------------------------------------------------------ */
 
 .pa-button.cdk-keyboard-focused {
-  box-shadow: var(--pa-button-focus-ring);
-  outline: none;
+  outline: var(--pa-button-focus-ring);
+  outline-offset: var(--pa-button-focus-ring-offset);
+}
+
+/* ------------------------------------------------------------------ */
+/* Reduced motion                                                      */
+/* ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .pa-button {
+    transition: none;
+  }
+
+  .pa-button__spinner {
+    animation: none;
+  }
 }

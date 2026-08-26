@@ -25,6 +25,8 @@
  *   --pa-select-readonly-*         -> readonly state
  *   --pa-select-error-*            -> error state
  *   --pa-select-focus-border       -> border-color on focus
+ *   --pa-select-focus-ring         -> outline on keyboard-only focus (:focus-visible)
+ *   --pa-select-focus-ring-offset  -> outline-offset on keyboard-only focus
  *   --pa-select-transition-*       -> transition duration/easing
  */
 
@@ -65,7 +67,17 @@
 }
 
 .pa-select__trigger:focus-visible {
-  outline: none;
+  border-color: var(--pa-select-focus-border);
+  outline: var(--pa-select-focus-ring);
+  outline-offset: var(--pa-select-focus-ring-offset);
+}
+
+/*
+ * Mouse clicks focus the button without matching `:focus-visible` in Chrome/
+ * Firefox (that pseudo-class is keyboard-only for buttons), so the open
+ * state needs its own rule to get the same border color on click.
+ */
+.pa-select__trigger--open {
   border-color: var(--pa-select-focus-border);
 }
 
@@ -134,6 +146,14 @@
 
 .pa-select__panel {
   box-sizing: border-box;
+  /*
+   * `.cdk-overlay-pane` (Angular CDK's own CSS, not ours) is `display: flex`,
+   * so this `<ul>` — its only flex item — shrinks to fit its content (the
+   * widest option label) instead of filling the pane. `cdkConnectedOverlayWidth`
+   * already sizes the pane to the trigger's width; `width: 100%` is what makes
+   * THIS element actually fill it.
+   */
+  width: 100%;
   margin: 0;
   margin-top: var(--pa-select-panel-offset);
   padding: var(--pa-select-panel-padding-y) 0;
@@ -158,6 +178,15 @@
  * get no pointer/hover affordance, since clicking one is a no-op.
  * `--active` reflects the ActiveDescendantKeyManager's current item
  * (`item.active()`); `--disabled` reflects `item.disabled`.
+ *
+ * `--active`/`--selected` double up the base class (`.pa-select__option.pa-
+ * select__option--active`) so their specificity ties the hover rule's; the
+ * hover rule wraps its `:not()` in `:where()` (zero specificity) so it stays
+ * at base class + `:hover` instead of base class + `:not()` class + `:hover`,
+ * matching `--active`/`--selected`'s two classes. The tie is then broken by
+ * source order (declared after hover), so hovering an active/selected
+ * option keeps its own background instead of flashing the generic hover
+ * color.
  */
 .pa-select__option {
   box-sizing: border-box;
@@ -175,16 +204,16 @@
   cursor: pointer;
 }
 
-.pa-select__option:not(.pa-select__option--disabled):hover {
+.pa-select__option:where(:not(.pa-select__option--disabled)):hover {
   background-color: var(--pa-select-option-hover-bg);
 }
 
-.pa-select__option--active {
+.pa-select__option.pa-select__option--active {
   background-color: var(--pa-select-option-active-bg);
   color: var(--pa-select-option-active-color);
 }
 
-.pa-select__option--selected {
+.pa-select__option.pa-select__option--selected {
   background-color: var(--pa-select-option-selected-bg);
   color: var(--pa-select-option-selected-color);
   font-weight: var(--pa-select-option-selected-font-weight);

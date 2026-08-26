@@ -1,19 +1,103 @@
 :host {
   display: block;
+
+  --app-shell-bg: var(--neutral-200);
+  --app-sidebar-bg: var(--neutral-50);
+  --app-sidebar-border: var(--neutral-200);
+  --app-sidebar-tagline-color: var(--neutral-700);
+  --app-sidebar-group-bg: var(--light-blue-50);
+  --app-sidebar-link-color: var(--neutral-700);
+  --app-sidebar-link-hover-bg: var(--neutral-200);
+  --app-sidebar-link-active-bg: var(--light-blue-50);
 }
 
-.app-nav {
+.app-shell {
   display: flex;
-  gap: var(--pa-gap-md);
-  padding: var(--pa-spacing-md);
+  min-height: 100vh;
+  background: var(--app-shell-bg);
+  font-family: var(--pa-font-family);
 }
 
-.app-nav__link {
+.app-sidebar {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: var(--pa-gap-xl);
+  width: 260px;
+  padding: var(--pa-spacing-xl) var(--pa-spacing-lg);
+  background: var(--app-sidebar-bg);
+  border-right: 1px solid var(--app-sidebar-border);
+}
+
+.app-sidebar__brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pa-gap-xs);
+}
+
+.app-sidebar__logo {
+  font-size: var(--pa-font-size-h2);
+  font-weight: var(--pa-font-weight-h2);
   color: var(--pa-primary);
-  font-weight: 600;
+}
+
+.app-sidebar__tagline {
+  font-size: 0.8125rem;
+  line-height: var(--pa-line-height-caption);
+  color: var(--app-sidebar-tagline-color);
+}
+
+.app-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pa-gap-sm);
+}
+
+.app-sidebar__group-header {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding: 10px var(--pa-spacing-md);
+  border-radius: var(--pa-radius-md);
+  background: var(--app-sidebar-group-bg);
+  color: var(--pa-primary);
+  font-size: var(--pa-font-size-small-body);
+  font-weight: var(--pa-font-weight-semibold);
   text-decoration: none;
 }
 
-.app-nav__link--active {
-  text-decoration: underline;
+.app-sidebar__sub-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pa-gap-xs);
+}
+
+.app-sidebar__link {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 10px var(--pa-spacing-md) 10px 40px;
+  border-radius: var(--pa-radius-md);
+  color: var(--app-sidebar-link-color);
+  font-size: var(--pa-font-size-small-body);
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background-color 150ms ease-in-out,
+    color 150ms ease-in-out;
+}
+
+.app-sidebar__link:hover {
+  background: var(--app-sidebar-link-hover-bg);
+}
+
+.app-sidebar__link--active {
+  background: var(--app-sidebar-link-active-bg);
+  color: var(--pa-primary);
+  font-weight: var(--pa-font-weight-semibold);
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
 }

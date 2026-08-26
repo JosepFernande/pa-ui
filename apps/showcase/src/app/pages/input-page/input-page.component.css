@@ -1,6 +1,37 @@
 :host {
   display: block;
-  padding: var(--pa-spacing-lg);
+  padding: var(--pa-spacing-xl) calc(var(--pa-spacing-xl) * 2);
+
+  --input-page-title-color: var(--neutral-900);
+  --input-page-description-color: var(--neutral-700);
+}
+
+.input-page__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pa-gap-xs);
+  margin-block-end: var(--pa-gap-lg);
+}
+
+.input-page__title {
+  margin: 0;
+  font-size: var(--pa-font-size-h1);
+  font-weight: var(--pa-font-weight-bold);
+  color: var(--input-page-title-color);
+}
+
+.input-page__description {
+  margin: 0;
+  font-size: var(--pa-font-size-small-body);
+  line-height: var(--pa-line-height-small-body);
+  color: var(--input-page-description-color);
+}
+
+.input-page__docs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pa-gap-md);
+  margin-block-end: var(--pa-spacing-xl);
 }
 
 .input-page__section {

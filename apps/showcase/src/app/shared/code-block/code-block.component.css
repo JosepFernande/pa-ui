@@ -1,0 +1,77 @@
+:host {
+  display: block;
+
+  --code-block-label-color: var(--neutral-700);
+  --code-block-bg: var(--dark-blue-800);
+  --code-block-bar-border: var(--dark-blue-700);
+  --code-block-lang-color: var(--neutral-50);
+  --code-block-copy-bg: var(--dark-blue-700);
+  --code-block-copy-color: var(--dark-blue-100);
+  --code-block-copy-hover-bg: var(--dark-blue-600);
+  --code-block-code-color: var(--dark-blue-50);
+}
+
+.code-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pa-gap-xs);
+}
+
+.code-block__label {
+  font-size: var(--pa-font-size-caption);
+  font-weight: var(--pa-font-weight-semibold);
+  color: var(--code-block-label-color);
+}
+
+.code-block__card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--pa-radius-md);
+  background: var(--code-block-bg);
+  overflow: hidden;
+}
+
+.code-block__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--pa-gap-sm) var(--pa-spacing-md);
+  border-bottom: 1px solid var(--code-block-bar-border);
+}
+
+.code-block__lang {
+  font-size: var(--pa-font-size-caption);
+  font-weight: var(--pa-font-weight-semibold);
+  color: var(--code-block-lang-color);
+}
+
+.code-block__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pa-gap-xs);
+  padding: var(--pa-gap-xs) var(--pa-gap-sm);
+  border: none;
+  border-radius: var(--pa-radius-sm);
+  background: var(--code-block-copy-bg);
+  color: var(--code-block-copy-color);
+  font-family: var(--pa-font-family);
+  font-size: var(--pa-font-size-caption);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 150ms ease-in-out;
+}
+
+.code-block__copy:hover {
+  background: var(--code-block-copy-hover-bg);
+}
+
+.code-block__code {
+  margin: 0;
+  padding: var(--pa-spacing-md) var(--pa-spacing-lg);
+  color: var(--code-block-code-color);
+  font-family: Consolas, Monaco, monospace;
+  font-size: var(--pa-font-size-small-body);
+  line-height: var(--pa-line-height-small-body);
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}

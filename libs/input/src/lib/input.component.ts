@@ -139,6 +139,7 @@ export class PaInput implements ControlValueAccessor, OnInit {
       this.readonly() ? 'pa-input--readonly' : '',
       this.hasError() ? 'pa-input--error' : '',
       this.focusOrigin() !== null ? 'pa-input--focused' : '',
+      this.focusOrigin() === 'keyboard' ? 'pa-input--keyboard-focused' : '',
     ]
       .filter(Boolean)
       .join(' '),
