@@ -1,6 +1,37 @@
 :host {
   display: block;
-  padding: var(--pa-spacing-lg);
+  padding: var(--pa-spacing-xl) calc(var(--pa-spacing-xl) * 2);
+
+  --button-page-title-color: var(--neutral-900);
+  --button-page-description-color: var(--neutral-700);
+}
+
+.button-page__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pa-gap-xs);
+  margin-block-end: var(--pa-gap-lg);
+}
+
+.button-page__title {
+  margin: 0;
+  font-size: var(--pa-font-size-h1);
+  font-weight: var(--pa-font-weight-bold);
+  color: var(--button-page-title-color);
+}
+
+.button-page__description {
+  margin: 0;
+  font-size: var(--pa-font-size-small-body);
+  line-height: var(--pa-line-height-small-body);
+  color: var(--button-page-description-color);
+}
+
+.button-page__docs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pa-gap-md);
+  margin-block-end: var(--pa-spacing-xl);
 }
 
 .button-page__section {

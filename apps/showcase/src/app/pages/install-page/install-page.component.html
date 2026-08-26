@@ -1,0 +1,53 @@
+<h1 class="install-page__title">Instalación y configuración</h1>
+<p class="install-page__subtitle">De cero a tu primer componente en menos de 5 minutos.</p>
+
+<ol class="install-page__steps">
+  <li class="install-page__step">
+    <span class="install-page__step-number">1</span>
+    <div class="install-page__step-body">
+      <h2 class="install-page__step-title">Instalar el paquete</h2>
+      <p class="install-page__step-description">
+        Instalá el paquete principal junto con Angular CDK, la única dependencia externa.
+      </p>
+      <pre class="install-page__code">npm install &#64;pa-ui/angular &#64;angular/cdk</pre>
+    </div>
+  </li>
+
+  <li class="install-page__step">
+    <span class="install-page__step-number">2</span>
+    <div class="install-page__step-body">
+      <h2 class="install-page__step-title">Configurar el Theme Engine</h2>
+      <p class="install-page__step-description">
+        Agregá el provider en app.config.ts — con el tema por defecto no necesitás pasarle nada.
+      </p>
+      <pre class="install-page__code">
+import {{ '{' }} providePaTheme {{ '}' }} from '&#64;pa-ui/core';
+providers: [ providePaTheme() ]</pre
+      >
+    </div>
+  </li>
+
+  <li class="install-page__step">
+    <span class="install-page__step-number">3</span>
+    <div class="install-page__step-body">
+      <h2 class="install-page__step-title">Importar el CSS de Foundation</h2>
+      <p class="install-page__step-description">
+        Sumá los estilos base una sola vez, en cualquier hoja de estilos global. Si te olvidás este import, los
+        componentes quedan sin estilo hasta que lo agregues.
+      </p>
+      <pre class="install-page__code">&#64;import '&#64;pa-ui/core/theme.css';</pre>
+    </div>
+  </li>
+
+  <li class="install-page__step">
+    <span class="install-page__step-number">4</span>
+    <div class="install-page__step-body">
+      <h2 class="install-page__step-title">Usar un componente</h2>
+      <p class="install-page__step-description">
+        Eso es todo — no hay NgModules ni configuración adicional. Importá el componente standalone que necesites y
+        listo.
+      </p>
+      <a class="install-page__gallery-link" routerLink="/componentes/boton">Ver galería de componentes →</a>
+    </div>
+  </li>
+</ol>

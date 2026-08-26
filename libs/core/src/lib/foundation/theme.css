@@ -249,7 +249,8 @@
   --pa-button-gap-md: 10px;
   --pa-button-gap-lg: 12px; /* provisional: pending design validation */
 
-  --pa-button-focus-ring: 0 0 0 3px var(--pa-primary-hover);
+  --pa-button-focus-ring: 2px solid var(--pa-primary-hover);
+  --pa-button-focus-ring-offset: 5px;
   --pa-button-hover-bg: var(--pa-primary-hover);
   --pa-button-active-bg: var(--pa-primary-active);
   --pa-button-disabled-bg: var(--neutral-200);
@@ -295,6 +296,8 @@
   --pa-input-radius-lg: 8px; /* provisional: pending design validation */
 
   --pa-input-focus-border: var(--pa-primary);
+  --pa-input-focus-ring: 2px solid var(--pa-primary-hover);
+  --pa-input-focus-ring-offset: 5px;
   --pa-input-error-border: var(--pa-error);
   --pa-input-error-color: var(--pa-error);
   --pa-input-error-icon-color: var(--pa-error);
@@ -342,6 +345,8 @@
 
   --pa-select-placeholder-color: var(--neutral-500);
   --pa-select-focus-border: var(--pa-primary);
+  --pa-select-focus-ring: 2px solid var(--pa-primary-hover);
+  --pa-select-focus-ring-offset: 5px;
   --pa-select-error-border: var(--pa-error);
   --pa-select-error-color: var(--pa-error);
   --pa-select-disabled-bg: var(--neutral-200);

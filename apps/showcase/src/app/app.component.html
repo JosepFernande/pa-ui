@@ -1,7 +1,37 @@
-<nav class="app-nav">
-  <a class="app-nav__link" routerLink="/button" routerLinkActive="app-nav__link--active">Button</a>
-  <a class="app-nav__link" routerLink="/input" routerLinkActive="app-nav__link--active">Input</a>
-  <a class="app-nav__link" routerLink="/select" routerLinkActive="app-nav__link--active">Select</a>
-</nav>
+<div class="app-shell">
+  <aside class="app-sidebar">
+    <div class="app-sidebar__brand">
+      <span class="app-sidebar__logo">pa-ui</span>
+      <span class="app-sidebar__tagline">Documentación de componentes</span>
+    </div>
 
-<router-outlet />
+    <nav class="app-sidebar__nav">
+      <a class="app-sidebar__group-header" routerLink="/instalacion">Instalación y configuración</a>
+      <div class="app-sidebar__sub-items">
+        <a class="app-sidebar__link" routerLink="/instalacion" routerLinkActive="app-sidebar__link--active"
+          >Instalación</a
+        >
+        <a class="app-sidebar__link" routerLink="/configuracion" routerLinkActive="app-sidebar__link--active"
+          >Configuración</a
+        >
+      </div>
+
+      <a class="app-sidebar__group-header" routerLink="/componentes/boton">Componentes</a>
+      <div class="app-sidebar__sub-items">
+        <a class="app-sidebar__link" routerLink="/componentes/input-text" routerLinkActive="app-sidebar__link--active"
+          >InputText</a
+        >
+        <a class="app-sidebar__link" routerLink="/componentes/select" routerLinkActive="app-sidebar__link--active"
+          >Select</a
+        >
+        <a class="app-sidebar__link" routerLink="/componentes/boton" routerLinkActive="app-sidebar__link--active"
+          >Botón</a
+        >
+      </div>
+    </nav>
+  </aside>
+
+  <main class="app-main">
+    <router-outlet />
+  </main>
+</div>

@@ -1,3 +1,31 @@
+<header class="select-page__header">
+  <h1 class="select-page__title">Select</h1>
+  <p class="select-page__description">
+    Combobox accesible e integrado con Angular Forms, con soporte para tamaños, estados y los eventos
+    <code>valueChange</code>, <code>opened</code> y <code>closed</code>.
+  </p>
+</header>
+
+<div class="select-page__docs">
+  <app-code-block label="Instalación" language="bash" code="npm install &#64;pa-ui/angular &#64;angular/cdk" />
+  <app-code-block
+    label="Importación"
+    language="typescript"
+    code="import { PaSelect } from '&#64;pa-ui/angular';
+import type { PaSelectOption } from '&#64;pa-ui/angular';"
+  />
+  <app-code-block
+    label="Uso básico"
+    language="html"
+    code='&lt;pa-select
+  [options]="options"
+  size="md"
+  placeholder="Elegí una opción"
+  (valueChange)="onValueChange($event)"
+/&gt;'
+  />
+</div>
+
 <section class="select-page__section">
   <h2>Sizes</h2>
   <div class="select-page__row">

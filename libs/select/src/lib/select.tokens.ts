@@ -1,10 +1,10 @@
 /**
- * `--pa-select-*` component tokens (51 keys), following the same
+ * `--pa-select-*` component tokens (53 keys), following the same
  * camelCase-key -> kebab-name convention and per-size suffix scheme as
- * `PA_INPUT_TOKENS`. Grouped as trigger (30), panel (7), and option (14).
+ * `PA_INPUT_TOKENS`. Grouped as trigger (32), panel (7), and option (14).
  */
 export const PA_SELECT_TOKENS = {
-  // Trigger (30)
+  // Trigger (32)
   bg: '--pa-select-bg',
   color: '--pa-select-color',
   border: '--pa-select-border',
@@ -25,6 +25,8 @@ export const PA_SELECT_TOKENS = {
   radiusLg: '--pa-select-radius-lg',
   placeholderColor: '--pa-select-placeholder-color',
   focusBorder: '--pa-select-focus-border',
+  focusRing: '--pa-select-focus-ring',
+  focusRingOffset: '--pa-select-focus-ring-offset',
   errorBorder: '--pa-select-error-border',
   errorColor: '--pa-select-error-color',
   disabledBg: '--pa-select-disabled-bg',

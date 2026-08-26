@@ -25,6 +25,7 @@ export const PA_BUTTON_TOKENS = {
   gapMd: '--pa-button-gap-md',
   gapLg: '--pa-button-gap-lg',
   focusRing: '--pa-button-focus-ring',
+  focusRingOffset: '--pa-button-focus-ring-offset',
   hoverBg: '--pa-button-hover-bg',
   activeBg: '--pa-button-active-bg',
   disabledBg: '--pa-button-disabled-bg',

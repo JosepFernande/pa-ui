@@ -30,7 +30,10 @@ FILE_PATTERNS="*.ts,*.js,*.css,*.scss,*.html"
 # Examples:
 #   EXCLUDE_PATTERNS="*.test.ts,*.spec.ts"
 #   EXCLUDE_PATTERNS="*_test.go,*.mock.ts"
-EXCLUDE_PATTERNS="*.test.ts,*.spec.ts,*.d.ts"
+#
+# apps/showcase/* — the showcase is a demo/doc app, not a published pa-ui
+# component; it isn't held to the libs/* token/a11y architecture rules.
+EXCLUDE_PATTERNS="*.test.ts,*.spec.ts,*.d.ts,apps/showcase/*"
 
 # File containing code review rules
 # Default: AGENTS.md
