@@ -1,5 +1,15 @@
 # @pa-ui/angular
 
+## 19.3.1
+
+### Patch Changes
+
+- Updated dependencies [6a8f96a]
+  - @pa-ui/core@19.3.1
+  - @pa-ui/button@19.3.1
+  - @pa-ui/input@19.3.1
+  - @pa-ui/select@19.3.1
+
 ## 19.3.0
 
 ### Minor Changes
