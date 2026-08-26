@@ -1,5 +1,15 @@
 # @pa-ui/core
 
+## 19.3.1
+
+### Patch Changes
+
+- 6a8f96a: Switch the `button`/`input`/`select` focus-ring tokens from
+  `box-shadow` to `outline` + `outline-offset` for consistent keyboard-only
+  focus styling, and fix select trigger sizing/interaction (stale overlay width
+  on open, missing open-state border on click, option mousedown stealing trigger
+  focus, hover overriding selected/active option styling).
+
 ## 19.3.0
 
 ### Minor Changes
