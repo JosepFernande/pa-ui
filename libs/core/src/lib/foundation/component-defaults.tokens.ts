@@ -22,12 +22,9 @@ import {
 import { PA_INPUT_PROVISIONAL_DIMENSIONS } from './input-dimensions.tokens';
 
 /**
- * Every `--pa-button-*` custom property currently referenced by
- * `libs/button/src/lib/button.component.css`, plus the forward-looking
- * per-size `min-width`/`gap` pair that `button.tokens.ts` will name in
- * Phase 3 (additive; unused until Phase 3 wires the CSS rule that consumes
- * them — declaring the default now costs nothing and needs no follow-up
- * edit to this file).
+ * Every `--pa-button-*` custom property referenced by
+ * `libs/button/src/lib/button.component.css`, including the per-size
+ * `min-width`/`gap` pair consumed by its `.pa-button--sm/md/lg` rules.
  */
 const PA_BUTTON_TOKEN_DEFAULTS: Readonly<Record<string, string>> = {
   '--pa-button-bg': 'var(--pa-primary)',
