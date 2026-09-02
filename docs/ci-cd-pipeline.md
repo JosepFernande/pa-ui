@@ -326,7 +326,7 @@ post the verdict comment on the PR (`gh pr comment`), not for model inference.
    no verdict) — the PR is never left without a comment.
 
 **Rule source:** `AGENTS.md` is an **index** pointing to skills
-(`pa-ui-architecture`, `pa-ui-coding-standards`, `pa-ui-testing`,
+(`lib-ui-architecture`, `lib-ui-coding-standards`, `lib-ui-testing`,
 `github-issues-from-docs`), it does not contain the rules inline. `gga` does a
 literal `cat` of `AGENTS.md` (it does not follow links); it's the agentic
 provider (`opencode`, with `skill`/`glob`/`Read` tools) that resolves those

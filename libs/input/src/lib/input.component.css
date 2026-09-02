@@ -1,134 +1,134 @@
 /*
- * PaInput — BEM CSS classes
- * Every value comes from a --pa-* custom property. Zero hardcoded colors, spacing, or radii.
+ * HaInput — BEM CSS classes
+ * Every value comes from a --ha-* custom property. Zero hardcoded colors, spacing, or radii.
  *
  * Token mapping:
- *   --pa-input-font-family        → font-family
- *   --pa-input-font-weight        → font-weight
- *   --pa-input-line-height        → line-height
- *   --pa-input-color              → color (text)
- *   --pa-input-bg                 → background-color
- *   --pa-input-border             → border shorthand
- *   --pa-input-radius-sm/md/lg    → border-radius (per size)
- *   --pa-input-padding-sm         → padding (sm)
- *   --pa-input-padding-md         → padding (md)
- *   --pa-input-padding-lg         → padding (lg)
- *   --pa-input-font-sm            → font-size (sm)
- *   --pa-input-font-md            → font-size (md)
- *   --pa-input-font-lg            → font-size (lg)
- *   --pa-input-min-height-sm      → min-height (sm)
- *   --pa-input-min-height-md      → min-height (md)
- *   --pa-input-min-height-lg      → min-height (lg)
- *   --pa-input-placeholder-color  → ::placeholder color
- *   --pa-input-disabled-opacity   → opacity when disabled
- *   --pa-input-disabled-bg        → background-color when disabled
- *   --pa-input-disabled-color     → color when disabled
- *   --pa-input-readonly-bg        → background-color when readonly
- *   --pa-input-readonly-border    → border when readonly
- *   --pa-input-error-border       → border-color when error
- *   --pa-input-error-color        → color when error
- *   --pa-input-focus-border       → border-color when focused (any origin)
- *   --pa-input-focus-ring         → outline for keyboard-only focus (CDK origin === 'keyboard')
- *   --pa-input-focus-ring-offset  → outline-offset for keyboard-only focus
- *   --pa-input-transition-duration → transition duration
- *   --pa-input-transition-easing  → transition easing
+ *   --ha-input-font-family        → font-family
+ *   --ha-input-font-weight        → font-weight
+ *   --ha-input-line-height        → line-height
+ *   --ha-input-color              → color (text)
+ *   --ha-input-bg                 → background-color
+ *   --ha-input-border             → border shorthand
+ *   --ha-input-radius-sm/md/lg    → border-radius (per size)
+ *   --ha-input-padding-sm         → padding (sm)
+ *   --ha-input-padding-md         → padding (md)
+ *   --ha-input-padding-lg         → padding (lg)
+ *   --ha-input-font-sm            → font-size (sm)
+ *   --ha-input-font-md            → font-size (md)
+ *   --ha-input-font-lg            → font-size (lg)
+ *   --ha-input-min-height-sm      → min-height (sm)
+ *   --ha-input-min-height-md      → min-height (md)
+ *   --ha-input-min-height-lg      → min-height (lg)
+ *   --ha-input-placeholder-color  → ::placeholder color
+ *   --ha-input-disabled-opacity   → opacity when disabled
+ *   --ha-input-disabled-bg        → background-color when disabled
+ *   --ha-input-disabled-color     → color when disabled
+ *   --ha-input-readonly-bg        → background-color when readonly
+ *   --ha-input-readonly-border    → border when readonly
+ *   --ha-input-error-border       → border-color when error
+ *   --ha-input-error-color        → color when error
+ *   --ha-input-focus-border       → border-color when focused (any origin)
+ *   --ha-input-focus-ring         → outline for keyboard-only focus (CDK origin === 'keyboard')
+ *   --ha-input-focus-ring-offset  → outline-offset for keyboard-only focus
+ *   --ha-input-transition-duration → transition duration
+ *   --ha-input-transition-easing  → transition easing
  */
 
 /* ------------------------------------------------------------------ */
 /* Base                                                                 */
 /* ------------------------------------------------------------------ */
 
-.pa-input {
+.ha-input {
   display: block;
   width: 100%;
   box-sizing: border-box;
 
-  font-family: var(--pa-input-font-family);
-  font-weight: var(--pa-input-font-weight);
-  line-height: var(--pa-input-line-height);
+  font-family: var(--ha-input-font-family);
+  font-weight: var(--ha-input-font-weight);
+  line-height: var(--ha-input-line-height);
 
-  color: var(--pa-input-color);
-  background-color: var(--pa-input-bg);
-  border: var(--pa-input-border);
+  color: var(--ha-input-color);
+  background-color: var(--ha-input-bg);
+  border: var(--ha-input-border);
 
   transition:
-    background-color var(--pa-input-transition-duration) var(--pa-input-transition-easing),
-    border-color var(--pa-input-transition-duration) var(--pa-input-transition-easing),
-    color var(--pa-input-transition-duration) var(--pa-input-transition-easing),
-    box-shadow var(--pa-input-transition-duration) var(--pa-input-transition-easing);
+    background-color var(--ha-input-transition-duration) var(--ha-input-transition-easing),
+    border-color var(--ha-input-transition-duration) var(--ha-input-transition-easing),
+    color var(--ha-input-transition-duration) var(--ha-input-transition-easing),
+    box-shadow var(--ha-input-transition-duration) var(--ha-input-transition-easing);
 }
 
-.pa-input::placeholder {
-  color: var(--pa-input-placeholder-color);
+.ha-input::placeholder {
+  color: var(--ha-input-placeholder-color);
 }
 
 /* ------------------------------------------------------------------ */
 /* Sizes                                                               */
 /* ------------------------------------------------------------------ */
 
-.pa-input--sm {
-  padding: var(--pa-input-padding-sm);
-  font-size: var(--pa-input-font-sm);
-  min-height: var(--pa-input-min-height-sm);
-  border-radius: var(--pa-input-radius-sm);
+.ha-input--sm {
+  padding: var(--ha-input-padding-sm);
+  font-size: var(--ha-input-font-sm);
+  min-height: var(--ha-input-min-height-sm);
+  border-radius: var(--ha-input-radius-sm);
 }
 
-.pa-input--md {
-  padding: var(--pa-input-padding-md);
-  font-size: var(--pa-input-font-md);
-  min-height: var(--pa-input-min-height-md);
-  border-radius: var(--pa-input-radius-md);
+.ha-input--md {
+  padding: var(--ha-input-padding-md);
+  font-size: var(--ha-input-font-md);
+  min-height: var(--ha-input-min-height-md);
+  border-radius: var(--ha-input-radius-md);
 }
 
-.pa-input--lg {
-  padding: var(--pa-input-padding-lg);
-  font-size: var(--pa-input-font-lg);
-  min-height: var(--pa-input-min-height-lg);
-  border-radius: var(--pa-input-radius-lg);
+.ha-input--lg {
+  padding: var(--ha-input-padding-lg);
+  font-size: var(--ha-input-font-lg);
+  min-height: var(--ha-input-min-height-lg);
+  border-radius: var(--ha-input-radius-lg);
 }
 
 /* ------------------------------------------------------------------ */
 /* Disabled                                                            */
 /* ------------------------------------------------------------------ */
 
-.pa-input--disabled {
-  opacity: var(--pa-input-disabled-opacity);
+.ha-input--disabled {
+  opacity: var(--ha-input-disabled-opacity);
   cursor: not-allowed;
-  background-color: var(--pa-input-disabled-bg);
-  color: var(--pa-input-disabled-color);
+  background-color: var(--ha-input-disabled-bg);
+  color: var(--ha-input-disabled-color);
 }
 
 /* ------------------------------------------------------------------ */
 /* Readonly                                                            */
 /* ------------------------------------------------------------------ */
 
-.pa-input--readonly {
-  background-color: var(--pa-input-readonly-bg);
-  border: var(--pa-input-readonly-border);
+.ha-input--readonly {
+  background-color: var(--ha-input-readonly-bg);
+  border: var(--ha-input-readonly-border);
 }
 
 /* ------------------------------------------------------------------ */
 /* Error                                                               */
 /* ------------------------------------------------------------------ */
 
-.pa-input--error {
-  border-color: var(--pa-input-error-border);
-  color: var(--pa-input-error-color);
+.ha-input--error {
+  border-color: var(--ha-input-error-border);
+  color: var(--ha-input-error-color);
 }
 
 /* ------------------------------------------------------------------ */
 /* Focus (CDK FocusMonitor) — any origin: mouse, touch, keyboard, program */
 /* ------------------------------------------------------------------ */
 
-.pa-input--focused {
-  border-color: var(--pa-input-focus-border);
+.ha-input--focused {
+  border-color: var(--ha-input-focus-border);
   outline: none;
 }
 
 /* Keyboard-only ring (CDK FocusMonitor origin === 'keyboard'), on top of the any-origin border above */
-.pa-input--keyboard-focused {
-  outline: var(--pa-input-focus-ring);
-  outline-offset: var(--pa-input-focus-ring-offset);
+.ha-input--keyboard-focused {
+  outline: var(--ha-input-focus-ring);
+  outline-offset: var(--ha-input-focus-ring-offset);
 }
 
 /* ------------------------------------------------------------------ */
@@ -136,7 +136,7 @@
 /* ------------------------------------------------------------------ */
 
 @media (prefers-reduced-motion: reduce) {
-  .pa-input {
+  .ha-input {
     transition: none;
   }
 }

@@ -21,20 +21,20 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { CdkConnectedOverlay, Overlay } from '@angular/cdk/overlay';
 import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
-import type { PaSelectOption, PaSelectSize } from './select.types';
+import type { HaSelectOption, HaSelectSize } from './select.types';
 import {
-  PA_SELECT_POSITIONS,
-  PA_SELECT_TYPEAHEAD_DEBOUNCE,
-  PA_SELECT_VIEWPORT_MARGIN,
+  HA_SELECT_POSITIONS,
+  HA_SELECT_TYPEAHEAD_DEBOUNCE,
+  HA_SELECT_VIEWPORT_MARGIN,
 } from './select.constants';
 import { resolveSelectKeyIntent } from './select.keyboard';
-import { PaSelectOptionItem } from './select.option-item';
+import { HaSelectOptionItem } from './select.option-item';
 import { findOptionIndexByValue, firstEnabledIndex, nextSelectId, optionId } from './select.utils';
 
 /**
  * Accessible, token-driven single-select combobox (custom element
- * `pa-select`, NOT an attribute selector — unlike `button[pa-button]`/
- * `input[pa-input]`, the trigger is a `<button role="combobox">` rendered
+ * `ha-select`, NOT an attribute selector — unlike `button[ha-button]`/
+ * `input[ha-input]`, the trigger is a `<button role="combobox">` rendered
  * inside the component's own template).
  *
  * The panel is a `CdkConnectedOverlay` (`disableClose=true` — Escape is
@@ -44,7 +44,7 @@ import { findOptionIndexByValue, firstEnabledIndex, nextSelectId, optionId } fro
  * mirrors the real `panelOpen()` state.
  *
  * Keyboard navigation and commit (D4, D6) are driven by an
- * `ActiveDescendantKeyManager<PaSelectOptionItem>` built over a *signal*
+ * `ActiveDescendantKeyManager<HaSelectOptionItem>` built over a *signal*
  * item source (`optionItems`) — no RxJS subscription needed. Arrow/Home/End/
  * typeahead move `aria-activedescendant` only (navigate); Enter, Space, Tab,
  * Alt+ArrowUp, and clicking an enabled option all commit (D6), writing
@@ -54,31 +54,31 @@ import { findOptionIndexByValue, firstEnabledIndex, nextSelectId, optionId } fro
  * options at either end — a deliberate deviation from design decision D5
  * ("clamp, not wrap"): the spec's keyboard matrix mandates wrap-around.
  *
- * Forms integration mirrors `PaInput`'s `NgControl` lazy-injection +
+ * Forms integration mirrors `HaInput`'s `NgControl` lazy-injection +
  * `validityVersion` idiom (D8, `libs/input/src/lib/input.component.ts:103-175`):
  * the bound form directive also injects `NG_VALUE_ACCESSOR` (this component),
  * so resolving `NgControl` eagerly would throw NG0200; resolving lazily
  * inside `hasError` breaks the cycle.
  */
 @Component({
-  selector: 'pa-select',
+  selector: 'ha-select',
   standalone: true,
   imports: [CdkConnectedOverlay],
   templateUrl: './select.component.html',
   styleUrl: './select.component.css',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => PaSelect), multi: true }],
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => HaSelect), multi: true }],
   host: {
     '[class]': 'hostClasses()',
   },
 })
-export class PaSelect implements ControlValueAccessor, OnInit {
+export class HaSelect implements ControlValueAccessor, OnInit {
   /** Selectable options rendered inside the panel. */
-  readonly options = input<PaSelectOption[]>([]);
+  readonly options = input<HaSelectOption[]>([]);
 
   /** Size preset: sm, md, or lg. */
-  readonly size = input<PaSelectSize>('md');
+  readonly size = input<HaSelectSize>('md');
 
   /** Whether the trigger is disabled. Overridden by the form control when disabled. */
   readonly disabled = input(false);
@@ -120,10 +120,10 @@ export class PaSelect implements ControlValueAccessor, OnInit {
   protected readonly triggerWidth = signal<number>(0);
 
   /** Connected-overlay fallback positions (D7). */
-  protected readonly positions = PA_SELECT_POSITIONS;
+  protected readonly positions = HA_SELECT_POSITIONS;
 
   /** Minimum gap (px) kept between the panel and the viewport edge (D7). */
-  protected readonly viewportMargin = PA_SELECT_VIEWPORT_MARGIN;
+  protected readonly viewportMargin = HA_SELECT_VIEWPORT_MARGIN;
 
   private readonly overlay = inject(Overlay);
 
@@ -140,9 +140,9 @@ export class PaSelect implements ControlValueAccessor, OnInit {
   protected readonly panelId = `${this.selectId}-panel`;
 
   /** Computed: `Highlightable` wrappers per option (D4), passed as a signal to `ActiveDescendantKeyManager`. */
-  protected readonly optionItems = computed<PaSelectOptionItem[]>(() =>
+  protected readonly optionItems = computed<HaSelectOptionItem[]>(() =>
     this.options().map(
-      (option, index) => new PaSelectOptionItem(option, optionId(this.selectId, index)),
+      (option, index) => new HaSelectOptionItem(option, optionId(this.selectId, index)),
     ),
   );
 
@@ -157,7 +157,7 @@ export class PaSelect implements ControlValueAccessor, OnInit {
    * overload calls `effect()` internally, which throws NG0602 if nested
    * inside another running effect.
    */
-  private readonly keyManager: ActiveDescendantKeyManager<PaSelectOptionItem>;
+  private readonly keyManager: ActiveDescendantKeyManager<HaSelectOptionItem>;
 
   /**
    * Re-computation trigger for `hasError`: `control.invalid`/`control.touched`
@@ -168,7 +168,7 @@ export class PaSelect implements ControlValueAccessor, OnInit {
 
   /**
    * Element injector used to resolve `NgControl` lazily (see class TSDoc —
-   * mirrors `PaInput`'s NG0200 workaround).
+   * mirrors `HaInput`'s NG0200 workaround).
    */
   private readonly injector = inject(Injector);
 
@@ -189,7 +189,7 @@ export class PaSelect implements ControlValueAccessor, OnInit {
 
   /**
    * Computed: `true` when the bound control is invalid AND touched — drives
-   * `.pa-select--error` and `aria-invalid`. Reactive via `validityVersion`.
+   * `.ha-select--error` and `aria-invalid`. Reactive via `validityVersion`.
    */
   protected readonly hasError = computed(() => {
     this.validityVersion();
@@ -203,7 +203,7 @@ export class PaSelect implements ControlValueAccessor, OnInit {
    * `valueState`/the bound control — a later `options()` change re-resolves
    * the same raw value for free.
    */
-  protected readonly selectedOption = computed<PaSelectOption | null>(() => {
+  protected readonly selectedOption = computed<HaSelectOption | null>(() => {
     const index = findOptionIndexByValue(this.options(), this.valueState());
     return index === -1 ? null : this.options()[index];
   });
@@ -213,19 +213,19 @@ export class PaSelect implements ControlValueAccessor, OnInit {
     () => this.selectedOption()?.label ?? this.placeholder(),
   );
 
-  /** Template helper: whether `option` is the currently selected option (`aria-selected`, `.pa-select__option--selected`). */
-  protected isSelected(option: PaSelectOption): boolean {
+  /** Template helper: whether `option` is the currently selected option (`aria-selected`, `.ha-select__option--selected`). */
+  protected isSelected(option: HaSelectOption): boolean {
     return Object.is(option.value, this.valueState());
   }
 
-  /** Computed: BEM class string for the host `pa-select` element. */
+  /** Computed: BEM class string for the host `ha-select` element. */
   protected readonly hostClasses = computed(() =>
     [
-      'pa-select',
-      `pa-select--${this.size()}`,
-      this.effectiveDisabled() ? 'pa-select--disabled' : '',
-      this.readonly() ? 'pa-select--readonly' : '',
-      this.hasError() ? 'pa-select--error' : '',
+      'ha-select',
+      `ha-select--${this.size()}`,
+      this.effectiveDisabled() ? 'ha-select--disabled' : '',
+      this.readonly() ? 'ha-select--readonly' : '',
+      this.hasError() ? 'ha-select--error' : '',
     ]
       .filter(Boolean)
       .join(' '),
@@ -240,14 +240,14 @@ export class PaSelect implements ControlValueAccessor, OnInit {
   constructor(private readonly cdr: ChangeDetectorRef) {
     // Built here, NOT inside the effect() below — see the `keyManager` field
     // TSDoc for why (NG0602: nested effect() creation).
-    this.keyManager = new ActiveDescendantKeyManager<PaSelectOptionItem>(
+    this.keyManager = new ActiveDescendantKeyManager<HaSelectOptionItem>(
       this.optionItems,
       this.injector,
     )
       .withVerticalOrientation(true)
       .withWrap(true)
       .withHomeAndEnd(true)
-      .withTypeAhead(PA_SELECT_TYPEAHEAD_DEBOUNCE);
+      .withTypeAhead(HA_SELECT_TYPEAHEAD_DEBOUNCE);
     this.destroyRef.onDestroy(() => this.keyManager.destroy());
 
     // One effect emitting `opened`/`closed` on every `panelOpen()` transition
@@ -270,7 +270,7 @@ export class PaSelect implements ControlValueAccessor, OnInit {
   }
 
   ngOnInit(): void {
-    // See `PaInput.ngOnInit` for why a subscription (not a computed()) is
+    // See `HaInput.ngOnInit` for why a subscription (not a computed()) is
     // required to react to control.invalid/control.touched changes.
     const control = this.ngControl?.control;
     control?.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
@@ -376,7 +376,7 @@ export class PaSelect implements ControlValueAccessor, OnInit {
   }
 
   /** Host handler: click-commits `item` via `commit` (D6), closes, and refocuses the trigger. Disabled options are a no-op. */
-  protected onOptionClick(item: PaSelectOptionItem): void {
+  protected onOptionClick(item: HaSelectOptionItem): void {
     if (item.disabled) {
       return;
     }

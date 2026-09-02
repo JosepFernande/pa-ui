@@ -150,10 +150,18 @@ jobs:
           # non-prerelease release, so npm tags them `latest` by default. The
           # "Point the alpha dist-tag" step below moves `alpha` forward
           # afterward.
+          # Explicit dependency-ordered list (NOT a libs/*/package.json glob):
+          # core has no internal deps, button/input/select each depend on
+          # core, and the halo-ui umbrella depends on all four. A
+          # libs/*/package.json glob sorts alphabetically as button, core,
+          # halo-ui, input, select — publishing the umbrella BEFORE input and
+          # select even though it depends on them, leaving it briefly
+          # uninstallable. The explicit list guarantees every dependency is
+          # already on the registry before its dependents publish.
           : > /tmp/newly_published.txt
           published=false
-          for src_pkg in libs/*/package.json; do
-            lib_dir="$(dirname "$src_pkg")"
+          for lib_dir in libs/core libs/button libs/input libs/select libs/halo-ui; do
+            src_pkg="$lib_dir/package.json"
             dist_dir="dist/$lib_dir"
             [ -f "$dist_dir/package.json" ] || continue
 
@@ -279,7 +287,7 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ env.TAG }}
-          name: pa-ui ${{ env.VERSION }}
+          name: halo-ui ${{ env.VERSION }}
           body_path: /tmp/release-body.md
           generate_release_notes: true
           prerelease: ${{ env.PRERELEASE == 'true' }}

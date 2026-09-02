@@ -7,17 +7,17 @@
 </header>
 
 <div class="input-page__docs">
-  <app-code-block label="Instalación" language="bash" code="npm install &#64;pa-ui/angular &#64;angular/cdk" />
+  <app-code-block label="Instalación" language="bash" code="npm install &#64;halo-ui/angular &#64;angular/cdk" />
   <app-code-block
     label="Importación"
     language="typescript"
-    code="import { PaInput } from '&#64;pa-ui/angular';
+    code="import { HaInput } from '&#64;halo-ui/angular';
 import { FormsModule } from '&#64;angular/forms';"
   />
   <app-code-block
     label="Uso básico"
     language="html"
-    code='&lt;input pa-input size="md" placeholder="Escribí algo" [(ngModel)]="value" /&gt;'
+    code='&lt;input ha-input size="md" placeholder="Escribí algo" [(ngModel)]="value" /&gt;'
   />
 </div>
 
@@ -25,7 +25,7 @@ import { FormsModule } from '&#64;angular/forms';"
   <h2>Sizes</h2>
   <div class="input-page__row">
     @for (size of sizes; track size) {
-      <input pa-input [size]="size" [placeholder]="size" />
+      <input ha-input [size]="size" [placeholder]="size" />
     }
   </div>
 </section>
@@ -33,15 +33,15 @@ import { FormsModule } from '&#64;angular/forms';"
 <section class="input-page__section">
   <h2>States</h2>
   <div class="input-page__row">
-    <input pa-input placeholder="Disabled" [disabled]="true" />
-    <input pa-input placeholder="Read-only" [readonly]="true" value="Read-only value" />
+    <input ha-input placeholder="Disabled" [disabled]="true" />
+    <input ha-input placeholder="Read-only" [readonly]="true" value="Read-only value" />
   </div>
 </section>
 
 <section class="input-page__section">
   <h2>Two-way binding</h2>
   <div class="input-page__row">
-    <input pa-input placeholder="Type something" name="demoInput" [(ngModel)]="boundValue" />
+    <input ha-input placeholder="Type something" name="demoInput" [(ngModel)]="boundValue" />
     <p>Current value: {{ boundValue }}</p>
   </div>
 </section>

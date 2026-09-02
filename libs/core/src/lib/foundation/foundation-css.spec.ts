@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { toFoundationCssVariables } from './foundation-css';
-import { PA_FOUNDATION_PALETTE } from './foundation.tokens';
+import { HA_FOUNDATION_PALETTE } from './foundation.tokens';
 
 /**
  * Parity + shape guard for the shipped `theme.css` artifact (D1/D4/D5).
@@ -79,7 +79,7 @@ describe('theme.css shape guard', () => {
   it('has no numeric-indexed scale name outside the raw 25-900 color scale steps (Requirement: Foundation Emitted as Static CSS)', () => {
     const tsVars = toFoundationCssVariables();
     const rawColorScaleNames = new Set(
-      Object.entries(PA_FOUNDATION_PALETTE).flatMap(([family, scale]) =>
+      Object.entries(HA_FOUNDATION_PALETTE).flatMap(([family, scale]) =>
         Object.keys(scale).map((step) => `--${family}-${step}`),
       ),
     );
@@ -95,22 +95,22 @@ describe('theme.css shape guard', () => {
 
 describe('Provisional dimension markers (D5)', () => {
   const provisionalKeys = [
-    '--pa-button-min-height-sm',
-    '--pa-button-min-height-lg',
-    '--pa-button-padding-sm',
-    '--pa-button-padding-lg',
-    '--pa-button-gap-sm',
-    '--pa-button-gap-lg',
+    '--ha-button-min-height-sm',
+    '--ha-button-min-height-lg',
+    '--ha-button-padding-sm',
+    '--ha-button-padding-lg',
+    '--ha-button-gap-sm',
+    '--ha-button-gap-lg',
   ];
 
   const confirmedKeys = [
-    '--pa-button-min-width-sm',
-    '--pa-button-min-width-md',
-    '--pa-button-min-width-lg',
-    '--pa-button-min-height-md',
-    '--pa-button-padding-md',
-    '--pa-button-gap-md',
-    '--pa-button-radius',
+    '--ha-button-min-width-sm',
+    '--ha-button-min-width-md',
+    '--ha-button-min-width-lg',
+    '--ha-button-min-height-md',
+    '--ha-button-padding-md',
+    '--ha-button-gap-md',
+    '--ha-button-radius',
   ];
 
   function findDeclarationLine(css: string, key: string): string {
@@ -122,7 +122,7 @@ describe('Provisional dimension markers (D5)', () => {
     return match[0];
   }
 
-  it('every sm/lg button dimension sourced from PA_BUTTON_PROVISIONAL_DIMENSIONS carries a provisional comment', () => {
+  it('every sm/lg button dimension sourced from HA_BUTTON_PROVISIONAL_DIMENSIONS carries a provisional comment', () => {
     const css = readThemeCss();
     for (const key of provisionalKeys) {
       expect(findDeclarationLine(css, key)).toContain('provisional');
@@ -147,18 +147,18 @@ describe('Input provisional dimension markers', () => {
     return match[0];
   }
 
-  it('every input dimension sourced from PA_INPUT_PROVISIONAL_DIMENSIONS carries a provisional comment', () => {
+  it('every input dimension sourced from HA_INPUT_PROVISIONAL_DIMENSIONS carries a provisional comment', () => {
     const css = readThemeCss();
     for (const key of [
-      '--pa-input-min-height-sm',
-      '--pa-input-min-height-md',
-      '--pa-input-min-height-lg',
-      '--pa-input-padding-sm',
-      '--pa-input-padding-md',
-      '--pa-input-padding-lg',
-      '--pa-input-radius-sm',
-      '--pa-input-radius-md',
-      '--pa-input-radius-lg',
+      '--ha-input-min-height-sm',
+      '--ha-input-min-height-md',
+      '--ha-input-min-height-lg',
+      '--ha-input-padding-sm',
+      '--ha-input-padding-md',
+      '--ha-input-padding-lg',
+      '--ha-input-radius-sm',
+      '--ha-input-radius-md',
+      '--ha-input-radius-lg',
     ]) {
       expect(findDeclarationLine(css, key)).toContain('provisional');
     }
@@ -166,7 +166,7 @@ describe('Input provisional dimension markers', () => {
 
   it('non-dimension input keys are NOT marked provisional', () => {
     const css = readThemeCss();
-    for (const key of ['--pa-input-bg', '--pa-input-error-border']) {
+    for (const key of ['--ha-input-bg', '--ha-input-error-border']) {
       expect(findDeclarationLine(css, key)).not.toContain('provisional');
     }
   });
@@ -182,18 +182,18 @@ describe('Select provisional dimension markers', () => {
     return match[0];
   }
 
-  it('every select trigger dimension sourced from PA_INPUT_PROVISIONAL_DIMENSIONS carries a provisional comment', () => {
+  it('every select trigger dimension sourced from HA_INPUT_PROVISIONAL_DIMENSIONS carries a provisional comment', () => {
     const css = readThemeCss();
     for (const key of [
-      '--pa-select-padding-sm',
-      '--pa-select-padding-md',
-      '--pa-select-padding-lg',
-      '--pa-select-min-height-sm',
-      '--pa-select-min-height-md',
-      '--pa-select-min-height-lg',
-      '--pa-select-radius-sm',
-      '--pa-select-radius-md',
-      '--pa-select-radius-lg',
+      '--ha-select-padding-sm',
+      '--ha-select-padding-md',
+      '--ha-select-padding-lg',
+      '--ha-select-min-height-sm',
+      '--ha-select-min-height-md',
+      '--ha-select-min-height-lg',
+      '--ha-select-radius-sm',
+      '--ha-select-radius-md',
+      '--ha-select-radius-lg',
     ]) {
       expect(findDeclarationLine(css, key)).toContain('provisional');
     }
@@ -202,10 +202,10 @@ describe('Select provisional dimension markers', () => {
   it('non-dimension select keys (trigger, panel, option) are NOT marked provisional', () => {
     const css = readThemeCss();
     for (const key of [
-      '--pa-select-bg',
-      '--pa-select-error-border',
-      '--pa-select-panel-shadow',
-      '--pa-select-option-hover-bg',
+      '--ha-select-bg',
+      '--ha-select-error-border',
+      '--ha-select-panel-shadow',
+      '--ha-select-option-hover-bg',
     ]) {
       expect(findDeclarationLine(css, key)).not.toContain('provisional');
     }

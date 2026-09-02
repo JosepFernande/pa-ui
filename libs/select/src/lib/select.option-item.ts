@@ -1,18 +1,18 @@
 import { signal } from '@angular/core';
 import type { Highlightable } from '@angular/cdk/a11y';
-import type { PaSelectOption } from './select.types';
+import type { HaSelectOption } from './select.types';
 
 /**
- * Wraps a `PaSelectOption` to satisfy CDK's `Highlightable` contract for
+ * Wraps a `HaSelectOption` to satisfy CDK's `Highlightable` contract for
  * `ActiveDescendantKeyManager` (D4). Internal implementation detail of
- * `PaSelect` — deliberately NOT exported from `public-api.ts`.
+ * `HaSelect` — deliberately NOT exported from `public-api.ts`.
  */
-export class PaSelectOptionItem<T = unknown> implements Highlightable {
+export class HaSelectOptionItem<T = unknown> implements Highlightable {
   /** Whether the key manager currently considers this item active. */
   readonly active = signal(false);
 
   constructor(
-    readonly option: PaSelectOption<T>,
+    readonly option: HaSelectOption<T>,
     readonly id: string,
   ) {}
 

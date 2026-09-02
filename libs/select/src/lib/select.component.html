@@ -1,8 +1,8 @@
 <button
   #trigger
   type="button"
-  class="pa-select__trigger"
-  [class.pa-select__trigger--open]="panelOpen()"
+  class="ha-select__trigger"
+  [class.ha-select__trigger--open]="panelOpen()"
   role="combobox"
   aria-haspopup="listbox"
   [attr.aria-expanded]="panelOpen() ? 'true' : 'false'"
@@ -17,7 +17,7 @@
   (keydown)="onTriggerKeydown($event)"
   (blur)="onTriggerBlur()"
 >
-  <span class="pa-select__label" [class.pa-select__label--placeholder]="!selectedOption()">{{ triggerLabel() }}</span>
+  <span class="ha-select__label" [class.ha-select__label--placeholder]="!selectedOption()">{{ triggerLabel() }}</span>
 </button>
 
 <ng-template
@@ -31,17 +31,17 @@
   [cdkConnectedOverlayWidth]="triggerWidth()"
   (overlayOutsideClick)="close()"
 >
-  <ul class="pa-select__panel" role="listbox" [id]="panelId">
+  <ul class="ha-select__panel" role="listbox" [id]="panelId">
     @for (item of optionItems(); track item.id) {
       <li
-        class="pa-select__option"
+        class="ha-select__option"
         role="option"
         [id]="item.id"
         [attr.aria-selected]="isSelected(item.option) ? 'true' : 'false'"
         [attr.aria-disabled]="item.disabled ? 'true' : null"
-        [class.pa-select__option--selected]="isSelected(item.option)"
-        [class.pa-select__option--active]="item.active()"
-        [class.pa-select__option--disabled]="item.disabled"
+        [class.ha-select__option--selected]="isSelected(item.option)"
+        [class.ha-select__option--active]="item.active()"
+        [class.ha-select__option--disabled]="item.disabled"
         (mousedown)="$event.preventDefault()"
         (click)="onOptionClick(item)"
       >

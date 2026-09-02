@@ -9,21 +9,21 @@
  * icon sizes, typography font-size/weight) except where noted otherwise.
  */
 import type {
-  PaColorScale,
-  PaFontWeightScale,
-  PaFoundationPalette,
-  PaPartialColorScale,
-  PaSizeScale,
-  PaTypographyScale,
+  HaColorScale,
+  HaFontWeightScale,
+  HaFoundationPalette,
+  HaPartialColorScale,
+  HaSizeScale,
+  HaTypographyScale,
 } from './foundation.types';
 
 /**
  * The 4 brand families, each a complete 11-step scale (25-900). `satisfies`
  * enforces completeness here — omitting a step is a compile error — while
- * the exported constant widens to the open `PaFoundationPalette` type
+ * the exported constant widens to the open `HaFoundationPalette` type
  * (Requirement: adding a 5th family requires no type change).
  */
-const PA_BRAND_PALETTE = {
+const HA_BRAND_PALETTE = {
   'dark-blue': {
     25: '#f2f6f7',
     50: '#e6edf0',
@@ -76,10 +76,10 @@ const PA_BRAND_PALETTE = {
     800: '#394c0d',
     900: '#1c2606',
   },
-} satisfies Record<'dark-blue' | 'light-blue' | 'dark-green' | 'light-green', PaColorScale>;
+} satisfies Record<'dark-blue' | 'light-blue' | 'dark-green' | 'light-green', HaColorScale>;
 
-/** `neutral` ships only 5 of 11 steps (design data) — `PaPartialColorScale`, not `PaColorScale`. */
-const PA_NEUTRAL_PALETTE = {
+/** `neutral` ships only 5 of 11 steps (design data) — `HaPartialColorScale`, not `HaColorScale`. */
+const HA_NEUTRAL_PALETTE = {
   neutral: {
     900: '#4c4c4c',
     700: '#828282',
@@ -87,11 +87,11 @@ const PA_NEUTRAL_PALETTE = {
     200: '#ededed',
     50: '#fafafa',
   },
-} satisfies Record<'neutral', PaPartialColorScale>;
+} satisfies Record<'neutral', HaPartialColorScale>;
 
-export const PA_FOUNDATION_PALETTE: PaFoundationPalette = {
-  ...PA_BRAND_PALETTE,
-  ...PA_NEUTRAL_PALETTE,
+export const HA_FOUNDATION_PALETTE: HaFoundationPalette = {
+  ...HA_BRAND_PALETTE,
+  ...HA_NEUTRAL_PALETTE,
 };
 
 /**
@@ -105,7 +105,7 @@ export const PA_FOUNDATION_PALETTE: PaFoundationPalette = {
  * "provisional" CSS marker (no spec/design requirement demands one for this
  * generic scale).
  */
-export const PA_SPACING_SCALE: PaSizeScale = {
+export const HA_SPACING_SCALE: HaSizeScale = {
   xs: '4px',
   sm: '8px',
   md: '16px',
@@ -114,12 +114,12 @@ export const PA_SPACING_SCALE: PaSizeScale = {
 };
 
 /**
- * Generic gap scale — same assistant-authored status as `PA_SPACING_SCALE`.
- * Kept as an independent named scale (not a `PA_SPACING_SCALE` alias) per
+ * Generic gap scale — same assistant-authored status as `HA_SPACING_SCALE`.
+ * Kept as an independent named scale (not a `HA_SPACING_SCALE` alias) per
  * design's explicit listing of "spacing, gap, radius, ..." as distinct
  * scales, even though the two currently share identical values.
  */
-export const PA_GAP_SCALE: PaSizeScale = {
+export const HA_GAP_SCALE: HaSizeScale = {
   xs: '4px',
   sm: '8px',
   md: '16px',
@@ -132,7 +132,7 @@ export const PA_GAP_SCALE: PaSizeScale = {
  * `sm` (4px) intentionally matches the Figma-confirmed Button radius (4px,
  * constant across all sizes) as a real anchor point.
  */
-export const PA_RADIUS_SCALE: PaSizeScale = {
+export const HA_RADIUS_SCALE: HaSizeScale = {
   xs: '2px',
   sm: '4px',
   md: '8px',
@@ -141,7 +141,7 @@ export const PA_RADIUS_SCALE: PaSizeScale = {
 };
 
 /** Icon size scale — CONFIRMED design values (Flaticon-driven, `pa-ui-default-theme-design-values`). */
-export const PA_ICON_SIZE_SCALE: PaSizeScale = {
+export const HA_ICON_SIZE_SCALE: HaSizeScale = {
   xs: '16px',
   sm: '20px',
   md: '24px',
@@ -156,14 +156,14 @@ export const PA_ICON_SIZE_SCALE: PaSizeScale = {
  * assignment — Semibold has no typography role using it yet, kept available
  * for component-level use, e.g. Button).
  */
-export const PA_FONT_WEIGHT_SCALE: PaFontWeightScale = {
+export const HA_FONT_WEIGHT_SCALE: HaFontWeightScale = {
   regular: '400',
   semibold: '600',
   bold: '700',
 };
 
 /** System-stack font-family declaration. No `@font-face`/CDN import — Montserrat is a consumer responsibility (design D1/open-question). */
-export const PA_FONT_FAMILY =
+export const HA_FONT_FAMILY =
   "'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
 
 /**
@@ -173,16 +173,16 @@ export const PA_FONT_FAMILY =
  * headings, 1.5 for body-scale text), pending design confirmation.
  * Role keys are kebab-case, matching the palette family key convention.
  */
-export const PA_TYPOGRAPHY_SCALE: PaTypographyScale = {
-  h1: { fontSize: '2rem', fontWeight: PA_FONT_WEIGHT_SCALE.bold, lineHeight: '1.25' },
-  h2: { fontSize: '1.5rem', fontWeight: PA_FONT_WEIGHT_SCALE.bold, lineHeight: '1.25' },
-  h3: { fontSize: '1.125rem', fontWeight: PA_FONT_WEIGHT_SCALE.bold, lineHeight: '1.3' },
-  h4: { fontSize: '1rem', fontWeight: PA_FONT_WEIGHT_SCALE.bold, lineHeight: '1.3' },
-  body: { fontSize: '1rem', fontWeight: PA_FONT_WEIGHT_SCALE.regular, lineHeight: '1.5' },
+export const HA_TYPOGRAPHY_SCALE: HaTypographyScale = {
+  h1: { fontSize: '2rem', fontWeight: HA_FONT_WEIGHT_SCALE.bold, lineHeight: '1.25' },
+  h2: { fontSize: '1.5rem', fontWeight: HA_FONT_WEIGHT_SCALE.bold, lineHeight: '1.25' },
+  h3: { fontSize: '1.125rem', fontWeight: HA_FONT_WEIGHT_SCALE.bold, lineHeight: '1.3' },
+  h4: { fontSize: '1rem', fontWeight: HA_FONT_WEIGHT_SCALE.bold, lineHeight: '1.3' },
+  body: { fontSize: '1rem', fontWeight: HA_FONT_WEIGHT_SCALE.regular, lineHeight: '1.5' },
   'small-body': {
     fontSize: '0.875rem',
-    fontWeight: PA_FONT_WEIGHT_SCALE.regular,
+    fontWeight: HA_FONT_WEIGHT_SCALE.regular,
     lineHeight: '1.5',
   },
-  caption: { fontSize: '0.75rem', fontWeight: PA_FONT_WEIGHT_SCALE.regular, lineHeight: '1.5' },
+  caption: { fontSize: '0.75rem', fontWeight: HA_FONT_WEIGHT_SCALE.regular, lineHeight: '1.5' },
 };

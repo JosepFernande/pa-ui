@@ -3,7 +3,7 @@
 > Librería de componentes Angular 19 accesible y basada en tokens, con una
 > arquitectura de variables CSS de 3 capas.
 
-[![npm version](https://img.shields.io/npm/v/pa-ui)](https://www.npmjs.com/package/@pa-ui/angular)
+[![npm version](https://img.shields.io/npm/v/@halo-ui/angular)](https://www.npmjs.com/package/@halo-ui/angular)
 [![license](https://img.shields.io/github/license/JosepFernande/pa-ui)](./LICENSE)
 [![build](https://img.shields.io/github/actions/workflow/status/JosepFernande/pa-ui/ci.yml?label=build)](https://github.com/JosepFernande/pa-ui/actions)
 
@@ -14,7 +14,7 @@
 ### 1. Instalar
 
 ```bash
-npm install @pa-ui/angular @angular/cdk
+npm install @halo-ui/angular @angular/cdk
 ```
 
 ### 2. Configurar el Theme Engine
@@ -22,18 +22,18 @@ npm install @pa-ui/angular @angular/cdk
 ```typescript
 // app.config.ts
 import { ApplicationConfig } from '@angular/core';
-import { providePaTheme } from '@pa-ui/core';
+import { provideHaTheme } from '@halo-ui/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    providePaTheme(), // tema por defecto — funciona sin configuración adicional
+    provideHaTheme(), // tema por defecto — funciona sin configuración adicional
   ],
 };
 ```
 
 ### 3. Importar el CSS de Foundation
 
-Además de `providePaTheme()`, hace falta un import explícito de CSS — trae los
+Además de `provideHaTheme()`, hace falta un import explícito de CSS — trae los
 valores por defecto estáticos de las capas Foundation/Semantic/Component
 (spacing, radius, tipografía, tamaños de íconos, defaults de tokens de
 componente) que hacen que los componentes se rendericen completamente
@@ -41,11 +41,11 @@ estilizados sin configuración adicional:
 
 ```css
 /* styles.css (o cualquier hoja de estilos global) */
-@import '@pa-ui/core/theme.css';
+@import '@halo-ui/core/theme.css';
 ```
 
 Olvidar este import no rompe la app — los componentes quedan sin estilo, usando
-las custom properties `--pa-*` sin resolver, hasta que se agregue. Ver
+las custom properties `--ha-*` sin resolver, hasta que se agregue. Ver
 [CSS Strategy](./docs/css-strategy.md) para el detalle completo de las capas y
 la estrategia de distribución.
 
@@ -77,10 +77,10 @@ arriba.
 ```
 Foundation           Semantic              Component
 ─────────            ─────────             ─────────
---blue-500      →    --pa-primary     →    --pa-button-bg
---gray-100      →    --pa-surface     →    --pa-button-color
---radius-2      →    --pa-border      →    --pa-button-radius
---spacing-4     →    --pa-text        →    --pa-button-padding-md
+--blue-500      →    --ha-primary     →    --ha-button-bg
+--gray-100      →    --ha-surface     →    --ha-button-color
+--radius-2      →    --ha-border      →    --ha-button-radius
+--spacing-4     →    --ha-text        →    --ha-button-padding-md
 ```
 
 Los componentes consumen **únicamente** tokens semánticos y de componente. Los
@@ -92,16 +92,16 @@ sin tocar un solo componente.
 
 ## Theme Engine
 
-El Theme Engine (`providePaTheme()`) es el único punto de entrada para toda
+El Theme Engine (`provideHaTheme()`) es el único punto de entrada para toda
 personalización visual.
 
 ### Tema por defecto (sin configuración)
 
 ```typescript
-import { providePaTheme } from '@pa-ui/core';
+import { provideHaTheme } from '@halo-ui/core';
 
 export const appConfig: ApplicationConfig = {
-  providers: [providePaTheme()],
+  providers: [provideHaTheme()],
 };
 ```
 
@@ -111,7 +111,7 @@ Registrá colores específicos del dominio. El engine deriva automáticamente la
 variantes de hover, active y contraste.
 
 ```typescript
-providePaTheme({
+provideHaTheme({
   colors: {
     primary: { 500: '#0066cc' },
     secondary: { 500: '#6c757d' },
@@ -124,8 +124,8 @@ providePaTheme({
 Después usalos en cualquier componente:
 
 ```html
-<button pa-button color="treasury">Acción de tesorería</button>
-<button pa-button variant="outline" color="danger">Eliminar</button>
+<button ha-button color="treasury">Acción de tesorería</button>
+<button ha-button variant="outline" color="danger">Eliminar</button>
 ```
 
 ### Tema exacto (sin defaults)
@@ -134,7 +134,7 @@ Usá `extendDefaults: false` cuando quieras control total — solo se registran 
 colores.
 
 ```typescript
-providePaTheme({
+provideHaTheme({
   extendDefaults: false,
   colors: {
     primary: { 500: '#1a1a2e' },
@@ -156,14 +156,14 @@ scope:
 ```css
 /* Global — afecta a todos los botones */
 :root {
-  --pa-button-radius: 8px;
-  --pa-button-font-weight: 600;
+  --ha-button-radius: 8px;
+  --ha-button-font-weight: 600;
 }
 
 /* Con scope — afecta solo a los botones dentro de .admin-panel */
 .admin-panel {
-  --pa-button-bg: var(--pa-treasury);
-  --pa-button-hover-bg: color-mix(in srgb, var(--pa-treasury) 85%, black);
+  --ha-button-bg: var(--ha-treasury);
+  --ha-button-hover-bg: color-mix(in srgb, var(--ha-treasury) 85%, black);
 }
 ```
 
@@ -174,7 +174,7 @@ nunca un enum cerrado. Registrá un color nuevo en el tema y funciona en todos
 lados:
 
 ```typescript
-providePaTheme({
+provideHaTheme({
   colors: {
     accounting: { 500: '#28a745' },
   },
@@ -182,7 +182,7 @@ providePaTheme({
 ```
 
 ```html
-<button pa-button color="accounting">Aprobar</button>
+<button ha-button color="accounting">Aprobar</button>
 ```
 
 Sin cambios en el componente. Sin variantes nuevas. El Theme Engine deriva
@@ -220,11 +220,11 @@ Todo componente de pa-ui está construido con la accesibilidad como prioridad:
 ```
 pa-ui/
 ├── libs/
-│   ├── button/          # @pa-ui/button — componente PaButton
-│   ├── input/           # @pa-ui/input — componente PaInput
-│   ├── select/          # @pa-ui/select — componente PaSelect
-│   ├── core/            # @pa-ui/core — Theme Engine (providePaTheme) + capa Foundation
-│   └── pa-ui/           # @pa-ui/angular — paquete umbrella (re-exporta el resto)
+│   ├── button/          # @halo-ui/button — componente HaButton
+│   ├── input/           # @halo-ui/input — componente HaInput
+│   ├── select/          # @halo-ui/select — componente HaSelect
+│   ├── core/            # @halo-ui/core — Theme Engine (provideHaTheme) + capa Foundation
+│   └── halo-ui/         # @halo-ui/angular — paquete umbrella (re-exporta el resto)
 ├── apps/
 │   └── showcase/        # App de demo con ejemplos en vivo
 └── skills/              # Skills de agentes de IA para hacer cumplir la arquitectura

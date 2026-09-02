@@ -1,9 +1,9 @@
 /**
- * pa-ui audit script — standalone tsx report generator.
+ * halo-ui audit script — standalone tsx report generator.
  *
  * Walks libs/, collects:
- *  - pa-* selectors from CSS files
- *  - Design tokens consumed (var(--pa-*)) from CSS files
+ *  - ha-* selectors from CSS files
+ *  - Design tokens consumed (var(--ha-*)) from CSS files
  *  - ViewEncapsulation.None compliance from component .ts files
  *
  * Output: report.json
@@ -15,6 +15,9 @@ import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getEncapsulationStatus } from '../shared/encapsulation-detect.js';
+import { parseTokens, getComponentSelector } from './parse.js';
+
+export { SELECTOR_PREFIX, parseSelectors, parseTokens, getComponentSelector } from './parse.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -36,52 +39,6 @@ interface AuditReport {
   selectors: string[];
   violations: Array<{ component: string; rule: string; message: string }>;
   status: 'pass' | 'fail';
-}
-
-// ----------------------------------------------------------------------
-// Pure functions — CSS parsing
-// ----------------------------------------------------------------------
-
-/** Extract pa- prefixed selectors from CSS content (class selectors and element selectors). */
-export function parseSelectors(cssContent: string): string[] {
-  const selectors = new Set<string>();
-
-  // Match class selectors: .pa-xxx
-  const classRe = /\.pa-[\w-]+/g;
-  for (const m of cssContent.matchAll(classRe)) {
-    selectors.add(m[0]);
-  }
-
-  // Match element selectors: pa-xxx (not inside url() or var())
-  // For simplicity, match standalone pa-xxx patterns not preceded by . or var(
-  const elemRe = /(?:^|[\s,{>+~])pa-[\w-]+/gm;
-  for (const m of cssContent.matchAll(elemRe)) {
-    const name = m[0].trim();
-    selectors.add(name);
-  }
-
-  return Array.from(selectors).sort();
-}
-
-/** Extract design tokens (var(--pa-*)) from CSS content. */
-export function parseTokens(cssContent: string): string[] {
-  const tokens = new Set<string>();
-  // Match var(--pa-xxx) or var(--pa-xxx, fallback)
-  const re = /var\((--pa-[\w-]+)/g;
-  for (const m of cssContent.matchAll(re)) {
-    tokens.add(m[1]);
-  }
-  return Array.from(tokens).sort();
-}
-
-// ----------------------------------------------------------------------
-// Pure functions — TypeScript parsing
-// ----------------------------------------------------------------------
-
-/** Extract the selector from a @Component decorator. */
-export function getComponentSelector(tsContent: string): string | null {
-  const selMatch = tsContent.match(/selector\s*:\s*['"]([^'"]+)['"]/);
-  return selMatch ? selMatch[1] : null;
 }
 
 // ----------------------------------------------------------------------
@@ -182,7 +139,7 @@ function main(): void {
   writeFileSync(outPath, JSON.stringify(report, null, 2));
 
   console.log(
-    `${report.status === 'pass' ? '✅' : '❌'} pa-ui audit complete — ${components.length} component(s), ${report.violations.length} violation(s)`,
+    `${report.status === 'pass' ? '✅' : '❌'} halo-ui audit complete — ${components.length} component(s), ${report.violations.length} violation(s)`,
   );
   console.log(`Report written to ${outPath}`);
 }

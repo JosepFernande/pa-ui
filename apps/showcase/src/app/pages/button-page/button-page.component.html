@@ -7,12 +7,12 @@
 </header>
 
 <div class="button-page__docs">
-  <app-code-block label="Instalación" language="bash" code="npm install &#64;pa-ui/angular &#64;angular/cdk" />
-  <app-code-block label="Importación" language="typescript" code="import { PaButton } from '&#64;pa-ui/angular';" />
+  <app-code-block label="Instalación" language="bash" code="npm install &#64;halo-ui/angular &#64;angular/cdk" />
+  <app-code-block label="Importación" language="typescript" code="import { HaButton } from '&#64;halo-ui/angular';" />
   <app-code-block
     label="Uso básico"
     language="html"
-    code='&lt;button pa-button variant="solid" size="md" color="primary"&gt;
+    code='&lt;button ha-button variant="solid" size="md" color="primary"&gt;
   Continuar
 &lt;/button&gt;'
   />
@@ -22,7 +22,7 @@
   <h2>Variants</h2>
   <div class="button-page__row">
     @for (variant of variants; track variant) {
-      <button pa-button [variant]="variant">{{ variant }}</button>
+      <button ha-button [variant]="variant">{{ variant }}</button>
     }
   </div>
 </section>
@@ -31,7 +31,7 @@
   <h2>Sizes</h2>
   <div class="button-page__row">
     @for (size of sizes; track size) {
-      <button pa-button [size]="size">{{ size }}</button>
+      <button ha-button [size]="size">{{ size }}</button>
     }
   </div>
 </section>
@@ -40,7 +40,7 @@
   <h2>Colors</h2>
   <div class="button-page__row">
     @for (color of colors; track color) {
-      <button pa-button [color]="color">{{ color }}</button>
+      <button ha-button [color]="color">{{ color }}</button>
     }
   </div>
 </section>
@@ -48,7 +48,7 @@
 <section class="button-page__section">
   <h2>States</h2>
   <div class="button-page__row">
-    <button pa-button [disabled]="true">Disabled</button>
-    <button pa-button [loading]="true">Loading</button>
+    <button ha-button [disabled]="true">Disabled</button>
+    <button ha-button [loading]="true">Loading</button>
   </div>
 </section>

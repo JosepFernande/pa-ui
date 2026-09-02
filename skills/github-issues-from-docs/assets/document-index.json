@@ -136,7 +136,7 @@
         "select",
         "core",
         "umbrella",
-        "pa-ui-angular"
+        "halo-ui-angular"
       ]
     }
   ]

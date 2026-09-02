@@ -1,3 +1,3 @@
-export { PaSelect } from './lib/select.component';
-export type { PaSelectOption, PaSelectSize } from './lib/select.types';
-export { PA_SELECT_TOKENS } from './lib/select.tokens';
+export { HaSelect } from './lib/select.component';
+export type { HaSelectOption, HaSelectSize } from './lib/select.types';
+export { HA_SELECT_TOKENS } from './lib/select.tokens';

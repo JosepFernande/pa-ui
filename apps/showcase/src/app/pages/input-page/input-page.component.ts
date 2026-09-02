@@ -1,21 +1,21 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { PaInput } from '@pa-ui/input';
-import type { PaInputSize } from '@pa-ui/input';
+import { HaInput } from '@halo-ui/input';
+import type { HaInputSize } from '@halo-ui/input';
 import { CodeBlockComponent } from '../../shared/code-block/code-block.component';
 
-/** Showcase playground for `pa-input` (`libs/input`): sizes, states, and `[(ngModel)]` binding. */
+/** Showcase playground for `ha-input` (`libs/input`): sizes, states, and `[(ngModel)]` binding. */
 @Component({
   selector: 'app-input-page',
   standalone: true,
-  imports: [FormsModule, PaInput, CodeBlockComponent],
+  imports: [FormsModule, HaInput, CodeBlockComponent],
   templateUrl: './input-page.component.html',
   styleUrl: './input-page.component.css',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputPageComponent {
-  protected readonly sizes: readonly PaInputSize[] = ['sm', 'md', 'lg'];
+  protected readonly sizes: readonly HaInputSize[] = ['sm', 'md', 'lg'];
 
   /**
    * Plain (non-signal) field: `[(ngModel)]` owns this value through the form

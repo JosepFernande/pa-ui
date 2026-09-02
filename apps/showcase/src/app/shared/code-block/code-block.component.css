@@ -14,19 +14,19 @@
 .code-block {
   display: flex;
   flex-direction: column;
-  gap: var(--pa-gap-xs);
+  gap: var(--ha-gap-xs);
 }
 
 .code-block__label {
-  font-size: var(--pa-font-size-caption);
-  font-weight: var(--pa-font-weight-semibold);
+  font-size: var(--ha-font-size-caption);
+  font-weight: var(--ha-font-weight-semibold);
   color: var(--code-block-label-color);
 }
 
 .code-block__card {
   display: flex;
   flex-direction: column;
-  border-radius: var(--pa-radius-md);
+  border-radius: var(--ha-radius-md);
   background: var(--code-block-bg);
   overflow: hidden;
 }
@@ -35,27 +35,27 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--pa-gap-sm) var(--pa-spacing-md);
+  padding: var(--ha-gap-sm) var(--ha-spacing-md);
   border-bottom: 1px solid var(--code-block-bar-border);
 }
 
 .code-block__lang {
-  font-size: var(--pa-font-size-caption);
-  font-weight: var(--pa-font-weight-semibold);
+  font-size: var(--ha-font-size-caption);
+  font-weight: var(--ha-font-weight-semibold);
   color: var(--code-block-lang-color);
 }
 
 .code-block__copy {
   display: inline-flex;
   align-items: center;
-  gap: var(--pa-gap-xs);
-  padding: var(--pa-gap-xs) var(--pa-gap-sm);
+  gap: var(--ha-gap-xs);
+  padding: var(--ha-gap-xs) var(--ha-gap-sm);
   border: none;
-  border-radius: var(--pa-radius-sm);
+  border-radius: var(--ha-radius-sm);
   background: var(--code-block-copy-bg);
   color: var(--code-block-copy-color);
-  font-family: var(--pa-font-family);
-  font-size: var(--pa-font-size-caption);
+  font-family: var(--ha-font-family);
+  font-size: var(--ha-font-size-caption);
   font-weight: 500;
   cursor: pointer;
   transition: background-color 150ms ease-in-out;
@@ -67,11 +67,11 @@
 
 .code-block__code {
   margin: 0;
-  padding: var(--pa-spacing-md) var(--pa-spacing-lg);
+  padding: var(--ha-spacing-md) var(--ha-spacing-lg);
   color: var(--code-block-code-color);
   font-family: Consolas, Monaco, monospace;
-  font-size: var(--pa-font-size-small-body);
-  line-height: var(--pa-line-height-small-body);
+  font-size: var(--ha-font-size-small-body);
+  line-height: var(--ha-line-height-small-body);
   white-space: pre-wrap;
   overflow-wrap: break-word;
 }

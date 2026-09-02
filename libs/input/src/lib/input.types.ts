@@ -1,1 +1,1 @@
-export type PaInputSize = 'sm' | 'md' | 'lg';
+export type HaInputSize = 'sm' | 'md' | 'lg';

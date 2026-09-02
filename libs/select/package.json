@@ -1,5 +1,5 @@
 {
-  "name": "@pa-ui/select",
+  "name": "@halo-ui/select",
   "version": "19.3.1",
   "license": "MIT",
   "description": "Accessible, token-driven Angular 19 select component with forms integration",
@@ -7,7 +7,7 @@
     "angular",
     "angular19",
     "ui-library",
-    "pa-ui",
+    "halo-ui",
     "select",
     "combobox",
     "forms",
@@ -27,7 +27,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@pa-ui/core": "19.3.1"
+    "@halo-ui/core": "19.3.1"
   },
   "peerDependencies": {
     "@angular/core": "^19.2.0",

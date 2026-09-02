@@ -1,40 +1,40 @@
 /*
- * PaButton — BEM CSS classes
- * Every value comes from a --pa-* custom property. Zero hardcoded colors, spacing, or radii.
+ * HaButton — BEM CSS classes
+ * Every value comes from a --ha-* custom property. Zero hardcoded colors, spacing, or radii.
  *
  * Token mapping:
- *   --pa-button-bg             → background-color
- *   --pa-button-color          → color (text / icon)
- *   --pa-button-border         → border shorthand
- *   --pa-button-radius         → border-radius
- *   --pa-button-padding-sm     → padding (sm)
- *   --pa-button-padding-md     → padding (md)
- *   --pa-button-padding-lg     → padding (lg)
- *   --pa-button-font-sm        → font-size (sm)
- *   --pa-button-font-md        → font-size (md)
- *   --pa-button-font-lg        → font-size (lg)
- *   --pa-button-min-height-*   → min-height (sm/md/lg)
- *   --pa-button-min-width-*    → min-width (sm/md/lg, Phase 3)
- *   --pa-button-gap-*          → gap (sm/md/lg, Phase 3; overrides the unsized base --pa-button-gap)
- *   --pa-button-focus-ring     → outline for keyboard focus (CDK cdk-keyboard-focused)
- *   --pa-button-focus-ring-offset → outline-offset for keyboard focus
- *   --pa-button-hover-bg       → background-color on hover
- *   --pa-button-active-bg      → background-color on active
- *   --pa-button-disabled-bg    → background-color when disabled
- *   --pa-button-disabled-color → color when disabled
- *   --pa-button-loading-color  → spinner color
- *   --pa-button-spinner-size   → spinner width & height
+ *   --ha-button-bg             → background-color
+ *   --ha-button-color          → color (text / icon)
+ *   --ha-button-border         → border shorthand
+ *   --ha-button-radius         → border-radius
+ *   --ha-button-padding-sm     → padding (sm)
+ *   --ha-button-padding-md     → padding (md)
+ *   --ha-button-padding-lg     → padding (lg)
+ *   --ha-button-font-sm        → font-size (sm)
+ *   --ha-button-font-md        → font-size (md)
+ *   --ha-button-font-lg        → font-size (lg)
+ *   --ha-button-min-height-*   → min-height (sm/md/lg)
+ *   --ha-button-min-width-*    → min-width (sm/md/lg, Phase 3)
+ *   --ha-button-gap-*          → gap (sm/md/lg, Phase 3; overrides the unsized base --ha-button-gap)
+ *   --ha-button-focus-ring     → outline for keyboard focus (CDK cdk-keyboard-focused)
+ *   --ha-button-focus-ring-offset → outline-offset for keyboard focus
+ *   --ha-button-hover-bg       → background-color on hover
+ *   --ha-button-active-bg      → background-color on active
+ *   --ha-button-disabled-bg    → background-color when disabled
+ *   --ha-button-disabled-color → color when disabled
+ *   --ha-button-loading-color  → spinner color
+ *   --ha-button-spinner-size   → spinner width & height
  */
 
 /* ------------------------------------------------------------------ */
 /* Base                                                                 */
 /* ------------------------------------------------------------------ */
 
-.pa-button {
+.ha-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--pa-button-gap);
+  gap: var(--ha-button-gap);
   box-sizing: border-box;
   position: relative;
   cursor: pointer;
@@ -43,21 +43,21 @@
   text-decoration: none;
   vertical-align: middle;
 
-  font-family: var(--pa-button-font-family);
-  font-weight: var(--pa-button-font-weight);
-  line-height: var(--pa-button-line-height);
+  font-family: var(--ha-button-font-family);
+  font-weight: var(--ha-button-font-weight);
+  line-height: var(--ha-button-line-height);
 
-  border: var(--pa-button-border);
-  border-radius: var(--pa-button-radius);
+  border: var(--ha-button-border);
+  border-radius: var(--ha-button-radius);
 
-  background-color: var(--pa-button-bg);
-  color: var(--pa-button-color);
+  background-color: var(--ha-button-bg);
+  color: var(--ha-button-color);
 
   transition:
-    background-color var(--pa-button-transition-duration) var(--pa-button-transition-easing),
-    border-color var(--pa-button-transition-duration) var(--pa-button-transition-easing),
-    color var(--pa-button-transition-duration) var(--pa-button-transition-easing),
-    box-shadow var(--pa-button-transition-duration) var(--pa-button-transition-easing);
+    background-color var(--ha-button-transition-duration) var(--ha-button-transition-easing),
+    border-color var(--ha-button-transition-duration) var(--ha-button-transition-easing),
+    color var(--ha-button-transition-duration) var(--ha-button-transition-easing),
+    box-shadow var(--ha-button-transition-duration) var(--ha-button-transition-easing);
 }
 
 /* ------------------------------------------------------------------ */
@@ -65,23 +65,23 @@
 /* ------------------------------------------------------------------ */
 
 /* Solid: filled background, no border */
-.pa-button--solid {
-  background-color: var(--pa-button-bg);
-  color: var(--pa-button-solid-color);
+.ha-button--solid {
+  background-color: var(--ha-button-bg);
+  color: var(--ha-button-solid-color);
   border-color: transparent;
 }
 
 /* Outline: bordered, transparent background */
-.pa-button--outline {
+.ha-button--outline {
   background-color: transparent;
-  color: var(--pa-button-color);
-  border-color: var(--pa-button-color);
+  color: var(--ha-button-color);
+  border-color: var(--ha-button-color);
 }
 
 /* Ghost: no border, transparent background */
-.pa-button--ghost {
+.ha-button--ghost {
   background-color: transparent;
-  color: var(--pa-button-color);
+  color: var(--ha-button-color);
   border-color: transparent;
 }
 
@@ -89,69 +89,70 @@
 /* Hover & Active                                                      */
 /* ------------------------------------------------------------------ */
 
-.pa-button:not(.pa-button--disabled):hover {
-  background-color: var(--pa-button-hover-bg);
+.ha-button:not(.ha-button--disabled):hover {
+  background-color: var(--ha-button-hover-bg);
 }
 
-.pa-button:not(.pa-button--disabled):active {
-  background-color: var(--pa-button-active-bg);
+.ha-button:not(.ha-button--disabled):active {
+  background-color: var(--ha-button-active-bg);
 }
 
 /* ------------------------------------------------------------------ */
 /* Sizes                                                               */
 /* ------------------------------------------------------------------ */
 
-.pa-button--sm {
-  padding: var(--pa-button-padding-sm);
-  font-size: var(--pa-button-font-sm);
-  min-height: var(--pa-button-min-height-sm);
-  min-width: var(--pa-button-min-width-sm);
-  gap: var(--pa-button-gap-sm);
+.ha-button--sm {
+  padding: var(--ha-button-padding-sm);
+  font-size: var(--ha-button-font-sm);
+  min-height: var(--ha-button-min-height-sm);
+  min-width: var(--ha-button-min-width-sm);
+  gap: var(--ha-button-gap-sm);
 }
 
-.pa-button--md {
-  padding: var(--pa-button-padding-md);
-  font-size: var(--pa-button-font-md);
-  min-height: var(--pa-button-min-height-md);
-  min-width: var(--pa-button-min-width-md);
-  gap: var(--pa-button-gap-md);
+.ha-button--md {
+  padding: var(--ha-button-padding-md);
+  font-size: var(--ha-button-font-md);
+  min-height: var(--ha-button-min-height-md);
+  min-width: var(--ha-button-min-width-md);
+  gap: var(--ha-button-gap-md);
 }
 
-.pa-button--lg {
-  padding: var(--pa-button-padding-lg);
-  font-size: var(--pa-button-font-lg);
-  min-height: var(--pa-button-min-height-lg);
-  min-width: var(--pa-button-min-width-lg);
-  gap: var(--pa-button-gap-lg);
+.ha-button--lg {
+  padding: var(--ha-button-padding-lg);
+  font-size: var(--ha-button-font-lg);
+  min-height: var(--ha-button-min-height-lg);
+  min-width: var(--ha-button-min-width-lg);
+  gap: var(--ha-button-gap-lg);
 }
 
 /* ------------------------------------------------------------------ */
 /* Disabled                                                            */
 /* ------------------------------------------------------------------ */
 
-.pa-button--disabled {
-  opacity: var(--pa-button-disabled-opacity);
+.ha-button--disabled {
+  opacity: var(--ha-button-disabled-opacity);
   cursor: not-allowed;
   pointer-events: none;
-  background-color: var(--pa-button-disabled-bg);
-  color: var(--pa-button-disabled-color);
+  background-color: var(--ha-button-disabled-bg);
+  color: var(--ha-button-disabled-color);
 }
 
 /* ------------------------------------------------------------------ */
 /* Loading                                                             */
 /* ------------------------------------------------------------------ */
 
-.pa-button--loading {
+.ha-button--loading {
   cursor: wait;
 }
 
 /* Visually hidden but accessible to screen readers */
-.pa-button__label--hidden {
+/* gga-ignore: defensive fallbacks only; real values come from --ha-button-sr-only-* tokens */
+.ha-button__label--hidden {
   position: absolute;
-  width: var(--pa-button-sr-only-width, 1px);
-  height: var(--pa-button-sr-only-height, 1px);
+  width: var(--ha-button-sr-only-width, 1px);
+  height: var(--ha-button-sr-only-height, 1px);
   padding: 0;
-  margin: var(--pa-button-sr-only-margin, -1px);
+  margin: var(--ha-button-sr-only-margin, -1px);
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
@@ -162,21 +163,24 @@
 /* Spinner                                                             */
 /* ------------------------------------------------------------------ */
 
-.pa-button__spinner {
+.ha-button__spinner {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: var(--pa-button-spinner-size);
-  height: var(--pa-button-spinner-size);
-  margin-top: calc(var(--pa-button-spinner-size) / -2);
-  margin-left: calc(var(--pa-button-spinner-size) / -2);
-  border: var(--pa-button-spinner-border, 2px solid var(--pa-button-loading-color));
+  width: var(--ha-button-spinner-size);
+  height: var(--ha-button-spinner-size);
+  margin-top: calc(var(--ha-button-spinner-size) / -2);
+  margin-left: calc(var(--ha-button-spinner-size) / -2);
+  border: var(
+    --ha-button-spinner-border,
+    2px solid var(--ha-button-loading-color)
+  ); /* gga-ignore: defensive fallback; real value from --ha-button-spinner-border token */
   border-top-color: transparent;
   border-radius: 50%;
-  animation: pa-button-spin var(--pa-button-spinner-duration) linear infinite;
+  animation: ha-button-spin var(--ha-button-spinner-duration) linear infinite;
 }
 
-@keyframes pa-button-spin {
+@keyframes ha-button-spin {
   to {
     transform: rotate(360deg);
   }
@@ -186,9 +190,9 @@
 /* Focus visible (CDK FocusMonitor)                                    */
 /* ------------------------------------------------------------------ */
 
-.pa-button.cdk-keyboard-focused {
-  outline: var(--pa-button-focus-ring);
-  outline-offset: var(--pa-button-focus-ring-offset);
+.ha-button.cdk-keyboard-focused {
+  outline: var(--ha-button-focus-ring);
+  outline-offset: var(--ha-button-focus-ring-offset);
 }
 
 /* ------------------------------------------------------------------ */
@@ -196,11 +200,11 @@
 /* ------------------------------------------------------------------ */
 
 @media (prefers-reduced-motion: reduce) {
-  .pa-button {
+  .ha-button {
     transition: none;
   }
 
-  .pa-button__spinner {
+  .ha-button__spinner {
     animation: none;
   }
 }

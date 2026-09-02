@@ -1,13 +1,13 @@
 import { DOWN_ARROW, END, ENTER, ESCAPE, HOME, SPACE, TAB, UP_ARROW } from '@angular/cdk/keycodes';
 import { resolveSelectKeyIntent } from './select.keyboard';
-import type { PaSelectKeyState } from './select.keyboard';
+import type { HaSelectKeyState } from './select.keyboard';
 
 function key(keyCode: number, altKey = false): { keyCode: number; altKey: boolean } {
   return { keyCode, altKey };
 }
 
-const OPEN: PaSelectKeyState = { open: true, disabled: false, readonly: false };
-const CLOSED: PaSelectKeyState = { open: false, disabled: false, readonly: false };
+const OPEN: HaSelectKeyState = { open: true, disabled: false, readonly: false };
+const CLOSED: HaSelectKeyState = { open: false, disabled: false, readonly: false };
 
 describe('resolveSelectKeyIntent', () => {
   it('opens the panel when ArrowDown is pressed while closed', () => {
@@ -95,8 +95,8 @@ describe('resolveSelectKeyIntent', () => {
   });
 
   it('is a no-op for every key while disabled, regardless of open state', () => {
-    const disabledOpen: PaSelectKeyState = { open: true, disabled: true, readonly: false };
-    const disabledClosed: PaSelectKeyState = { open: false, disabled: true, readonly: false };
+    const disabledOpen: HaSelectKeyState = { open: true, disabled: true, readonly: false };
+    const disabledClosed: HaSelectKeyState = { open: false, disabled: true, readonly: false };
     expect(resolveSelectKeyIntent(key(ENTER), disabledOpen)).toEqual({
       kind: 'noop',
       preventDefault: false,
@@ -108,7 +108,7 @@ describe('resolveSelectKeyIntent', () => {
   });
 
   it('is a no-op for every opening key while readonly', () => {
-    const readonlyClosed: PaSelectKeyState = { open: false, disabled: false, readonly: true };
+    const readonlyClosed: HaSelectKeyState = { open: false, disabled: false, readonly: true };
     expect(resolveSelectKeyIntent(key(DOWN_ARROW), readonlyClosed)).toEqual({
       kind: 'noop',
       preventDefault: false,

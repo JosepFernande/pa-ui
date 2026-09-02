@@ -1,4 +1,4 @@
-# Cómo contribuir a pa-ui
+# Cómo contribuir a halo-ui (ex pa-ui)
 
 ¡Gracias por tu interés en contribuir! Este documento cubre el flujo de
 desarrollo, el proceso de PR, las convenciones de changesets y el proceso de
@@ -26,7 +26,7 @@ npm run lint:css
 npx nx test core
 npx nx test button
 npx nx test input
-npx nx test pa-ui   # paquete umbrella @pa-ui/angular
+npx nx test halo-ui   # paquete umbrella @halo-ui/angular
 ```
 
 ### Comandos nx útiles
@@ -108,7 +108,7 @@ versionado y changelogs.
 ### Cuándo se requiere un changeset
 
 Se requiere un changeset siempre que tu PR modifique un **paquete publicable**
-(`@pa-ui/core`, `@pa-ui/button`, `@pa-ui/input`, `@pa-ui/angular`). Esto
+(`@halo-ui/core`, `@halo-ui/button`, `@halo-ui/input`, `@halo-ui/angular`). Esto
 incluye:
 
 - Agregar nuevas features o componentes
@@ -181,12 +181,12 @@ que efectivamente publica a npm.
 ### Estado actual: release estable (fuera de modo prerelease)
 
 El repo salió del modo prerelease de Changesets (`changeset pre exit`) y ya no
-usa `.changeset/pre.json`. Los cuatro paquetes (`@pa-ui/core`, `@pa-ui/button`,
-`@pa-ui/input`, `@pa-ui/angular`) tienen releases estables reales y se instalan
-sin ningún tag especial:
+usa `.changeset/pre.json`. Los cuatro paquetes (`@halo-ui/core`,
+`@halo-ui/button`, `@halo-ui/input`, `@halo-ui/angular`) tienen releases
+estables reales y se instalan sin ningún tag especial:
 
 ```bash
-npm install @pa-ui/core
+npm install @halo-ui/core
 ```
 
 `release.yml` conserva lógica condicional para el caso en que el repo vuelva a
@@ -199,12 +199,12 @@ workflow no se ejecutan y no aplican.
 `AGENTS.md` es un **índice de skills**, no un documento de convenciones en sí
 mismo. Para las reglas completas, consultá:
 
-- [`skills/pa-ui-architecture/SKILL.md`](skills/pa-ui-architecture/SKILL.md) —
+- [`skills/lib-ui-architecture/SKILL.md`](skills/lib-ui-architecture/SKILL.md) —
   arquitectura, tokens, theming
-- [`skills/pa-ui-coding-standards/SKILL.md`](skills/pa-ui-coding-standards/SKILL.md)
+- [`skills/lib-ui-coding-standards/SKILL.md`](skills/lib-ui-coding-standards/SKILL.md)
   — estructura de archivos, inputs/outputs, signals, CSS
-- [`skills/pa-ui-testing/SKILL.md`](skills/pa-ui-testing/SKILL.md) — patrones de
-  testing, a11y, coverage
+- [`skills/lib-ui-testing/SKILL.md`](skills/lib-ui-testing/SKILL.md) — patrones
+  de testing, a11y, coverage
 
 Puntos clave:
 
@@ -213,7 +213,7 @@ Puntos clave:
 - **Tokens primero** — sin colores, spacing o radios hardcodeados
 - **CSS variables primero** — preferí custom properties nativas sobre SCSS
 - **CDK sobre custom** — usá Angular CDK para overlays, focus, a11y
-- **Prefijo `pa-`** — todos los selectores de componentes usan el prefijo `pa-`
+- **Prefijo `ha-`** — todos los selectores de componentes usan el prefijo `ha-`
 
 ## ¿Preguntas?
 
