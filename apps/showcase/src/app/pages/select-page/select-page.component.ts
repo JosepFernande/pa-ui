@@ -1,22 +1,22 @@
 import { ChangeDetectionStrategy, Component, signal, ViewEncapsulation } from '@angular/core';
-import { PaSelect } from '@pa-ui/select';
-import type { PaSelectOption, PaSelectSize } from '@pa-ui/select';
+import { HaSelect } from '@halo-ui/select';
+import type { HaSelectOption, HaSelectSize } from '@halo-ui/select';
 import { CodeBlockComponent } from '../../shared/code-block/code-block.component';
 
-/** Showcase playground for `pa-select` (`libs/select`): sizes, states, and its `valueChange`/`opened`/`closed` outputs. */
+/** Showcase playground for `ha-select` (`libs/select`): sizes, states, and its `valueChange`/`opened`/`closed` outputs. */
 @Component({
   selector: 'app-select-page',
   standalone: true,
-  imports: [PaSelect, CodeBlockComponent],
+  imports: [HaSelect, CodeBlockComponent],
   templateUrl: './select-page.component.html',
   styleUrl: './select-page.component.css',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectPageComponent {
-  protected readonly sizes: readonly PaSelectSize[] = ['sm', 'md', 'lg'];
+  protected readonly sizes: readonly HaSelectSize[] = ['sm', 'md', 'lg'];
 
-  protected readonly fruitOptions: PaSelectOption[] = [
+  protected readonly fruitOptions: HaSelectOption[] = [
     { label: 'Apple', value: 'apple' },
     { label: 'Banana', value: 'banana' },
     { label: 'Cherry (disabled)', value: 'cherry', disabled: true },

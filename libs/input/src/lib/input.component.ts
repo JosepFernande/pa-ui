@@ -16,14 +16,14 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FocusMonitor, FocusOrigin } from '@angular/cdk/a11y';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
-import { withFocusMonitor } from '@pa-ui/core';
-import type { PaInputSize } from './input.types';
+import { withFocusMonitor } from '@halo-ui/core';
+import type { HaInputSize } from './input.types';
 
 /**
- * Accessible, token-driven native text input (selector `input[pa-input]`).
+ * Accessible, token-driven native text input (selector `input[ha-input]`).
  * Text-only: password, email, and number inputs are separate components.
  *
- * The host IS the native `<input>` element (mirroring `button[pa-button]`),
+ * The host IS the native `<input>` element (mirroring `button[ha-button]`),
  * so the component renders no template content and carries no element of its
  * own — native semantics, keyboard, focus, and form behaviour are inherited
  * for free.
@@ -32,23 +32,23 @@ import type { PaInputSize } from './input.types';
  * both reactive `[formControl]`/`formControlName` and template-driven
  * `[(ngModel)]`). Angular's `selectValueAccessor` prefers this custom
  * accessor over the native `DefaultValueAccessor`, so a `[formControl]` on
- * the same element wires to `PaInput`.
+ * the same element wires to `HaInput`.
  *
- * Error state (`invalid && touched`) is surfaced via `.pa-input--error` and
+ * Error state (`invalid && touched`) is surfaced via `.ha-input--error` and
  * `aria-invalid`. Validity/touched changes come from the form control, which
  * is NOT signal-based, so `ngOnInit` subscribes to the control's `events`
  * stream to invalidate the `hasError` computed — `computed()` cannot observe
  * `control.invalid`/`control.touched` directly.
  */
 @Component({
-  selector: 'input[pa-input]',
+  selector: 'input[ha-input]',
   standalone: true,
   imports: [],
   template: '',
   styleUrl: './input.component.css',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => PaInput), multi: true }],
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => HaInput), multi: true }],
   host: {
     '[class]': 'hostClasses()',
     '[disabled]': 'effectiveDisabled()',
@@ -68,9 +68,9 @@ import type { PaInputSize } from './input.types';
     '(blur)': 'onBlur()',
   },
 })
-export class PaInput implements ControlValueAccessor, OnInit {
+export class HaInput implements ControlValueAccessor, OnInit {
   /** Size preset: sm, md, or lg. */
-  readonly size = input<PaInputSize>('md');
+  readonly size = input<HaInputSize>('md');
 
   /** Whether the input is disabled. Overridden by the form control when disabled. */
   readonly disabled = input(false);
@@ -122,7 +122,7 @@ export class PaInput implements ControlValueAccessor, OnInit {
 
   /**
    * Computed: `true` when the bound control is invalid AND touched — drives
-   * `.pa-input--error` and `aria-invalid`. Reactive via `validityVersion`.
+   * `.ha-input--error` and `aria-invalid`. Reactive via `validityVersion`.
    */
   protected readonly hasError = computed(() => {
     this.validityVersion();
@@ -133,13 +133,13 @@ export class PaInput implements ControlValueAccessor, OnInit {
   /** Computed: BEM class string for the host input element. */
   protected readonly hostClasses = computed(() =>
     [
-      'pa-input',
-      `pa-input--${this.size()}`,
-      this.effectiveDisabled() ? 'pa-input--disabled' : '',
-      this.readonly() ? 'pa-input--readonly' : '',
-      this.hasError() ? 'pa-input--error' : '',
-      this.focusOrigin() !== null ? 'pa-input--focused' : '',
-      this.focusOrigin() === 'keyboard' ? 'pa-input--keyboard-focused' : '',
+      'ha-input',
+      `ha-input--${this.size()}`,
+      this.effectiveDisabled() ? 'ha-input--disabled' : '',
+      this.readonly() ? 'ha-input--readonly' : '',
+      this.hasError() ? 'ha-input--error' : '',
+      this.focusOrigin() !== null ? 'ha-input--focused' : '',
+      this.focusOrigin() === 'keyboard' ? 'ha-input--keyboard-focused' : '',
     ]
       .filter(Boolean)
       .join(' '),

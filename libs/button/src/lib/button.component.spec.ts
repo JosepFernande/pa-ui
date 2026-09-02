@@ -13,8 +13,8 @@ const { axe, toHaveNoViolations } = require('jest-axe') as {
   toHaveNoViolations: Record<string, jest.CustomMatcher>;
 };
 
-import { PaButton } from './button.component';
-import { PaButtonVariant, PaButtonSize } from './button.types';
+import { HaButton } from './button.component';
+import { HaButtonVariant, HaButtonSize } from './button.types';
 
 expect.extend(toHaveNoViolations);
 
@@ -29,17 +29,17 @@ declare global {
 }
 
 /**
- * Test host that wraps PaButton in a parent template,
- * matching real consumer usage with `<button pa-button>`.
+ * Test host that wraps HaButton in a parent template,
+ * matching real consumer usage with `<button ha-button>`.
  */
 @Component({
-  selector: 'pa-test-host',
+  selector: 'ha-test-host',
   standalone: true,
-  imports: [PaButton],
+  imports: [HaButton],
   encapsulation: ViewEncapsulation.None,
   template: `
     <button
-      pa-button
+      ha-button
       [variant]="variant"
       [size]="size"
       [color]="color"
@@ -53,8 +53,8 @@ declare global {
   `,
 })
 class TestHost {
-  variant: PaButtonVariant = 'solid';
-  size: PaButtonSize = 'md';
+  variant: HaButtonVariant = 'solid';
+  size: HaButtonSize = 'md';
   color = 'primary';
   disabled = false;
   loading = false;
@@ -69,18 +69,18 @@ class TestHost {
 
 /**
  * Test host reproducing the README's documented "bare" attribute usage:
- * `<button pa-button loading>` with no binding, no `[loading]`.
+ * `<button ha-button loading>` with no binding, no `[loading]`.
  */
 @Component({
-  selector: 'pa-test-host-bare-loading',
+  selector: 'ha-test-host-bare-loading',
   standalone: true,
-  imports: [PaButton],
+  imports: [HaButton],
   encapsulation: ViewEncapsulation.None,
-  template: `<button pa-button loading>Bare Loading</button>`,
+  template: `<button ha-button loading>Bare Loading</button>`,
 })
 class BareLoadingTestHost {}
 
-describe('PaButton', () => {
+describe('HaButton', () => {
   let focusOrigin$: Subject<FocusOrigin>;
   let focusMonitorMock: { monitor: jest.Mock; stopMonitoring: jest.Mock };
 
@@ -128,26 +128,26 @@ describe('PaButton', () => {
       expect(buttonEl.textContent).toContain('Save Changes');
     });
 
-    it('should wrap ng-content in a .pa-button__label span', () => {
+    it('should wrap ng-content in a .ha-button__label span', () => {
       const { fixture, host } = createTestHost();
       host.label = 'Save Changes';
       host.loading = false;
       fixture.detectChanges();
 
-      const labelSpan = fixture.debugElement.query(By.css('.pa-button__label'));
+      const labelSpan = fixture.debugElement.query(By.css('.ha-button__label'));
       expect(labelSpan).not.toBeNull();
       expect(labelSpan.nativeElement.textContent).toContain('Save Changes');
     });
 
-    it('should NOT render .pa-button__label when loading', () => {
+    it('should NOT render .ha-button__label when loading', () => {
       const { fixture, host } = createTestHost();
       host.label = 'Save Changes';
       host.loading = true;
       fixture.detectChanges();
 
-      const labelSpan = fixture.debugElement.query(By.css('.pa-button__label'));
+      const labelSpan = fixture.debugElement.query(By.css('.ha-button__label'));
       expect(labelSpan).not.toBeNull();
-      expect(labelSpan.nativeElement.classList.contains('pa-button__label--hidden')).toBe(true);
+      expect(labelSpan.nativeElement.classList.contains('ha-button__label--hidden')).toBe(true);
     });
 
     it('should have implicit role="button" from the native element', () => {
@@ -161,11 +161,11 @@ describe('PaButton', () => {
       expect(byRole).not.toBeNull();
     });
 
-    it('should always have the base BEM class pa-button', () => {
+    it('should always have the base BEM class ha-button', () => {
       const { fixture, buttonEl } = createTestHost();
       fixture.detectChanges();
 
-      expect(buttonEl.classList.contains('pa-button')).toBe(true);
+      expect(buttonEl.classList.contains('ha-button')).toBe(true);
     });
   });
 
@@ -173,28 +173,28 @@ describe('PaButton', () => {
   // Variant classes
   // -----------------------------------------------------------------------
   describe('variant classes', () => {
-    it('should apply pa-button--solid by default', () => {
+    it('should apply ha-button--solid by default', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.variant = 'solid';
       fixture.detectChanges();
 
-      expect(buttonEl.classList.contains('pa-button--solid')).toBe(true);
+      expect(buttonEl.classList.contains('ha-button--solid')).toBe(true);
     });
 
-    it('should apply pa-button--outline when variant is outline', () => {
+    it('should apply ha-button--outline when variant is outline', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.variant = 'outline';
       fixture.detectChanges();
 
-      expect(buttonEl.classList.contains('pa-button--outline')).toBe(true);
+      expect(buttonEl.classList.contains('ha-button--outline')).toBe(true);
     });
 
-    it('should apply pa-button--ghost when variant is ghost', () => {
+    it('should apply ha-button--ghost when variant is ghost', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.variant = 'ghost';
       fixture.detectChanges();
 
-      expect(buttonEl.classList.contains('pa-button--ghost')).toBe(true);
+      expect(buttonEl.classList.contains('ha-button--ghost')).toBe(true);
     });
 
     it('should NOT have classes for other variants', () => {
@@ -202,8 +202,8 @@ describe('PaButton', () => {
       host.variant = 'solid';
       fixture.detectChanges();
 
-      expect(buttonEl.classList.contains('pa-button--outline')).toBe(false);
-      expect(buttonEl.classList.contains('pa-button--ghost')).toBe(false);
+      expect(buttonEl.classList.contains('ha-button--outline')).toBe(false);
+      expect(buttonEl.classList.contains('ha-button--ghost')).toBe(false);
     });
   });
 
@@ -211,28 +211,28 @@ describe('PaButton', () => {
   // Size classes
   // -----------------------------------------------------------------------
   describe('size classes', () => {
-    it('should apply pa-button--md by default', () => {
+    it('should apply ha-button--md by default', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.size = 'md';
       fixture.detectChanges();
 
-      expect(buttonEl.classList.contains('pa-button--md')).toBe(true);
+      expect(buttonEl.classList.contains('ha-button--md')).toBe(true);
     });
 
-    it('should apply pa-button--sm when size is sm', () => {
+    it('should apply ha-button--sm when size is sm', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.size = 'sm';
       fixture.detectChanges();
 
-      expect(buttonEl.classList.contains('pa-button--sm')).toBe(true);
+      expect(buttonEl.classList.contains('ha-button--sm')).toBe(true);
     });
 
-    it('should apply pa-button--lg when size is lg', () => {
+    it('should apply ha-button--lg when size is lg', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.size = 'lg';
       fixture.detectChanges();
 
-      expect(buttonEl.classList.contains('pa-button--lg')).toBe(true);
+      expect(buttonEl.classList.contains('ha-button--lg')).toBe(true);
     });
 
     it('should NOT have classes for other sizes', () => {
@@ -240,8 +240,8 @@ describe('PaButton', () => {
       host.size = 'sm';
       fixture.detectChanges();
 
-      expect(buttonEl.classList.contains('pa-button--md')).toBe(false);
-      expect(buttonEl.classList.contains('pa-button--lg')).toBe(false);
+      expect(buttonEl.classList.contains('ha-button--md')).toBe(false);
+      expect(buttonEl.classList.contains('ha-button--lg')).toBe(false);
     });
   });
 
@@ -249,31 +249,31 @@ describe('PaButton', () => {
   // Color CSS variable
   // -----------------------------------------------------------------------
   describe('color CSS variable', () => {
-    it('should resolve --pa-button-color to var(--pa-primary) by default', () => {
+    it('should resolve --ha-button-color to var(--ha-primary) by default', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.color = 'primary';
       fixture.detectChanges();
 
-      const style = buttonEl.style.getPropertyValue('--pa-button-color');
-      expect(style).toBe('var(--pa-primary)');
+      const style = buttonEl.style.getPropertyValue('--ha-button-color');
+      expect(style).toBe('var(--ha-primary)');
     });
 
-    it('should resolve --pa-button-color to var(--pa-danger) when color is danger', () => {
+    it('should resolve --ha-button-color to var(--ha-danger) when color is danger', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.color = 'danger';
       fixture.detectChanges();
 
-      const style = buttonEl.style.getPropertyValue('--pa-button-color');
-      expect(style).toBe('var(--pa-danger)');
+      const style = buttonEl.style.getPropertyValue('--ha-button-color');
+      expect(style).toBe('var(--ha-danger)');
     });
 
-    it('should resolve --pa-button-color to var(--pa-custom) for any string', () => {
+    it('should resolve --ha-button-color to var(--ha-custom) for any string', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.color = 'custom-theme';
       fixture.detectChanges();
 
-      const style = buttonEl.style.getPropertyValue('--pa-button-color');
-      expect(style).toBe('var(--pa-custom-theme)');
+      const style = buttonEl.style.getPropertyValue('--ha-button-color');
+      expect(style).toBe('var(--ha-custom-theme)');
     });
   });
 
@@ -281,58 +281,58 @@ describe('PaButton', () => {
   // Theme-derived token variants (Issue #59)
   // -----------------------------------------------------------------------
   describe('theme-derived token variants', () => {
-    it('should resolve --pa-button-bg to var(--pa-primary) for color=primary', () => {
+    it('should resolve --ha-button-bg to var(--ha-primary) for color=primary', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.color = 'primary';
       fixture.detectChanges();
 
-      expect(buttonEl.style.getPropertyValue('--pa-button-bg')).toBe('var(--pa-primary)');
+      expect(buttonEl.style.getPropertyValue('--ha-button-bg')).toBe('var(--ha-primary)');
     });
 
-    it('should resolve --pa-button-hover-bg to var(--pa-primary-hover) for color=primary', () => {
+    it('should resolve --ha-button-hover-bg to var(--ha-primary-hover) for color=primary', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.color = 'primary';
       fixture.detectChanges();
 
-      expect(buttonEl.style.getPropertyValue('--pa-button-hover-bg')).toBe(
-        'var(--pa-primary-hover)',
+      expect(buttonEl.style.getPropertyValue('--ha-button-hover-bg')).toBe(
+        'var(--ha-primary-hover)',
       );
     });
 
-    it('should resolve --pa-button-active-bg to var(--pa-primary-active) for color=primary', () => {
+    it('should resolve --ha-button-active-bg to var(--ha-primary-active) for color=primary', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.color = 'primary';
       fixture.detectChanges();
 
-      expect(buttonEl.style.getPropertyValue('--pa-button-active-bg')).toBe(
-        'var(--pa-primary-active)',
+      expect(buttonEl.style.getPropertyValue('--ha-button-active-bg')).toBe(
+        'var(--ha-primary-active)',
       );
     });
 
-    it('should resolve --pa-button-solid-color to var(--pa-primary-contrast) for color=primary', () => {
+    it('should resolve --ha-button-solid-color to var(--ha-primary-contrast) for color=primary', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.color = 'primary';
       fixture.detectChanges();
 
-      expect(buttonEl.style.getPropertyValue('--pa-button-solid-color')).toBe(
-        'var(--pa-primary-contrast)',
+      expect(buttonEl.style.getPropertyValue('--ha-button-solid-color')).toBe(
+        'var(--ha-primary-contrast)',
       );
     });
 
-    it('should resolve all 4 variants against --pa-secondary-* for color=secondary', () => {
+    it('should resolve all 4 variants against --ha-secondary-* for color=secondary', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.color = 'secondary';
       fixture.detectChanges();
 
-      expect(buttonEl.style.getPropertyValue('--pa-button-bg')).toBe('var(--pa-secondary)');
-      expect(buttonEl.style.getPropertyValue('--pa-button-hover-bg')).toBe(
-        'var(--pa-secondary-hover)',
+      expect(buttonEl.style.getPropertyValue('--ha-button-bg')).toBe('var(--ha-secondary)');
+      expect(buttonEl.style.getPropertyValue('--ha-button-hover-bg')).toBe(
+        'var(--ha-secondary-hover)',
       );
-      expect(buttonEl.style.getPropertyValue('--pa-button-active-bg')).toBe(
-        'var(--pa-secondary-active)',
+      expect(buttonEl.style.getPropertyValue('--ha-button-active-bg')).toBe(
+        'var(--ha-secondary-active)',
       );
-      expect(buttonEl.style.getPropertyValue('--pa-button-solid-color')).toBe(
-        'var(--pa-secondary-contrast)',
+      expect(buttonEl.style.getPropertyValue('--ha-button-solid-color')).toBe(
+        'var(--ha-secondary-contrast)',
       );
     });
   });
@@ -407,12 +407,12 @@ describe('PaButton', () => {
       expect(host.clicked).toBe(false);
     });
 
-    it('should apply pa-button--disabled class when disabled', () => {
+    it('should apply ha-button--disabled class when disabled', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.disabled = true;
       fixture.detectChanges();
 
-      expect(buttonEl.classList.contains('pa-button--disabled')).toBe(true);
+      expect(buttonEl.classList.contains('ha-button--disabled')).toBe(true);
     });
 
     it('should NOT suppress click when not disabled', () => {
@@ -461,12 +461,12 @@ describe('PaButton', () => {
       expect(host.clicked).toBe(false);
     });
 
-    it('should apply pa-button--loading class when loading', () => {
+    it('should apply ha-button--loading class when loading', () => {
       const { fixture, host, buttonEl } = createTestHost();
       host.loading = true;
       fixture.detectChanges();
 
-      expect(buttonEl.classList.contains('pa-button--loading')).toBe(true);
+      expect(buttonEl.classList.contains('ha-button--loading')).toBe(true);
     });
 
     it('should render a spinner element when loading', () => {
@@ -474,7 +474,7 @@ describe('PaButton', () => {
       host.loading = true;
       fixture.detectChanges();
 
-      const spinner = fixture.debugElement.query(By.css('.pa-button__spinner'));
+      const spinner = fixture.debugElement.query(By.css('.ha-button__spinner'));
       expect(spinner).not.toBeNull();
     });
 
@@ -483,7 +483,7 @@ describe('PaButton', () => {
       host.loading = false;
       fixture.detectChanges();
 
-      const spinner = fixture.debugElement.query(By.css('.pa-button__spinner'));
+      const spinner = fixture.debugElement.query(By.css('.ha-button__spinner'));
       expect(spinner).toBeNull();
     });
 
@@ -492,7 +492,7 @@ describe('PaButton', () => {
       host.loading = true;
       fixture.detectChanges();
 
-      const spinner = fixture.debugElement.query(By.css('.pa-button__spinner'))!.nativeElement;
+      const spinner = fixture.debugElement.query(By.css('.ha-button__spinner'))!.nativeElement;
       expect(spinner.getAttribute('aria-hidden')).toBe('true');
     });
 
@@ -518,7 +518,7 @@ describe('PaButton', () => {
       }).compileComponents();
     });
 
-    it('should coerce `<button pa-button loading>` (no binding) to true', () => {
+    it('should coerce `<button ha-button loading>` (no binding) to true', () => {
       const fixture = TestBed.createComponent(BareLoadingTestHost);
       fixture.detectChanges();
 
@@ -540,9 +540,9 @@ describe('PaButton', () => {
       host.color = 'primary';
       fixture.detectChanges();
 
-      expect(buttonEl.classList.contains('pa-button--solid')).toBe(true);
-      const style = buttonEl.style.getPropertyValue('--pa-button-color');
-      expect(style).toBe('var(--pa-primary)');
+      expect(buttonEl.classList.contains('ha-button--solid')).toBe(true);
+      const style = buttonEl.style.getPropertyValue('--ha-button-color');
+      expect(style).toBe('var(--ha-primary)');
     });
 
     it('should produce secondary outcome: outline + primary', () => {
@@ -551,9 +551,9 @@ describe('PaButton', () => {
       host.color = 'primary';
       fixture.detectChanges();
 
-      expect(buttonEl.classList.contains('pa-button--outline')).toBe(true);
-      const style = buttonEl.style.getPropertyValue('--pa-button-color');
-      expect(style).toBe('var(--pa-primary)');
+      expect(buttonEl.classList.contains('ha-button--outline')).toBe(true);
+      const style = buttonEl.style.getPropertyValue('--ha-button-color');
+      expect(style).toBe('var(--ha-primary)');
     });
 
     it('should produce ghost outcome: ghost + primary', () => {
@@ -562,9 +562,9 @@ describe('PaButton', () => {
       host.color = 'primary';
       fixture.detectChanges();
 
-      expect(buttonEl.classList.contains('pa-button--ghost')).toBe(true);
-      const style = buttonEl.style.getPropertyValue('--pa-button-color');
-      expect(style).toBe('var(--pa-primary)');
+      expect(buttonEl.classList.contains('ha-button--ghost')).toBe(true);
+      const style = buttonEl.style.getPropertyValue('--ha-button-color');
+      expect(style).toBe('var(--ha-primary)');
     });
 
     it('should produce danger outcome: solid + danger', () => {
@@ -573,9 +573,9 @@ describe('PaButton', () => {
       host.color = 'danger';
       fixture.detectChanges();
 
-      expect(buttonEl.classList.contains('pa-button--solid')).toBe(true);
-      const style = buttonEl.style.getPropertyValue('--pa-button-color');
-      expect(style).toBe('var(--pa-danger)');
+      expect(buttonEl.classList.contains('ha-button--solid')).toBe(true);
+      const style = buttonEl.style.getPropertyValue('--ha-button-color');
+      expect(style).toBe('var(--ha-danger)');
     });
   });
 
@@ -643,7 +643,7 @@ describe('PaButton', () => {
       const { fixture } = createTestHost();
       fixture.detectChanges();
 
-      const buttonDebug = fixture.debugElement.query(By.directive(PaButton));
+      const buttonDebug = fixture.debugElement.query(By.directive(HaButton));
       const component = buttonDebug!.componentInstance;
       // Standalone components can be created via TestBed without an NgModule
       expect(component).toBeDefined();
@@ -653,7 +653,7 @@ describe('PaButton', () => {
       const { fixture } = createTestHost();
       fixture.detectChanges();
 
-      const buttonDebug = fixture.debugElement.query(By.directive(PaButton));
+      const buttonDebug = fixture.debugElement.query(By.directive(HaButton));
       // OnPush components have changeDetectorRef with OnPush strategy (internal)
       // We verify behavior: input change triggers DOM update
       const host = fixture.componentInstance;
@@ -661,7 +661,7 @@ describe('PaButton', () => {
       fixture.detectChanges();
 
       const buttonEl = buttonDebug!.nativeElement as HTMLButtonElement;
-      expect(buttonEl.classList.contains('pa-button--ghost')).toBe(true);
+      expect(buttonEl.classList.contains('ha-button--ghost')).toBe(true);
     });
 
     it('should have all inputs defined as Angular signals', () => {
@@ -676,7 +676,7 @@ describe('PaButton', () => {
 
       const buttonEl = fixture.debugElement.query(By.css('button'))!
         .nativeElement as HTMLButtonElement;
-      expect(buttonEl.classList.contains('pa-button--lg')).toBe(true);
+      expect(buttonEl.classList.contains('ha-button--lg')).toBe(true);
     });
   });
 

@@ -56,7 +56,7 @@ A reviewer should verify:
 
 ### Architecture
 
-- [ ] The 6 hard rules are respected (see the `pa-ui-architecture` skill).
+- [ ] The 6 hard rules are respected (see the `lib-ui-architecture` skill).
 - [ ] **gga (Gentleman Guardian Angel) passes** — AI review of the 6 hard
       rules + token system in CI.
 - [ ] No new hardcoded colors, spacing, or radius in the component's CSS.
@@ -202,6 +202,6 @@ If you're the maintainer:
 
 - [`CONTRIBUTING.md`](../CONTRIBUTING.md) — branch naming, commit conventions,
   the changeset workflow, quick-start commands
-- `pa-ui-coding-standards` skill (`skills/pa-ui-coding-standards/SKILL.md`) —
+- `lib-ui-coding-standards` skill (`skills/lib-ui-coding-standards/SKILL.md`) —
   file structure, input/output conventions, gga review criteria
 - [CI/CD Pipeline](./ci-cd-pipeline.md) — the checks referenced above

@@ -1,3 +1,3 @@
-export { PaInput } from './lib/input.component';
-export type { PaInputSize } from './lib/input.types';
-export { PA_INPUT_TOKENS } from './lib/input.tokens';
+export { HaInput } from './lib/input.component';
+export type { HaInputSize } from './lib/input.types';
+export { HA_INPUT_TOKENS } from './lib/input.tokens';

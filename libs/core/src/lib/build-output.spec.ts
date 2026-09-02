@@ -49,14 +49,14 @@ describe('Build-output verification', () => {
       expect(peers['@angular/forms']).toBeDefined();
     });
 
-    it('dist package.json peerDependencies does NOT include @pa-ui/button', () => {
+    it('dist package.json peerDependencies does NOT include @halo-ui/button', () => {
       const pkg = readJson(path.resolve(distDir(), 'package.json'));
       const peers = pkg['peerDependencies'] as Record<string, string>;
-      expect(peers['@pa-ui/button']).toBeUndefined();
+      expect(peers['@halo-ui/button']).toBeUndefined();
     });
 
-    it('fesm2022/pa-ui-core.mjs exists', () => {
-      const mjsPath = path.resolve(distDir(), 'fesm2022', 'pa-ui-core.mjs');
+    it('fesm2022/halo-ui-core.mjs exists', () => {
+      const mjsPath = path.resolve(distDir(), 'fesm2022', 'halo-ui-core.mjs');
       expect(fs.existsSync(mjsPath)).toBe(true);
     });
 
@@ -76,7 +76,7 @@ describe('Build-output verification', () => {
       const cssPath = path.resolve(distDir(), 'theme.css');
       const content = fs.readFileSync(cssPath, 'utf-8');
       expect(content).toContain(':root');
-      expect(content).toContain('--pa-button-bg');
+      expect(content).toContain('--ha-button-bg');
     });
 
     it("dist package.json exports['./theme.css'] survives the production build", () => {
@@ -90,14 +90,14 @@ describe('Build-output verification', () => {
 
   describe('tree-shaking proxy', () => {
     it('fesm2022 bundle does not import @angular/cdk', () => {
-      const mjsPath = path.resolve(distDir(), 'fesm2022', 'pa-ui-core.mjs');
+      const mjsPath = path.resolve(distDir(), 'fesm2022', 'halo-ui-core.mjs');
       const content = fs.readFileSync(mjsPath, 'utf-8');
       expect(content).not.toContain("from '@angular/cdk'");
       expect(content).not.toContain('from "@angular/cdk"');
     });
 
     it('fesm2022 bundle does not import @angular/forms', () => {
-      const mjsPath = path.resolve(distDir(), 'fesm2022', 'pa-ui-core.mjs');
+      const mjsPath = path.resolve(distDir(), 'fesm2022', 'halo-ui-core.mjs');
       const content = fs.readFileSync(mjsPath, 'utf-8');
       expect(content).not.toContain("from '@angular/forms'");
       expect(content).not.toContain('from "@angular/forms"');

@@ -7,7 +7,7 @@
  */
 import { hexToHsl, hslToHex, hslToRgb, relativeLuminance } from './color-math';
 import type { HSL } from './color-math';
-import type { PaColorVariants, ResolvedTheme, ThemeCssVariables } from './theme.tokens';
+import type { HaColorVariants, ResolvedTheme, ThemeCssVariables } from './theme.tokens';
 
 /** Lightness delta applied for hover (+) and active (-) variants. */
 export const LIGHTNESS_STEP = 8;
@@ -78,7 +78,7 @@ function resolveVariant(
     return explicit;
   } catch {
     console.warn(
-      `[pa-ui] deriveTokens: invalid explicit ${variant} value "${explicit}" for key "${name}"; falling back to derivation.`,
+      `[halo-ui] deriveTokens: invalid explicit ${variant} value "${explicit}" for key "${name}"; falling back to derivation.`,
     );
     return derive();
   }
@@ -86,7 +86,7 @@ function resolveVariant(
 
 /**
  * Walks `theme.colors` in insertion order and emits a flat
- * `--pa-color-{name}[-hover|-active|-contrast]` map (Requirement: CSS
+ * `--ha-color-{name}[-hover|-active|-contrast]` map (Requirement: CSS
  * Variable Map Output Shape). Per entry: normalize the key (warn if
  * sanitized), detect name collisions (warn, last-write-wins via object-key
  * overwrite), then derive the 4 variant values. Malformed hex values are
@@ -105,18 +105,18 @@ export function deriveTokens(theme: ResolvedTheme): ThemeCssVariables {
     const name = normalizeColorName(rawName);
 
     if (name !== rawName) {
-      console.warn(`[pa-ui] deriveTokens: color key "${rawName}" was sanitized to "${name}".`);
+      console.warn(`[halo-ui] deriveTokens: color key "${rawName}" was sanitized to "${name}".`);
     }
 
     if (seen.has(name)) {
       console.warn(
-        `[pa-ui] deriveTokens: color key "${name}" has a naming collision with a previously processed key; the later value wins.`,
+        `[halo-ui] deriveTokens: color key "${name}" has a naming collision with a previously processed key; the later value wins.`,
       );
     }
     seen.add(name);
 
     const isObj = typeof value === 'object' && value !== null;
-    const variants: PaColorVariants | undefined = isObj ? value : undefined;
+    const variants: HaColorVariants | undefined = isObj ? value : undefined;
     const base = isObj ? value.base : value;
 
     let hsl: HSL;
@@ -124,19 +124,19 @@ export function deriveTokens(theme: ResolvedTheme): ThemeCssVariables {
       hsl = hexToHsl(base);
     } catch {
       console.warn(
-        `[pa-ui] deriveTokens: invalid color value "${base}" for key "${name}"; skipping this color.`,
+        `[halo-ui] deriveTokens: invalid color value "${base}" for key "${name}"; skipping this color.`,
       );
       continue;
     }
 
-    result[`--pa-color-${name}`] = base;
-    result[`--pa-color-${name}-hover`] = resolveVariant(variants?.hover, name, 'hover', () =>
+    result[`--ha-color-${name}`] = base;
+    result[`--ha-color-${name}-hover`] = resolveVariant(variants?.hover, name, 'hover', () =>
       hslToHex(adjustLightness(hsl, LIGHTNESS_STEP)),
     );
-    result[`--pa-color-${name}-active`] = resolveVariant(variants?.active, name, 'active', () =>
+    result[`--ha-color-${name}-active`] = resolveVariant(variants?.active, name, 'active', () =>
       hslToHex(adjustLightness(hsl, -LIGHTNESS_STEP)),
     );
-    result[`--pa-color-${name}-contrast`] = resolveVariant(
+    result[`--ha-color-${name}-contrast`] = resolveVariant(
       variants?.contrast,
       name,
       'contrast',

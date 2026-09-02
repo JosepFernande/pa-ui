@@ -7,17 +7,17 @@
 </header>
 
 <div class="select-page__docs">
-  <app-code-block label="Instalación" language="bash" code="npm install &#64;pa-ui/angular &#64;angular/cdk" />
+  <app-code-block label="Instalación" language="bash" code="npm install &#64;halo-ui/angular &#64;angular/cdk" />
   <app-code-block
     label="Importación"
     language="typescript"
-    code="import { PaSelect } from '&#64;pa-ui/angular';
-import type { PaSelectOption } from '&#64;pa-ui/angular';"
+    code="import { HaSelect } from '&#64;halo-ui/angular';
+import type { HaSelectOption } from '&#64;halo-ui/angular';"
   />
   <app-code-block
     label="Uso básico"
     language="html"
-    code='&lt;pa-select
+    code='&lt;ha-select
   [options]="options"
   size="md"
   placeholder="Elegí una opción"
@@ -30,7 +30,7 @@ import type { PaSelectOption } from '&#64;pa-ui/angular';"
   <h2>Sizes</h2>
   <div class="select-page__row">
     @for (size of sizes; track size) {
-      <pa-select [options]="fruitOptions" [size]="size" placeholder="Choose a fruit" />
+      <ha-select [options]="fruitOptions" [size]="size" placeholder="Choose a fruit" />
     }
   </div>
 </section>
@@ -38,15 +38,15 @@ import type { PaSelectOption } from '&#64;pa-ui/angular';"
 <section class="select-page__section">
   <h2>States</h2>
   <div class="select-page__row">
-    <pa-select [options]="fruitOptions" [disabled]="true" placeholder="Disabled" />
-    <pa-select [options]="fruitOptions" [readonly]="true" placeholder="Read-only" />
+    <ha-select [options]="fruitOptions" [disabled]="true" placeholder="Disabled" />
+    <ha-select [options]="fruitOptions" [readonly]="true" placeholder="Read-only" />
   </div>
 </section>
 
 <section class="select-page__section">
   <h2>Events</h2>
   <div class="select-page__row">
-    <pa-select
+    <ha-select
       [options]="fruitOptions"
       placeholder="Choose a fruit"
       (valueChange)="onValueChange($event)"

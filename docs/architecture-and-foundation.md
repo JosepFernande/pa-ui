@@ -4,7 +4,7 @@ This is the deep reference for `pa-ui`'s architecture: the project vision, the
 monorepo layout, the token system, and the design constraints behind every
 component. For the day-to-day operational contract (the six hard rules, decision
 gates, execution checklist) used when implementing or reviewing a change, see
-the `pa-ui-architecture` skill (`skills/pa-ui-architecture/SKILL.md`) — this
+the `lib-ui-architecture` skill (`skills/lib-ui-architecture/SKILL.md`) — this
 document does not duplicate that checklist, only the reasoning and the deeper
 structural detail behind it.
 
@@ -37,9 +37,9 @@ for packaging.
 
 The six hard rules (tokens first, standalone only, Signals first, CSS variables
 first, CDK over custom, consistent APIs) are the non-negotiable contract for
-every component — see the `pa-ui-architecture` skill for the full rule text, the
-decision gates, and the verification checklist. They are not repeated here to
-avoid drift between two copies of the same rule.
+every component — see the `lib-ui-architecture` skill for the full rule text,
+the decision gates, and the verification checklist. They are not repeated here
+to avoid drift between two copies of the same rule.
 
 ## Monorepo Architecture
 
@@ -53,7 +53,8 @@ libs/
  ├── core/       (includes foundation/ and theme/ — see below)
  ├── button/
  ├── input/
- └── pa-ui/      (umbrella package @pa-ui/angular, re-exports button/core/input)
+ ├── select/
+ └── halo-ui/    (umbrella package @halo-ui/angular, re-exports button/core/input/select)
 ```
 
 Roadmap — planned libs, not yet scaffolded:
@@ -110,9 +111,9 @@ libs/
  └── core/
      └── theme/
          ├── theme-engine.ts     # mergeTheme() — pure config/defaults merge
-         ├── theme-provider.ts   # providePaTheme() — DI registration, SSR, fail-safe bootstrap
-         ├── theme.tokens.ts     # DEFAULT_THEME, PA_THEME_TOKEN, types
-         ├── theme.service.ts    # PaThemeService — runtime mutation API
+         ├── theme-provider.ts   # provideHaTheme() — DI registration, SSR, fail-safe bootstrap
+         ├── theme.tokens.ts     # DEFAULT_THEME, HA_THEME_TOKEN, types
+         ├── theme.service.ts    # HaThemeService — runtime mutation API
          ├── color-derivation.ts # deriveTokens() — HSL derivation policy
          ├── color-math.ts       # pure color-space/luminance primitives
          └── semantic-tokens.ts  # toSemanticCssVariables() adapter
@@ -167,7 +168,7 @@ libs/button/
 There is no `button.constants.ts` or `button.utils.ts` today — no separate
 convention for constants or utilities exists yet; that content, when it applies,
 lives in `*.tokens.ts` or directly in the component. (The
-`pa-ui-coding-standards` skill documents `.constants.ts`/`.utils.ts` as part of
+`lib-ui-coding-standards` skill documents `.constants.ts`/`.utils.ts` as part of
 the target file layout for future components with that need — it is not
 contradicted by their absence in `button`/`input` today.)
 
@@ -180,13 +181,13 @@ attach as **attribute selectors on the semantically closest native element**,
 not as custom elements:
 
 ```html
-<button pa-button>Save</button> <input pa-input />
+<button ha-button>Save</button> <input ha-input />
 ```
 
 This is a correction to the original architecture plan, which assumed custom
-elements (`<pa-button />`, `<pa-input />`). The real selectors are
-`button[pa-button]` (`libs/button/src/lib/button.component.ts:17`) and
-`input[pa-input]` (`libs/input/src/lib/input.component.ts:44`) — the host IS the
+elements (`<ha-button />`, `<ha-input />`). The real selectors are
+`button[ha-button]` (`libs/button/src/lib/button.component.ts:17`) and
+`input[ha-input]` (`libs/input/src/lib/input.component.ts:44`) — the host IS the
 native element, so keyboard behavior, forms integration, and native semantics
 are inherited for free instead of reimplemented behind a wrapper.
 
@@ -201,8 +202,8 @@ architecture decision — not something the current two components answer. -->
 - **size**: `sm | md | lg`
 - **variant**: `solid | outline | ghost`
 
-Both are closed unions in the real types (`PaButtonSize`, `PaButtonVariant`,
-`PaInputSize` in `libs/button/src/lib/button.types.ts` and
+Both are closed unions in the real types (`HaButtonSize`, `HaButtonVariant`,
+`HaInputSize` in `libs/button/src/lib/button.types.ts` and
 `libs/input/src/lib/input.types.ts`).
 
 `color` is **not** a closed variant — it is typed `string` and resolved by the
@@ -241,7 +242,7 @@ Foundation tokens directly.
 - Shared mutable state
 - Invasive global CSS
 - Oversized components (hard cap: 300–400 lines per component, per the
-  `pa-ui-architecture` skill's decision gates)
+  `lib-ui-architecture` skill's decision gates)
 - Visual logic mixed with business logic
 - Unnecessary dependencies (avoid `lodash` and other heavy libraries)
 
@@ -275,7 +276,7 @@ states, and accessibility notes. See [Showcase](./showcase.md) for the real
 Clean APIs are the top priority:
 
 ```html
-<button pa-button variant="solid" color="primary" size="md">Save</button>
+<button ha-button variant="solid" color="primary" size="md">Save</button>
 ```
 
 It should feel intuitive, consistent, elegant, and modern.
@@ -297,7 +298,7 @@ no mass CSS class generation, no closed color enums.
 ### Default Theme
 
 ```typescript
-providePaTheme();
+provideHaTheme();
 ```
 
 If the consumer configures nothing, this resolves the shipped `DEFAULT_THEME`
@@ -326,7 +327,7 @@ Valid colors are defined by the Theme Engine, not by the component.
 ### Extensible Configuration
 
 ```typescript
-providePaTheme({
+provideHaTheme({
   colors: {
     primary: '#2563eb',
     treasury: '#7c3aed',
@@ -343,7 +344,7 @@ hatch.
 ### Global Component Configuration (future)
 
 ```typescript
-providePaComponents({
+provideHaComponents({
   button: {
     defaultVariant: 'solid',
     defaultSize: 'md',
@@ -351,6 +352,6 @@ providePaComponents({
 });
 ```
 
-<!-- TODO(verify): `providePaComponents()` does not exist in the codebase
+<!-- TODO(verify): `provideHaComponents()` does not exist in the codebase
 today — this is a forward-looking design sketch from the original wiki page,
 not an implemented or scheduled API. -->

@@ -37,7 +37,13 @@
     }
   },
   "namedInputs": {
-    "sharedGlobals": [],
+    "sharedGlobals": [
+      "{workspaceRoot}/tsconfig.base.json",
+      "{workspaceRoot}/eslint.config.js",
+      "{workspaceRoot}/.stylelintrc.json",
+      "{workspaceRoot}/tools/stylelint/*/dist/**/*",
+      "{workspaceRoot}/tools/eslint/*/dist/**/*"
+    ],
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
       "default",

@@ -2,7 +2,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 
 /** Reads the actual shipped Foundation stylesheet — the same artifact a real
- * consumer app imports once (`@pa-ui/core/theme.css`). Resolved from
+ * consumer app imports once (`@halo-ui/core/theme.css`). Resolved from
  * source (not `dist/`) so this test exercises the file this repo edits. */
 function readFoundationThemeCss(): string {
   return fs.readFileSync(
@@ -18,7 +18,7 @@ function readInputComponentCss(): string {
 
 /**
  * jsdom does not perform CSS `var()` resolution/cascade, so a custom property
- * declared as a literal under `:root` (e.g. `--pa-input-radius`) IS readable
+ * declared as a literal under `:root` (e.g. `--ha-input-radius`) IS readable
  * via `getComputedStyle`, but a property whose declared value is itself
  * `var(--other)` is returned unresolved (the literal string `"var(--other)"`),
  * and full multi-hop resolution is a real-browser-only guarantee. Each
@@ -39,32 +39,38 @@ describe('Theme runtime integration — Foundation theme.css ships Input default
     styleEl.remove();
   });
 
-  it('declares the key --pa-input-* defaults a consumer gets from @pa-ui/core/theme.css', () => {
+  it('declares the key --ha-input-* defaults a consumer gets from @halo-ui/core/theme.css, reachable through the legacy --pa-* alias (#139)', () => {
     const rootStyle = getComputedStyle(document.documentElement);
 
-    expect(rootStyle.getPropertyValue('--pa-input-bg').trim()).toBe('var(--neutral-50)');
-    expect(rootStyle.getPropertyValue('--pa-input-error-border').trim()).toBe('var(--pa-error)');
-    expect(rootStyle.getPropertyValue('--pa-input-error-color').trim()).toBe('var(--pa-error)');
-    expect(rootStyle.getPropertyValue('--pa-input-error-icon-color').trim()).toBe(
-      'var(--pa-error)',
-    );
-    expect(rootStyle.getPropertyValue('--pa-input-radius-sm').trim()).toBe('6px');
-    expect(rootStyle.getPropertyValue('--pa-input-radius-md').trim()).toBe('4px');
-    expect(rootStyle.getPropertyValue('--pa-input-radius-lg').trim()).toBe('8px');
+    const entries: Array<[legacy: string, value: string]> = [
+      ['--pa-input-bg', 'var(--neutral-50)'],
+      ['--pa-input-error-border', 'var(--ha-error)'],
+      ['--pa-input-error-color', 'var(--ha-error)'],
+      ['--pa-input-error-icon-color', 'var(--ha-error)'],
+      ['--pa-input-radius-sm', '6px'],
+      ['--pa-input-radius-md', '4px'],
+      ['--pa-input-radius-lg', '8px'],
+    ];
+
+    for (const [legacyKey, value] of entries) {
+      const haKey = '--ha-' + legacyKey.slice('--pa-'.length);
+      expect(rootStyle.getPropertyValue(legacyKey).trim()).toBe(value);
+      expect(rootStyle.getPropertyValue(haKey).trim()).toBe(`var(${legacyKey})`);
+    }
   });
 
   it('marks ALL input dimension declarations (padding sm/md/lg + min-height sm/md/lg + radius sm/md/lg) as provisional', () => {
     const css = readFoundationThemeCss();
     for (const key of [
-      '--pa-input-padding-sm',
-      '--pa-input-padding-md',
-      '--pa-input-padding-lg',
-      '--pa-input-min-height-sm',
-      '--pa-input-min-height-md',
-      '--pa-input-min-height-lg',
-      '--pa-input-radius-sm',
-      '--pa-input-radius-md',
-      '--pa-input-radius-lg',
+      '--ha-input-padding-sm',
+      '--ha-input-padding-md',
+      '--ha-input-padding-lg',
+      '--ha-input-min-height-sm',
+      '--ha-input-min-height-md',
+      '--ha-input-min-height-lg',
+      '--ha-input-radius-sm',
+      '--ha-input-radius-md',
+      '--ha-input-radius-lg',
     ]) {
       const lineRegex = new RegExp(`${key}\\s*:[^;]+;[^\\n]*`);
       const match = css.match(lineRegex);
@@ -79,25 +85,25 @@ describe('Theme runtime integration — input.component.css wires per-size token
     const css = readInputComponentCss();
 
     const sizeBlock = (size: 'sm' | 'md' | 'lg'): string => {
-      const match = css.match(new RegExp(`\\.pa-input--${size}\\s*\\{([^}]*)\\}`));
+      const match = css.match(new RegExp(`\\.ha-input--${size}\\s*\\{([^}]*)\\}`));
       expect(match).not.toBeNull();
       return match![1];
     };
 
     for (const size of ['sm', 'md', 'lg'] as const) {
       const block = sizeBlock(size);
-      expect(block).toMatch(new RegExp(`padding:\\s*var\\(--pa-input-padding-${size}\\)`));
-      expect(block).toMatch(new RegExp(`min-height:\\s*var\\(--pa-input-min-height-${size}\\)`));
-      expect(block).toMatch(new RegExp(`font-size:\\s*var\\(--pa-input-font-${size}\\)`));
-      expect(block).toMatch(new RegExp(`border-radius:\\s*var\\(--pa-input-radius-${size}\\)`));
+      expect(block).toMatch(new RegExp(`padding:\\s*var\\(--ha-input-padding-${size}\\)`));
+      expect(block).toMatch(new RegExp(`min-height:\\s*var\\(--ha-input-min-height-${size}\\)`));
+      expect(block).toMatch(new RegExp(`font-size:\\s*var\\(--ha-input-font-${size}\\)`));
+      expect(block).toMatch(new RegExp(`border-radius:\\s*var\\(--ha-input-radius-${size}\\)`));
     }
   });
 
-  it('wires the focused-state rule to --pa-input-focus-border only (no box-shadow ring)', () => {
+  it('wires the focused-state rule to --ha-input-focus-border only (no box-shadow ring)', () => {
     const css = readInputComponentCss();
-    const focusBlock = css.match(/\.pa-input--focused\s*\{([^}]*)\}/);
+    const focusBlock = css.match(/\.ha-input--focused\s*\{([^}]*)\}/);
     expect(focusBlock).not.toBeNull();
-    expect(focusBlock![1]).toMatch(/border-color:\s*var\(--pa-input-focus-border\)/);
+    expect(focusBlock![1]).toMatch(/border-color:\s*var\(--ha-input-focus-border\)/);
     expect(focusBlock![1]).not.toMatch(/box-shadow/);
   });
 });

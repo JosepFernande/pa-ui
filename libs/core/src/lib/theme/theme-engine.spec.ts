@@ -1,4 +1,4 @@
-import { DEFAULT_THEME, type PaThemeConfig, type PaThemeOptions } from './theme.tokens';
+import { DEFAULT_THEME, type HaThemeConfig, type HaThemeOptions } from './theme.tokens';
 import { mergeTheme } from './theme-engine';
 
 describe('mergeTheme', () => {
@@ -32,7 +32,7 @@ describe('mergeTheme', () => {
 
   describe('extendDefaults true (default) merges over defaults', () => {
     it('overrides the given key and keeps the other 4 defaults when options is undefined', () => {
-      const config: PaThemeConfig = { colors: { primary: '#f00' } };
+      const config: HaThemeConfig = { colors: { primary: '#f00' } };
       const result = mergeTheme(config, undefined);
       expect(result.colors['primary']).toBe('#f00');
       expect(result.colors['success']).toBe(DEFAULT_THEME.colors['success']);
@@ -42,8 +42,8 @@ describe('mergeTheme', () => {
     });
 
     it('overrides the given key and keeps the other 4 defaults when extendDefaults is explicitly true', () => {
-      const config: PaThemeConfig = { colors: { danger: '#123456' } };
-      const options: PaThemeOptions = { extendDefaults: true };
+      const config: HaThemeConfig = { colors: { danger: '#123456' } };
+      const options: HaThemeOptions = { extendDefaults: true };
       const result = mergeTheme(config, options);
       expect(result.colors['danger']).toBe('#123456');
       expect(result.colors['primary']).toBe(DEFAULT_THEME.colors['primary']);
@@ -58,7 +58,7 @@ describe('mergeTheme', () => {
     });
 
     it('Task 1.6 — includes a custom "brand" color alongside every entry of the new full DEFAULT_THEME roster', () => {
-      const config: PaThemeConfig = { colors: { brand: '#ec4899' } };
+      const config: HaThemeConfig = { colors: { brand: '#ec4899' } };
       const result = mergeTheme(config, undefined);
       expect(result.colors['brand']).toBe('#ec4899');
       for (const key of Object.keys(DEFAULT_THEME.colors)) {
@@ -69,7 +69,7 @@ describe('mergeTheme', () => {
 
   describe('open color dictionary', () => {
     it('includes a custom key alongside the 5 defaults with extendDefaults true', () => {
-      const config: PaThemeConfig = { colors: { brand: '#00f' } };
+      const config: HaThemeConfig = { colors: { brand: '#00f' } };
       const result = mergeTheme(config, { extendDefaults: true });
       expect(result.colors['brand']).toBe('#00f');
       expect(result.colors['primary']).toBe(DEFAULT_THEME.colors['primary']);
@@ -80,14 +80,14 @@ describe('mergeTheme', () => {
     });
 
     it('does not validate keys against a closed enum', () => {
-      const config: PaThemeConfig = { colors: { 'anything-goes': '#abcdef' } };
+      const config: HaThemeConfig = { colors: { 'anything-goes': '#abcdef' } };
       const result = mergeTheme(config, { extendDefaults: true });
       expect(result.colors['anything-goes']).toBe('#abcdef');
     });
   });
 
   describe('extendDefaults false with all 8 base colors given', () => {
-    const fullBaseConfig: PaThemeConfig = {
+    const fullBaseConfig: HaThemeConfig = {
       colors: {
         primary: '#111111',
         secondary: '#222222',
@@ -113,7 +113,7 @@ describe('mergeTheme', () => {
 
   describe('extendDefaults false with missing base colors', () => {
     it('returns ONLY the given colors, without backfilling the missing base keys', () => {
-      const config: PaThemeConfig = { colors: { primary: '#f00' } };
+      const config: HaThemeConfig = { colors: { primary: '#f00' } };
       const result = mergeTheme(config, { extendDefaults: false });
       expect(result.colors).toEqual({ primary: '#f00' });
       expect(result.colors['secondary']).toBeUndefined();
@@ -126,7 +126,7 @@ describe('mergeTheme', () => {
     });
 
     it('emits exactly one console.warn naming the missing base colors', () => {
-      const config: PaThemeConfig = { colors: { primary: '#f00' } };
+      const config: HaThemeConfig = { colors: { primary: '#f00' } };
       mergeTheme(config, { extendDefaults: false });
       expect(warnSpy).toHaveBeenCalledTimes(1);
       const [message] = warnSpy.mock.calls[0] as [string];
@@ -141,12 +141,12 @@ describe('mergeTheme', () => {
     });
 
     it('does not throw', () => {
-      const config: PaThemeConfig = { colors: {} };
+      const config: HaThemeConfig = { colors: {} };
       expect(() => mergeTheme(config, { extendDefaults: false })).not.toThrow();
     });
 
     it('emits console.warn even when colors is an empty object, naming all 8 base keys', () => {
-      const config: PaThemeConfig = { colors: {} };
+      const config: HaThemeConfig = { colors: {} };
       mergeTheme(config, { extendDefaults: false });
       expect(warnSpy).toHaveBeenCalledTimes(1);
       const [message] = warnSpy.mock.calls[0] as [string];
@@ -161,7 +161,7 @@ describe('mergeTheme', () => {
     });
 
     it('does NOT require the deprecated "danger" alias key (D3 — deprecated aliases are deliberately not required)', () => {
-      const config: PaThemeConfig = {
+      const config: HaThemeConfig = {
         colors: {
           primary: '#111111',
           secondary: '#222222',

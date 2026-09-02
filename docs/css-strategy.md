@@ -5,7 +5,7 @@ pa-ui styles every component through a strict 3-layer token system: **Foundation
 defined, how they are distributed to a consumer app, and which product decisions
 are still open.
 
-See `skills/pa-ui-architecture/SKILL.md` for the architectural hard rules this
+See `skills/lib-ui-architecture/SKILL.md` for the architectural hard rules this
 document implements.
 
 ## The Three Layers
@@ -13,20 +13,20 @@ document implements.
 ```
 Foundation              Semantic                  Component
 ──────────              ────────                  ─────────
---light-blue-500   ──►  --pa-primary         ──►  --pa-button-bg
---dark-blue-500    ──►  --pa-primary-hover   ──►  --pa-button-hover-bg
---spacing-md       ──►  --pa-spacing-md      ──►  --pa-button-padding-md
---font-size-body   ──►  --pa-font-size-body  ──►  --pa-button-font-md
+--light-blue-500   ──►  --ha-primary         ──►  --ha-button-bg
+--dark-blue-500    ──►  --ha-primary-hover   ──►  --ha-button-hover-bg
+--spacing-md       ──►  --ha-spacing-md      ──►  --ha-button-padding-md
+--font-size-body   ──►  --ha-font-size-body  ──►  --ha-button-font-md
 ```
 
 1. **Foundation** — raw values. Unprefixed CSS custom properties:
    `--dark-blue-500`, `--light-blue-500`, `--spacing-md`, `--radius-md`,
    `--font-size-body`, `--icon-size-md`. Never consumed directly by components.
-2. **Semantic** — `--pa-*` names with product meaning: `--pa-primary`,
-   `--pa-spacing-md`, `--pa-font-size-h1`. Colors are resolved at runtime by the
+2. **Semantic** — `--ha-*` names with product meaning: `--ha-primary`,
+   `--ha-spacing-md`, `--ha-font-size-h1`. Colors are resolved at runtime by the
    Theme Engine (see below); every other semantic scale (spacing, gap, radius,
    typography, icon size) is a static 1:1 alias of its Foundation counterpart.
-3. **Component** — `--pa-button-*`, `--pa-input-*`, etc. Component CSS
+3. **Component** — `--ha-button-*`, `--ha-input-*`, etc. Component CSS
    references only semantic and component tokens, never Foundation tokens
    directly (hard rule, `SKILL.md:34`).
 
@@ -38,7 +38,7 @@ non-negotiable convention shared with the existing component-token vocabulary
 The color scale steps (`25` through `900`) are the one intentional exception:
 they are the Figma lightness axis of a raw color scale, not a size scale, and
 they never leave the Foundation layer as a numeric name — semantic color tokens
-(`--pa-primary`, `--pa-success`, ...) carry no numeric suffix.
+(`--ha-primary`, `--ha-success`, ...) carry no numeric suffix.
 
 ## Two Disjoint Pipelines
 
@@ -52,17 +52,17 @@ Color **bases** (`primary`, `secondary`, `success`, `error`, `warning`, `alert`,
 Engine:
 
 ```
-providePaTheme(config?) → mergeTheme() → DEFAULT_THEME + config
+provideHaTheme(config?) → mergeTheme() → DEFAULT_THEME + config
                               │
                         deriveTokens() → toSemanticCssVariables()
                               │
-                    PaThemeService writes inline styles on
+                    HaThemeService writes inline styles on
                     document.documentElement at bootstrap:
-                    --pa-{name}, --pa-{name}-hover,
-                    --pa-{name}-active, --pa-{name}-contrast
+                    --ha-{name}, --ha-{name}-hover,
+                    --ha-{name}-active, --ha-{name}-contrast
 ```
 
-`providePaTheme()` with no arguments resolves the shipped `DEFAULT_THEME`
+`provideHaTheme()` with no arguments resolves the shipped `DEFAULT_THEME`
 roster. Passing `colors` merges on top of it (`extendDefaults: true` by default)
 or replaces it entirely (`extendDefaults: false`).
 
@@ -71,7 +71,7 @@ outrank any `:root` stylesheet rule automatically — no `!important`, no
 load-order coupling between the Theme Engine and the static CSS file below.
 
 Raw color scales (the 25→900 steps) are never passed to `deriveTokens()` and
-never appear as a `PaThemeConfig.colors` entry — they have no interactive states
+never appear as a `HaThemeConfig.colors` entry — they have no interactive states
 (hover/active/contrast make no sense for a fixed swatch), so runtime derivation
 would be meaningless for them. They live only in the static layer described
 next.
@@ -80,7 +80,7 @@ next.
 
 Raw color scales, spacing, gap, radius, typography, icon sizes, and every
 component-token _default_ value are static: fixed at build time and shipped as a
-hand-authored `:root` stylesheet, `@pa-ui/core/theme.css`. They are never
+hand-authored `:root` stylesheet, `@halo-ui/core/theme.css`. They are never
 runtime-mutable.
 
 The TypeScript constants in `libs/core/src/lib/foundation/`
@@ -92,7 +92,7 @@ between the TS constants and the shipped CSS file.
 
 ### Default Theme color roster
 
-`DEFAULT_THEME` (the base every `providePaTheme()` call merges against,
+`DEFAULT_THEME` (the base every `provideHaTheme()` call merges against,
 `libs/core/src/lib/theme/theme.tokens.ts`):
 
 | Key                     | Value                                   | Notes                                                      |
@@ -114,11 +114,11 @@ between the TS constants and the shipped CSS file.
 Bootstrap example:
 
 ```typescript
-import { providePaTheme } from '@pa-ui/core';
+import { provideHaTheme } from '@halo-ui/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    providePaTheme(), // resolves the DEFAULT_THEME roster above, zero config
+    provideHaTheme(), // resolves the DEFAULT_THEME roster above, zero config
   ],
 };
 ```
@@ -126,7 +126,7 @@ export const appConfig: ApplicationConfig = {
 Registering an app-specific color on top of the defaults:
 
 ```typescript
-providePaTheme({
+provideHaTheme({
   colors: {
     treasury: { base: '#0d6efd' }, // hover/active/contrast auto-derived
   },
@@ -135,30 +135,30 @@ providePaTheme({
 
 ## Consumer Setup
 
-Full setup is `providePaTheme()` **plus one explicit CSS import**:
+Full setup is `provideHaTheme()` **plus one explicit CSS import**:
 
 ```typescript
 // app.config.ts
-import { providePaTheme } from '@pa-ui/core';
+import { provideHaTheme } from '@halo-ui/core';
 
 export const appConfig: ApplicationConfig = {
-  providers: [providePaTheme()],
+  providers: [provideHaTheme()],
 };
 ```
 
 ```css
 /* styles.css (or any global entry point) */
-@import '@pa-ui/core/theme.css';
+@import '@halo-ui/core/theme.css';
 ```
 
-With both in place, a bare app renders a fully-styled `PaButton` — height,
+With both in place, a bare app renders a fully-styled `HaButton` — height,
 min-width, radius, padding, gap, color, typography — with zero consumer-authored
-`--pa-*` tokens.
+`--ha-*` tokens.
 
-`@pa-ui/core/theme.css` is exposed as a package subpath export
+`@halo-ui/core/theme.css` is exposed as a package subpath export
 (`libs/core/package.json` → `exports["./theme.css"]`) and shipped as an
-`ng-packagr` asset. It is not injected automatically by `providePaTheme()`:
-`@pa-ui/core` declares `sideEffects: false` and has no global stylesheet
+`ng-packagr` asset. It is not injected automatically by `provideHaTheme()`:
+`@halo-ui/core` declares `sideEffects: false` and has no global stylesheet
 otherwise, so injecting ~180 static custom properties via JS on every bootstrap
 would defeat browser CSS caching and risk FOUC on SSR. Forgetting the import
 produces an unstyled-but-not-broken component, not a crash.
@@ -169,21 +169,21 @@ produces an unstyled-but-not-broken component, not a crash.
 `--icon-size-*` by name/size only. It does **not** ship a `@font-face`
 declaration, a Montserrat font file, a Flaticon icon font, or any CDN `@import`.
 Loading the actual Montserrat font and Flaticon icon assets is the consuming
-application's responsibility. This keeps `@pa-ui/core` free of a third-party
+application's responsibility. This keeps `@halo-ui/core` free of a third-party
 asset dependency and keeps `sideEffects: false` honest.
 
 ## Overriding Tokens
 
 Every visual property is a CSS custom property and can be overridden at any
-scope, same as any other `--pa-*` variable:
+scope, same as any other `--ha-*` variable:
 
 ```css
 :root {
-  --pa-button-radius: 8px;
+  --ha-button-radius: 8px;
 }
 
 .admin-panel {
-  --pa-button-bg: var(--pa-treasury);
+  --ha-button-bg: var(--ha-treasury);
 }
 ```
 
@@ -199,17 +199,17 @@ permanent decision**.
    error, instead of a hard pre-1.0 break. Pending product sign-off; must be
    revisited before the next minor release. See design decision D3.
 2. **One explicit CSS import is acceptable consumer setup.** The alternative
-   (fully self-installing theme via `providePaTheme()` alone, injecting the
+   (fully self-installing theme via `provideHaTheme()` alone, injecting the
    static sheet from JS) was rejected on caching/SSR/`sideEffects` grounds (see
    "Consumer Setup" above), but the underlying product question — is one extra
    import step acceptable friction — has not been explicitly confirmed.
 3. **Montserrat and Flaticon are the consuming app's responsibility**, not
-   self-hosted or bundled by `@pa-ui/core`. No alternative delivery (self-hosted
-   font file, CDN import) has been evaluated or approved.
+   self-hosted or bundled by `@halo-ui/core`. No alternative delivery
+   (self-hosted font file, CDN import) has been evaluated or approved.
 4. **Button `sm`/`lg` height, padding, and gap values are assistant-authored
    placeholders**, not Figma-confirmed, pending designer validation. Only `md`
    dimensions and `min-width` for all three sizes are Figma-confirmed.
-   Placeholder values are isolated in `PA_BUTTON_PROVISIONAL_DIMENSIONS`
+   Placeholder values are isolated in `HA_BUTTON_PROVISIONAL_DIMENSIONS`
    (`libs/core/src/lib/foundation/button-dimensions.tokens.ts`) and marked with
    `/* provisional: pending design validation */` in `theme.css`, so updating
    them later only touches that one constant — no API or logic change.
@@ -221,5 +221,5 @@ permanent decision**.
 - `libs/core/src/lib/foundation/` — Foundation types, constants, and the shipped
   `theme.css`
 - `libs/button/src/lib/button.tokens.ts` — first real component consumer
-- `skills/pa-ui-architecture/SKILL.md` — the 6 hard rules and 3-layer contract
+- `skills/lib-ui-architecture/SKILL.md` — the 6 hard rules and 3-layer contract
   this document implements

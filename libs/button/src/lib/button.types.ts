@@ -1,3 +1,3 @@
-export type PaButtonVariant = 'solid' | 'outline' | 'ghost';
+export type HaButtonVariant = 'solid' | 'outline' | 'ghost';
 
-export type PaButtonSize = 'sm' | 'md' | 'lg';
+export type HaButtonSize = 'sm' | 'md' | 'lg';

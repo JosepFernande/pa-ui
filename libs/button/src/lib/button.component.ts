@@ -12,11 +12,11 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { FocusMonitor, FocusOrigin } from '@angular/cdk/a11y';
-import { withFocusMonitor } from '@pa-ui/core';
-import type { PaButtonVariant, PaButtonSize } from './button.types';
+import { withFocusMonitor } from '@halo-ui/core';
+import type { HaButtonVariant, HaButtonSize } from './button.types';
 
 @Component({
-  selector: 'button[pa-button]',
+  selector: 'button[ha-button]',
   standalone: true,
   imports: [],
   templateUrl: './button.component.html',
@@ -29,25 +29,25 @@ import type { PaButtonVariant, PaButtonSize } from './button.types';
     '[attr.aria-disabled]': 'effectiveDisabled()',
     '[attr.aria-busy]': 'loading() ? "true" : null',
     '[attr.type]': 'type()',
-    '[style.--pa-button-color]': 'colorVar()',
-    '[style.--pa-button-bg]': 'colorVar()',
-    '[style.--pa-button-hover-bg]': 'hoverVar()',
-    '[style.--pa-button-active-bg]': 'activeVar()',
-    '[style.--pa-button-solid-color]': 'contrastVar()',
+    '[style.--ha-button-color]': 'colorVar()',
+    '[style.--ha-button-bg]': 'colorVar()',
+    '[style.--ha-button-hover-bg]': 'hoverVar()',
+    '[style.--ha-button-active-bg]': 'activeVar()',
+    '[style.--ha-button-solid-color]': 'contrastVar()',
   },
 })
-export class PaButton implements OnInit {
+export class HaButton implements OnInit {
   /** Visual variant: solid (filled), outline (bordered), or ghost (transparent). */
-  readonly variant = input<PaButtonVariant>('solid');
+  readonly variant = input<HaButtonVariant>('solid');
 
   /** Size preset: sm, md, or lg. */
-  readonly size = input<PaButtonSize>('md');
+  readonly size = input<HaButtonSize>('md');
 
-  /** Theme-registered color name used to resolve --pa-button-color. */
+  /** Theme-registered color name used to resolve --ha-button-color. */
   readonly color = input('primary');
 
   /** Whether the button is disabled. Overridden by loading. */
-  readonly disabled = input(false);
+  readonly disabled = input(false, { transform: booleanAttribute });
 
   /** Whether the button shows a loading spinner. */
   readonly loading = input(false, { transform: booleanAttribute });
@@ -65,14 +65,14 @@ export class PaButton implements OnInit {
 
   /** Computed: BEM class string for the host element. */
   protected readonly hostClasses = computed(() => {
-    const classes = ['pa-button'];
-    classes.push(`pa-button--${this.variant()}`);
-    classes.push(`pa-button--${this.size()}`);
+    const classes = ['ha-button'];
+    classes.push(`ha-button--${this.variant()}`);
+    classes.push(`ha-button--${this.size()}`);
     if (this.effectiveDisabled()) {
-      classes.push('pa-button--disabled');
+      classes.push('ha-button--disabled');
     }
     if (this.loading()) {
-      classes.push('pa-button--loading');
+      classes.push('ha-button--loading');
     }
     if (this.focusOrigin() === 'keyboard') {
       classes.push('cdk-keyboard-focused');
@@ -81,16 +81,16 @@ export class PaButton implements OnInit {
   });
 
   /** Computed: CSS custom property value resolving the color input. */
-  protected readonly colorVar = computed(() => `var(--pa-${this.color()})`);
+  protected readonly colorVar = computed(() => `var(--ha-${this.color()})`);
 
   /** Computed: CSS custom property value resolving the color's hover variant. */
-  protected readonly hoverVar = computed(() => `var(--pa-${this.color()}-hover)`);
+  protected readonly hoverVar = computed(() => `var(--ha-${this.color()}-hover)`);
 
   /** Computed: CSS custom property value resolving the color's active variant. */
-  protected readonly activeVar = computed(() => `var(--pa-${this.color()}-active)`);
+  protected readonly activeVar = computed(() => `var(--ha-${this.color()}-active)`);
 
   /** Computed: CSS custom property value resolving the color's contrast variant. */
-  protected readonly contrastVar = computed(() => `var(--pa-${this.color()}-contrast)`);
+  protected readonly contrastVar = computed(() => `var(--ha-${this.color()}-contrast)`);
 
   constructor(
     private readonly focusMonitor: FocusMonitor,

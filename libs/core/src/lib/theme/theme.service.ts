@@ -1,14 +1,15 @@
 import { DOCUMENT, isPlatformServer } from '@angular/common';
 import { Injectable, PLATFORM_ID, Signal, inject, signal } from '@angular/core';
+import { withLegacyAliases } from '../foundation/legacy-token-alias';
 import { deriveTokens } from './color-derivation';
 import { toSemanticCssVariables } from './semantic-tokens';
 import { mergeTheme } from './theme-engine';
-import { PA_THEME_TOKEN } from './theme.tokens';
+import { HA_THEME_TOKEN } from './theme.tokens';
 import type { ResolvedTheme } from './theme.tokens';
 
 /**
  * Runtime theme mutation surface built on top of the bootstrap snapshot
- * registered by `providePaTheme()` (Requirement: Runtime Mutation Surface
+ * registered by `provideHaTheme()` (Requirement: Runtime Mutation Surface
  * Supersedes Read-Only Boundary). Exposes `applyTheme`, `overrideColor`,
  * `reset`, and `getResolvedTheme` in addition to the existing readonly
  * `theme` signal and `getColor()` getter.
@@ -21,15 +22,15 @@ import type { ResolvedTheme } from './theme.tokens';
  * `deriveTokens`'s own warn+skip contract; no extra try/catch here.
  */
 @Injectable({ providedIn: 'root' })
-export class PaThemeService {
+export class HaThemeService {
   /**
-   * The bootstrap-time snapshot from `PA_THEME_TOKEN`, cached at
+   * The bootstrap-time snapshot from `HA_THEME_TOKEN`, cached at
    * construction so `reset()` restores it without re-injecting mid-lifecycle
    * (the token value is frozen/immutable post-bootstrap). Declared before
    * `_theme` because `_theme`'s initializer reads `this.initialSnapshot` —
    * class fields initialize in declaration order.
    */
-  private readonly initialSnapshot = inject(PA_THEME_TOKEN);
+  private readonly initialSnapshot = inject(HA_THEME_TOKEN);
 
   private readonly document = inject(DOCUMENT);
   private readonly platformId = inject(PLATFORM_ID);
@@ -96,14 +97,14 @@ export class PaThemeService {
   /**
    * Runs the semantic-only DOM write adapter for `theme` (Requirement:
    * Semantic-Only DOM Write Adapter). Skipped entirely on the server
-   * (Requirement: SSR-Safe DOM Writes) — mirrors `providePaTheme`'s guard.
+   * (Requirement: SSR-Safe DOM Writes) — mirrors `provideHaTheme`'s guard.
    */
   private writeToDom(theme: ResolvedTheme): void {
     if (isPlatformServer(this.platformId)) {
       return;
     }
 
-    const vars = toSemanticCssVariables(deriveTokens(theme));
+    const vars = withLegacyAliases(toSemanticCssVariables(deriveTokens(theme)));
     const root = this.document.documentElement;
     for (const [prop, value] of Object.entries(vars)) {
       root.style.setProperty(prop, value);

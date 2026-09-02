@@ -1,10 +1,10 @@
-import type { PaSelectOption } from './select.types';
+import type { HaSelectOption } from './select.types';
 
 /**
  * Finds the index of the option whose value is `Object.is`-equal to `value`,
  * or `-1` when no option matches (including when `options` is empty).
  */
-export function findOptionIndexByValue<T>(options: readonly PaSelectOption<T>[], value: T): number {
+export function findOptionIndexByValue<T>(options: readonly HaSelectOption<T>[], value: T): number {
   return options.findIndex((option) => Object.is(option.value, value));
 }
 
@@ -12,7 +12,7 @@ export function findOptionIndexByValue<T>(options: readonly PaSelectOption<T>[],
  * Finds the index of the first non-disabled option, or `-1` when every
  * option is disabled (or `options` is empty).
  */
-export function firstEnabledIndex<T>(options: readonly PaSelectOption<T>[]): number {
+export function firstEnabledIndex<T>(options: readonly HaSelectOption<T>[]): number {
   return options.findIndex((option) => !option.disabled);
 }
 
@@ -29,5 +29,5 @@ let selectIdCounter = 0;
  */
 export function nextSelectId(): string {
   selectIdCounter += 1;
-  return `pa-select-${selectIdCounter}`;
+  return `ha-select-${selectIdCounter}`;
 }
