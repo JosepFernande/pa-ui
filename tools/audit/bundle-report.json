@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-08-27T19:03:57.754Z",
+  "timestamp": "2026-09-03T20:38:03.071Z",
   "results": [
     {
       "package": "@halo-ui/core",
       "file": "dist/libs/core/fesm2022/halo-ui-core.mjs",
-      "gzipBytes": 14330,
+      "gzipBytes": 14333,
       "maxGzipBytes": 16384,
       "warnGzipBytes": 8192,
       "status": "warn"
@@ -21,6 +21,13 @@
       "file": "dist/libs/input/fesm2022/halo-ui-input.mjs",
       "gzipBytes": 4156,
       "maxGzipBytes": 5120,
+      "status": "pass"
+    },
+    {
+      "package": "@halo-ui/select",
+      "file": "dist/libs/select/fesm2022/halo-ui-select.mjs",
+      "gzipBytes": 9078,
+      "maxGzipBytes": 12288,
       "status": "pass"
     },
     {

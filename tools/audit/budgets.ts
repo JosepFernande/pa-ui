@@ -68,6 +68,12 @@ export const PACKAGE_BUDGETS: readonly PackageBudget[] = [
     baselineBytes: 499,
   },
   {
+    name: '@halo-ui/select',
+    file: 'dist/libs/select/fesm2022/halo-ui-select.mjs',
+    maxGzipBytes: 12 * KB,
+    baselineBytes: 9060,
+  },
+  {
     name: '@halo-ui/angular',
     file: 'dist/libs/halo-ui/index.mjs',
     maxGzipBytes: 1 * KB,
