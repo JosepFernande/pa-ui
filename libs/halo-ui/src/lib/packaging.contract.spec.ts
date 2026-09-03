@@ -28,8 +28,8 @@ describe('Umbrella packaging contract — source-level', () => {
   describe('package.json', () => {
     const pkg = readJson(path.resolve(libRoot(), 'package.json'));
 
-    it('name is @halo-ui/angular', () => {
-      expect(pkg['name']).toBe('@halo-ui/angular');
+    it('name is @halolib-ui/angular', () => {
+      expect(pkg['name']).toBe('@halolib-ui/angular');
     });
 
     it('sideEffects is set to false', () => {
@@ -40,76 +40,76 @@ describe('Umbrella packaging contract — source-level', () => {
       expect(pkg['private']).toBeUndefined();
     });
 
-    it('dependencies include @halo-ui/button', () => {
+    it('dependencies include @halolib-ui/button', () => {
       const deps = pkg['dependencies'] as Record<string, string> | undefined;
       expect(deps).toBeDefined();
-      expect(deps!['@halo-ui/button']).toBeDefined();
+      expect(deps!['@halolib-ui/button']).toBeDefined();
     });
 
-    it('dependencies include @halo-ui/core', () => {
+    it('dependencies include @halolib-ui/core', () => {
       const deps = pkg['dependencies'] as Record<string, string> | undefined;
       expect(deps).toBeDefined();
-      expect(deps!['@halo-ui/core']).toBeDefined();
+      expect(deps!['@halolib-ui/core']).toBeDefined();
     });
 
-    it('dependencies include @halo-ui/input', () => {
+    it('dependencies include @halolib-ui/input-text', () => {
       const deps = pkg['dependencies'] as Record<string, string> | undefined;
       expect(deps).toBeDefined();
-      expect(deps!['@halo-ui/input']).toBeDefined();
+      expect(deps!['@halolib-ui/input-text']).toBeDefined();
     });
 
-    it('dependencies include @halo-ui/select', () => {
+    it('dependencies include @halolib-ui/select', () => {
       const deps = pkg['dependencies'] as Record<string, string> | undefined;
       expect(deps).toBeDefined();
-      expect(deps!['@halo-ui/select']).toBeDefined();
+      expect(deps!['@halolib-ui/select']).toBeDefined();
     });
   });
 
   describe('umbrella re-exports', () => {
-    it('public-api.ts re-exports from @halo-ui/button', () => {
+    it('public-api.ts re-exports from @halolib-ui/button', () => {
       const publicApiPath = path.resolve(libRoot(), 'src', 'public-api.ts');
       const content = fs.readFileSync(publicApiPath, 'utf-8');
-      expect(content).toContain("export * from '@halo-ui/button'");
+      expect(content).toContain("export * from '@halolib-ui/button'");
     });
 
-    it('public-api.ts re-exports from @halo-ui/core', () => {
+    it('public-api.ts re-exports from @halolib-ui/core', () => {
       const publicApiPath = path.resolve(libRoot(), 'src', 'public-api.ts');
       const content = fs.readFileSync(publicApiPath, 'utf-8');
-      expect(content).toContain("export * from '@halo-ui/core'");
+      expect(content).toContain("export * from '@halolib-ui/core'");
     });
 
-    it('public-api.ts re-exports from @halo-ui/input', () => {
+    it('public-api.ts re-exports from @halolib-ui/input-text', () => {
       const publicApiPath = path.resolve(libRoot(), 'src', 'public-api.ts');
       const content = fs.readFileSync(publicApiPath, 'utf-8');
-      expect(content).toContain("export * from '@halo-ui/input'");
+      expect(content).toContain("export * from '@halolib-ui/input-text'");
     });
 
-    it('public-api.ts re-exports from @halo-ui/select', () => {
+    it('public-api.ts re-exports from @halolib-ui/select', () => {
       const publicApiPath = path.resolve(libRoot(), 'src', 'public-api.ts');
       const content = fs.readFileSync(publicApiPath, 'utf-8');
-      expect(content).toContain("export * from '@halo-ui/select'");
+      expect(content).toContain("export * from '@halolib-ui/select'");
     });
   });
 
   describe('hand-maintained index.mjs / index.d.mts (nx:run-commands build, no ng-packagr)', () => {
-    it('index.mjs re-exports from @halo-ui/select', () => {
+    it('index.mjs re-exports from @halolib-ui/select', () => {
       const indexMjsPath = path.resolve(libRoot(), 'src', 'index.mjs');
       const content = fs.readFileSync(indexMjsPath, 'utf-8');
-      expect(content).toContain("export * from '@halo-ui/select'");
+      expect(content).toContain("export * from '@halolib-ui/select'");
     });
 
-    it('index.d.mts re-exports from @halo-ui/select', () => {
+    it('index.d.mts re-exports from @halolib-ui/select', () => {
       const indexDMtsPath = path.resolve(libRoot(), 'src', 'index.d.mts');
       const content = fs.readFileSync(indexDMtsPath, 'utf-8');
-      expect(content).toContain("export * from '@halo-ui/select'");
+      expect(content).toContain("export * from '@halolib-ui/select'");
     });
   });
 
-  describe('libs/select project.json target parity with libs/input (spec R7-S19)', () => {
+  describe('libs/select project.json target parity with libs/input-text (spec R7-S19)', () => {
     const selectProjectJson = readJson(path.resolve(libRoot(), '..', 'select', 'project.json'));
-    const inputProjectJson = readJson(path.resolve(libRoot(), '..', 'input', 'project.json'));
+    const inputProjectJson = readJson(path.resolve(libRoot(), '..', 'input-text', 'project.json'));
 
-    it('defines the same build/test/lint/stylelint target names as libs/input/project.json', () => {
+    it('defines the same build/test/lint/stylelint target names as libs/input-text/project.json', () => {
       const selectTargets = Object.keys(selectProjectJson['targets'] as Record<string, unknown>);
       const inputTargets = Object.keys(inputProjectJson['targets'] as Record<string, unknown>);
 
@@ -121,12 +121,12 @@ describe('Umbrella packaging contract — source-level', () => {
   });
 
   describe('.changeset/config.json fixed group (spec R7-S20)', () => {
-    it('includes @halo-ui/select in the fixed group so it version-bumps with the rest of the umbrella', () => {
+    it('includes @halolib-ui/select in the fixed group so it version-bumps with the rest of the umbrella', () => {
       const changesetConfigPath = path.resolve(libRoot(), '..', '..', '.changeset', 'config.json');
       const changesetConfig = readJson(changesetConfigPath);
       const fixedGroups = changesetConfig['fixed'] as string[][];
 
-      const includesSelect = fixedGroups.some((group) => group.includes('@halo-ui/select'));
+      const includesSelect = fixedGroups.some((group) => group.includes('@halolib-ui/select'));
       expect(includesSelect).toBe(true);
     });
   });

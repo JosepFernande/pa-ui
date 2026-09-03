@@ -1,5 +1,5 @@
 {
-  "name": "@halo-ui/angular",
+  "name": "@halolib-ui/angular",
   "version": "19.3.1",
   "license": "MIT",
   "description": "Accessible, token-driven Angular 19 UI component library — umbrella package",
@@ -38,10 +38,10 @@
     }
   },
   "dependencies": {
-    "@halo-ui/button": "19.3.1",
-    "@halo-ui/core": "19.3.1",
-    "@halo-ui/input": "19.3.1",
-    "@halo-ui/select": "19.3.1"
+    "@halolib-ui/button": "19.3.1",
+    "@halolib-ui/core": "19.3.1",
+    "@halolib-ui/input-text": "19.3.1",
+    "@halolib-ui/select": "19.3.1"
   },
   "peerDependencies": {
     "@angular/common": "^19.2.0",
