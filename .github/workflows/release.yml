@@ -151,16 +151,17 @@ jobs:
           # "Point the alpha dist-tag" step below moves `alpha` forward
           # afterward.
           # Explicit dependency-ordered list (NOT a libs/*/package.json glob):
-          # core has no internal deps, button/input/select each depend on
+          # core has no internal deps, button/input-text/select each depend on
           # core, and the halo-ui umbrella depends on all four. A
           # libs/*/package.json glob sorts alphabetically as button, core,
-          # halo-ui, input, select — publishing the umbrella BEFORE input and
-          # select even though it depends on them, leaving it briefly
-          # uninstallable. The explicit list guarantees every dependency is
-          # already on the registry before its dependents publish.
+          # halo-ui, input-text, select — publishing the umbrella BEFORE
+          # input-text and select even though it depends on them, leaving it
+          # briefly uninstallable. The explicit list guarantees every
+          # dependency is already on the registry before its dependents
+          # publish.
           : > /tmp/newly_published.txt
           published=false
-          for lib_dir in libs/core libs/button libs/input libs/select libs/halo-ui; do
+          for lib_dir in libs/core libs/button libs/input-text libs/select libs/halo-ui; do
             src_pkg="$lib_dir/package.json"
             dist_dir="dist/$lib_dir"
             [ -f "$dist_dir/package.json" ] || continue
