@@ -9,11 +9,11 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@halo-ui/angular": ["libs/halo-ui/src/index.ts"],
-      "@halo-ui/button": ["libs/button/src/index.ts"],
-      "@halo-ui/core": ["libs/core/src/index.ts"],
-      "@halo-ui/input": ["libs/input/src/index.ts"],
-      "@halo-ui/select": ["libs/select/src/index.ts"]
+      "@halolib-ui/angular": ["libs/halo-ui/src/index.ts"],
+      "@halolib-ui/button": ["libs/button/src/index.ts"],
+      "@halolib-ui/core": ["libs/core/src/index.ts"],
+      "@halolib-ui/input-text": ["libs/input-text/src/index.ts"],
+      "@halolib-ui/select": ["libs/select/src/index.ts"]
     }
   }
 }
