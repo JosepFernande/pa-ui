@@ -59,8 +59,8 @@ Three layers, in order of definition:
 Scale naming (spacing, radius, font-size, size) is **semantic**
 (`xs`/`sm`/`md`/`lg`/`xl`), never numeric (`-1`, `-2`, `-4`). This matches the
 suffix convention already shipped in component tokens (`button.tokens.ts`,
-`input.tokens.ts`) — do not introduce a numeric-indexed scale anywhere in the
-token system.
+`input-text.tokens.ts`) — do not introduce a numeric-indexed scale anywhere in
+the token system.
 
 Components consume ONLY semantic and component tokens. Foundation tokens are
 off-limits inside components. The Theme Engine (`provideHaTheme()`) auto-derives
@@ -68,13 +68,13 @@ hover, active, and contrast variants from user-registered colors.
 
 ### Transition (#139)
 
-`libs/core`, `libs/button`, `libs/input`, and `libs/select` have migrated their
-selectors, CSS custom properties, and exported TypeScript symbols from the
+`libs/core`, `libs/button`, `libs/input-text`, and `libs/select` have migrated
+their selectors, CSS custom properties, and exported TypeScript symbols from the
 `pa-`/`--pa-*`/`Pa*` naming to `ha-`/`--ha-*`/`Ha*` (halo-ui rebrand). `--pa-*`
 ships as a DEPRECATED alias of `--ha-*` for one minor version — see
 `docs/migration-pa-ui-to-halo-ui.md`. The npm package scope (`@pa-ui/*` →
-`@halo-ui/*`) and this skill's own folder name migrate in a later slice; do not
-assume they have moved yet from this note alone.
+`@halolib-ui/*`) and this skill's own folder name migrate in a later slice; do
+not assume they have moved yet from this note alone.
 
 ## Decision Gates
 

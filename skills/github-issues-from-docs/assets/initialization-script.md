@@ -90,7 +90,7 @@ function generateTags(content: string, file: string): string[] {
   if (contentLower.includes('stylelint')) tags.add('stylelint');
   if (contentLower.includes('eslint')) tags.add('eslint');
   if (contentLower.includes('button')) tags.add('button');
-  if (contentLower.includes('input')) tags.add('input');
+  if (contentLower.includes('input-text')) tags.add('input-text');
   if (contentLower.includes('select')) tags.add('select');
   if (contentLower.includes('pre-commit')) tags.add('pre-commit');
   if (

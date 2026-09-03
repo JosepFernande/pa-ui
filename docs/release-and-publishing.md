@@ -3,8 +3,8 @@
 ## Purpose
 
 Defines the technical flow that takes a change from `main` to a published npm
-version: how `@halo-ui/*` packages are versioned, signed, and distributed. This
-is the "why" companion to the `lib-ui-release` skill
+version: how `@halolib-ui/*` packages are versioned, signed, and distributed.
+This is the "why" companion to the `lib-ui-release` skill
 (`skills/lib-ui-release/SKILL.md`), which owns the day-to-day operational
 checklist and the historical record of three release bugs already found and
 fixed — this document does not repeat that checklist, only the reasoning behind
@@ -17,14 +17,14 @@ the pipeline's shape. See also [CI/CD Pipeline](./ci-cd-pipeline.md) (the
 
 **Correction to the source material:** at the time of this migration,
 `.changeset/pre.json` does not exist in the repo, and the four publishable
-packages (`@halo-ui/core`, `@halo-ui/button`, `@halo-ui/input`,
-`@halo-ui/angular`) are on real stable versions (verified: `@halo-ui/core` is
-`19.2.1` as of this writing) with no `alpha`/`beta`/`next` dist-tag involved —
-installing any of them with a bare `npm install @halo-ui/<pkg>` resolves the
-real `latest` stable version. The repo previously ran in Changesets' prerelease
-(`pre`) mode, which is the historical context the `lib-ui-release` skill still
-documents in detail (including three release bugs found while in that mode) —
-but `changeset pre exit` has since run, and `pre.json` is gone.
+packages (`@halolib-ui/core`, `@halolib-ui/button`, `@halolib-ui/input-text`,
+`@halolib-ui/angular`) are on real stable versions (verified: `@halolib-ui/core`
+is `19.2.1` as of this writing) with no `alpha`/`beta`/`next` dist-tag involved
+— installing any of them with a bare `npm install @halolib-ui/<pkg>` resolves
+the real `latest` stable version. The repo previously ran in Changesets'
+prerelease (`pre`) mode, which is the historical context the `lib-ui-release`
+skill still documents in detail (including three release bugs found while in
+that mode) — but `changeset pre exit` has since run, and `pre.json` is gone.
 
 `release.yml` retains conditional branches for `.changeset/pre.json` (the
 `alpha` dist-tag step, marking the GitHub Release as `prerelease`). Those
@@ -41,11 +41,11 @@ Before any publish can happen, three things must be ready on the npm side.
 
 ### 1. npm organization
 
-The `@halo-ui` npm scope needs an organization. Options:
+The `@halolib-ui` npm scope needs an organization. Options:
 
 - **Personal scope** — `npm login`, then
-  `npm access set scope @halo-ui restricted`. Anyone with publish rights on the
-  org can publish.
+  `npm access set scope @halolib-ui restricted`. Anyone with publish rights on
+  the org can publish.
 - **Team scope** — create an npm organization named `halo-ui`. Add members,
   assign the "Developer" role to anyone who can publish.
 
@@ -58,10 +58,10 @@ Required by npm to publish. Use an authenticator app, not SMS (npm is
 deprecating SMS 2FA). CI does **not** need 2FA because it uses a different
 mechanism (see Trusted Publishing below).
 
-### 3. The `@halo-ui` scope
+### 3. The `@halolib-ui` scope
 
-Already declared in each lib's `package.json` via `name: "@halo-ui/<lib>"`. The
-very first version of each package must be published manually
+Already declared in each lib's `package.json` via `name: "@halolib-ui/<lib>"`.
+The very first version of each package must be published manually
 (`npm login && npm publish --access public`, run once per package inside its
 directory); every subsequent publish goes through CI.
 
@@ -79,8 +79,8 @@ token expires in minutes, so there's no long-lived secret that can leak.
 **Setup (one-time, by the maintainer):** in npm's package settings → Trusted
 publishers → Add trusted publisher, with repository owner/name set to this repo,
 workflow filename `release.yml`, and an optional GitHub Environment name for an
-extra gate. Repeat per `@halo-ui/*` package, or configure org-wide if the scope
-belongs to an org.
+extra gate. Repeat per `@halolib-ui/*` package, or configure org-wide if the
+scope belongs to an org.
 
 **Current state: still on a classic token, not OIDC.** `release.yml`'s
 `permissions: id-token: write` is declared, but the actual
@@ -106,15 +106,15 @@ affect multiple packages.
 
 ```markdown
 ---
-'@halo-ui/button': minor
+'@halolib-ui/button': minor
 ---
 
 Add the `size` input to the button component.
 ```
 
 Frontmatter: one line per affected package with its SemVer bump type. In
-practice, since all four packages (`@halo-ui/core`, `@halo-ui/button`,
-`@halo-ui/input`, `@halo-ui/angular`) are in the `fixed` group in
+practice, since all four packages (`@halolib-ui/core`, `@halolib-ui/button`,
+`@halolib-ui/input-text`, `@halolib-ui/angular`) are in the `fixed` group in
 `.changeset/config.json`, they all end up bumping the same version even if the
 changeset only names one.
 
@@ -124,7 +124,7 @@ Each lib's `package.json` needs specific fields for npm publishing:
 
 ```json
 {
-  "name": "@halo-ui/button",
+  "name": "@halolib-ui/button",
   "version": "0.1.0",
   "license": "MIT",
   "repository": {
@@ -159,8 +159,8 @@ entry points, `exports` (subpath exports for tree-shaking),
 "assets": [{ "glob": "README.md", "input": ".", "output": "." }]
 ```
 
-`@halo-ui/angular` (the umbrella package) does not use ng-packagr — its build is
-a custom `nx:run-commands` copy in `project.json`, which explicitly copies
+`@halolib-ui/angular` (the umbrella package) does not use ng-packagr — its build
+is a custom `nx:run-commands` copy in `project.json`, which explicitly copies
 `README.md` to `dist/libs/halo-ui/README.md` and declares it as a build input so
 the Nx cache invalidates correctly when it changes.
 
@@ -202,8 +202,8 @@ Total time from merge to npm: **1–3 minutes**.
 
 ## Version Sync Strategy: Fixed (Lockstep)
 
-`@halo-ui` is a multi-package monorepo. `.changeset/config.json` declares
-`"fixed": [["@halo-ui/core", "@halo-ui/button", "@halo-ui/input", "@halo-ui/angular"]]`
+`@halolib-ui` is a multi-package monorepo. `.changeset/config.json` declares
+`"fixed": [["@halolib-ui/core", "@halolib-ui/button", "@halolib-ui/input-text", "@halolib-ui/angular"]]`
 — all four packages bump together. A change in any one of them triggers a bump
 of all four; confirmed in the real `package.json` files, which are all on the
 exact same version.
@@ -233,10 +233,11 @@ Once a version is published, it cannot be unpublished after 72 hours (npm
 policy).
 
 - **Deprecate (preferred):**
-  `npm deprecate @halo-ui/button@1.0.0 "Critical bug, upgrade to 1.0.1"` — marks
-  the version deprecated; it stays downloadable but installers see a warning.
+  `npm deprecate @halolib-ui/button@1.0.0 "Critical bug, upgrade to 1.0.1"` —
+  marks the version deprecated; it stays downloadable but installers see a
+  warning.
 - **Unpublish (within 72 hours, never-installed only):**
-  `npm unpublish @halo-ui/button@1.0.0 --force` — destructive, reserved for
+  `npm unpublish @halolib-ui/button@1.0.0 --force` — destructive, reserved for
   security incidents or genuinely broken releases. npm is deprecating
   `unpublish` in favor of `deprecate`.
 - **Fix forward (always safe):** ship a patch release through the normal flow
@@ -248,7 +249,7 @@ policy).
 Changesets auto-generates `CHANGELOG.md` per package during `changeset version`:
 
 ```markdown
-# @halo-ui/button
+# @halolib-ui/button
 
 ## 1.1.0
 
@@ -260,7 +261,7 @@ Changesets auto-generates `CHANGELOG.md` per package during `changeset version`:
 ### Patch Changes
 
 - Updated dependencies:
-  - @halo-ui/core@1.0.1
+  - @halolib-ui/core@1.0.1
 ```
 
 These are committed with the version bumps and shipped in the npm tarball.

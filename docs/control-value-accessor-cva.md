@@ -10,7 +10,7 @@ Without CVA, an input wired to forms manually needs explicit bindings:
 ```html
 <!-- Without CVA: the consumer has to do everything manually -->
 <input
-  ha-input
+  ha-input-text
   [value]="form.get('email').value"
   (input)="form.get('email').setValue($event.target.value)"
 />
@@ -20,17 +20,17 @@ With CVA, the component integrates natively:
 
 ```html
 <!-- With CVA: use it like any native input -->
-<input ha-input formControlName="email" />
-<input ha-input [(ngModel)]="email" />
+<input ha-input-text formControlName="email" />
+<input ha-input-text [(ngModel)]="email" />
 ```
 
-## How `HaInput` Implements CVA (real code)
+## How `HaInputText` Implements CVA (real code)
 
-`HaInput` (`libs/input/src/lib/input.component.ts`) uses an **attribute**
-selector on the native element (`input[ha-input]`), not a custom element
-(`<ha-input>`). The host IS the native `<input>` — the component has no template
-of its own (`template: ''`): there's no intermediate `value` signal,
-`writeValue` writes directly to the DOM.
+`HaInputText` (`libs/input-text/src/lib/input-text.component.ts`) uses an
+**attribute** selector on the native element (`input[ha-input-text]`), not a
+custom element (`<ha-input-text>`). The host IS the native `<input>` — the
+component has no template of its own (`template: ''`): there's no intermediate
+`value` signal, `writeValue` writes directly to the DOM.
 
 ```typescript
 import {
@@ -58,16 +58,16 @@ import {
 } from '@angular/forms';
 
 @Component({
-  selector: 'input[ha-input]',
+  selector: 'input[ha-input-text]',
   standalone: true,
   template: '',
-  styleUrl: './input.component.css',
+  styleUrl: './input-text.component.css',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => HaInput),
+      useExisting: forwardRef(() => HaInputText),
       multi: true,
     },
   ],
@@ -79,7 +79,7 @@ import {
     '(blur)': 'onBlur()',
   },
 })
-export class HaInput implements ControlValueAccessor, OnInit, OnDestroy {
+export class HaInputText implements ControlValueAccessor, OnInit, OnDestroy {
   readonly disabled = input(false);
   protected readonly formDisabled = signal(false);
   protected readonly effectiveDisabled = computed(
@@ -122,17 +122,17 @@ _(Simplified excerpt — the real file additionally wires `size`, `readonly`,
 `placeholder`, `ariaLabel`/`ariaDescribedBy`, `focusOrigin` via CDK
 `FocusMonitor`, and the `hasError` logic explained below.)_
 
-There's no template and no wrapper `<div class="ha-input">`: the host element is
-directly the `<input>` the consumer wrote, and the BEM classes
-(`ha-input--error`, `ha-input--disabled`, etc.) apply to that same element via
-`[class]="hostClasses()"`.
+There's no template and no wrapper `<div class="ha-input-text">`: the host
+element is directly the `<input>` the consumer wrote, and the BEM classes
+(`ha-input-text--error`, `ha-input-text--disabled`, etc.) apply to that same
+element via `[class]="hostClasses()"`.
 
 ## Which Components Implement CVA Today
 
-| Component                        | CVA | Value type |
-| -------------------------------- | --- | ---------- |
-| `input[ha-input]` (`HaInput`)    | Yes | `string`   |
-| `button[ha-button]` (`HaButton`) | No  | —          |
+| Component                              | CVA | Value type |
+| -------------------------------------- | --- | ---------- |
+| `input[ha-input-text]` (`HaInputText`) | Yes | `string`   |
+| `button[ha-button]` (`HaButton`)       | No  | —          |
 
 The remaining form components (`checkbox`, `radio`, `select`, `autocomplete`)
 don't exist in the repo yet — they're roadmap, not a live contract.
@@ -143,7 +143,7 @@ Earlier documentation showed `inject(NgControl, { optional: true, self: true })`
 as a field initializer. **That breaks with `NG0200` (circular DI)** in this
 component: the `[formControl]`/`formControlName` directive lives on the same
 native element and injects `NG_VALUE_ACCESSOR` in its own constructor — which is
-`HaInput`. Resolving `NgControl` at construction time creates the cycle.
+`HaInputText`. Resolving `NgControl` at construction time creates the cycle.
 
 The real fix resolves it lazily, on first read, using an injected `Injector` and
 a getter:
@@ -157,8 +157,8 @@ private get ngControl(): NgControl | null {
 ```
 
 `ngControl.valueAccessor` is never assigned manually — Angular resolves it on
-its own via `selectValueAccessor`, because `HaInput` is already registered as
-`NG_VALUE_ACCESSOR`.
+its own via `selectValueAccessor`, because `HaInputText` is already registered
+as `NG_VALUE_ACCESSOR`.
 
 ## `hasError`: Why It Isn't a Plain `computed()`
 
@@ -187,10 +187,10 @@ ngOnInit(): void {
 }
 ```
 
-`hasError` only drives state (`.ha-input--error` + `aria-invalid`). `HaInput`
-renders no visual error message (`<span class="ha-input__error">` doesn't exist)
-and no `paFormError` pipe — it isn't in the repo. Showing the error text is the
-consumer's responsibility.
+`hasError` only drives state (`.ha-input-text--error` + `aria-invalid`).
+`HaInputText` renders no visual error message
+(`<span class="ha-input-text__error">` doesn't exist) and no `paFormError` pipe
+— it isn't in the repo. Showing the error text is the consumer's responsibility.
 
 ## Testing CVA (real pattern: TestBed, not Angular Testing Library)
 
@@ -198,7 +198,7 @@ Real tests use `TestBed` + `fixture.debugElement.query(By.css(...))`, not
 `@testing-library/angular` (that dependency is not in `package.json`):
 
 ```typescript
-describe('HaInput - CVA', () => {
+describe('HaInputText - CVA', () => {
   it('writes the form control value into the native input', () => {
     // TestBed.configureTestingModule({ imports: [ReactiveFormsModule] }), etc.
     // form.get('name')?.setValue('updated');

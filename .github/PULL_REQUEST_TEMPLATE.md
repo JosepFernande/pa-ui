@@ -12,7 +12,7 @@
 
 ## Changeset
 
-- [ ] Este PR modifica un paquete publicable (`@halo-ui/core`,
-      `@halo-ui/button`, `@halo-ui/input`, `@halo-ui/angular`) y agrega un
-      changeset (`npx changeset`)
+- [ ] Este PR modifica un paquete publicable (`@halolib-ui/core`,
+      `@halolib-ui/button`, `@halolib-ui/input-text`, `@halolib-ui/angular`) y
+      agrega un changeset (`npx changeset`)
 - [ ] No aplica — no toca ningún paquete publicable

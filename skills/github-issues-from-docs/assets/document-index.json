@@ -132,7 +132,7 @@
         "components",
         "catalog",
         "button",
-        "input",
+        "input-text",
         "select",
         "core",
         "umbrella",
