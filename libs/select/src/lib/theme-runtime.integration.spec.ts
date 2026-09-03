@@ -2,7 +2,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 
 /** Reads the actual shipped Foundation stylesheet — the same artifact a real
- * consumer app imports once (`@halo-ui/core/theme.css`). Resolved from
+ * consumer app imports once (`@halolib-ui/core/theme.css`). Resolved from
  * source (not `dist/`) so this test exercises the file this repo edits. */
 function readFoundationThemeCss(): string {
   return fs.readFileSync(
@@ -39,7 +39,7 @@ describe('Theme runtime integration — Foundation theme.css ships Select defaul
     styleEl.remove();
   });
 
-  it('declares the key --ha-select-* defaults a consumer gets from @halo-ui/core/theme.css, reachable through the legacy --pa-* alias (#139)', () => {
+  it('declares the key --ha-select-* defaults a consumer gets from @halolib-ui/core/theme.css, reachable through the legacy --pa-* alias (#139)', () => {
     const rootStyle = getComputedStyle(document.documentElement);
 
     const entries: Array<[legacy: string, value: string]> = [

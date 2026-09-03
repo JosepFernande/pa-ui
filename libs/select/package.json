@@ -1,5 +1,5 @@
 {
-  "name": "@halo-ui/select",
+  "name": "@halolib-ui/select",
   "version": "19.3.1",
   "license": "MIT",
   "description": "Accessible, token-driven Angular 19 select component with forms integration",
@@ -27,7 +27,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@halo-ui/core": "19.3.1"
+    "@halolib-ui/core": "19.3.1"
   },
   "peerDependencies": {
     "@angular/core": "^19.2.0",
