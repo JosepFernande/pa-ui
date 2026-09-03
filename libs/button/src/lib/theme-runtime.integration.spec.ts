@@ -5,11 +5,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FocusMonitor, FocusOrigin } from '@angular/cdk/a11y';
 import { Subject } from 'rxjs';
-import { provideHaTheme } from '@halo-ui/core';
+import { provideHaTheme } from '@halolib-ui/core';
 import { HaButton } from './button.component';
 
 /** Reads the actual shipped Foundation stylesheet — the same artifact a real
- * consumer app imports once (`@halo-ui/core/theme.css`, D1). Resolved from
+ * consumer app imports once (`@halolib-ui/core/theme.css`, D1). Resolved from
  * source (not `dist/`) so this test exercises the file this repo edits. */
 function readFoundationThemeCss(): string {
   return fs.readFileSync(
@@ -170,7 +170,7 @@ describe('Theme runtime integration — Button resolves a custom "secondary" col
 
 /**
  * Phase 3 (Task 3.4/3.5): proves the static Foundation stylesheet
- * (`@halo-ui/core/theme.css`) and the runtime Theme Engine compose correctly
+ * (`@halolib-ui/core/theme.css`) and the runtime Theme Engine compose correctly
  * for Button's dimension tokens, and that `button.component.css` actually
  * wires the per-size `min-width`/`gap` custom properties (not just declares
  * defaults for them in `theme.css`).

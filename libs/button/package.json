@@ -1,5 +1,5 @@
 {
-  "name": "@halo-ui/button",
+  "name": "@halolib-ui/button",
   "version": "19.3.1",
   "license": "MIT",
   "description": "Accessible, token-driven Angular 19 button component",
@@ -25,7 +25,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@halo-ui/core": "19.3.1"
+    "@halolib-ui/core": "19.3.1"
   },
   "peerDependencies": {
     "@angular/common": "^19.2.0",
