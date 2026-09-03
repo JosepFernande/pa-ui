@@ -12,7 +12,7 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { FocusMonitor, FocusOrigin } from '@angular/cdk/a11y';
-import { withFocusMonitor } from '@halo-ui/core';
+import { withFocusMonitor } from '@halolib-ui/core';
 import type { HaButtonVariant, HaButtonSize } from './button.types';
 
 @Component({
