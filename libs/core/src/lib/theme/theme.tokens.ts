@@ -6,7 +6,7 @@ import { InjectionToken, makeStateKey } from '@angular/core';
  * and is the HSL anchor for any variant not explicitly supplied — omitted
  * variants keep deriving from `base` exactly as a plain-string entry would.
  */
-export interface PaColorVariants {
+export interface HaColorVariants {
   base: string;
   hover?: string;
   active?: string;
@@ -18,32 +18,32 @@ export interface PaColorVariants {
  * object with an explicit `base` and optional explicit hover/active/contrast
  * overrides (Requirement: Bootstrap Color Union Type).
  */
-export type PaColorValue = string | PaColorVariants;
+export type HaColorValue = string | HaColorVariants;
 
 /**
- * Consumer-provided theme configuration passed to `providePaTheme()`.
+ * Consumer-provided theme configuration passed to `provideHaTheme()`.
  * `colors` is an open dictionary — any string key is accepted, not just the
  * 5 default base colors (Requirement: Open Color Dictionary).
  */
-export interface PaThemeConfig {
-  colors: Record<string, PaColorValue>;
+export interface HaThemeConfig {
+  colors: Record<string, HaColorValue>;
 }
 
 /**
- * Behavior options for `providePaTheme()`.
+ * Behavior options for `provideHaTheme()`.
  * `extendDefaults` defaults to `true` when omitted or when `options` itself
  * is omitted (Requirement: Color Merge Behavior).
  */
-export interface PaThemeOptions {
+export interface HaThemeOptions {
   extendDefaults?: boolean;
 }
 
 /**
  * The computed, immutable theme snapshot produced by the theme engine and
- * exposed via `PA_THEME_TOKEN`.
+ * exposed via `HA_THEME_TOKEN`.
  */
 export interface ResolvedTheme {
-  colors: Record<string, PaColorValue>;
+  colors: Record<string, HaColorValue>;
 }
 
 /**
@@ -98,13 +98,13 @@ export const DEFAULT_THEME: ResolvedTheme = Object.freeze({
 
 /**
  * DI token carrying the resolved theme snapshot, provided by
- * `providePaTheme()` and read synchronously by `PaThemeService`.
+ * `provideHaTheme()` and read synchronously by `HaThemeService`.
  */
-export const PA_THEME_TOKEN = new InjectionToken<ResolvedTheme>('pa-theme');
+export const HA_THEME_TOKEN = new InjectionToken<ResolvedTheme>('ha-theme');
 
 /**
  * `TransferState` key used to round-trip the resolved snapshot from
  * server-side bootstrap to browser rehydration (Requirement: SSR-Safe
  * Computation).
  */
-export const PA_THEME_STATE_KEY = makeStateKey<ResolvedTheme>('pa-theme');
+export const HA_THEME_STATE_KEY = makeStateKey<ResolvedTheme>('ha-theme');

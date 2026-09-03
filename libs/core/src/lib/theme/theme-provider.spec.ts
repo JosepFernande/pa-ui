@@ -1,15 +1,15 @@
 import { EnvironmentInjector, PLATFORM_ID, TransferState } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { DEFAULT_THEME, PA_THEME_STATE_KEY, PA_THEME_TOKEN } from './theme.tokens';
-import type { PaThemeConfig, PaThemeOptions, ResolvedTheme } from './theme.tokens';
+import { DEFAULT_THEME, HA_THEME_STATE_KEY, HA_THEME_TOKEN } from './theme.tokens';
+import type { HaThemeConfig, HaThemeOptions, ResolvedTheme } from './theme.tokens';
 import { mergeTheme } from './theme-engine';
-import { providePaTheme } from './theme-provider';
+import { provideHaTheme } from './theme-provider';
 
 jest.mock('./theme-engine');
 
 const mergeThemeMock = mergeTheme as jest.MockedFunction<typeof mergeTheme>;
 
-describe('providePaTheme', () => {
+describe('provideHaTheme', () => {
   let warnSpy: jest.SpyInstance;
 
   beforeEach(() => {
@@ -28,11 +28,11 @@ describe('providePaTheme', () => {
 
   function configureTestBed(
     platform: 'server' | 'browser',
-    config?: PaThemeConfig,
-    options?: PaThemeOptions,
+    config?: HaThemeConfig,
+    options?: HaThemeOptions,
   ): void {
     TestBed.configureTestingModule({
-      providers: [providePaTheme(config, options), { provide: PLATFORM_ID, useValue: platform }],
+      providers: [provideHaTheme(config, options), { provide: PLATFORM_ID, useValue: platform }],
     });
   }
 
@@ -41,16 +41,16 @@ describe('providePaTheme', () => {
       expect(() => configureTestBed('browser')).not.toThrow();
     });
 
-    it('provides PA_THEME_TOKEN via useFactory calling mergeTheme(undefined, undefined), equal to DEFAULT_THEME', () => {
+    it('provides HA_THEME_TOKEN via useFactory calling mergeTheme(undefined, undefined), equal to DEFAULT_THEME', () => {
       configureTestBed('browser');
-      const theme = TestBed.inject(PA_THEME_TOKEN);
+      const theme = TestBed.inject(HA_THEME_TOKEN);
       expect(theme).toEqual(DEFAULT_THEME);
       expect(mergeThemeMock).toHaveBeenCalledWith(undefined, undefined);
     });
 
     it('freezes the provided snapshot so a consumer cannot mutate it in place', () => {
       configureTestBed('browser');
-      const theme = TestBed.inject(PA_THEME_TOKEN);
+      const theme = TestBed.inject(HA_THEME_TOKEN);
       expect(Object.isFrozen(theme)).toBe(true);
       expect(Object.isFrozen(theme.colors)).toBe(true);
       expect(() => {
@@ -62,10 +62,10 @@ describe('providePaTheme', () => {
 
   describe('partial config forwarding (browser, triangulation)', () => {
     it('forwards config and options to mergeTheme and exposes the merged snapshot on the token', () => {
-      const config: PaThemeConfig = { colors: { primary: '#f00' } };
-      const options: PaThemeOptions = { extendDefaults: true };
+      const config: HaThemeConfig = { colors: { primary: '#f00' } };
+      const options: HaThemeOptions = { extendDefaults: true };
       configureTestBed('browser', config, options);
-      const theme = TestBed.inject(PA_THEME_TOKEN);
+      const theme = TestBed.inject(HA_THEME_TOKEN);
       expect(mergeThemeMock).toHaveBeenCalledWith(config, options);
       expect(theme.colors['primary']).toBe('#f00');
       expect(theme.colors['success']).toBe(DEFAULT_THEME.colors['success']);
@@ -75,16 +75,16 @@ describe('providePaTheme', () => {
   describe('SSR-safe computation — server', () => {
     it('computes synchronously via isPlatformServer and persists the snapshot into TransferState', () => {
       // Spy on the prototype BEFORE any TestBed.inject(...) call. Since
-      // providePaTheme() now eagerly constructs PaThemeService via
+      // provideHaTheme() now eagerly constructs HaThemeService via
       // provideEnvironmentInitializer() (Phase 3), TestBed's environment
-      // injector — and therefore PA_THEME_TOKEN's factory — resolves on the
-      // FIRST inject() call of ANY token, not only when PA_THEME_TOKEN
+      // injector — and therefore HA_THEME_TOKEN's factory — resolves on the
+      // FIRST inject() call of ANY token, not only when HA_THEME_TOKEN
       // itself is explicitly requested. Spying on an already-injected
       // instance would miss that first (real) call.
       const setSpy = jest.spyOn(TransferState.prototype, 'set');
       configureTestBed('server');
-      const theme = TestBed.inject(PA_THEME_TOKEN);
-      expect(setSpy).toHaveBeenCalledWith(PA_THEME_STATE_KEY, theme);
+      const theme = TestBed.inject(HA_THEME_TOKEN);
+      expect(setSpy).toHaveBeenCalledWith(HA_THEME_STATE_KEY, theme);
       expect(theme).toEqual(DEFAULT_THEME);
     });
   });
@@ -93,21 +93,21 @@ describe('providePaTheme', () => {
     it('reads the seeded TransferState snapshot without recomputing via mergeTheme', () => {
       const seeded: ResolvedTheme = { colors: { primary: '#seeded' } };
       const seededTransferState = new TransferState();
-      seededTransferState.set(PA_THEME_STATE_KEY, seeded);
+      seededTransferState.set(HA_THEME_STATE_KEY, seeded);
 
       // Provide the pre-seeded TransferState directly rather than seeding it
       // after TestBed.inject(TransferState) — the eager environment
-      // initializer (Phase 3) resolves PA_THEME_TOKEN on the first inject()
+      // initializer (Phase 3) resolves HA_THEME_TOKEN on the first inject()
       // call in this environment, so seeding afterwards would be too late.
       TestBed.configureTestingModule({
         providers: [
-          providePaTheme(),
+          provideHaTheme(),
           { provide: PLATFORM_ID, useValue: 'browser' },
           { provide: TransferState, useValue: seededTransferState },
         ],
       });
 
-      const theme = TestBed.inject(PA_THEME_TOKEN);
+      const theme = TestBed.inject(HA_THEME_TOKEN);
       expect(theme).toEqual(seeded);
       expect(mergeThemeMock).not.toHaveBeenCalled();
     });
@@ -116,7 +116,7 @@ describe('providePaTheme', () => {
   describe('SSR-safe computation — browser, TransferState absent', () => {
     it('falls back to a synchronous recompute via mergeTheme without error', () => {
       configureTestBed('browser');
-      const theme = TestBed.inject(PA_THEME_TOKEN);
+      const theme = TestBed.inject(HA_THEME_TOKEN);
       expect(mergeThemeMock).toHaveBeenCalledWith(undefined, undefined);
       expect(theme).toEqual(DEFAULT_THEME);
     });
@@ -131,7 +131,7 @@ describe('providePaTheme', () => {
 
       let theme: ResolvedTheme | undefined;
       expect(() => {
-        theme = TestBed.inject(PA_THEME_TOKEN);
+        theme = TestBed.inject(HA_THEME_TOKEN);
       }).not.toThrow();
 
       expect(theme).toEqual(DEFAULT_THEME);
@@ -143,7 +143,7 @@ describe('providePaTheme', () => {
         throw new Error('boom');
       });
       configureTestBed('server');
-      const theme = TestBed.inject(PA_THEME_TOKEN);
+      const theme = TestBed.inject(HA_THEME_TOKEN);
       expect(Object.isFrozen(theme.colors)).toBe(true);
       expect(() => {
         'use strict';
@@ -159,7 +159,7 @@ describe('providePaTheme', () => {
       configureTestBed('server');
       const transferState = TestBed.inject(TransferState);
       const setSpy = jest.spyOn(transferState, 'set');
-      TestBed.inject(PA_THEME_TOKEN);
+      TestBed.inject(HA_THEME_TOKEN);
       expect(setSpy).not.toHaveBeenCalled();
     });
 
@@ -169,18 +169,18 @@ describe('providePaTheme', () => {
         throw error;
       });
       configureTestBed('browser');
-      TestBed.inject(PA_THEME_TOKEN);
-      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('providePaTheme'), error);
+      TestBed.inject(HA_THEME_TOKEN);
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('provideHaTheme'), error);
     });
   });
 
   describe('deep-freeze of object-shaped color entries (Phase 3)', () => {
     it('deep-freezes a nested object entry, and a strict-mode mutation of one of its variants throws (Task 3.1)', () => {
-      const config: PaThemeConfig = {
+      const config: HaThemeConfig = {
         colors: { primary: { base: '#16709e', hover: '#0a4f6b' } },
       };
       configureTestBed('browser', config);
-      const theme = TestBed.inject(PA_THEME_TOKEN);
+      const theme = TestBed.inject(HA_THEME_TOKEN);
 
       expect(Object.isFrozen(theme.colors['primary'])).toBe(true);
       expect(() => {
@@ -192,9 +192,9 @@ describe('providePaTheme', () => {
 
     it('freezes an independent copy of an object entry, so mutating the caller-owned config object afterward never affects the snapshot (Task 3.2)', () => {
       const primaryEntry = { base: '#16709e', hover: '#0a4f6b' };
-      const config: PaThemeConfig = { colors: { primary: primaryEntry } };
+      const config: HaThemeConfig = { colors: { primary: primaryEntry } };
       configureTestBed('browser', config);
-      const theme = TestBed.inject(PA_THEME_TOKEN);
+      const theme = TestBed.inject(HA_THEME_TOKEN);
 
       // Mutate the caller's own object AFTER bootstrap.
       primaryEntry.hover = '#ffffff';
@@ -210,17 +210,17 @@ describe('providePaTheme', () => {
         colors: { primary: { base: '#16709e', hover: '#0a4f6b', active: '#1a80b3' } },
       };
       const seededTransferState = new TransferState();
-      seededTransferState.set(PA_THEME_STATE_KEY, seeded);
+      seededTransferState.set(HA_THEME_STATE_KEY, seeded);
 
       TestBed.configureTestingModule({
         providers: [
-          providePaTheme(),
+          provideHaTheme(),
           { provide: PLATFORM_ID, useValue: 'browser' },
           { provide: TransferState, useValue: seededTransferState },
         ],
       });
 
-      const theme = TestBed.inject(PA_THEME_TOKEN);
+      const theme = TestBed.inject(HA_THEME_TOKEN);
 
       expect(theme.colors['primary']).toEqual(seeded.colors['primary']);
       expect(Object.isFrozen(theme.colors['primary'])).toBe(true);
@@ -231,17 +231,17 @@ describe('providePaTheme', () => {
     });
   });
 
-  describe('eager PaThemeService instantiation (Task 3.2, resolved decision #175 — deliberate extension of a closed file)', () => {
+  describe('eager HaThemeService instantiation (Task 3.2, resolved decision #175 — deliberate extension of a closed file)', () => {
     afterEach(() => {
       // Same shared jsdom document across tests in this file — see the
       // identical note in theme.service.spec.ts.
       jest.restoreAllMocks();
     });
 
-    it('constructs PaThemeService and runs its initial DOM write with zero explicit injection anywhere in the test', () => {
+    it('constructs HaThemeService and runs its initial DOM write with zero explicit injection anywhere in the test', () => {
       // Spy on the global document BEFORE any TestBed.inject(...) call —
       // TestBed.inject(DOCUMENT) itself would be the first inject() call in
-      // this environment and would already trigger PaThemeService's eager
+      // this environment and would already trigger HaThemeService's eager
       // construction (and its DOM write) via provideEnvironmentInitializer,
       // running before a spy attached afterward could observe it.
       const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');
@@ -249,10 +249,11 @@ describe('providePaTheme', () => {
       configureTestBed('browser', { colors: { primary: '#111111' } });
 
       // Force environment-injector construction WITHOUT ever calling
-      // TestBed.inject(PaThemeService) explicitly.
+      // TestBed.inject(HaThemeService) explicitly.
       TestBed.inject(EnvironmentInjector);
 
       expect(setPropertySpy).toHaveBeenCalledWith('--pa-primary', '#111111');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', 'var(--pa-primary)');
     });
 
     it('also constructs the service on the server without any document access (Task 3.4 — triangulation)', () => {

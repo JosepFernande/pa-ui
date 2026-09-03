@@ -1,5 +1,5 @@
 {
-  "name": "@pa-ui/core",
+  "name": "@halo-ui/core",
   "version": "19.3.1",
   "license": "MIT",
   "description": "Accessible, token-driven Angular 19 UI component library with Theme Engine",
@@ -7,7 +7,7 @@
     "angular",
     "angular19",
     "ui-library",
-    "pa-ui",
+    "halo-ui",
     "component-library",
     "theme-engine",
     "design-system"

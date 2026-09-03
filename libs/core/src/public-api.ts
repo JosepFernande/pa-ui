@@ -1,13 +1,11 @@
-export { PaUiComponent } from './lib/pa-ui/pa-ui.component';
-
-export { providePaTheme } from './lib/theme/theme-provider';
-export { PaThemeService } from './lib/theme/theme.service';
+export { provideHaTheme } from './lib/theme/theme-provider';
+export { HaThemeService } from './lib/theme/theme.service';
 export { DEFAULT_THEME } from './lib/theme/theme.tokens';
 export type {
-  PaColorValue,
-  PaColorVariants,
-  PaThemeConfig,
-  PaThemeOptions,
+  HaColorValue,
+  HaColorVariants,
+  HaThemeConfig,
+  HaThemeOptions,
   ResolvedTheme,
   ThemeCssVariables,
 } from './lib/theme/theme.tokens';
@@ -31,35 +29,35 @@ export {
 
 export { toSemanticCssVariables } from './lib/theme/semantic-tokens';
 
-export { PA_COLOR_SCALE_STEPS, PA_SIZE_STEPS } from './lib/foundation/foundation.types';
+export { HA_COLOR_SCALE_STEPS, HA_SIZE_STEPS } from './lib/foundation/foundation.types';
 export type {
-  PaColorScale,
-  PaColorScaleStep,
-  PaFontWeightScale,
-  PaFoundationPalette,
-  PaPartialColorScale,
-  PaSizeScale,
-  PaSizeStep,
-  PaTypographyRole,
-  PaTypographyScale,
+  HaColorScale,
+  HaColorScaleStep,
+  HaFontWeightScale,
+  HaFoundationPalette,
+  HaPartialColorScale,
+  HaSizeScale,
+  HaSizeStep,
+  HaTypographyRole,
+  HaTypographyScale,
 } from './lib/foundation/foundation.types';
 
 export {
-  PA_FONT_FAMILY,
-  PA_FONT_WEIGHT_SCALE,
-  PA_FOUNDATION_PALETTE,
-  PA_GAP_SCALE,
-  PA_ICON_SIZE_SCALE,
-  PA_RADIUS_SCALE,
-  PA_SPACING_SCALE,
-  PA_TYPOGRAPHY_SCALE,
+  HA_FONT_FAMILY,
+  HA_FONT_WEIGHT_SCALE,
+  HA_FOUNDATION_PALETTE,
+  HA_GAP_SCALE,
+  HA_ICON_SIZE_SCALE,
+  HA_RADIUS_SCALE,
+  HA_SPACING_SCALE,
+  HA_TYPOGRAPHY_SCALE,
 } from './lib/foundation/foundation.tokens';
 
 export {
-  PA_BUTTON_FIGMA_DIMENSIONS,
-  PA_BUTTON_PROVISIONAL_DIMENSIONS,
+  HA_BUTTON_FIGMA_DIMENSIONS,
+  HA_BUTTON_PROVISIONAL_DIMENSIONS,
 } from './lib/foundation/button-dimensions.tokens';
 
-export { PA_COMPONENT_TOKEN_DEFAULTS } from './lib/foundation/component-defaults.tokens';
+export { HA_COMPONENT_TOKEN_DEFAULTS } from './lib/foundation/component-defaults.tokens';
 
 export { withFocusMonitor } from './lib/focus/with-focus-monitor';

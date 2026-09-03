@@ -1,11 +1,11 @@
-// Root ESLint flat config for pa-ui
-// Extends typescript-eslint + @nx/eslint-plugin + angular-eslint + pa-ui custom rules
+// Root ESLint flat config for halo-ui
+// Extends typescript-eslint + @nx/eslint-plugin + angular-eslint + halo-ui custom rules
 // eslint-config-prettier applied as last override to disable conflicting formatting rules.
 
 import tseslint from 'typescript-eslint';
 import nx from '@nx/eslint-plugin';
 import angularEslint from 'angular-eslint';
-import paUi from './tools/eslint/pa-ui-rules/dist/index.js';
+import haloUi from './tools/eslint/halo-ui-rules/dist/index.js';
 import eslintConfigPrettier from 'eslint-config-prettier/flat';
 
 export default tseslint.config(
@@ -24,7 +24,7 @@ export default tseslint.config(
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
     plugins: {
       '@nx': nx,
-      'pa-ui': paUi,
+      'halo-ui': haloUi,
     },
     rules: {
       // Nx module boundaries — the architecture contract is enforced here.
@@ -36,7 +36,7 @@ export default tseslint.config(
           enforceBuildableLibDependency: true,
           allowCircularSelfDependency: false,
           banTransitiveDependencies: true,
-          checkDynamicDependenciesExceptions: ['^@angular/.*', '^@pa-ui/.*'],
+          checkDynamicDependenciesExceptions: ['^@angular/.*', '^@halo-ui/.*'],
           allow: [],
           depConstraints: [
             {
@@ -63,11 +63,11 @@ export default tseslint.config(
         },
       ],
 
-      // pa-ui custom ESLint rules — architecture enforcement
-      'pa-ui/require-view-encapsulation-none': 'error',
-      'pa-ui/no-color-literal-union': 'error',
-      'pa-ui/max-component-lines': 'error',
-      'pa-ui/no-rxjs-local-state': 'warn',
+      // halo-ui custom ESLint rules — architecture enforcement
+      'halo-ui/require-view-encapsulation-none': 'error',
+      'halo-ui/no-color-literal-union': 'error',
+      'halo-ui/max-component-lines': 'error',
+      'halo-ui/no-rxjs-local-state': 'warn',
     },
   },
   // Base TypeScript rules — applied to all TS files except generated/config.

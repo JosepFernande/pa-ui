@@ -1,14 +1,14 @@
-# @pa-ui/select
+# @halo-ui/select
 
 Accessible, token-driven Angular 19 single-select combobox with forms
 integration (issue #125).
 
 ## Architecture
 
-- **Tokens first** — Every value comes from `var(--pa-select-*)` CSS custom
-  properties. Zero hardcoded colors, spacing, or radii. `@pa-ui/core/theme.css`
-  ships defaults for all 53 `PA_SELECT_TOKENS` entries, so no tokens need to be
-  authored by the consumer.
+- **Tokens first** — Every value comes from `var(--ha-select-*)` CSS custom
+  properties. Zero hardcoded colors, spacing, or radii.
+  `@halo-ui/core/theme.css` ships defaults for all 53 `HA_SELECT_TOKENS`
+  entries, so no tokens need to be authored by the consumer.
 - **Standalone only** — No NgModule. Component is `standalone: true`.
 - **Signals first** — All inputs are signals; derived state via `computed()`.
 - **CDK over custom** — Uses `CdkConnectedOverlay` for panel positioning and
@@ -18,22 +18,22 @@ integration (issue #125).
 - **ControlValueAccessor** — Forms integration via `NG_VALUE_ACCESSOR`.
   Compatible with both reactive form controls (`[formControl]`,
   `formControlName`) and template-driven `[(ngModel)]`.
-- **Custom element host** — Selector is `pa-select` (unlike `button[pa-button]`
-  / `input[pa-input]`, the trigger is a `<button role="combobox">` rendered
+- **Custom element host** — Selector is `ha-select` (unlike `button[ha-button]`
+  / `input[ha-input]`, the trigger is a `<button role="combobox">` rendered
   inside the component's own template, not the host element itself).
 
 ## Setup
 
 Import the foundation theme once (provides the token defaults) and call
-`providePaTheme()` for the runtime color layer:
+`provideHaTheme()` for the runtime color layer:
 
 ```ts
-import { providePaTheme } from '@pa-ui/core';
+import { provideHaTheme } from '@halo-ui/core';
 // styles.scss
-// @import '@pa-ui/core/theme.css';
+// @import '@halo-ui/core/theme.css';
 
 bootstrapApplication(App, {
-  providers: [providePaTheme()],
+  providers: [provideHaTheme()],
 });
 ```
 
@@ -42,15 +42,15 @@ bootstrapApplication(App, {
 ### Basic
 
 ```html
-<pa-select
+<ha-select
   [options]="fruits"
   placeholder="Select a fruit…"
   ariaLabel="Fruit"
-></pa-select>
+></ha-select>
 ```
 
 ```ts
-readonly fruits: PaSelectOption[] = [
+readonly fruits: HaSelectOption[] = [
   { label: 'Apple', value: 'apple' },
   { label: 'Banana', value: 'banana' },
   { label: 'Cherry', value: 'cherry', disabled: true },
@@ -69,13 +69,13 @@ class Example {
 ```
 
 ```html
-<pa-select [formControl]="fruit" [options]="fruits" ariaLabel="Fruit" />
+<ha-select [formControl]="fruit" [options]="fruits" ariaLabel="Fruit" />
 ```
 
 ### Template-driven forms
 
 ```html
-<pa-select
+<ha-select
   [(ngModel)]="fruit"
   [options]="fruits"
   name="fruit"
@@ -86,10 +86,10 @@ class Example {
 ### Size, placeholder, disabled, readonly
 
 ```html
-<pa-select [options]="fruits" size="sm" />
-<pa-select [options]="fruits" size="lg" placeholder="Choose one" />
-<pa-select [options]="fruits" [disabled]="true" />
-<pa-select [options]="fruits" [readonly]="true" />
+<ha-select [options]="fruits" size="sm" />
+<ha-select [options]="fruits" size="lg" placeholder="Choose one" />
+<ha-select [options]="fruits" [disabled]="true" />
+<ha-select [options]="fruits" [readonly]="true" />
 ```
 
 `disabled` removes the trigger from the tab order entirely. `readonly` keeps the
@@ -98,12 +98,12 @@ trigger focusable/tabbable, but the panel never opens.
 ### Error state and hint
 
 When the bound control is `invalid && touched`, the trigger renders
-`.pa-select--error` and sets `aria-invalid="true"`. Wire a hint with
+`.ha-select--error` and sets `aria-invalid="true"`. Wire a hint with
 `aria-describedby`:
 
 ```html
 <label for="fruit">Fruit</label>
-<pa-select
+<ha-select
   id="fruit"
   [formControl]="fruit"
   [options]="fruits"
@@ -154,7 +154,7 @@ opens (an empty `role="listbox"` panel, no error).
 
 | Input             | Type                   | Default | Description                                           |
 | ----------------- | ---------------------- | ------- | ----------------------------------------------------- |
-| `options`         | `PaSelectOption[]`     | `[]`    | Selectable options (`{ label, value, disabled? }`)    |
+| `options`         | `HaSelectOption[]`     | `[]`    | Selectable options (`{ label, value, disabled? }`)    |
 | `size`            | `'sm' \| 'md' \| 'lg'` | `'md'`  | Size preset                                           |
 | `disabled`        | `boolean`              | `false` | Disabled state (combined with the form control state) |
 | `readonly`        | `boolean`              | `false` | Read-only state — focusable, panel never opens        |

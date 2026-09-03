@@ -15,16 +15,16 @@
   display: flex;
   min-height: 100vh;
   background: var(--app-shell-bg);
-  font-family: var(--pa-font-family);
+  font-family: var(--ha-font-family);
 }
 
 .app-sidebar {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  gap: var(--pa-gap-xl);
+  gap: var(--ha-gap-xl);
   width: 260px;
-  padding: var(--pa-spacing-xl) var(--pa-spacing-lg);
+  padding: var(--ha-spacing-xl) var(--ha-spacing-lg);
   background: var(--app-sidebar-bg);
   border-right: 1px solid var(--app-sidebar-border);
 }
@@ -32,54 +32,54 @@
 .app-sidebar__brand {
   display: flex;
   flex-direction: column;
-  gap: var(--pa-gap-xs);
+  gap: var(--ha-gap-xs);
 }
 
 .app-sidebar__logo {
-  font-size: var(--pa-font-size-h2);
-  font-weight: var(--pa-font-weight-h2);
-  color: var(--pa-primary);
+  font-size: var(--ha-font-size-h2);
+  font-weight: var(--ha-font-weight-h2);
+  color: var(--ha-primary);
 }
 
 .app-sidebar__tagline {
   font-size: 0.8125rem;
-  line-height: var(--pa-line-height-caption);
+  line-height: var(--ha-line-height-caption);
   color: var(--app-sidebar-tagline-color);
 }
 
 .app-sidebar__nav {
   display: flex;
   flex-direction: column;
-  gap: var(--pa-gap-sm);
+  gap: var(--ha-gap-sm);
 }
 
 .app-sidebar__group-header {
   display: flex;
   align-items: center;
   height: 44px;
-  padding: 10px var(--pa-spacing-md);
-  border-radius: var(--pa-radius-md);
+  padding: 10px var(--ha-spacing-md);
+  border-radius: var(--ha-radius-md);
   background: var(--app-sidebar-group-bg);
-  color: var(--pa-primary);
-  font-size: var(--pa-font-size-small-body);
-  font-weight: var(--pa-font-weight-semibold);
+  color: var(--ha-primary);
+  font-size: var(--ha-font-size-small-body);
+  font-weight: var(--ha-font-weight-semibold);
   text-decoration: none;
 }
 
 .app-sidebar__sub-items {
   display: flex;
   flex-direction: column;
-  gap: var(--pa-gap-xs);
+  gap: var(--ha-gap-xs);
 }
 
 .app-sidebar__link {
   display: flex;
   align-items: center;
   height: 40px;
-  padding: 10px var(--pa-spacing-md) 10px 40px;
-  border-radius: var(--pa-radius-md);
+  padding: 10px var(--ha-spacing-md) 10px 40px;
+  border-radius: var(--ha-radius-md);
   color: var(--app-sidebar-link-color);
-  font-size: var(--pa-font-size-small-body);
+  font-size: var(--ha-font-size-small-body);
   font-weight: 500;
   text-decoration: none;
   transition:
@@ -93,8 +93,8 @@
 
 .app-sidebar__link--active {
   background: var(--app-sidebar-link-active-bg);
-  color: var(--pa-primary);
-  font-weight: var(--pa-font-weight-semibold);
+  color: var(--ha-primary);
+  font-weight: var(--ha-font-weight-semibold);
 }
 
 .app-main {

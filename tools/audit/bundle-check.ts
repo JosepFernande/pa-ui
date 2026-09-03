@@ -1,5 +1,5 @@
 /**
- * pa-ui bundle-size enforcement — fails CI when a published lib exceeds its
+ * halo-ui bundle-size enforcement — fails CI when a published lib exceeds its
  * gzip budget.
  *
  * Reads the single source of truth from `./budgets.ts` (no duplicated numbers;

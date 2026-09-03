@@ -1,9 +1,9 @@
 import { findOptionIndexByValue, firstEnabledIndex, nextSelectId, optionId } from './select.utils';
-import type { PaSelectOption } from './select.types';
+import type { HaSelectOption } from './select.types';
 
 describe('select utils', () => {
   describe('findOptionIndexByValue', () => {
-    const options: PaSelectOption<string>[] = [
+    const options: HaSelectOption<string>[] = [
       { label: 'Apple', value: 'apple' },
       { label: 'Banana', value: 'banana' },
       { label: 'Cherry', value: 'cherry', disabled: true },
@@ -24,7 +24,7 @@ describe('select utils', () => {
 
   describe('firstEnabledIndex', () => {
     it('returns the index of the first non-disabled option', () => {
-      const options: PaSelectOption<string>[] = [
+      const options: HaSelectOption<string>[] = [
         { label: 'Apple', value: 'apple', disabled: true },
         { label: 'Banana', value: 'banana' },
       ];
@@ -32,7 +32,7 @@ describe('select utils', () => {
     });
 
     it('returns 0 when the first option is already enabled', () => {
-      const options: PaSelectOption<string>[] = [
+      const options: HaSelectOption<string>[] = [
         { label: 'Apple', value: 'apple' },
         { label: 'Banana', value: 'banana', disabled: true },
       ];
@@ -40,7 +40,7 @@ describe('select utils', () => {
     });
 
     it('returns -1 when every option is disabled', () => {
-      const options: PaSelectOption<string>[] = [
+      const options: HaSelectOption<string>[] = [
         { label: 'Apple', value: 'apple', disabled: true },
         { label: 'Banana', value: 'banana', disabled: true },
       ];
@@ -54,8 +54,8 @@ describe('select utils', () => {
 
   describe('optionId', () => {
     it('builds a deterministic id from the select id and index', () => {
-      expect(optionId('pa-select-1', 0)).toBe('pa-select-1-option-0');
-      expect(optionId('pa-select-1', 3)).toBe('pa-select-1-option-3');
+      expect(optionId('ha-select-1', 0)).toBe('ha-select-1-option-0');
+      expect(optionId('ha-select-1', 3)).toBe('ha-select-1-option-3');
     });
   });
 
@@ -64,8 +64,8 @@ describe('select utils', () => {
       const first = nextSelectId();
       const second = nextSelectId();
       expect(first).not.toBe(second);
-      expect(first).toMatch(/^pa-select-\d+$/);
-      expect(second).toMatch(/^pa-select-\d+$/);
+      expect(first).toMatch(/^ha-select-\d+$/);
+      expect(second).toMatch(/^ha-select-\d+$/);
     });
   });
 });

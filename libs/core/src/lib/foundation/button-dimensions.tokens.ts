@@ -2,7 +2,7 @@
  * Button dimension source data (D5), split into a Figma-confirmed set and a
  * placeholder set — physically separate constants so a reader cannot
  * mistake one for the other (D5 point 1). Consumed by
- * `component-defaults.tokens.ts` to build the `--pa-button-*` defaults
+ * `component-defaults.tokens.ts` to build the `--ha-button-*` defaults
  * shipped in `theme.css`.
  *
  * `height` is intentionally realized downstream as `min-height` (D6): a
@@ -14,9 +14,9 @@
 /**
  * Figma-confirmed `md` Button dimensions (`pa-ui-default-theme-design-values`).
  * `radius` (4px) is constant across all 3 sizes — also re-used verbatim by
- * `sm`/`lg` in `PA_BUTTON_PROVISIONAL_DIMENSIONS`.
+ * `sm`/`lg` in `HA_BUTTON_PROVISIONAL_DIMENSIONS`.
  */
-export const PA_BUTTON_FIGMA_DIMENSIONS = {
+export const HA_BUTTON_FIGMA_DIMENSIONS = {
   md: {
     minHeight: '48px',
     minWidth: '224px',
@@ -40,7 +40,7 @@ export const PA_BUTTON_FIGMA_DIMENSIONS = {
  * `theme.css` marks only the placeholder-sourced declarations as
  * provisional, never `min-width`.
  */
-export const PA_BUTTON_PROVISIONAL_DIMENSIONS = {
+export const HA_BUTTON_PROVISIONAL_DIMENSIONS = {
   sm: {
     minHeight: '40px',
     minWidth: '200px',

@@ -9,15 +9,11 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@pa-ui/angular": ["libs/pa-ui/src/index.ts"],
-      "@pa-ui/button": ["libs/button/src/index.ts"],
-      "@pa-ui/core": ["libs/core/src/index.ts"],
-      "@pa-ui/input": ["libs/input/src/index.ts"],
-      "@pa-ui/select": ["libs/select/src/index.ts"],
-      "@pa-ui/styles": ["libs/styles/src/index.ts"],
-      "@pa-ui/themes": ["libs/themes/src/index.ts"],
-      "@pa-ui/tokens": ["libs/tokens/src/index.ts"],
-      "@pa-ui/utils": ["libs/utils/src/index.ts"]
+      "@halo-ui/angular": ["libs/halo-ui/src/index.ts"],
+      "@halo-ui/button": ["libs/button/src/index.ts"],
+      "@halo-ui/core": ["libs/core/src/index.ts"],
+      "@halo-ui/input": ["libs/input/src/index.ts"],
+      "@halo-ui/select": ["libs/select/src/index.ts"]
     }
   }
 }

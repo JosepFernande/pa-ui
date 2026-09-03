@@ -14,8 +14,8 @@ const { axe, toHaveNoViolations } = require('jest-axe') as {
   toHaveNoViolations: Record<string, jest.CustomMatcher>;
 };
 
-import { PaInput } from './input.component';
-import { PaInputSize } from './input.types';
+import { HaInput } from './input.component';
+import { HaInputSize } from './input.types';
 
 expect.extend(toHaveNoViolations);
 
@@ -30,18 +30,18 @@ declare global {
 }
 
 /**
- * Test host that wraps PaInput in a reactive form, matching real consumer
- * usage with `<input pa-input [formControl]="control">`.
+ * Test host that wraps HaInput in a reactive form, matching real consumer
+ * usage with `<input ha-input [formControl]="control">`.
  */
 @Component({
-  selector: 'pa-input-test-host',
+  selector: 'ha-input-test-host',
   standalone: true,
-  imports: [PaInput, ReactiveFormsModule],
+  imports: [HaInput, ReactiveFormsModule],
   encapsulation: ViewEncapsulation.None,
   template: `
     <input
-      pa-input
-      id="pa-input-test"
+      ha-input
+      id="ha-input-test"
       [formControl]="control"
       [size]="size"
       [placeholder]="placeholder"
@@ -53,7 +53,7 @@ declare global {
 })
 class TestHost {
   control = new FormControl<string>('');
-  size: PaInputSize = 'md';
+  size: HaInputSize = 'md';
   placeholder = '';
   disabled = false;
   readonly = false;
@@ -61,19 +61,19 @@ class TestHost {
 }
 
 /**
- * Standalone host WITHOUT any form directive — proves PaInput works outside
+ * Standalone host WITHOUT any form directive — proves HaInput works outside
  * a form (ngControl is null, typing works, no errors).
  */
 @Component({
-  selector: 'pa-input-standalone-host',
+  selector: 'ha-input-standalone-host',
   standalone: true,
-  imports: [PaInput],
+  imports: [HaInput],
   encapsulation: ViewEncapsulation.None,
-  template: `<input pa-input placeholder="Write something" />`,
+  template: `<input ha-input placeholder="Write something" />`,
 })
 class StandaloneHost {}
 
-describe('PaInput', () => {
+describe('HaInput', () => {
   let focusOrigin$: Subject<FocusOrigin>;
   let focusMonitorMock: { monitor: jest.Mock; stopMonitoring: jest.Mock };
 
@@ -123,11 +123,11 @@ describe('PaInput', () => {
       expect(byCss).not.toBeNull();
     });
 
-    it('should always have the base BEM class pa-input', () => {
+    it('should always have the base BEM class ha-input', () => {
       const { fixture, inputEl } = createTestHost();
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('pa-input')).toBe(true);
+      expect(inputEl.classList.contains('ha-input')).toBe(true);
     });
 
     it('should apply aria-label from the input', () => {
@@ -141,7 +141,7 @@ describe('PaInput', () => {
       const { fixture, inputEl } = createTestHost();
       fixture.detectChanges();
 
-      expect(inputEl.getAttribute('id')).toBe('pa-input-test');
+      expect(inputEl.getAttribute('id')).toBe('ha-input-test');
     });
 
     it('should always render a text input, overriding any consumer-set type attribute', () => {
@@ -157,28 +157,28 @@ describe('PaInput', () => {
   // Size classes
   // -----------------------------------------------------------------------
   describe('size classes', () => {
-    it('should apply pa-input--md by default', () => {
+    it('should apply ha-input--md by default', () => {
       const { fixture, host, inputEl } = createTestHost();
       host.size = 'md';
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('pa-input--md')).toBe(true);
+      expect(inputEl.classList.contains('ha-input--md')).toBe(true);
     });
 
-    it('should apply pa-input--sm when size is sm', () => {
+    it('should apply ha-input--sm when size is sm', () => {
       const { fixture, host, inputEl } = createTestHost();
       host.size = 'sm';
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('pa-input--sm')).toBe(true);
+      expect(inputEl.classList.contains('ha-input--sm')).toBe(true);
     });
 
-    it('should apply pa-input--lg when size is lg', () => {
+    it('should apply ha-input--lg when size is lg', () => {
       const { fixture, host, inputEl } = createTestHost();
       host.size = 'lg';
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('pa-input--lg')).toBe(true);
+      expect(inputEl.classList.contains('ha-input--lg')).toBe(true);
     });
 
     it('should NOT have classes for other sizes', () => {
@@ -186,8 +186,8 @@ describe('PaInput', () => {
       host.size = 'sm';
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('pa-input--md')).toBe(false);
-      expect(inputEl.classList.contains('pa-input--lg')).toBe(false);
+      expect(inputEl.classList.contains('ha-input--md')).toBe(false);
+      expect(inputEl.classList.contains('ha-input--lg')).toBe(false);
     });
   });
 
@@ -223,7 +223,7 @@ describe('PaInput', () => {
 
       expect(inputEl.disabled).toBe(true);
       expect(inputEl.getAttribute('aria-disabled')).toBe('true');
-      expect(inputEl.classList.contains('pa-input--disabled')).toBe(true);
+      expect(inputEl.classList.contains('ha-input--disabled')).toBe(true);
     });
 
     it('should NOT disable the input when [disabled] is false', () => {
@@ -232,7 +232,7 @@ describe('PaInput', () => {
       fixture.detectChanges();
 
       expect(inputEl.disabled).toBe(false);
-      expect(inputEl.classList.contains('pa-input--disabled')).toBe(false);
+      expect(inputEl.classList.contains('ha-input--disabled')).toBe(false);
     });
 
     it('should disable the native input when the control is disabled (CVA setDisabledState)', () => {
@@ -244,7 +244,7 @@ describe('PaInput', () => {
 
       expect(inputEl.disabled).toBe(true);
       expect(inputEl.getAttribute('aria-disabled')).toBe('true');
-      expect(inputEl.classList.contains('pa-input--disabled')).toBe(true);
+      expect(inputEl.classList.contains('ha-input--disabled')).toBe(true);
     });
 
     it('should re-enable the native input when the control is enabled (CVA setDisabledState)', () => {
@@ -259,7 +259,7 @@ describe('PaInput', () => {
       fixture.detectChanges();
 
       expect(inputEl.disabled).toBe(false);
-      expect(inputEl.classList.contains('pa-input--disabled')).toBe(false);
+      expect(inputEl.classList.contains('ha-input--disabled')).toBe(false);
     });
   });
 
@@ -274,7 +274,7 @@ describe('PaInput', () => {
 
       expect(inputEl.readOnly).toBe(true);
       expect(inputEl.hasAttribute('readonly')).toBe(true);
-      expect(inputEl.classList.contains('pa-input--readonly')).toBe(true);
+      expect(inputEl.classList.contains('ha-input--readonly')).toBe(true);
     });
 
     it('should remove the readonly state when [readonly] is false', () => {
@@ -284,7 +284,7 @@ describe('PaInput', () => {
 
       expect(inputEl.readOnly).toBe(false);
       expect(inputEl.hasAttribute('readonly')).toBe(false);
-      expect(inputEl.classList.contains('pa-input--readonly')).toBe(false);
+      expect(inputEl.classList.contains('ha-input--readonly')).toBe(false);
     });
   });
 
@@ -327,7 +327,7 @@ describe('PaInput', () => {
 
       const inputEl = fixture.nativeElement.querySelector('input') as HTMLInputElement;
       expect(inputEl).not.toBeNull();
-      expect(inputEl.classList.contains('pa-input')).toBe(true);
+      expect(inputEl.classList.contains('ha-input')).toBe(true);
 
       inputEl.value = 'typed without form';
       inputEl.dispatchEvent(new Event('input'));
@@ -340,7 +340,7 @@ describe('PaInput', () => {
   // Error state
   // -----------------------------------------------------------------------
   describe('error state', () => {
-    it('should apply .pa-input--error and aria-invalid="true" when the control is invalid and touched', () => {
+    it('should apply .ha-input--error and aria-invalid="true" when the control is invalid and touched', () => {
       const { fixture, host, inputEl } = createTestHost();
       fixture.detectChanges();
 
@@ -349,7 +349,7 @@ describe('PaInput', () => {
       host.control.markAsTouched();
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('pa-input--error')).toBe(true);
+      expect(inputEl.classList.contains('ha-input--error')).toBe(true);
       expect(inputEl.getAttribute('aria-invalid')).toBe('true');
     });
 
@@ -361,7 +361,7 @@ describe('PaInput', () => {
       host.control.updateValueAndValidity();
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('pa-input--error')).toBe(false);
+      expect(inputEl.classList.contains('ha-input--error')).toBe(false);
       expect(inputEl.getAttribute('aria-invalid')).toBeNull();
     });
 
@@ -373,12 +373,12 @@ describe('PaInput', () => {
       host.control.updateValueAndValidity();
       host.control.markAsTouched();
       fixture.detectChanges();
-      expect(inputEl.classList.contains('pa-input--error')).toBe(true);
+      expect(inputEl.classList.contains('ha-input--error')).toBe(true);
 
       host.control.setValue('ok');
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('pa-input--error')).toBe(false);
+      expect(inputEl.classList.contains('ha-input--error')).toBe(false);
       expect(inputEl.getAttribute('aria-invalid')).toBeNull();
     });
   });
@@ -394,37 +394,37 @@ describe('PaInput', () => {
       expect(focusMonitorMock.monitor).toHaveBeenCalledTimes(1);
     });
 
-    it('should apply pa-input--focused class on keyboard focus', () => {
+    it('should apply ha-input--focused class on keyboard focus', () => {
       const { fixture, inputEl } = createTestHost();
       fixture.detectChanges();
 
       focusOrigin$.next('keyboard');
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('pa-input--focused')).toBe(true);
+      expect(inputEl.classList.contains('ha-input--focused')).toBe(true);
     });
 
-    it('should also apply pa-input--focused class on mouse focus (any origin shows the focus color, not just keyboard)', () => {
+    it('should also apply ha-input--focused class on mouse focus (any origin shows the focus color, not just keyboard)', () => {
       const { fixture, inputEl } = createTestHost();
       fixture.detectChanges();
 
       focusOrigin$.next('mouse');
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('pa-input--focused')).toBe(true);
+      expect(inputEl.classList.contains('ha-input--focused')).toBe(true);
     });
 
-    it('should remove pa-input--focused when focus is lost (null origin)', () => {
+    it('should remove ha-input--focused when focus is lost (null origin)', () => {
       const { fixture, inputEl } = createTestHost();
       fixture.detectChanges();
 
       focusOrigin$.next('keyboard');
       fixture.detectChanges();
-      expect(inputEl.classList.contains('pa-input--focused')).toBe(true);
+      expect(inputEl.classList.contains('ha-input--focused')).toBe(true);
 
       focusOrigin$.next(null);
       fixture.detectChanges();
-      expect(inputEl.classList.contains('pa-input--focused')).toBe(false);
+      expect(inputEl.classList.contains('ha-input--focused')).toBe(false);
     });
 
     it('should call focusMonitor.stopMonitoring on destroy', () => {
@@ -445,7 +445,7 @@ describe('PaInput', () => {
       const { fixture } = createTestHost();
       fixture.detectChanges();
 
-      const inputDebug = fixture.debugElement.query(By.directive(PaInput));
+      const inputDebug = fixture.debugElement.query(By.directive(HaInput));
       expect(inputDebug!.componentInstance).toBeDefined();
     });
 
@@ -458,7 +458,7 @@ describe('PaInput', () => {
 
       const inputEl = fixture.debugElement.query(By.css('input'))!
         .nativeElement as HTMLInputElement;
-      expect(inputEl.classList.contains('pa-input--lg')).toBe(true);
+      expect(inputEl.classList.contains('ha-input--lg')).toBe(true);
     });
 
     it('should update the DOM when a signal input is set via the host', () => {

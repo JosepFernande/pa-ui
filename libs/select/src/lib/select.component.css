@@ -1,40 +1,40 @@
 /*
- * PaSelect — BEM CSS classes
- * Every value comes from a --pa-select-* custom property. Zero hardcoded
+ * HaSelect — BEM CSS classes
+ * Every value comes from a --ha-select-* custom property. Zero hardcoded
  * colors, spacing, or radii.
  *
- * Host (`pa-select`) carries size/state modifier classes; the trigger
- * (`.pa-select__trigger`) is the visible, styled `<button role="combobox">`
- * rendered inside — unlike `PaButton`/`PaInput`, the host is a genuine
+ * Host (`ha-select`) carries size/state modifier classes; the trigger
+ * (`.ha-select__trigger`) is the visible, styled `<button role="combobox">`
+ * rendered inside — unlike `HaButton`/`HaInput`, the host is a genuine
  * custom element, not an attribute selector on a native control.
  *
  * Token mapping:
- *   --pa-select-font-family        -> font-family
- *   --pa-select-font-weight        -> font-weight
- *   --pa-select-line-height       -> line-height
- *   --pa-select-color              -> color (text)
- *   --pa-select-bg                 -> background-color
- *   --pa-select-border             -> border shorthand
- *   --pa-select-gap                -> gap between label and (future) icon
- *   --pa-select-radius-sm/md/lg    -> border-radius (per size)
- *   --pa-select-padding-sm/md/lg   -> padding (per size)
- *   --pa-select-font-sm/md/lg      -> font-size (per size)
- *   --pa-select-min-height-sm/md/lg -> min-height (per size)
- *   --pa-select-placeholder-color  -> label color while unselected
- *   --pa-select-disabled-*         -> disabled state
- *   --pa-select-readonly-*         -> readonly state
- *   --pa-select-error-*            -> error state
- *   --pa-select-focus-border       -> border-color on focus
- *   --pa-select-focus-ring         -> outline on keyboard-only focus (:focus-visible)
- *   --pa-select-focus-ring-offset  -> outline-offset on keyboard-only focus
- *   --pa-select-transition-*       -> transition duration/easing
+ *   --ha-select-font-family        -> font-family
+ *   --ha-select-font-weight        -> font-weight
+ *   --ha-select-line-height       -> line-height
+ *   --ha-select-color              -> color (text)
+ *   --ha-select-bg                 -> background-color
+ *   --ha-select-border             -> border shorthand
+ *   --ha-select-gap                -> gap between label and (future) icon
+ *   --ha-select-radius-sm/md/lg    -> border-radius (per size)
+ *   --ha-select-padding-sm/md/lg   -> padding (per size)
+ *   --ha-select-font-sm/md/lg      -> font-size (per size)
+ *   --ha-select-min-height-sm/md/lg -> min-height (per size)
+ *   --ha-select-placeholder-color  -> label color while unselected
+ *   --ha-select-disabled-*         -> disabled state
+ *   --ha-select-readonly-*         -> readonly state
+ *   --ha-select-error-*            -> error state
+ *   --ha-select-focus-border       -> border-color on focus
+ *   --ha-select-focus-ring         -> outline on keyboard-only focus (:focus-visible)
+ *   --ha-select-focus-ring-offset  -> outline-offset on keyboard-only focus
+ *   --ha-select-transition-*       -> transition duration/easing
  */
 
 /* ------------------------------------------------------------------ */
 /* Host                                                                */
 /* ------------------------------------------------------------------ */
 
-.pa-select {
+.ha-select {
   display: block;
   width: 100%;
 }
@@ -43,33 +43,33 @@
 /* Trigger — base                                                      */
 /* ------------------------------------------------------------------ */
 
-.pa-select__trigger {
+.ha-select__trigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
   width: 100%;
 
-  font-family: var(--pa-select-font-family);
-  font-weight: var(--pa-select-font-weight);
-  line-height: var(--pa-select-line-height);
+  font-family: var(--ha-select-font-family);
+  font-weight: var(--ha-select-font-weight);
+  line-height: var(--ha-select-line-height);
 
-  color: var(--pa-select-color);
-  background-color: var(--pa-select-bg);
-  border: var(--pa-select-border);
-  gap: var(--pa-select-gap);
+  color: var(--ha-select-color);
+  background-color: var(--ha-select-bg);
+  border: var(--ha-select-border);
+  gap: var(--ha-select-gap);
   cursor: pointer;
 
   transition:
-    background-color var(--pa-select-transition-duration) var(--pa-select-transition-easing),
-    border-color var(--pa-select-transition-duration) var(--pa-select-transition-easing),
-    color var(--pa-select-transition-duration) var(--pa-select-transition-easing);
+    background-color var(--ha-select-transition-duration) var(--ha-select-transition-easing),
+    border-color var(--ha-select-transition-duration) var(--ha-select-transition-easing),
+    color var(--ha-select-transition-duration) var(--ha-select-transition-easing);
 }
 
-.pa-select__trigger:focus-visible {
-  border-color: var(--pa-select-focus-border);
-  outline: var(--pa-select-focus-ring);
-  outline-offset: var(--pa-select-focus-ring-offset);
+.ha-select__trigger:focus-visible {
+  border-color: var(--ha-select-focus-border);
+  outline: var(--ha-select-focus-ring);
+  outline-offset: var(--ha-select-focus-ring-offset);
 }
 
 /*
@@ -77,57 +77,57 @@
  * Firefox (that pseudo-class is keyboard-only for buttons), so the open
  * state needs its own rule to get the same border color on click.
  */
-.pa-select__trigger--open {
-  border-color: var(--pa-select-focus-border);
+.ha-select__trigger--open {
+  border-color: var(--ha-select-focus-border);
 }
 
-.pa-select__label--placeholder {
-  color: var(--pa-select-placeholder-color);
+.ha-select__label--placeholder {
+  color: var(--ha-select-placeholder-color);
 }
 
 /* ------------------------------------------------------------------ */
 /* Sizes                                                               */
 /* ------------------------------------------------------------------ */
 
-.pa-select--sm .pa-select__trigger {
-  padding: var(--pa-select-padding-sm);
-  font-size: var(--pa-select-font-sm);
-  min-height: var(--pa-select-min-height-sm);
-  border-radius: var(--pa-select-radius-sm);
+.ha-select--sm .ha-select__trigger {
+  padding: var(--ha-select-padding-sm);
+  font-size: var(--ha-select-font-sm);
+  min-height: var(--ha-select-min-height-sm);
+  border-radius: var(--ha-select-radius-sm);
 }
 
-.pa-select--md .pa-select__trigger {
-  padding: var(--pa-select-padding-md);
-  font-size: var(--pa-select-font-md);
-  min-height: var(--pa-select-min-height-md);
-  border-radius: var(--pa-select-radius-md);
+.ha-select--md .ha-select__trigger {
+  padding: var(--ha-select-padding-md);
+  font-size: var(--ha-select-font-md);
+  min-height: var(--ha-select-min-height-md);
+  border-radius: var(--ha-select-radius-md);
 }
 
-.pa-select--lg .pa-select__trigger {
-  padding: var(--pa-select-padding-lg);
-  font-size: var(--pa-select-font-lg);
-  min-height: var(--pa-select-min-height-lg);
-  border-radius: var(--pa-select-radius-lg);
+.ha-select--lg .ha-select__trigger {
+  padding: var(--ha-select-padding-lg);
+  font-size: var(--ha-select-font-lg);
+  min-height: var(--ha-select-min-height-lg);
+  border-radius: var(--ha-select-radius-lg);
 }
 
 /* ------------------------------------------------------------------ */
 /* Disabled                                                            */
 /* ------------------------------------------------------------------ */
 
-.pa-select--disabled .pa-select__trigger {
-  opacity: var(--pa-select-disabled-opacity);
+.ha-select--disabled .ha-select__trigger {
+  opacity: var(--ha-select-disabled-opacity);
   cursor: not-allowed;
-  background-color: var(--pa-select-disabled-bg);
-  color: var(--pa-select-disabled-color);
+  background-color: var(--ha-select-disabled-bg);
+  color: var(--ha-select-disabled-color);
 }
 
 /* ------------------------------------------------------------------ */
 /* Readonly                                                            */
 /* ------------------------------------------------------------------ */
 
-.pa-select--readonly .pa-select__trigger {
-  background-color: var(--pa-select-readonly-bg);
-  border: var(--pa-select-readonly-border);
+.ha-select--readonly .ha-select__trigger {
+  background-color: var(--ha-select-readonly-bg);
+  border: var(--ha-select-readonly-border);
   cursor: default;
 }
 
@@ -135,16 +135,16 @@
 /* Error                                                               */
 /* ------------------------------------------------------------------ */
 
-.pa-select--error .pa-select__trigger {
-  border-color: var(--pa-select-error-border);
-  color: var(--pa-select-error-color);
+.ha-select--error .ha-select__trigger {
+  border-color: var(--ha-select-error-border);
+  color: var(--ha-select-error-color);
 }
 
 /* ------------------------------------------------------------------ */
 /* Panel (rendered inside the CDK overlay, in document.body)          */
 /* ------------------------------------------------------------------ */
 
-.pa-select__panel {
+.ha-select__panel {
   box-sizing: border-box;
   /*
    * `.cdk-overlay-pane` (Angular CDK's own CSS, not ours) is `display: flex`,
@@ -155,16 +155,16 @@
    */
   width: 100%;
   margin: 0;
-  margin-top: var(--pa-select-panel-offset);
-  padding: var(--pa-select-panel-padding-y) 0;
+  margin-top: var(--ha-select-panel-offset);
+  padding: var(--ha-select-panel-padding-y) 0;
   list-style: none;
   overflow-y: auto;
-  max-height: var(--pa-select-panel-max-height);
+  max-height: var(--ha-select-panel-max-height);
 
-  background-color: var(--pa-select-panel-bg);
-  border: var(--pa-select-panel-border);
-  border-radius: var(--pa-select-panel-radius);
-  box-shadow: var(--pa-select-panel-shadow);
+  background-color: var(--ha-select-panel-bg);
+  border: var(--ha-select-panel-border);
+  border-radius: var(--ha-select-panel-radius);
+  box-shadow: var(--ha-select-panel-shadow);
 }
 
 /* ------------------------------------------------------------------ */
@@ -174,12 +174,12 @@
 /*
  * Options are selectable by keyboard AND mouse click (D6): `cursor: pointer`
  * and hover background apply only to enabled options
- * (`:not(.pa-select__option--disabled)`) — disabled options intentionally
+ * (`:not(.ha-select__option--disabled)`) — disabled options intentionally
  * get no pointer/hover affordance, since clicking one is a no-op.
  * `--active` reflects the ActiveDescendantKeyManager's current item
  * (`item.active()`); `--disabled` reflects `item.disabled`.
  *
- * `--active`/`--selected` double up the base class (`.pa-select__option.pa-
+ * `--active`/`--selected` double up the base class (`.ha-select__option.ha-
  * select__option--active`) so their specificity ties the hover rule's; the
  * hover rule wraps its `:not()` in `:where()` (zero specificity) so it stays
  * at base class + `:hover` instead of base class + `:not()` class + `:hover`,
@@ -188,40 +188,40 @@
  * option keeps its own background instead of flashing the generic hover
  * color.
  */
-.pa-select__option {
+.ha-select__option {
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  min-height: var(--pa-select-option-min-height);
-  padding: var(--pa-select-option-padding-y) var(--pa-select-option-padding-x);
+  min-height: var(--ha-select-option-min-height);
+  padding: var(--ha-select-option-padding-y) var(--ha-select-option-padding-x);
 
-  color: var(--pa-select-option-color);
-  background-color: var(--pa-select-option-bg);
-  font-size: var(--pa-select-option-font-size);
+  color: var(--ha-select-option-color);
+  background-color: var(--ha-select-option-bg);
+  font-size: var(--ha-select-option-font-size);
 }
 
-.pa-select__option:not(.pa-select__option--disabled) {
+.ha-select__option:not(.ha-select__option--disabled) {
   cursor: pointer;
 }
 
-.pa-select__option:where(:not(.pa-select__option--disabled)):hover {
-  background-color: var(--pa-select-option-hover-bg);
+.ha-select__option:where(:not(.ha-select__option--disabled)):hover {
+  background-color: var(--ha-select-option-hover-bg);
 }
 
-.pa-select__option.pa-select__option--active {
-  background-color: var(--pa-select-option-active-bg);
-  color: var(--pa-select-option-active-color);
+.ha-select__option.ha-select__option--active {
+  background-color: var(--ha-select-option-active-bg);
+  color: var(--ha-select-option-active-color);
 }
 
-.pa-select__option.pa-select__option--selected {
-  background-color: var(--pa-select-option-selected-bg);
-  color: var(--pa-select-option-selected-color);
-  font-weight: var(--pa-select-option-selected-font-weight);
+.ha-select__option.ha-select__option--selected {
+  background-color: var(--ha-select-option-selected-bg);
+  color: var(--ha-select-option-selected-color);
+  font-weight: var(--ha-select-option-selected-font-weight);
 }
 
-.pa-select__option--disabled {
-  color: var(--pa-select-option-disabled-color);
-  opacity: var(--pa-select-option-disabled-opacity);
+.ha-select__option--disabled {
+  color: var(--ha-select-option-disabled-color);
+  opacity: var(--ha-select-option-disabled-opacity);
 }
 
 /* ------------------------------------------------------------------ */
@@ -229,7 +229,7 @@
 /* ------------------------------------------------------------------ */
 
 @media (prefers-reduced-motion: reduce) {
-  .pa-select__trigger {
+  .ha-select__trigger {
     transition: none;
   }
 }

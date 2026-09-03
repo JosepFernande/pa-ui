@@ -91,8 +91,8 @@ describe('deriveTokens (Tasks 2.8-2.14 — full derivation policy)', () => {
     const theme: ResolvedTheme = { colors: { Primary: '#111111', primary: '#3366ff' } };
     const result = deriveTokens(theme);
 
-    expect(result['--pa-color-primary']).toBe('#3366ff');
-    expect(Object.keys(result).filter((key) => key.startsWith('--pa-color-primary'))).toHaveLength(
+    expect(result['--ha-color-primary']).toBe('#3366ff');
+    expect(Object.keys(result).filter((key) => key.startsWith('--ha-color-primary'))).toHaveLength(
       4,
     );
     expect(warnSpy.mock.calls.some(([message]) => /collis/i.test(message))).toBe(true);
@@ -106,7 +106,7 @@ describe('deriveTokens (Tasks 2.8-2.14 — full derivation policy)', () => {
       result = deriveTokens(theme);
     }).not.toThrow();
 
-    expect(result?.['--pa-color-primary']).toBe('#3366ff');
+    expect(result?.['--ha-color-primary']).toBe('#3366ff');
     expect(Object.keys(result ?? {}).some((key) => key.includes('broken'))).toBe(false);
     expect(warnSpy.mock.calls.some(([message]) => /broken/i.test(message))).toBe(true);
   });
@@ -114,7 +114,7 @@ describe('deriveTokens (Tasks 2.8-2.14 — full derivation policy)', () => {
   it('emits the base token verbatim as the exact registered hex string (Task 2.12)', () => {
     const theme: ResolvedTheme = { colors: { primary: '#3366FF' } };
     const result = deriveTokens(theme);
-    expect(result['--pa-color-primary']).toBe('#3366FF');
+    expect(result['--ha-color-primary']).toBe('#3366FF');
   });
 
   it('emits exactly 4 keys for a single color (Task 2.13)', () => {
@@ -122,10 +122,10 @@ describe('deriveTokens (Tasks 2.8-2.14 — full derivation policy)', () => {
     const result = deriveTokens(theme);
     expect(Object.keys(result).sort()).toEqual(
       [
-        '--pa-color-primary',
-        '--pa-color-primary-active',
-        '--pa-color-primary-contrast',
-        '--pa-color-primary-hover',
+        '--ha-color-primary',
+        '--ha-color-primary-active',
+        '--ha-color-primary-contrast',
+        '--ha-color-primary-hover',
       ].sort(),
     );
   });
@@ -136,9 +136,9 @@ describe('deriveTokens (Tasks 2.8-2.14 — full derivation policy)', () => {
     const keys = Object.keys(result);
 
     expect(keys).toHaveLength(8);
-    expect(keys.filter((key) => key.startsWith('--pa-color-primary'))).toHaveLength(4);
-    expect(keys.filter((key) => key.startsWith('--pa-color-danger'))).toHaveLength(4);
-    expect(result['--pa-color-primary']).not.toBe(result['--pa-color-danger']);
+    expect(keys.filter((key) => key.startsWith('--ha-color-primary'))).toHaveLength(4);
+    expect(keys.filter((key) => key.startsWith('--ha-color-danger'))).toHaveLength(4);
+    expect(result['--ha-color-primary']).not.toBe(result['--ha-color-danger']);
   });
 
   it('keeps float precision through adjustLightness before rounding only inside hslToHex (Task 2.15 — triangulation)', () => {
@@ -147,10 +147,10 @@ describe('deriveTokens (Tasks 2.8-2.14 — full derivation policy)', () => {
     const theme: ResolvedTheme = { colors: { accent: '#4d75f2' } };
     const result = deriveTokens(theme);
 
-    expect(result['--pa-color-accent-hover']).toMatch(/^#[0-9a-f]{6}$/);
-    expect(result['--pa-color-accent-active']).toMatch(/^#[0-9a-f]{6}$/);
-    expect(result['--pa-color-accent-hover']).not.toBe(result['--pa-color-accent']);
-    expect(result['--pa-color-accent-active']).not.toBe(result['--pa-color-accent']);
+    expect(result['--ha-color-accent-hover']).toMatch(/^#[0-9a-f]{6}$/);
+    expect(result['--ha-color-accent-active']).toMatch(/^#[0-9a-f]{6}$/);
+    expect(result['--ha-color-accent-hover']).not.toBe(result['--ha-color-accent']);
+    expect(result['--ha-color-accent-active']).not.toBe(result['--ha-color-accent']);
   });
 });
 
@@ -172,12 +172,12 @@ describe('deriveTokens — explicit hover/active/contrast overrides (Phase 2)', 
     const result = deriveTokens(theme);
     const hsl = hexToHsl('#16709e');
 
-    expect(result['--pa-color-primary']).toBe('#16709e');
-    expect(result['--pa-color-primary-hover']).toBe('#0a4f6b');
-    expect(result['--pa-color-primary-active']).toBe(
+    expect(result['--ha-color-primary']).toBe('#16709e');
+    expect(result['--ha-color-primary-hover']).toBe('#0a4f6b');
+    expect(result['--ha-color-primary-active']).toBe(
       hslToHex(adjustLightness(hsl, -LIGHTNESS_STEP)),
     );
-    expect(result['--pa-color-primary-contrast']).toBe(getContrastColor(hsl));
+    expect(result['--ha-color-primary-contrast']).toBe(getContrastColor(hsl));
   });
 
   it('emits all four explicit variant values verbatim with zero HSL/WCAG computation (Task 2.2)', () => {
@@ -193,10 +193,10 @@ describe('deriveTokens — explicit hover/active/contrast overrides (Phase 2)', 
     };
     const result = deriveTokens(theme);
 
-    expect(result['--pa-color-primary']).toBe('#16709e');
-    expect(result['--pa-color-primary-hover']).toBe('#0a4f6b');
-    expect(result['--pa-color-primary-active']).toBe('#1a80b3');
-    expect(result['--pa-color-primary-contrast']).toBe('#f0f0f0');
+    expect(result['--ha-color-primary']).toBe('#16709e');
+    expect(result['--ha-color-primary-hover']).toBe('#0a4f6b');
+    expect(result['--ha-color-primary-active']).toBe('#1a80b3');
+    expect(result['--ha-color-primary-contrast']).toBe('#f0f0f0');
   });
 
   it('emits a 3-digit explicit hex verbatim without expansion (Task 2.3)', () => {
@@ -204,7 +204,7 @@ describe('deriveTokens — explicit hover/active/contrast overrides (Phase 2)', 
       colors: { primary: { base: '#16709e', hover: '#abc' } },
     };
     const result = deriveTokens(theme);
-    expect(result['--pa-color-primary-hover']).toBe('#abc');
+    expect(result['--ha-color-primary-hover']).toBe('#abc');
   });
 
   it('produces byte-identical output for a plain string and its object-shape equivalent (Task 2.4)', () => {
@@ -221,12 +221,12 @@ describe('deriveTokens — explicit hover/active/contrast overrides (Phase 2)', 
     const result = deriveTokens(theme);
     const hsl = hexToHsl('#16709e');
 
-    expect(result['--pa-color-primary']).toBe('#16709e');
-    expect(result['--pa-color-primary-hover']).toBe(hslToHex(adjustLightness(hsl, LIGHTNESS_STEP)));
-    expect(result['--pa-color-primary-active']).toBe(
+    expect(result['--ha-color-primary']).toBe('#16709e');
+    expect(result['--ha-color-primary-hover']).toBe(hslToHex(adjustLightness(hsl, LIGHTNESS_STEP)));
+    expect(result['--ha-color-primary-active']).toBe(
       hslToHex(adjustLightness(hsl, -LIGHTNESS_STEP)),
     );
-    expect(result['--pa-color-primary-contrast']).toBe(getContrastColor(hsl));
+    expect(result['--ha-color-primary-contrast']).toBe(getContrastColor(hsl));
 
     expect(
       warnSpy.mock.calls.some(([message]) => /hover/i.test(message) && /not-a-hex/.test(message)),
@@ -247,7 +247,7 @@ describe('deriveTokens — explicit hover/active/contrast overrides (Phase 2)', 
       result = deriveTokens(theme);
     }).not.toThrow();
 
-    expect(Object.keys(result ?? {}).some((key) => key.startsWith('--pa-color-primary'))).toBe(
+    expect(Object.keys(result ?? {}).some((key) => key.startsWith('--ha-color-primary'))).toBe(
       false,
     );
     expect(
@@ -263,7 +263,7 @@ describe('deriveTokens — explicit hover/active/contrast overrides (Phase 2)', 
     };
     const result = deriveTokens(theme);
 
-    expect(result['--pa-color-primary-contrast']).toBe('#e0e0e0');
+    expect(result['--ha-color-primary-contrast']).toBe('#e0e0e0');
     expect(warnSpy).not.toHaveBeenCalled();
   });
 });

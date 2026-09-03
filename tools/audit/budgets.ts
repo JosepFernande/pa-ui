@@ -1,5 +1,5 @@
 /**
- * Single source of truth for pa-ui per-package gzip bundle budgets.
+ * Single source of truth for halo-ui per-package gzip bundle budgets.
  *
  * Enforced by `./bundle-check.ts` in the CI `audit` job. The `Performance
  * Budgets` Notion page mirrors these values for human readers — update them
@@ -22,7 +22,7 @@ export interface PackageBudget {
   /**
    * Path to the built ESM bundle, relative to the repo root.
    * ng-packagr emits per-lib FESM bundles at `dist/libs/<lib>/fesm2022/<name>.mjs`;
-   * the umbrella `@pa-ui/angular` barrel ships only `dist/libs/pa-ui/index.mjs`.
+   * the umbrella `@halo-ui/angular` barrel ships only `dist/libs/halo-ui/index.mjs`.
    */
   file: string;
   /** Maximum allowed gzip byte length — exceeding this fails CI (real regression territory). */
@@ -30,7 +30,7 @@ export interface PackageBudget {
   /**
    * Optional lower threshold — exceeding this prints a non-blocking ⚠️ instead
    * of failing CI. For packages expected to grow with normal feature work
-   * (e.g. `core`, which gains a `--pa-<component>-*` default set per new
+   * (e.g. `core`, which gains a `--ha-<component>-*` default set per new
    * component), this surfaces growth for review without treating "the
    * library grew because we shipped more" as the same failure class as an
    * actual bundle regression.
@@ -44,10 +44,10 @@ const KB = 1024;
 
 export const PACKAGE_BUDGETS: readonly PackageBudget[] = [
   {
-    name: '@pa-ui/core',
-    file: 'dist/libs/core/fesm2022/pa-ui-core.mjs',
+    name: '@halo-ui/core',
+    file: 'dist/libs/core/fesm2022/halo-ui-core.mjs',
     // core carries the Foundation layer (palette + typography/spacing/icon
-    // scales + a --pa-<component>-* default set per component), so it grows
+    // scales + a --ha-<component>-* default set per component), so it grows
     // with every new component by design — unlike button/input's thin
     // per-component footprint. maxGzipBytes stays a real regression guard;
     // warnGzipBytes flags that growth for review without failing CI on it.
@@ -56,20 +56,26 @@ export const PACKAGE_BUDGETS: readonly PackageBudget[] = [
     baselineBytes: 12174,
   },
   {
-    name: '@pa-ui/button',
-    file: 'dist/libs/button/fesm2022/pa-ui-button.mjs',
+    name: '@halo-ui/button',
+    file: 'dist/libs/button/fesm2022/halo-ui-button.mjs',
     maxGzipBytes: 4 * KB,
     baselineBytes: 2821,
   },
   {
-    name: '@pa-ui/input',
-    file: 'dist/libs/input/fesm2022/pa-ui-input.mjs',
+    name: '@halo-ui/input',
+    file: 'dist/libs/input/fesm2022/halo-ui-input.mjs',
     maxGzipBytes: 5 * KB,
     baselineBytes: 499,
   },
   {
-    name: '@pa-ui/angular',
-    file: 'dist/libs/pa-ui/index.mjs',
+    name: '@halo-ui/select',
+    file: 'dist/libs/select/fesm2022/halo-ui-select.mjs',
+    maxGzipBytes: 12 * KB,
+    baselineBytes: 9060,
+  },
+  {
+    name: '@halo-ui/angular',
+    file: 'dist/libs/halo-ui/index.mjs',
     maxGzipBytes: 1 * KB,
     baselineBytes: 68,
   },

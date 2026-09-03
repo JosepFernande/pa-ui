@@ -1,12 +1,12 @@
 import { DOCUMENT } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { DEFAULT_THEME, PA_THEME_TOKEN } from './theme.tokens';
-import type { PaColorVariants, PaThemeConfig, PaThemeOptions } from './theme.tokens';
-import { providePaTheme } from './theme-provider';
-import { PaThemeService } from './theme.service';
+import { DEFAULT_THEME, HA_THEME_TOKEN } from './theme.tokens';
+import type { HaColorVariants, HaThemeConfig, HaThemeOptions } from './theme.tokens';
+import { provideHaTheme } from './theme-provider';
+import { HaThemeService } from './theme.service';
 
-describe('PaThemeService', () => {
+describe('HaThemeService', () => {
   afterEach(() => {
     // `document.documentElement.style` is the same jsdom instance reused
     // across every test in this file; without restoring, `jest.spyOn`
@@ -17,19 +17,19 @@ describe('PaThemeService', () => {
 
   function configureTestBed(
     platform: 'server' | 'browser' = 'browser',
-    config?: PaThemeConfig,
-    options?: PaThemeOptions,
-  ): PaThemeService {
+    config?: HaThemeConfig,
+    options?: HaThemeOptions,
+  ): HaThemeService {
     TestBed.configureTestingModule({
-      providers: [providePaTheme(config, options), { provide: PLATFORM_ID, useValue: platform }],
+      providers: [provideHaTheme(config, options), { provide: PLATFORM_ID, useValue: platform }],
     });
-    return TestBed.inject(PaThemeService);
+    return TestBed.inject(HaThemeService);
   }
 
   describe('reading the injected snapshot', () => {
-    it('is providedIn root and resolves the injected PA_THEME_TOKEN snapshot synchronously', () => {
+    it('is providedIn root and resolves the injected HA_THEME_TOKEN snapshot synchronously', () => {
       const service = configureTestBed();
-      const token = TestBed.inject(PA_THEME_TOKEN);
+      const token = TestBed.inject(HA_THEME_TOKEN);
       expect(service.theme()).toEqual(token);
       expect(service.theme()).toEqual(DEFAULT_THEME);
     });
@@ -60,7 +60,7 @@ describe('PaThemeService', () => {
   describe('eager DOM write at construction (Task 2.3, closes design Open Question 1)', () => {
     it('writes the semantic vars for the injected snapshot at construction time, before any mutation method runs', () => {
       // Spy on the global document BEFORE any TestBed.inject(...) call.
-      // providePaTheme() eagerly constructs PaThemeService via
+      // provideHaTheme() eagerly constructs HaThemeService via
       // provideEnvironmentInitializer() (Phase 3), so TestBed's environment
       // injector resolves the service on the FIRST inject() call of ANY
       // token in this environment — a spy created after that first call
@@ -69,21 +69,24 @@ describe('PaThemeService', () => {
 
       TestBed.configureTestingModule({
         providers: [
-          providePaTheme({ colors: { primary: '#111111' } }),
+          provideHaTheme({ colors: { primary: '#111111' } }),
           { provide: PLATFORM_ID, useValue: 'browser' },
         ],
       });
 
-      TestBed.inject(PaThemeService);
+      TestBed.inject(HaThemeService);
 
+      // Legacy-first chain (Requirement: Temporary CSS Alias): the raw value
+      // is carried by --pa-primary; --ha-primary aliases it via var().
       expect(setPropertySpy).toHaveBeenCalledWith('--pa-primary', '#111111');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', 'var(--pa-primary)');
     });
 
-    it('propagates a custom error color to the signal and the --pa-error semantic var (REQ-4 transitive chain)', () => {
-      // Mirror of the primary test above: `--pa-input-error-border`,
-      // `--pa-input-error-color` and `--pa-input-error-icon-color` all
-      // resolve to `var(--pa-error)` (asserted in theme-runtime
-      // integration), so a custom error color reaching `--pa-error` in the
+    it('propagates a custom error color to the signal and the --ha-error semantic var (REQ-4 transitive chain)', () => {
+      // Mirror of the primary test above: `--ha-input-error-border`,
+      // `--ha-input-error-color` and `--ha-input-error-icon-color` all
+      // resolve to `var(--ha-error)` (asserted in theme-runtime
+      // integration), so a custom error color reaching `--ha-error` in the
       // DOM is the jsdom-feasible proof of REQ-4.
       const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');
 
@@ -91,6 +94,7 @@ describe('PaThemeService', () => {
 
       expect(service.theme().colors['error']).toBe('#8b0000');
       expect(setPropertySpy).toHaveBeenCalledWith('--pa-error', '#8b0000');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-error', 'var(--pa-error)');
     });
   });
 
@@ -107,6 +111,7 @@ describe('PaThemeService', () => {
       expect(service.theme().colors['primary']).toBe('#000000');
       expect(service.theme().colors['success']).toBe('#16a34a');
       expect(setPropertySpy).toHaveBeenCalledWith('--pa-primary', '#000000');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', 'var(--pa-primary)');
     });
 
     it('never throws on an empty overrides object (Task 2.7 — smoke, delegates to mergeTheme never-throw contract)', () => {
@@ -128,11 +133,12 @@ describe('PaThemeService', () => {
       expect(service.theme().colors['primary']).toBe('#0f0f0f');
       expect(service.theme().colors['success']).toBe('#16a34a');
       expect(setPropertySpy).toHaveBeenCalledWith('--pa-primary', '#0f0f0f');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', 'var(--pa-primary)');
     });
   });
 
   describe('reset (Req: reset Restores Bootstrap-Time Theme)', () => {
-    it('restores the bootstrap snapshot from providePaTheme (not DEFAULT_THEME) in both the signal and the DOM after overrides', () => {
+    it('restores the bootstrap snapshot from provideHaTheme (not DEFAULT_THEME) in both the signal and the DOM after overrides', () => {
       const service = configureTestBed('browser', { colors: { primary: '#123456' } });
       const document = TestBed.inject(DOCUMENT);
       const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');
@@ -142,6 +148,7 @@ describe('PaThemeService', () => {
 
       expect(service.theme().colors['primary']).toBe('#123456');
       expect(setPropertySpy).toHaveBeenCalledWith('--pa-primary', '#123456');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', 'var(--pa-primary)');
     });
   });
 
@@ -202,7 +209,9 @@ describe('PaThemeService', () => {
 
       expect(warnSpy).toHaveBeenCalled();
       expect(setPropertySpy).not.toHaveBeenCalledWith('--pa-primary', expect.anything());
+      expect(setPropertySpy).not.toHaveBeenCalledWith('--ha-primary', expect.anything());
       expect(setPropertySpy).toHaveBeenCalledWith('--pa-success', '#0f0');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-success', 'var(--pa-success)');
 
       warnSpy.mockRestore();
     });
@@ -217,7 +226,7 @@ describe('PaThemeService', () => {
     it('normalizes the default bootstrap `primary` object-shaped entry to its base hex string', () => {
       const service = configureTestBed();
       expect(service.getColor('primary')).toBe(
-        (DEFAULT_THEME.colors['primary'] as PaColorVariants).base,
+        (DEFAULT_THEME.colors['primary'] as HaColorVariants).base,
       );
     });
 
@@ -248,7 +257,9 @@ describe('PaThemeService', () => {
       expect(service.theme().colors['primary']).toBe('#334455');
       // Fully re-derived hover must NOT equal the dropped explicit hover.
       expect(setPropertySpy).not.toHaveBeenCalledWith('--pa-primary-hover', '#0a4f6b');
+      expect(setPropertySpy).not.toHaveBeenCalledWith('--ha-primary-hover', '#0a4f6b');
       expect(setPropertySpy).toHaveBeenCalledWith('--pa-primary', '#334455');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', 'var(--pa-primary)');
     });
 
     it('applyTheme with a plain string over an object entry drops explicit variants for that color (Task 4.2)', () => {
@@ -277,6 +288,7 @@ describe('PaThemeService', () => {
 
       expect(service.theme().colors['primary']).toEqual({ base: '#16709e', hover: '#0a4f6b' });
       expect(setPropertySpy).toHaveBeenCalledWith('--pa-primary-hover', '#0a4f6b');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary-hover', 'var(--pa-primary-hover)');
     });
   });
 });

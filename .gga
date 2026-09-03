@@ -46,7 +46,7 @@ STRICT_MODE="true"
 # Timeout in seconds for AI provider response
 # Default: 300 (5 minutes)
 # Increase for large changesets or slow connections
-TIMEOUT="300"
+TIMEOUT="1200"
 
 # Base branch for --pr-mode (auto-detects main/master/develop if empty)
 # Default: auto-detect

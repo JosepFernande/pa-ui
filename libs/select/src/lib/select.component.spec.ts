@@ -14,8 +14,8 @@ const { axe, toHaveNoViolations } = require('jest-axe') as {
   toHaveNoViolations: Record<string, jest.CustomMatcher>;
 };
 
-import { PaSelect } from './select.component';
-import type { PaSelectOption, PaSelectSize } from './select.types';
+import { HaSelect } from './select.component';
+import type { HaSelectOption, HaSelectSize } from './select.types';
 
 /**
  * Dispatches a synthetic `keydown` event with a working `keyCode` (task 3.2,
@@ -49,31 +49,31 @@ declare global {
   }
 }
 
-const FRUIT_OPTIONS: PaSelectOption[] = [
+const FRUIT_OPTIONS: HaSelectOption[] = [
   { label: 'Apple', value: 'apple' },
   { label: 'Banana', value: 'banana' },
   { label: 'Cherry', value: 'cherry', disabled: true },
 ];
 
 /** Distinct first letters for the typeahead scenario (`select.spec` Keyboard navigation matrix). */
-const TYPEAHEAD_OPTIONS: PaSelectOption[] = [
+const TYPEAHEAD_OPTIONS: HaSelectOption[] = [
   { label: 'Apple', value: 'apple' },
   { label: 'Banana', value: 'banana' },
   { label: 'Apricot', value: 'apricot' },
 ];
 
 /**
- * Test host that wraps PaSelect in a reactive form, matching real consumer
- * usage with `<pa-select [formControl]="control">`.
+ * Test host that wraps HaSelect in a reactive form, matching real consumer
+ * usage with `<ha-select [formControl]="control">`.
  */
 @Component({
-  selector: 'pa-select-test-host',
+  selector: 'ha-select-test-host',
   standalone: true,
-  imports: [PaSelect, ReactiveFormsModule],
+  imports: [HaSelect, ReactiveFormsModule],
   encapsulation: ViewEncapsulation.None,
   template: `
-    <pa-select
-      id="pa-select-test"
+    <ha-select
+      id="ha-select-test"
       [formControl]="control"
       [options]="options"
       [size]="size"
@@ -84,13 +84,13 @@ const TYPEAHEAD_OPTIONS: PaSelectOption[] = [
       [ariaDescribedBy]="ariaDescribedBy"
       (opened)="onOpened()"
       (closed)="onClosed()"
-    ></pa-select>
+    ></ha-select>
   `,
 })
 class TestHost {
   control = new FormControl<unknown>(null);
-  options: PaSelectOption[] = FRUIT_OPTIONS;
-  size: PaSelectSize = 'md';
+  options: HaSelectOption[] = FRUIT_OPTIONS;
+  size: HaSelectSize = 'md';
   placeholder = 'Select a fruit';
   disabled = false;
   readonly = false;
@@ -107,18 +107,18 @@ class TestHost {
 }
 
 /**
- * Standalone host WITHOUT any form directive — proves PaSelect works outside
+ * Standalone host WITHOUT any form directive — proves HaSelect works outside
  * a form (ngControl is null, no errors).
  */
 @Component({
-  selector: 'pa-select-standalone-host',
+  selector: 'ha-select-standalone-host',
   standalone: true,
-  imports: [PaSelect],
+  imports: [HaSelect],
   encapsulation: ViewEncapsulation.None,
-  template: `<pa-select [options]="options" placeholder="Pick one"></pa-select>`,
+  template: `<ha-select [options]="options" placeholder="Pick one"></ha-select>`,
 })
 class StandaloneHost {
-  options: PaSelectOption[] = FRUIT_OPTIONS;
+  options: HaSelectOption[] = FRUIT_OPTIONS;
 }
 
 /**
@@ -127,22 +127,22 @@ class StandaloneHost {
  * in README. Uses `FormsModule`, deliberately no `ReactiveFormsModule`.
  */
 @Component({
-  selector: 'pa-select-ngmodel-test-host',
+  selector: 'ha-select-ngmodel-test-host',
   standalone: true,
-  imports: [PaSelect, FormsModule],
+  imports: [HaSelect, FormsModule],
   encapsulation: ViewEncapsulation.None,
-  template: `<pa-select
+  template: `<ha-select
     [(ngModel)]="selected"
     [options]="options"
     placeholder="Select a fruit"
-  ></pa-select>`,
+  ></ha-select>`,
 })
 class NgModelTestHost {
   selected: unknown = null;
-  options: PaSelectOption[] = FRUIT_OPTIONS;
+  options: HaSelectOption[] = FRUIT_OPTIONS;
 }
 
-describe('PaSelect', () => {
+describe('HaSelect', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestHost, StandaloneHost, NgModelTestHost],
@@ -159,19 +159,19 @@ describe('PaSelect', () => {
     const host = fixture.componentInstance;
     const triggerEl = fixture.debugElement.query(By.css('[role="combobox"]'))
       .nativeElement as HTMLButtonElement;
-    const hostEl = fixture.debugElement.query(By.directive(PaSelect)).nativeElement as HTMLElement;
+    const hostEl = fixture.debugElement.query(By.directive(HaSelect)).nativeElement as HTMLElement;
     return { fixture, host, triggerEl, hostEl };
   }
 
   /**
-   * Subscribes a `jest.fn()` spy directly to the `PaSelect` instance's
+   * Subscribes a `jest.fn()` spy directly to the `HaSelect` instance's
    * `valueChange` output. Every commit-path test MUST assert this spy in
    * addition to `control.value` — `onChange` and `valueChange.emit` share a
    * code path that line coverage marks green even if one call is dropped.
    */
   function spyOnValueChange(fixture: ComponentFixture<TestHost>): jest.Mock {
     const spy = jest.fn();
-    const select = fixture.debugElement.query(By.directive(PaSelect)).componentInstance as PaSelect;
+    const select = fixture.debugElement.query(By.directive(HaSelect)).componentInstance as HaSelect;
     select.valueChange.subscribe(spy);
     return spy;
   }
@@ -188,11 +188,11 @@ describe('PaSelect', () => {
       expect(triggerEl.getAttribute('role')).toBe('combobox');
     });
 
-    it('should always have the base BEM class pa-select on the host element', () => {
+    it('should always have the base BEM class ha-select on the host element', () => {
       const { fixture, hostEl } = createTestHost();
       fixture.detectChanges();
 
-      expect(hostEl.classList.contains('pa-select')).toBe(true);
+      expect(hostEl.classList.contains('ha-select')).toBe(true);
     });
 
     it('should show the placeholder text when no value is selected', () => {
@@ -753,28 +753,28 @@ describe('PaSelect', () => {
   // Size classes
   // -----------------------------------------------------------------------
   describe('size classes', () => {
-    it('should apply pa-select--md by default', () => {
+    it('should apply ha-select--md by default', () => {
       const { fixture, host, hostEl } = createTestHost();
       host.size = 'md';
       fixture.detectChanges();
 
-      expect(hostEl.classList.contains('pa-select--md')).toBe(true);
+      expect(hostEl.classList.contains('ha-select--md')).toBe(true);
     });
 
-    it('should apply pa-select--sm when size is sm', () => {
+    it('should apply ha-select--sm when size is sm', () => {
       const { fixture, host, hostEl } = createTestHost();
       host.size = 'sm';
       fixture.detectChanges();
 
-      expect(hostEl.classList.contains('pa-select--sm')).toBe(true);
+      expect(hostEl.classList.contains('ha-select--sm')).toBe(true);
     });
 
-    it('should apply pa-select--lg when size is lg', () => {
+    it('should apply ha-select--lg when size is lg', () => {
       const { fixture, host, hostEl } = createTestHost();
       host.size = 'lg';
       fixture.detectChanges();
 
-      expect(hostEl.classList.contains('pa-select--lg')).toBe(true);
+      expect(hostEl.classList.contains('ha-select--lg')).toBe(true);
     });
 
     it('should NOT have classes for other sizes', () => {
@@ -782,8 +782,8 @@ describe('PaSelect', () => {
       host.size = 'sm';
       fixture.detectChanges();
 
-      expect(hostEl.classList.contains('pa-select--md')).toBe(false);
-      expect(hostEl.classList.contains('pa-select--lg')).toBe(false);
+      expect(hostEl.classList.contains('ha-select--md')).toBe(false);
+      expect(hostEl.classList.contains('ha-select--lg')).toBe(false);
     });
   });
 
@@ -798,7 +798,7 @@ describe('PaSelect', () => {
 
       expect(triggerEl.disabled).toBe(true);
       expect(triggerEl.getAttribute('aria-disabled')).toBe('true');
-      expect(hostEl.classList.contains('pa-select--disabled')).toBe(true);
+      expect(hostEl.classList.contains('ha-select--disabled')).toBe(true);
     });
 
     it('should remove the trigger from the tab order when disabled', () => {
@@ -846,7 +846,7 @@ describe('PaSelect', () => {
 
       expect(triggerEl.disabled).toBe(false);
       expect(triggerEl.tabIndex).toBe(0);
-      expect(hostEl.classList.contains('pa-select--readonly')).toBe(true);
+      expect(hostEl.classList.contains('ha-select--readonly')).toBe(true);
     });
 
     it('should remove the readonly class when [readonly] is false', () => {
@@ -854,7 +854,7 @@ describe('PaSelect', () => {
       host.readonly = false;
       fixture.detectChanges();
 
-      expect(hostEl.classList.contains('pa-select--readonly')).toBe(false);
+      expect(hostEl.classList.contains('ha-select--readonly')).toBe(false);
     });
   });
 
@@ -949,7 +949,7 @@ describe('PaSelect', () => {
   // Error state
   // -----------------------------------------------------------------------
   describe('error state', () => {
-    it('should apply .pa-select--error and aria-invalid="true" when the control is invalid and touched', () => {
+    it('should apply .ha-select--error and aria-invalid="true" when the control is invalid and touched', () => {
       const { fixture, host, triggerEl, hostEl } = createTestHost();
       fixture.detectChanges();
 
@@ -958,7 +958,7 @@ describe('PaSelect', () => {
       host.control.markAsTouched();
       fixture.detectChanges();
 
-      expect(hostEl.classList.contains('pa-select--error')).toBe(true);
+      expect(hostEl.classList.contains('ha-select--error')).toBe(true);
       expect(triggerEl.getAttribute('aria-invalid')).toBe('true');
     });
 
@@ -970,7 +970,7 @@ describe('PaSelect', () => {
       host.control.updateValueAndValidity();
       fixture.detectChanges();
 
-      expect(hostEl.classList.contains('pa-select--error')).toBe(false);
+      expect(hostEl.classList.contains('ha-select--error')).toBe(false);
       expect(triggerEl.getAttribute('aria-invalid')).toBeNull();
     });
 
@@ -982,12 +982,12 @@ describe('PaSelect', () => {
       host.control.updateValueAndValidity();
       host.control.markAsTouched();
       fixture.detectChanges();
-      expect(hostEl.classList.contains('pa-select--error')).toBe(true);
+      expect(hostEl.classList.contains('ha-select--error')).toBe(true);
 
       host.control.setValue('apple');
       fixture.detectChanges();
 
-      expect(hostEl.classList.contains('pa-select--error')).toBe(false);
+      expect(hostEl.classList.contains('ha-select--error')).toBe(false);
       expect(triggerEl.getAttribute('aria-invalid')).toBeNull();
     });
   });
@@ -1000,7 +1000,7 @@ describe('PaSelect', () => {
       const { fixture } = createTestHost();
       fixture.detectChanges();
 
-      const selectDebug = fixture.debugElement.query(By.directive(PaSelect));
+      const selectDebug = fixture.debugElement.query(By.directive(HaSelect));
       expect(selectDebug!.componentInstance).toBeDefined();
     });
 
@@ -1011,7 +1011,7 @@ describe('PaSelect', () => {
       host.size = 'lg';
       fixture.detectChanges();
 
-      expect(hostEl.classList.contains('pa-select--lg')).toBe(true);
+      expect(hostEl.classList.contains('ha-select--lg')).toBe(true);
     });
   });
 
@@ -1063,7 +1063,7 @@ describe('PaSelect', () => {
       // yields false aria-valid-attr-value violations. The "region" rule is
       // disabled because it flags the whole page (Karma/Jest test root has no
       // <main>/<nav> landmarks) — a full-page-layout concern unrelated to
-      // PaSelect's own accessibility contract, which is asserted below.
+      // HaSelect's own accessibility contract, which is asserted below.
       const results = await axe(document.body, { rules: { region: { enabled: false } } });
       expect(results).toHaveNoViolations();
 

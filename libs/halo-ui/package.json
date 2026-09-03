@@ -1,0 +1,54 @@
+{
+  "name": "@halo-ui/angular",
+  "version": "19.3.1",
+  "license": "MIT",
+  "description": "Accessible, token-driven Angular 19 UI component library — umbrella package",
+  "keywords": [
+    "angular",
+    "angular19",
+    "ui-library",
+    "halo-ui",
+    "component-library",
+    "theme-engine",
+    "design-system"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JosepFernande/pa-ui",
+    "directory": "libs/halo-ui"
+  },
+  "bugs": {
+    "url": "https://github.com/JosepFernande/pa-ui/issues"
+  },
+  "homepage": "https://github.com/JosepFernande/pa-ui#readme",
+  "author": "JosepFernande",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./index.mjs",
+  "types": "./index.d.mts",
+  "typings": "./index.d.mts",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./index.d.mts",
+      "default": "./index.mjs"
+    }
+  },
+  "dependencies": {
+    "@halo-ui/button": "19.3.1",
+    "@halo-ui/core": "19.3.1",
+    "@halo-ui/input": "19.3.1",
+    "@halo-ui/select": "19.3.1"
+  },
+  "peerDependencies": {
+    "@angular/common": "^19.2.0",
+    "@angular/core": "^19.2.0",
+    "@angular/cdk": "^19.2.0",
+    "@angular/forms": "^19.2.0"
+  },
+  "sideEffects": false,
+  "type": "module"
+}

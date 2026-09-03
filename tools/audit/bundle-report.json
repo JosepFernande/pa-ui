@@ -1,31 +1,39 @@
 {
-  "timestamp": "2026-07-24T21:16:11.380Z",
+  "timestamp": "2026-09-03T20:38:03.071Z",
   "results": [
     {
-      "package": "@pa-ui/core",
-      "file": "dist/libs/core/fesm2022/pa-ui-core.mjs",
-      "gzipBytes": 6743,
-      "maxGzipBytes": 8192,
-      "status": "pass"
+      "package": "@halo-ui/core",
+      "file": "dist/libs/core/fesm2022/halo-ui-core.mjs",
+      "gzipBytes": 14333,
+      "maxGzipBytes": 16384,
+      "warnGzipBytes": 8192,
+      "status": "warn"
     },
     {
-      "package": "@pa-ui/button",
-      "file": "dist/libs/button/fesm2022/pa-ui-button.mjs",
-      "gzipBytes": 2821,
+      "package": "@halo-ui/button",
+      "file": "dist/libs/button/fesm2022/halo-ui-button.mjs",
+      "gzipBytes": 3042,
       "maxGzipBytes": 4096,
       "status": "pass"
     },
     {
-      "package": "@pa-ui/input",
-      "file": "dist/libs/input/fesm2022/pa-ui-input.mjs",
-      "gzipBytes": 499,
+      "package": "@halo-ui/input",
+      "file": "dist/libs/input/fesm2022/halo-ui-input.mjs",
+      "gzipBytes": 4156,
       "maxGzipBytes": 5120,
       "status": "pass"
     },
     {
-      "package": "@pa-ui/angular",
-      "file": "dist/libs/pa-ui/index.mjs",
-      "gzipBytes": 68,
+      "package": "@halo-ui/select",
+      "file": "dist/libs/select/fesm2022/halo-ui-select.mjs",
+      "gzipBytes": 9078,
+      "maxGzipBytes": 12288,
+      "status": "pass"
+    },
+    {
+      "package": "@halo-ui/angular",
+      "file": "dist/libs/halo-ui/index.mjs",
+      "gzipBytes": 76,
       "maxGzipBytes": 1024,
       "status": "pass"
     }

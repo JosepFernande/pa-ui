@@ -1,18 +1,18 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { DEFAULT_THEME } from '../theme/theme.tokens';
-import { PA_COLOR_SCALE_STEPS } from './foundation.types';
-import { PA_FOUNDATION_PALETTE } from './foundation.tokens';
+import { HA_COLOR_SCALE_STEPS } from './foundation.types';
+import { HA_FOUNDATION_PALETTE } from './foundation.tokens';
 
 /**
  * Requirement: `deriveTokens()` Never Processes Raw Scales.
  *
  * "Raw 25-900 scale values MUST NOT be passed to `deriveTokens()` or
- * registered as `PaThemeConfig.colors` entries." (spec: foundation-tokens)
+ * registered as `HaThemeConfig.colors` entries." (spec: foundation-tokens)
  *
  * Two independent proofs:
  * 1. Runtime shape check — no `DEFAULT_THEME.colors` entry is a
- *    `PaColorScale`/`PaPartialColorScale`-shaped object (i.e. an object
+ *    `HaColorScale`/`HaPartialColorScale`-shaped object (i.e. an object
  *    whose keys are all valid scale steps).
  * 2. Static source-inspection check — `theme/theme-engine.ts` and
  *    `theme/theme.tokens.ts` (the only two producers of `ResolvedTheme`)
@@ -30,12 +30,12 @@ function isColorScaleShaped(value: unknown): boolean {
     return false;
   }
   return keys.every((key) =>
-    PA_COLOR_SCALE_STEPS.includes(Number(key) as (typeof PA_COLOR_SCALE_STEPS)[number]),
+    HA_COLOR_SCALE_STEPS.includes(Number(key) as (typeof HA_COLOR_SCALE_STEPS)[number]),
   );
 }
 
 describe('deriveTokens() never processes raw Foundation color scales', () => {
-  it('no DEFAULT_THEME.colors entry is a PaColorScale/PaPartialColorScale-shaped object', () => {
+  it('no DEFAULT_THEME.colors entry is a HaColorScale/HaPartialColorScale-shaped object', () => {
     const offendingEntries = Object.entries(DEFAULT_THEME.colors).filter(([, value]) =>
       isColorScaleShaped(value),
     );
@@ -46,7 +46,7 @@ describe('deriveTokens() never processes raw Foundation color scales', () => {
   it('sanity check: the detector actually recognizes a real Foundation scale as scale-shaped', () => {
     // Proves the detector above is not a tautology — it must flag a REAL
     // Foundation palette entry, or the previous assertion would be trivial.
-    expect(isColorScaleShaped(PA_FOUNDATION_PALETTE['dark-blue'])).toBe(true);
+    expect(isColorScaleShaped(HA_FOUNDATION_PALETTE['dark-blue'])).toBe(true);
     expect(isColorScaleShaped('#0a4f6b')).toBe(false);
     expect(isColorScaleShaped({ base: '#0a4f6b', hover: '#083f55' })).toBe(false);
   });
