@@ -2,7 +2,7 @@
   "name": "input",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/input/src",
-  "prefix": "pa",
+  "prefix": "ha",
   "projectType": "library",
   "release": {
     "version": {

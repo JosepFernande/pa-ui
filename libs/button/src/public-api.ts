@@ -1,3 +1,3 @@
-export { PaButton } from './lib/button.component';
-export type { PaButtonVariant, PaButtonSize } from './lib/button.types';
-export { PA_BUTTON_TOKENS } from './lib/button.tokens';
+export { HaButton } from './lib/button.component';
+export type { HaButtonVariant, HaButtonSize } from './lib/button.types';
+export { HA_BUTTON_TOKENS } from './lib/button.tokens';

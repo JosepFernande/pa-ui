@@ -1,16 +1,16 @@
-import { PA_COMPONENT_TOKEN_DEFAULTS } from '@pa-ui/core';
-import { PA_SELECT_TOKENS } from './select.tokens';
+import { HA_COMPONENT_TOKEN_DEFAULTS } from '@halo-ui/core';
+import { HA_SELECT_TOKENS } from './select.tokens';
 
 describe('Select Tokens', () => {
-  it('should export PA_SELECT_TOKENS with CSS variable name strings', () => {
-    expect(PA_SELECT_TOKENS).toBeDefined();
-    expect(PA_SELECT_TOKENS.bg).toBe('--pa-select-bg');
-    expect(PA_SELECT_TOKENS.panelBg).toBe('--pa-select-panel-bg');
-    expect(PA_SELECT_TOKENS.optionHoverBg).toBe('--pa-select-option-hover-bg');
+  it('should export HA_SELECT_TOKENS with CSS variable name strings', () => {
+    expect(HA_SELECT_TOKENS).toBeDefined();
+    expect(HA_SELECT_TOKENS.bg).toBe('--ha-select-bg');
+    expect(HA_SELECT_TOKENS.panelBg).toBe('--ha-select-panel-bg');
+    expect(HA_SELECT_TOKENS.optionHoverBg).toBe('--ha-select-option-hover-bg');
   });
 
   it('should include the exact 53 token keys from the design spec', () => {
-    const keys = Object.keys(PA_SELECT_TOKENS);
+    const keys = Object.keys(HA_SELECT_TOKENS);
     const required = [
       // Trigger (32)
       'bg',
@@ -77,16 +77,16 @@ describe('Select Tokens', () => {
     expect(keys).toHaveLength(53);
   });
 
-  it('should have all values prefixed with --pa-select-', () => {
-    const values = Object.values(PA_SELECT_TOKENS);
+  it('should have all values prefixed with --ha-select-', () => {
+    const values = Object.values(HA_SELECT_TOKENS);
     for (const value of values) {
-      expect(value).toMatch(/^--pa-select-/);
+      expect(value).toMatch(/^--ha-select-/);
     }
   });
 
-  it('every PA_SELECT_TOKENS value MUST be a key of PA_COMPONENT_TOKEN_DEFAULTS (foundation provides a default for every select token)', () => {
-    const defaultsKeys = Object.keys(PA_COMPONENT_TOKEN_DEFAULTS);
-    for (const cssVarName of Object.values(PA_SELECT_TOKENS)) {
+  it('every HA_SELECT_TOKENS value MUST be a key of HA_COMPONENT_TOKEN_DEFAULTS (foundation provides a default for every select token)', () => {
+    const defaultsKeys = Object.keys(HA_COMPONENT_TOKEN_DEFAULTS);
+    for (const cssVarName of Object.values(HA_SELECT_TOKENS)) {
       expect(defaultsKeys).toContain(cssVarName);
     }
   });

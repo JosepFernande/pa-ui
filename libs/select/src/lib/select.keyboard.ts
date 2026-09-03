@@ -1,20 +1,20 @@
 import { DOWN_ARROW, END, ENTER, ESCAPE, HOME, SPACE, TAB, UP_ARROW } from '@angular/cdk/keycodes';
-import type { PaSelectKeyIntent } from './select.types';
+import type { HaSelectKeyIntent } from './select.types';
 
 /** Current component state the resolver needs to decide an intent. */
-export interface PaSelectKeyState {
+export interface HaSelectKeyState {
   readonly open: boolean;
   readonly disabled: boolean;
   readonly readonly: boolean;
 }
 
 /** Duck-typed subset of `KeyboardEvent` — keeps this module DOM-independent. */
-export interface PaSelectKeyboardEventLike {
+export interface HaSelectKeyboardEventLike {
   readonly keyCode: number;
   readonly altKey?: boolean;
 }
 
-const NOOP: PaSelectKeyIntent = { kind: 'noop', preventDefault: false };
+const NOOP: HaSelectKeyIntent = { kind: 'noop', preventDefault: false };
 
 /** `0-9` and `A-Z` key codes — candidates for typeahead (SPACE is handled separately). */
 function isPrintableCharCode(keyCode: number): boolean {
@@ -30,9 +30,9 @@ function isPrintableCharCode(keyCode: number): boolean {
  * readonly/disabled short-circuit are decided here.
  */
 export function resolveSelectKeyIntent(
-  event: PaSelectKeyboardEventLike,
-  state: PaSelectKeyState,
-): PaSelectKeyIntent {
+  event: HaSelectKeyboardEventLike,
+  state: HaSelectKeyState,
+): HaSelectKeyIntent {
   if (state.disabled || state.readonly) {
     return NOOP;
   }

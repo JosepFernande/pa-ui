@@ -1,8 +1,8 @@
 /** Size preset: sm, md, or lg. */
-export type PaSelectSize = 'sm' | 'md' | 'lg';
+export type HaSelectSize = 'sm' | 'md' | 'lg';
 
 /** A single selectable option rendered inside the panel. */
-export interface PaSelectOption<T = unknown> {
+export interface HaSelectOption<T = unknown> {
   /** Text rendered for the option and matched by typeahead. */
   readonly label: string;
   /** Value committed to the bound form control / `valueChange` output. */
@@ -12,14 +12,14 @@ export interface PaSelectOption<T = unknown> {
 }
 
 /** Discriminant for the outcome of `resolveSelectKeyIntent`. */
-export type PaSelectKeyIntentKind = 'open' | 'commit' | 'cancel' | 'delegate' | 'noop';
+export type HaSelectKeyIntentKind = 'open' | 'commit' | 'cancel' | 'delegate' | 'noop';
 
 /**
  * Pure result of resolving a keyboard event against the component's current
  * state (open/closed, readonly, disabled). `preventDefault` is `false` for
  * `Tab` (D6 — focus must be allowed to move to the next tabbable element).
  */
-export interface PaSelectKeyIntent {
-  readonly kind: PaSelectKeyIntentKind;
+export interface HaSelectKeyIntent {
+  readonly kind: HaSelectKeyIntentKind;
   readonly preventDefault: boolean;
 }

@@ -1,5 +1,5 @@
 import { DEFAULT_THEME } from './theme.tokens';
-import type { PaThemeConfig, PaThemeOptions, ResolvedTheme } from './theme.tokens';
+import type { HaThemeConfig, HaThemeOptions, ResolvedTheme } from './theme.tokens';
 
 /**
  * The base color keys every default palette must provide. Used to detect
@@ -37,8 +37,8 @@ const BASE_COLOR_KEYS = [
  *   backfills.
  */
 export function mergeTheme(
-  config: PaThemeConfig | undefined,
-  options: PaThemeOptions | undefined,
+  config: HaThemeConfig | undefined,
+  options: HaThemeOptions | undefined,
   defaults: ResolvedTheme = DEFAULT_THEME,
 ): ResolvedTheme {
   if (!config) {
@@ -51,7 +51,7 @@ export function mergeTheme(
     const missingKeys = BASE_COLOR_KEYS.filter((key) => !(key in config.colors));
     if (missingKeys.length > 0) {
       console.warn(
-        `[pa-ui] providePaTheme: extendDefaults is false and config.colors is missing base color(s): ${missingKeys.join(', ')}. These keys will NOT be backfilled with defaults.`,
+        `[halo-ui] provideHaTheme: extendDefaults is false and config.colors is missing base color(s): ${missingKeys.join(', ')}. These keys will NOT be backfilled with defaults.`,
       );
     }
     return { colors: { ...config.colors } };

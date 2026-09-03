@@ -3,8 +3,8 @@
 This is the deep reference for why and how `pa-ui` tests components — the
 philosophy, the full a11y checklist, and the illustrative roadmap layer. For the
 concrete day-to-day patterns (exact `jest.config.ts` shape, CDK mocking
-snippets, required `describe` blocks, what gga flags), see the `pa-ui-testing`
-skill (`skills/pa-ui-testing/SKILL.md`) — this document does not duplicate that
+snippets, required `describe` blocks, what gga flags), see the `lib-ui-testing`
+skill (`skills/lib-ui-testing/SKILL.md`) — this document does not duplicate that
 operational checklist.
 
 ## Testing Philosophy
@@ -28,20 +28,20 @@ react, state changes correctly.
   Query the rendered DOM via `fixture.debugElement.query(By.css(...))`, not a
   separate query library.
 
-**Real example: `PaButton`**
+**Real example: `HaButton`**
 
 ```typescript
 // button.component.spec.ts (simplified — see the real file for the full suite)
 import { Component, ViewEncapsulation } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { PaButton } from './button.component';
+import { HaButton } from './button.component';
 
 @Component({
   standalone: true,
-  imports: [PaButton],
+  imports: [HaButton],
   encapsulation: ViewEncapsulation.None,
-  template: `<button pa-button [disabled]="disabled" (click)="onClick()">
+  template: `<button ha-button [disabled]="disabled" (click)="onClick()">
     {{ label }}
   </button>`,
 })
@@ -54,7 +54,7 @@ class TestHost {
   }
 }
 
-describe('PaButton', () => {
+describe('HaButton', () => {
   let fixture: ComponentFixture<TestHost>;
   let host: TestHost;
 
@@ -107,7 +107,7 @@ Test the component's visual and interactive behavior end-to-end against the real
 showcase app (`apps/showcase`) — flows like opening a dialog,
 keyboard-navigating a dropdown, closing a toast. No interaction-testing tool is
 installed today — this layer is a reference design, not a pattern in active use.
-The `PaDialogComponent` example below is illustrative: `dialog` does not exist
+The `HaDialogComponent` example below is illustrative: `dialog` does not exist
 yet as a component, and the tooling (e.g. Playwright against the showcase app's
 dialog route) is undecided.
 
@@ -155,19 +155,19 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const { axe, toHaveNoViolations } = require('jest-axe');
 
-import { PaButton } from './button.component';
+import { HaButton } from './button.component';
 
 expect.extend(toHaveNoViolations);
 
 @Component({
   standalone: true,
-  imports: [PaButton],
+  imports: [HaButton],
   encapsulation: ViewEncapsulation.None,
-  template: `<button pa-button>Save</button>`,
+  template: `<button ha-button>Save</button>`,
 })
 class TestHost {}
 
-describe('PaButton — Accessibility', () => {
+describe('HaButton — Accessibility', () => {
   let fixture: ComponentFixture<TestHost>;
 
   beforeEach(async () => {
@@ -254,7 +254,7 @@ npx nx serve showcase
 
 ## Reference
 
-- `pa-ui-testing` skill (`skills/pa-ui-testing/SKILL.md`) — operational
+- `lib-ui-testing` skill (`skills/lib-ui-testing/SKILL.md`) — operational
   patterns, CDK mocking, required `describe` blocks, gga review criteria
 - `jest.preset.cjs` — coverage thresholds and `collectCoverageFrom`
 - [Showcase](./showcase.md) — the real, centralized component playground

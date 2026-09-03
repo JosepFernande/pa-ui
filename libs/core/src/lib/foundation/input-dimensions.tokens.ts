@@ -1,9 +1,9 @@
 /**
  * Input dimension source data. Unlike Button — which has a Figma-confirmed
- * `md` row (`PA_BUTTON_FIGMA_DIMENSIONS`) and placeholder `sm`/`lg` — NO
+ * `md` row (`HA_BUTTON_FIGMA_DIMENSIONS`) and placeholder `sm`/`lg` — NO
  * Figma source exists for Input anywhere in
  * `pa-ui-default-theme-design-values`, so ALL sizes are placeholders.
- * Consumed by `component-defaults.tokens.ts` to build the `--pa-input-*`
+ * Consumed by `component-defaults.tokens.ts` to build the `--ha-input-*`
  * defaults shipped in `theme.css`.
  *
  * `minHeight` is intentionally realized downstream as `min-height` (D6): a
@@ -26,7 +26,7 @@
  * sourced from this object as provisional — including `md`, because unlike
  * Button, no size is confirmed for Input.
  */
-export const PA_INPUT_PROVISIONAL_DIMENSIONS = {
+export const HA_INPUT_PROVISIONAL_DIMENSIONS = {
   sm: {
     minHeight: '33px',
     paddingX: '12px',

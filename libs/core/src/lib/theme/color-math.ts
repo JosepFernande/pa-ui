@@ -28,7 +28,7 @@ const HEX_PATTERN = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
  */
 export function hexToRgb(hex: string): RGB {
   if (!HEX_PATTERN.test(hex)) {
-    throw new Error(`[pa-ui] Invalid hex color: "${hex}"`);
+    throw new Error(`[halo-ui] Invalid hex color: "${hex}"`);
   }
 
   const value = hex.slice(1);

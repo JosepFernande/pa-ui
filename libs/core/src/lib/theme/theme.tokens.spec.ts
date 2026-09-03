@@ -1,12 +1,12 @@
 import { InjectionToken } from '@angular/core';
 import {
   DEFAULT_THEME,
-  PA_THEME_TOKEN,
-  PA_THEME_STATE_KEY,
-  type PaColorValue,
-  type PaColorVariants,
-  type PaThemeConfig,
-  type PaThemeOptions,
+  HA_THEME_TOKEN,
+  HA_THEME_STATE_KEY,
+  type HaColorValue,
+  type HaColorVariants,
+  type HaThemeConfig,
+  type HaThemeOptions,
   type ResolvedTheme,
 } from './theme.tokens';
 
@@ -69,7 +69,7 @@ describe('theme.tokens', () => {
     it.each(VARIANT_COLOR_KEYS)(
       'has an explicit { base, hover } variant object for "%s", not a plain string',
       (key) => {
-        const entry = DEFAULT_THEME.colors[key] as PaColorVariants;
+        const entry = DEFAULT_THEME.colors[key] as HaColorVariants;
         expect(typeof entry).toBe('object');
         expect(entry.base).toMatch(HEX_COLOR);
         expect(entry.hover).toMatch(HEX_COLOR);
@@ -81,8 +81,8 @@ describe('theme.tokens', () => {
     });
 
     it('primary/secondary use the explicit inverted hover (light base / dark hover), not auto-derivation', () => {
-      const primary = DEFAULT_THEME.colors['primary'] as PaColorVariants;
-      const secondary = DEFAULT_THEME.colors['secondary'] as PaColorVariants;
+      const primary = DEFAULT_THEME.colors['primary'] as HaColorVariants;
+      const secondary = DEFAULT_THEME.colors['secondary'] as HaColorVariants;
       expect(primary.base).toBe(DEFAULT_THEME.colors['light-blue']);
       expect(primary.hover).toBe(DEFAULT_THEME.colors['dark-blue']);
       expect(secondary.base).toBe(DEFAULT_THEME.colors['light-green']);
@@ -111,31 +111,31 @@ describe('theme.tokens', () => {
     });
   });
 
-  describe('PA_THEME_TOKEN', () => {
+  describe('HA_THEME_TOKEN', () => {
     it('is an Angular InjectionToken instance', () => {
-      expect(PA_THEME_TOKEN).toBeInstanceOf(InjectionToken);
+      expect(HA_THEME_TOKEN).toBeInstanceOf(InjectionToken);
     });
 
     it('has a descriptive token name', () => {
-      expect(PA_THEME_TOKEN.toString()).toContain('pa-theme');
+      expect(HA_THEME_TOKEN.toString()).toContain('ha-theme');
     });
   });
 
-  describe('PA_THEME_STATE_KEY', () => {
-    it('is created from the "pa-theme" key string', () => {
-      expect(PA_THEME_STATE_KEY as unknown as string).toBe('pa-theme');
+  describe('HA_THEME_STATE_KEY', () => {
+    it('is created from the "ha-theme" key string', () => {
+      expect(HA_THEME_STATE_KEY as unknown as string).toBe('ha-theme');
     });
   });
 
   describe('type contracts', () => {
-    it('PaThemeConfig accepts an open colors dictionary', () => {
-      const config: PaThemeConfig = { colors: { primary: '#111111', brand: '#00ff00' } };
+    it('HaThemeConfig accepts an open colors dictionary', () => {
+      const config: HaThemeConfig = { colors: { primary: '#111111', brand: '#00ff00' } };
       expect(config.colors['brand']).toBe('#00ff00');
     });
 
-    it('PaThemeOptions makes extendDefaults an optional boolean', () => {
-      const withOption: PaThemeOptions = { extendDefaults: false };
-      const withoutOption: PaThemeOptions = {};
+    it('HaThemeOptions makes extendDefaults an optional boolean', () => {
+      const withOption: HaThemeOptions = { extendDefaults: false };
+      const withoutOption: HaThemeOptions = {};
       expect(withOption.extendDefaults).toBe(false);
       expect(withoutOption.extendDefaults).toBeUndefined();
     });
@@ -145,14 +145,14 @@ describe('theme.tokens', () => {
       expect(resolved.colors['primary']).toBe(DEFAULT_THEME.colors['primary']);
     });
 
-    it('PaThemeConfig accepts an object-shaped color entry (PaColorVariants) alongside plain strings', () => {
-      const config: PaThemeConfig = {
+    it('HaThemeConfig accepts an object-shaped color entry (HaColorVariants) alongside plain strings', () => {
+      const config: HaThemeConfig = {
         colors: {
           primary: { base: '#16709e', hover: '#0a4f6b' },
           brand: '#00ff00',
         },
       };
-      const primary = config.colors['primary'] as PaColorVariants;
+      const primary = config.colors['primary'] as HaColorVariants;
       expect(primary.base).toBe('#16709e');
       expect(primary.hover).toBe('#0a4f6b');
       expect(config.colors['brand']).toBe('#00ff00');
@@ -162,17 +162,17 @@ describe('theme.tokens', () => {
       const resolvedWithObject: ResolvedTheme = {
         colors: { primary: { base: '#16709e' } },
       };
-      expect((resolvedWithObject.colors['primary'] as PaColorVariants).base).toBe('#16709e');
+      expect((resolvedWithObject.colors['primary'] as HaColorVariants).base).toBe('#16709e');
 
       const resolved: ResolvedTheme = DEFAULT_THEME;
       expect(resolved.colors['primary']).toBe(DEFAULT_THEME.colors['primary']);
     });
 
-    it('PaColorValue is a union of string and PaColorVariants', () => {
-      const asString: PaColorValue = '#16709e';
-      const asObject: PaColorValue = { base: '#16709e', active: '#0a4f6b' };
+    it('HaColorValue is a union of string and HaColorVariants', () => {
+      const asString: HaColorValue = '#16709e';
+      const asObject: HaColorValue = { base: '#16709e', active: '#0a4f6b' };
       expect(asString).toBe('#16709e');
-      expect((asObject as PaColorVariants).base).toBe('#16709e');
+      expect((asObject as HaColorVariants).base).toBe('#16709e');
     });
   });
 });
