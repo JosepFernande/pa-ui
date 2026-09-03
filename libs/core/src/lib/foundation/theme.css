@@ -1,5 +1,5 @@
 /*
- * @halo-ui/core/theme.css — the Foundation static CSS artifact.
+ * @halolib-ui/core/theme.css — the Foundation static CSS artifact.
  *
  * Source of truth is TypeScript (`foundation.tokens.ts` + `foundation-css.ts`
  * + `component-defaults.tokens.ts` + `button-dimensions.tokens.ts`). This
@@ -18,7 +18,7 @@
  * radius/typography/icon-size, and component defaults built from them.
  *
  * Consumer setup: one import in addition to `provideHaTheme()`:
- *   @import '@halo-ui/core/theme.css';
+ *   @import '@halolib-ui/core/theme.css';
  *
  * Montserrat / Flaticon are NOT shipped here — declared by name/class only,
  * consumer responsibility (see docs/css-strategy.md).

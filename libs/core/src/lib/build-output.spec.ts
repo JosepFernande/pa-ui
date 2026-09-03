@@ -49,10 +49,10 @@ describe('Build-output verification', () => {
       expect(peers['@angular/forms']).toBeDefined();
     });
 
-    it('dist package.json peerDependencies does NOT include @halo-ui/button', () => {
+    it('dist package.json peerDependencies does NOT include @halolib-ui/button', () => {
       const pkg = readJson(path.resolve(distDir(), 'package.json'));
       const peers = pkg['peerDependencies'] as Record<string, string>;
-      expect(peers['@halo-ui/button']).toBeUndefined();
+      expect(peers['@halolib-ui/button']).toBeUndefined();
     });
 
     it('fesm2022/halo-ui-core.mjs exists', () => {
