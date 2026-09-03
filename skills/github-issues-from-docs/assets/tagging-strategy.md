@@ -50,7 +50,7 @@ Extraer tags del contenido analizando:
 **Componentes:**
 
 - `button` → si documenta componente Button
-- `input` → si documenta componente Input
+- `input-text` → si documenta componente Input
 - `select` → si documenta componente Select
 - `badge` → si documenta componente Badge (roadmap)
 - `dialog` → si documenta componente Dialog (roadmap)
@@ -144,7 +144,7 @@ Mantener en `assets/known-tags.json`:
   "tools": ["nx", "changesets", "stylelint", "eslint", "jest", "husky"],
   "components": [
     "button",
-    "input",
+    "input-text",
     "select",
     "badge",
     "dialog",

@@ -15,22 +15,22 @@ repo.
 
 ## npm Package Names
 
-| Old (`@pa-ui/*`) | New (`@halo-ui/*`) | Notes                                    |
-| ---------------- | ------------------ | ---------------------------------------- |
-| `@pa-ui/core`    | `@halo-ui/core`    | Theme Engine + Foundation CSS            |
-| `@pa-ui/button`  | `@halo-ui/button`  |                                          |
-| `@pa-ui/input`   | `@halo-ui/input`   |                                          |
-| `@pa-ui/select`  | `@halo-ui/select`  |                                          |
-| `@pa-ui/angular` | `@halo-ui/angular` | Umbrella package, re-exports the other 4 |
+| Old (`@pa-ui/*`) | New (`@halolib-ui/*`)    | Notes                                    |
+| ---------------- | ------------------------ | ---------------------------------------- |
+| `@pa-ui/core`    | `@halolib-ui/core`       | Theme Engine + Foundation CSS            |
+| `@pa-ui/button`  | `@halolib-ui/button`     |                                          |
+| `@pa-ui/input`   | `@halolib-ui/input-text` |                                          |
+| `@pa-ui/select`  | `@halolib-ui/select`     |                                          |
+| `@pa-ui/angular` | `@halolib-ui/angular`    | Umbrella package, re-exports the other 4 |
 
-`@halo-ui/*` continues the existing `19.x` version line (the semver break is
+`@halolib-ui/*` continues the existing `19.x` version line (the semver break is
 carried entirely by the package-name change, not a reset to `1.0.0`) — see the
 `lib-ui-release` skill (`skills/lib-ui-release/SKILL.md`) for the exact first
 published version.
 
 ```diff
 - npm install @pa-ui/angular @angular/cdk
-+ npm install @halo-ui/angular @angular/cdk
++ npm install @halolib-ui/angular @angular/cdk
 ```
 
 ## Selector Prefix
@@ -38,13 +38,13 @@ published version.
 Every component selector, directive-attribute selector, and BEM class moves from
 `pa-` to `ha-`.
 
-| Old                  | New                  |
-| -------------------- | -------------------- |
-| `<button pa-button>` | `<button ha-button>` |
-| `<input pa-input>`   | `<input ha-input>`   |
-| `<pa-select>`        | `<ha-select>`        |
-| `.pa-button__icon`   | `.ha-button__icon`   |
-| `.pa-button--solid`  | `.ha-button--solid`  |
+| Old                  | New                     |
+| -------------------- | ----------------------- |
+| `<button pa-button>` | `<button ha-button>`    |
+| `<input pa-input>`   | `<input ha-input-text>` |
+| `<pa-select>`        | `<ha-select>`           |
+| `.pa-button__icon`   | `.ha-button__icon`      |
+| `.pa-button--solid`  | `.ha-button--solid`     |
 
 ## CSS Custom-Property Prefix
 
@@ -60,8 +60,8 @@ Every design token moves from `--pa-*` to `--ha-*` as the canonical form.
 ### Temporary `--pa-*` alias window
 
 `libs/core` ships a temporary, DEPRECATED `--pa-*` alias of every `--ha-*`
-custom property for **one minor version** after the first `@halo-ui/*` release
-(implemented by `withLegacyAliases()` in
+custom property for **one minor version** after the first `@halolib-ui/*`
+release (implemented by `withLegacyAliases()` in
 `libs/core/src/lib/foundation/legacy-token-alias.ts`, applied to both the static
 `theme.css` output and the runtime DOM writes from `HaThemeService`).
 
@@ -111,12 +111,12 @@ consumer CSS resolves to nothing.
 | `PA_THEME_TOKEN`                   | `HA_THEME_TOKEN`                   |
 | `PA_THEME_STATE_KEY`               | `HA_THEME_STATE_KEY`               |
 | `PaButtonVariant` / `PaButtonSize` | `HaButtonVariant` / `HaButtonSize` |
-| `PaInputSize`                      | `HaInputSize`                      |
+| `PaInputSize`                      | `HaInputTextSize`                  |
 | `PaSelectOption` / `PaSelectSize`  | `HaSelectOption` / `HaSelectSize`  |
 
 ```diff
 - import { providePaTheme } from '@pa-ui/core';
-+ import { provideHaTheme } from '@halo-ui/core';
++ import { provideHaTheme } from '@halolib-ui/core';
 
   providers: [
 -   providePaTheme(),
@@ -128,29 +128,31 @@ consumer CSS resolves to nothing.
 
 `libs/core`'s dead scaffold component (`PaUiComponent`, never used by any real
 consumer) was **deleted**, not renamed to `HaUiComponent`. It is no longer
-exported from `@halo-ui/core`'s public API. There is no replacement — if your
+exported from `@halolib-ui/core`'s public API. There is no replacement — if your
 code imported `PaUiComponent`, remove the import; it served no functional
 purpose in the library.
 
 ## Deprecation Runbook (`@pa-ui/*` packages)
 
-Run immediately after all 5 `@halo-ui/*` packages report published (no
+Run immediately after all 5 `@halolib-ui/*` packages report published (no
 grace-period gap):
 
 ```bash
 for p in core button input select; do
+  new_p="$p"
+  if [ "$p" = "input" ]; then new_p="input-text"; fi
   npm deprecate "@pa-ui/$p@*" \
-    "@pa-ui/$p is deprecated and no longer maintained. Use @halo-ui/$p. Migration: https://github.com/JosepFernande/pa-ui/blob/main/docs/migration-pa-ui-to-halo-ui.md"
+    "@pa-ui/$p is deprecated and no longer maintained. Use @halolib-ui/$new_p. Migration: https://github.com/JosepFernande/pa-ui/blob/main/docs/migration-pa-ui-to-halo-ui.md"
 done
 npm deprecate "@pa-ui/angular@*" \
-  "@pa-ui/angular is deprecated and no longer maintained. Use @halo-ui/angular. Migration: https://github.com/JosepFernande/pa-ui/blob/main/docs/migration-pa-ui-to-halo-ui.md"
+  "@pa-ui/angular is deprecated and no longer maintained. Use @halolib-ui/angular. Migration: https://github.com/JosepFernande/pa-ui/blob/main/docs/migration-pa-ui-to-halo-ui.md"
 ```
 
 Verify:
 
 ```bash
 npm view @pa-ui/core deprecated
-npm view @halo-ui/angular dependencies
+npm view @halolib-ui/angular dependencies
 ```
 
 This is a manual, one-time runbook step — not a CI step — per the design
@@ -160,8 +162,8 @@ the `lib-ui-release` skill for the full pre-publish checklist this fits into.
 ## Full Checklist for Consumers
 
 1. `npm uninstall @pa-ui/angular` (or the individual `@pa-ui/*` packages you
-   depend on) and `npm install @halo-ui/angular` (or the equivalents).
-2. Update every `@pa-ui/*` import specifier to `@halo-ui/*`.
+   depend on) and `npm install @halolib-ui/angular` (or the equivalents).
+2. Update every `@pa-ui/*` import specifier to `@halolib-ui/*`.
 3. Rename every `Pa*` symbol you import to its `Ha*` equivalent (see table
    above).
 4. Rename every `pa-` component selector usage in your templates to `ha-`.

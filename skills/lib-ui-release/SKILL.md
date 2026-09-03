@@ -48,9 +48,9 @@ modo pre de changesets", consolidated by `ee53fbd`). `.changeset/pre.json` no
 longer exists. `@pa-ui/core`, `@pa-ui/button`, `@pa-ui/input`, and
 `@pa-ui/angular` shipped their last stable versions (e.g. `@pa-ui/core@19.3.1`)
 under that scope before the #139 rename;
-`@halo-ui/{core,button,input,select, angular}` continues the same `19.x` line
-(not a reset to `1.0.0`) and publishes under npm's default `latest` tag — there
-is no `alpha` tag anymore.
+`@halolib-ui/{core,button,input-text,select, angular}` continues the same `19.x`
+line (not a reset to `1.0.0`) and publishes under npm's default `latest` tag —
+there is no `alpha` tag anymore.
 
 `release.yml` still carries two branches gated on `.changeset/pre.json` existing
 (the `Check for changesets` step's array-diff, and the
@@ -66,7 +66,7 @@ job skip publish/tag/release steps without failing. Confirm directly:
 
 ```bash
 gh run list --workflow=release.yml --limit 3 --json databaseId,conclusion,createdAt
-npm view @halo-ui/<pkg> dist-tags --json   # `latest` should point at the new version
+npm view @halolib-ui/<pkg> dist-tags --json   # `latest` should point at the new version
 gh release list --limit 5                  # a GitHub Release should exist for the new tag
 ```
 
@@ -83,7 +83,7 @@ exists because of this exact bug). Fixed (#85) by replacing
 `npx changeset publish` with the per-package publish loop currently in
 `release.yml`'s `Publish to npm from dist` step, which resolves
 `dist/libs/<pkg>`, skips versions already on npm, and runs
-`npm publish "$dist_dir"` directly. `@halo-ui/angular` (`libs/halo-ui`) needs
+`npm publish "$dist_dir"` directly. `@halolib-ui/angular` (`libs/halo-ui`) needs
 its entry points maintained by hand in source (`main`, `types`, `exports["."]`)
 since its build is a plain `nx:run-commands` copy, not `ng-packagr` — see
 `validate-packages` below, which now catches this class of regression
@@ -113,7 +113,7 @@ It enforces the two guarantees that would have caught the #85 regression:
    workspaces-based source publish), validation fails explicitly — no silent
    PASS on a dist/ nobody publishes.
 
-`@halo-ui/angular` (`libs/halo-ui`) is special: its build is a plain
+`@halolib-ui/angular` (`libs/halo-ui`) is special: its build is a plain
 `nx:run-commands` copy, not ng-packagr, so **entry points AND types are
 maintained by hand** in `libs/halo-ui/package.json` (`main`, `types`/`typings`,
 `exports["."].types`) plus `src/index.mjs` + `src/index.d.mts`, all copied by
@@ -127,12 +127,12 @@ are **necessary but not sufficient**. The dist-vs-source bug above published
 green for two releases while being completely unusable — nothing in the pipeline
 ever installed the package and tried to use it. Two more real bugs (#88) were
 found the same way (against `@pa-ui/button`, pre-#139 rename — the same class of
-bug applies verbatim to `@halo-ui/button` today): the `loading` input rejects
+bug applies verbatim to `@halolib-ui/button` today): the `loading` input rejects
 the bare-attribute usage its own README documents, and no README mentions that
-`@halo-ui/core/theme.css` must be imported separately or the button renders with
-correct colors but no padding/height/font/gap/radius — `provideHaTheme()` only
-ever writes color variables at runtime; every other design token is a static CSS
-file the consumer has to opt into.
+`@halolib-ui/core/theme.css` must be imported separately or the button renders
+with correct colors but no padding/height/font/gap/radius — `provideHaTheme()`
+only ever writes color variables at runtime; every other design token is a
+static CSS file the consumer has to opt into.
 
 The pre-publish harness above checks entry points and the publish-directory
 invariant. It intentionally does NOT cover runtime/API/docs correctness — the
@@ -141,17 +141,17 @@ version-packages PR merge, or right after `release.yml` finishes publishing):
 
 ```bash
 # 1. The tarball must contain the ng-packagr build, not source
-npm pack @halo-ui/<pkg>@<new-version>
+npm pack @halolib-ui/<pkg>@<new-version>
 tar -tzf halo-ui-<pkg>-<new-version>.tgz   # expect fesm2022/*.mjs + *.d.ts, NOT src/*.ts
 tar -xzOf halo-ui-<pkg>-<new-version>.tgz package/package.json \
   | jq '{main, module, exports, typings}'  # must be non-null/populated
 
 # 2. Internal deps must point at the new version too (updateInternalDependencies)
-npm view @halo-ui/<pkg>@<new-version> dependencies --json
+npm view @halolib-ui/<pkg>@<new-version> dependencies --json
 
 # 3. A REAL consumer must actually build against it — not just resolve it.
 #    In a scratch Angular app (or a disposable one kept around for this):
-npm install @halo-ui/angular@<new-version>
+npm install @halolib-ui/angular@<new-version>
 npx ng build   # or ng serve — TS2307 here means the dist-vs-source bug regressed
 ```
 

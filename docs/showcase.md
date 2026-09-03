@@ -3,8 +3,8 @@
 `pa-ui` uses `apps/showcase` — a real Angular application — as the local
 playground for every published component. There is no separate preview tool: the
 showcase app imports each library from its public entry point
-(`@halo-ui/button`, `@halo-ui/input`, `@halo-ui/select`, ...) exactly as a
-consumer would.
+(`@halolib-ui/button`, `@halolib-ui/input-text`, `@halolib-ui/select`, ...)
+exactly as a consumer would.
 
 ## Running the showcase locally
 
@@ -29,7 +29,7 @@ theme-derived CSS custom properties (e.g. `--ha-primary`) already present on
 
 1. Create a standalone page component under
    `apps/showcase/src/app/pages/<component>-page/`, importing the library
-   component from its public entry point (`@halo-ui/<lib>`).
+   component from its public entry point (`@halolib-ui/<lib>`).
 2. Demonstrate the component's main variants, sizes, colors, and states (no need
    to cover every combination) — this is a working playground, not exhaustive
    documentation.
