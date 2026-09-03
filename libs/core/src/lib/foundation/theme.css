@@ -299,15 +299,11 @@
 
   /* sm/lg min-height sourced from HA_BUTTON_PROVISIONAL_DIMENSIONS (D5) */
   --pa-button-min-height-sm: 40px; /* provisional: pending design validation */
-  --ha-button-min-height-sm: var(
-    --pa-button-min-height-sm
-  ); /* provisional: pending design validation */
+  --ha-button-min-height-sm: var(--pa-button-min-height-sm); /* provisional */
   --pa-button-min-height-md: 48px;
   --ha-button-min-height-md: var(--pa-button-min-height-md);
   --pa-button-min-height-lg: 56px; /* provisional: pending design validation */
-  --ha-button-min-height-lg: var(
-    --pa-button-min-height-lg
-  ); /* provisional: pending design validation */
+  --ha-button-min-height-lg: var(--pa-button-min-height-lg); /* provisional */
 
   /* min-width is Figma-confirmed for ALL sizes, incl. sm/lg — never provisional */
   --pa-button-min-width-sm: 200px;
@@ -393,17 +389,11 @@
   --ha-input-font-lg: var(--pa-input-font-lg);
 
   --pa-input-min-height-sm: 33px; /* provisional: pending design validation */
-  --ha-input-min-height-sm: var(
-    --pa-input-min-height-sm
-  ); /* provisional: pending design validation */
+  --ha-input-min-height-sm: var(--pa-input-min-height-sm); /* provisional */
   --pa-input-min-height-md: 48px; /* provisional: pending design validation */
-  --ha-input-min-height-md: var(
-    --pa-input-min-height-md
-  ); /* provisional: pending design validation */
+  --ha-input-min-height-md: var(--pa-input-min-height-md); /* provisional */
   --pa-input-min-height-lg: 56px; /* provisional: pending design validation */
-  --ha-input-min-height-lg: var(
-    --pa-input-min-height-lg
-  ); /* provisional: pending design validation */
+  --ha-input-min-height-lg: var(--pa-input-min-height-lg); /* provisional */
 
   --pa-input-radius-sm: 6px; /* provisional: pending design validation */
   --ha-input-radius-sm: var(--pa-input-radius-sm); /* provisional: pending design validation */
@@ -484,17 +474,11 @@
   --ha-select-font-lg: var(--pa-select-font-lg);
 
   --pa-select-min-height-sm: 33px; /* provisional: pending design validation */
-  --ha-select-min-height-sm: var(
-    --pa-select-min-height-sm
-  ); /* provisional: pending design validation */
+  --ha-select-min-height-sm: var(--pa-select-min-height-sm); /* provisional */
   --pa-select-min-height-md: 48px; /* provisional: pending design validation */
-  --ha-select-min-height-md: var(
-    --pa-select-min-height-md
-  ); /* provisional: pending design validation */
+  --ha-select-min-height-md: var(--pa-select-min-height-md); /* provisional */
   --pa-select-min-height-lg: 56px; /* provisional: pending design validation */
-  --ha-select-min-height-lg: var(
-    --pa-select-min-height-lg
-  ); /* provisional: pending design validation */
+  --ha-select-min-height-lg: var(--pa-select-min-height-lg); /* provisional */
 
   --pa-select-radius-sm: 6px; /* provisional: pending design validation */
   --ha-select-radius-sm: var(--pa-select-radius-sm); /* provisional: pending design validation */
@@ -542,9 +526,7 @@
   --pa-select-panel-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   --ha-select-panel-shadow: var(--pa-select-panel-shadow);
   --pa-select-panel-max-height: 320px; /* v1 literal, no foundation scale match */
-  --ha-select-panel-max-height: var(
-    --pa-select-panel-max-height
-  ); /* v1 literal, no foundation scale match */
+  --ha-select-panel-max-height: var(--pa-select-panel-max-height);
   --pa-select-panel-padding-y: var(--gap-xs);
   --ha-select-panel-padding-y: var(--pa-select-panel-padding-y);
   --pa-select-panel-offset: var(--gap-xs);
@@ -559,9 +541,7 @@
   --pa-select-option-padding-y: var(--spacing-sm);
   --ha-select-option-padding-y: var(--pa-select-option-padding-y);
   --pa-select-option-min-height: 40px; /* v1 literal, no foundation scale match */
-  --ha-select-option-min-height: var(
-    --pa-select-option-min-height
-  ); /* v1 literal, no foundation scale match */
+  --ha-select-option-min-height: var(--pa-select-option-min-height);
   --pa-select-option-font-size: var(--font-size-body);
   --ha-select-option-font-size: var(--pa-select-option-font-size);
   --pa-select-option-hover-bg: var(--neutral-200);
