@@ -5,7 +5,7 @@ import { rule as noRxjsLocalState } from './rules/no-rxjs-local-state.js';
 
 const plugin = {
   meta: {
-    name: '@halo-ui/eslint-plugin',
+    name: '@halolib-ui/eslint-plugin',
     version: '1.0.0',
   },
   rules: {

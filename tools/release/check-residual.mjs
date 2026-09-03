@@ -59,7 +59,7 @@ const FILE_ALLOWLIST_EXACT = new Set([
   'libs/core/src/lib/theme/theme.service.spec.ts',
   'libs/core/src/lib/theme/theme-provider.spec.ts',
   'libs/button/src/lib/theme-runtime.integration.spec.ts',
-  'libs/input/src/lib/theme-runtime.integration.spec.ts',
+  'libs/input-text/src/lib/theme-runtime.integration.spec.ts',
   'libs/select/src/lib/theme-runtime.integration.spec.ts',
   'docs/migration-pa-ui-to-halo-ui.md',
   // Historical-rename narrative, deliberately worded with "formerly"/

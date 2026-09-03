@@ -36,7 +36,7 @@ export default tseslint.config(
           enforceBuildableLibDependency: true,
           allowCircularSelfDependency: false,
           banTransitiveDependencies: true,
-          checkDynamicDependenciesExceptions: ['^@angular/.*', '^@halo-ui/.*'],
+          checkDynamicDependenciesExceptions: ['^@angular/.*', '^@halolib-ui/.*'],
           allow: [],
           depConstraints: [
             {

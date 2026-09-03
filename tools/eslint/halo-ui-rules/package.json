@@ -1,5 +1,5 @@
 {
-  "name": "@halo-ui/eslint-plugin",
+  "name": "@halolib-ui/eslint-plugin",
   "version": "1.0.0",
   "private": true,
   "type": "module",
