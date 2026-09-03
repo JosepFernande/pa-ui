@@ -2,7 +2,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 
 /** Reads the actual shipped Foundation stylesheet — the same artifact a real
- * consumer app imports once (`@halo-ui/core/theme.css`). Resolved from
+ * consumer app imports once (`@halolib-ui/core/theme.css`). Resolved from
  * source (not `dist/`) so this test exercises the file this repo edits. */
 function readFoundationThemeCss(): string {
   return fs.readFileSync(
@@ -11,9 +11,9 @@ function readFoundationThemeCss(): string {
   );
 }
 
-/** Reads the actual `input.component.css` source (not a mock). */
+/** Reads the actual `input-text.component.css` source (not a mock). */
 function readInputComponentCss(): string {
-  return fs.readFileSync(path.resolve(__dirname, 'input.component.css'), 'utf-8');
+  return fs.readFileSync(path.resolve(__dirname, 'input-text.component.css'), 'utf-8');
 }
 
 /**
@@ -39,7 +39,7 @@ describe('Theme runtime integration — Foundation theme.css ships Input default
     styleEl.remove();
   });
 
-  it('declares the key --ha-input-* defaults a consumer gets from @halo-ui/core/theme.css, reachable through the legacy --pa-* alias (#139)', () => {
+  it('declares the key --ha-input-* defaults a consumer gets from @halolib-ui/core/theme.css, reachable through the legacy --pa-* alias (#139)', () => {
     const rootStyle = getComputedStyle(document.documentElement);
 
     const entries: Array<[legacy: string, value: string]> = [
@@ -80,12 +80,12 @@ describe('Theme runtime integration — Foundation theme.css ships Input default
   });
 });
 
-describe('Theme runtime integration — input.component.css wires per-size tokens', () => {
+describe('Theme runtime integration — input-text.component.css wires per-size tokens', () => {
   it('wires padding, min-height and font-size for every size to the matching per-size custom property', () => {
     const css = readInputComponentCss();
 
     const sizeBlock = (size: 'sm' | 'md' | 'lg'): string => {
-      const match = css.match(new RegExp(`\\.ha-input--${size}\\s*\\{([^}]*)\\}`));
+      const match = css.match(new RegExp(`\\.ha-input-text--${size}\\s*\\{([^}]*)\\}`));
       expect(match).not.toBeNull();
       return match![1];
     };
@@ -101,7 +101,7 @@ describe('Theme runtime integration — input.component.css wires per-size token
 
   it('wires the focused-state rule to --ha-input-focus-border only (no box-shadow ring)', () => {
     const css = readInputComponentCss();
-    const focusBlock = css.match(/\.ha-input--focused\s*\{([^}]*)\}/);
+    const focusBlock = css.match(/\.ha-input-text--focused\s*\{([^}]*)\}/);
     expect(focusBlock).not.toBeNull();
     expect(focusBlock![1]).toMatch(/border-color:\s*var\(--ha-input-focus-border\)/);
     expect(focusBlock![1]).not.toMatch(/box-shadow/);
