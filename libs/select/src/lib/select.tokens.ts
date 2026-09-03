@@ -1,7 +1,7 @@
 /**
  * `--ha-select-*` component tokens (53 keys), following the same
  * camelCase-key -> kebab-name convention and per-size suffix scheme as
- * `HA_INPUT_TOKENS`. Grouped as trigger (32), panel (7), and option (14).
+ * `HA_INPUT_TEXT_TOKENS`. Grouped as trigger (32), panel (7), and option (14).
  */
 export const HA_SELECT_TOKENS = {
   // Trigger (32)

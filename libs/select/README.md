@@ -1,4 +1,4 @@
-# @halo-ui/select
+# @halolib-ui/select
 
 Accessible, token-driven Angular 19 single-select combobox with forms
 integration (issue #125).
@@ -7,7 +7,7 @@ integration (issue #125).
 
 - **Tokens first** — Every value comes from `var(--ha-select-*)` CSS custom
   properties. Zero hardcoded colors, spacing, or radii.
-  `@halo-ui/core/theme.css` ships defaults for all 53 `HA_SELECT_TOKENS`
+  `@halolib-ui/core/theme.css` ships defaults for all 53 `HA_SELECT_TOKENS`
   entries, so no tokens need to be authored by the consumer.
 - **Standalone only** — No NgModule. Component is `standalone: true`.
 - **Signals first** — All inputs are signals; derived state via `computed()`.
@@ -28,9 +28,9 @@ Import the foundation theme once (provides the token defaults) and call
 `provideHaTheme()` for the runtime color layer:
 
 ```ts
-import { provideHaTheme } from '@halo-ui/core';
+import { provideHaTheme } from '@halolib-ui/core';
 // styles.scss
-// @import '@halo-ui/core/theme.css';
+// @import '@halolib-ui/core/theme.css';
 
 bootstrapApplication(App, {
   providers: [provideHaTheme()],
