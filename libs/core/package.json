@@ -1,5 +1,5 @@
 {
-  "name": "@halo-ui/core",
+  "name": "@halolib-ui/core",
   "version": "19.3.1",
   "license": "MIT",
   "description": "Accessible, token-driven Angular 19 UI component library with Theme Engine",

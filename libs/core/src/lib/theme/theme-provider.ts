@@ -32,7 +32,7 @@ function freezeSnapshot(theme: ResolvedTheme): ResolvedTheme {
 }
 
 /**
- * Registers the pa-ui theme engine at application bootstrap
+ * Registers the halo-ui theme engine at application bootstrap
  * (Requirement: Bootstrap Registration).
  *
  * - Called with no arguments, registers the full `DEFAULT_THEME` palette.
