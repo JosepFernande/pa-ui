@@ -39,23 +39,21 @@ describe('Theme runtime integration — Foundation theme.css ships Input default
     styleEl.remove();
   });
 
-  it('declares the key --ha-input-* defaults a consumer gets from @halolib-ui/core/theme.css, reachable through the legacy --pa-* alias (#139)', () => {
+  it('declares the key --ha-input-* defaults a consumer gets from @halolib-ui/core/theme.css', () => {
     const rootStyle = getComputedStyle(document.documentElement);
 
-    const entries: Array<[legacy: string, value: string]> = [
-      ['--pa-input-bg', 'var(--neutral-50)'],
-      ['--pa-input-error-border', 'var(--ha-error)'],
-      ['--pa-input-error-color', 'var(--ha-error)'],
-      ['--pa-input-error-icon-color', 'var(--ha-error)'],
-      ['--pa-input-radius-sm', '6px'],
-      ['--pa-input-radius-md', '4px'],
-      ['--pa-input-radius-lg', '8px'],
+    const entries: Array<[key: string, value: string]> = [
+      ['--ha-input-bg', 'var(--neutral-50)'],
+      ['--ha-input-error-border', 'var(--ha-error)'],
+      ['--ha-input-error-color', 'var(--ha-error)'],
+      ['--ha-input-error-icon-color', 'var(--ha-error)'],
+      ['--ha-input-radius-sm', '6px'],
+      ['--ha-input-radius-md', '4px'],
+      ['--ha-input-radius-lg', '8px'],
     ];
 
-    for (const [legacyKey, value] of entries) {
-      const haKey = '--ha-' + legacyKey.slice('--pa-'.length);
-      expect(rootStyle.getPropertyValue(legacyKey).trim()).toBe(value);
-      expect(rootStyle.getPropertyValue(haKey).trim()).toBe(`var(${legacyKey})`);
+    for (const [key, value] of entries) {
+      expect(rootStyle.getPropertyValue(key).trim()).toBe(value);
     }
   });
 

@@ -1,19 +1,19 @@
 ---
 name: lib-ui-architecture
 description:
-  'Trigger: pa-ui, halo-ui, Angular UI library, ha- components, design tokens,
-  theming, sdd design spec tasks apply verify. Apply the six hard rules and
-  three-layer token system to every halo-ui artifact.'
+  'Trigger: halo-ui, Angular UI library, ha- components, design tokens, theming,
+  sdd design spec tasks apply verify. Apply the six hard rules and three-layer
+  token system to every halo-ui artifact.'
 license: MIT
 metadata:
   author: JosepFernande
   version: '1.0'
-  project: pa-ui
+  project: halo-ui
 ---
 
 ## Activation Contract
 
-Load this skill whenever work targets the `pa-ui` repository: any
+Load this skill whenever work targets the `halo-ui` repository: any
 implementation, refactor, or review of Angular components, theming, or tokens.
 This applies **unconditionally**, regardless of whether the collaborator uses
 the SDD workflow — the architecture rules below are a project constraint, not a
@@ -66,16 +66,6 @@ Components consume ONLY semantic and component tokens. Foundation tokens are
 off-limits inside components. The Theme Engine (`provideHaTheme()`) auto-derives
 hover, active, and contrast variants from user-registered colors.
 
-### Transition (#139)
-
-`libs/core`, `libs/button`, `libs/input-text`, and `libs/select` have migrated
-their selectors, CSS custom properties, and exported TypeScript symbols from the
-`pa-`/`--pa-*`/`Pa*` naming to `ha-`/`--ha-*`/`Ha*` (halo-ui rebrand). `--pa-*`
-ships as a DEPRECATED alias of `--ha-*` for one minor version — see
-`docs/migration-pa-ui-to-halo-ui.md`. The npm package scope (`@pa-ui/*` →
-`@halolib-ui/*`) and this skill's own folder name migrate in a later slice; do
-not assume they have moved yet from this note alone.
-
 ## Decision Gates
 
 | Situation                                                    | Rule                                                                               |
@@ -90,7 +80,7 @@ not assume they have moved yet from this note alone.
 
 ## Execution Steps
 
-1. Confirm the change targets the `pa-ui` repo. If the collaborator is running
+1. Confirm the change targets the `halo-ui` repo. If the collaborator is running
    an SDD phase, identify which artifact you own for that phase (spec, design,
    task, implementation, verification). If not, apply the rules directly to the
    implementation, refactor, or review at hand — no phase breakdown required.
@@ -122,4 +112,4 @@ Every phase or direct implementation must return:
 ## References
 
 - Architecture & Foundation: `../../docs/architecture-and-foundation.md`
-- Repo: `https://github.com/JosepFernande/pa-ui`
+- Repo: `https://github.com/JosepFernande/halo-ui`

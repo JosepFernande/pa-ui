@@ -252,8 +252,7 @@ describe('provideHaTheme', () => {
       // TestBed.inject(HaThemeService) explicitly.
       TestBed.inject(EnvironmentInjector);
 
-      expect(setPropertySpy).toHaveBeenCalledWith('--pa-primary', '#111111');
-      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', 'var(--pa-primary)');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', '#111111');
     });
 
     it('also constructs the service on the server without any document access (Task 3.4 — triangulation)', () => {

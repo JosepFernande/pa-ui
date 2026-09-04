@@ -57,39 +57,10 @@ Every design token moves from `--pa-*` to `--ha-*` as the canonical form.
 | `--pa-button-bg`          | `--ha-button-bg`          |
 | `--pa-input-error-border` | `--ha-input-error-border` |
 
-### Temporary `--pa-*` alias window
-
-`libs/core` ships a temporary, DEPRECATED `--pa-*` alias of every `--ha-*`
-custom property for **one minor version** after the first `@halolib-ui/*`
-release (implemented by `withLegacyAliases()` in
-`libs/core/src/lib/foundation/legacy-token-alias.ts`, applied to both the static
-`theme.css` output and the runtime DOM writes from `HaThemeService`).
-
-**Chain shape** (legacy-first — the value lives on `--pa-*`, `--ha-*` aliases it
-via `var()`):
-
-```css
---pa-primary: #16709e;
---ha-primary: var(--pa-primary);
-```
-
-This supports BOTH directions during the window:
-
-- **Reading** `var(--pa-primary)` still resolves to the real value.
-- **Overriding** `--pa-primary` at `:root`/`html` flows into `--ha-primary`
-  through the `var()` indirection.
-
-**Known limitation**: a legacy override applied at a _scoped_ selector
-(`.my-card { --pa-button-bg: red }`) does **not** reach `--ha-button-bg`,
-because `--ha-button-bg` was already computed at `:root`. Only `:root`/
-`html`-level legacy overrides are honored. If you need a scoped override, target
-`--ha-*` directly instead of the deprecated `--pa-*` alias.
-
-**Removal**: the alias is removed in the following minor release (`19.4.0`) — a
-one-file change (`legacy-token-alias.ts` deleted, the two wrapper call sites
-unwrapped, `theme.css` regenerated). After that release, `--pa-*` custom
-properties are no longer defined and any remaining `var(--pa-*)` reference in
-consumer CSS resolves to nothing.
+**No transition alias**: `--pa-*` custom properties are never defined by
+`@halolib-ui/*` — there was no temporary alias window. Rename every `--pa-*`
+reference in your own CSS to its `--ha-*` equivalent before adopting
+`@halolib-ui/*`.
 
 ```diff
   .my-button {
@@ -167,7 +138,6 @@ the `lib-ui-release` skill for the full pre-publish checklist this fits into.
 3. Rename every `Pa*` symbol you import to its `Ha*` equivalent (see table
    above).
 4. Rename every `pa-` component selector usage in your templates to `ha-`.
-5. Rename every `--pa-*` custom-property reference in your own CSS to `--ha-*`
-   (the alias window gives you one minor version of runway, but don't rely on it
-   past that).
+5. Rename every `--pa-*` custom-property reference in your own CSS to `--ha-*` —
+   there is no alias window; `--pa-*` is never defined.
 6. If you imported `PaUiComponent`, remove the import — it has no replacement.
