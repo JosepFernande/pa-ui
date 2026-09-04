@@ -55,8 +55,8 @@ describe('Build-output verification', () => {
       expect(peers['@halolib-ui/button']).toBeUndefined();
     });
 
-    it('fesm2022/halo-ui-core.mjs exists', () => {
-      const mjsPath = path.resolve(distDir(), 'fesm2022', 'halo-ui-core.mjs');
+    it('fesm2022/halolib-ui-core.mjs exists', () => {
+      const mjsPath = path.resolve(distDir(), 'fesm2022', 'halolib-ui-core.mjs');
       expect(fs.existsSync(mjsPath)).toBe(true);
     });
 
@@ -90,14 +90,14 @@ describe('Build-output verification', () => {
 
   describe('tree-shaking proxy', () => {
     it('fesm2022 bundle does not import @angular/cdk', () => {
-      const mjsPath = path.resolve(distDir(), 'fesm2022', 'halo-ui-core.mjs');
+      const mjsPath = path.resolve(distDir(), 'fesm2022', 'halolib-ui-core.mjs');
       const content = fs.readFileSync(mjsPath, 'utf-8');
       expect(content).not.toContain("from '@angular/cdk'");
       expect(content).not.toContain('from "@angular/cdk"');
     });
 
     it('fesm2022 bundle does not import @angular/forms', () => {
-      const mjsPath = path.resolve(distDir(), 'fesm2022', 'halo-ui-core.mjs');
+      const mjsPath = path.resolve(distDir(), 'fesm2022', 'halolib-ui-core.mjs');
       const content = fs.readFileSync(mjsPath, 'utf-8');
       expect(content).not.toContain("from '@angular/forms'");
       expect(content).not.toContain('from "@angular/forms"');
