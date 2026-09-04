@@ -143,10 +143,26 @@ class NgModelTestHost {
 }
 
 describe('HaSelect', () => {
+  // Every fixture created via `createTestHost()` or directly in a test is
+  // tracked here and destroyed in `afterEach` below — the file never
+  // declared a describe-scoped `fixture` (each `it`/`createTestHost` call
+  // creates its own local one), so destruction is promoted to this
+  // module-level list instead of a single `fixture` variable. Without an
+  // explicit `fixture.destroy()`, the `fakeAsync`/`tick(200)` typeahead test
+  // relies entirely on TestBed's implicit teardown to run `destroyRef.onDestroy()`
+  // (select.component.ts) and unsubscribe the CDK `ActiveDescendantKeyManager`
+  // debounce timer.
+  const activeFixtures: ComponentFixture<unknown>[] = [];
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestHost, StandaloneHost, NgModelTestHost],
     }).compileComponents();
+  });
+
+  afterEach(() => {
+    activeFixtures.forEach((fixture) => fixture.destroy());
+    activeFixtures.length = 0;
   });
 
   function createTestHost(): {
@@ -156,6 +172,7 @@ describe('HaSelect', () => {
     hostEl: HTMLElement;
   } {
     const fixture = TestBed.createComponent(TestHost);
+    activeFixtures.push(fixture);
     const host = fixture.componentInstance;
     const triggerEl = fixture.debugElement.query(By.css('[role="combobox"]'))
       .nativeElement as HTMLButtonElement;
@@ -907,6 +924,7 @@ describe('HaSelect', () => {
 
     it('should work outside a form control (standalone host, ngControl null, no errors)', () => {
       const fixture = TestBed.createComponent(StandaloneHost);
+      activeFixtures.push(fixture);
       fixture.detectChanges();
 
       const triggerEl = fixture.nativeElement.querySelector(
@@ -925,6 +943,7 @@ describe('HaSelect', () => {
   describe('template-driven forms (ngModel)', () => {
     it('round-trips [(ngModel)]: selecting an option updates the bound property and the trigger reflects the new label', () => {
       const fixture = TestBed.createComponent(NgModelTestHost);
+      activeFixtures.push(fixture);
       const host = fixture.componentInstance;
       fixture.detectChanges();
 
