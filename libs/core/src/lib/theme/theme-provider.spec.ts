@@ -11,6 +11,7 @@ const mergeThemeMock = mergeTheme as jest.MockedFunction<typeof mergeTheme>;
 
 describe('provideHaTheme', () => {
   let warnSpy: jest.SpyInstance;
+  let originalDocumentElementStyle: string | null;
 
   beforeEach(() => {
     warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
@@ -19,11 +20,22 @@ describe('provideHaTheme', () => {
     // (spy on call args) or the fail-safe throw path.
     const actual = jest.requireActual<typeof import('./theme-engine')>('./theme-engine');
     mergeThemeMock.mockImplementation(actual.mergeTheme);
+    // `document.documentElement.style` is the same jsdom instance reused
+    // across every test in this file; provideHaTheme() eagerly constructs
+    // HaThemeService (browser platform), which writes CSS custom properties
+    // directly onto it, so it must be captured/restored per test.
+    originalDocumentElementStyle = document.documentElement.getAttribute('style');
   });
 
   afterEach(() => {
     warnSpy.mockRestore();
     jest.clearAllMocks();
+
+    if (originalDocumentElementStyle === null) {
+      document.documentElement.removeAttribute('style');
+    } else {
+      document.documentElement.setAttribute('style', originalDocumentElementStyle);
+    }
   });
 
   function configureTestBed(
