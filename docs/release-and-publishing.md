@@ -129,11 +129,11 @@ Each lib's `package.json` needs specific fields for npm publishing:
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JosepFernande/pa-ui.git",
+    "url": "https://github.com/JosepFernande/halo-ui.git",
     "directory": "libs/button"
   },
-  "bugs": { "url": "https://github.com/JosepFernande/pa-ui/issues" },
-  "homepage": "https://github.com/JosepFernande/pa-ui#readme",
+  "bugs": { "url": "https://github.com/JosepFernande/halo-ui/issues" },
+  "homepage": "https://github.com/JosepFernande/halo-ui#readme",
   "publishConfig": { "access": "public" },
   "peerDependencies": {
     "@angular/common": "^19.2.0",
@@ -256,7 +256,7 @@ Changesets auto-generates `CHANGELOG.md` per package during `changeset version`:
 ### Minor Changes
 
 - Add the `size` input to the button component.
-  ([#12](https://github.com/JosepFernande/pa-ui/pull/12))
+  ([#12](https://github.com/JosepFernande/halo-ui/pull/12))
 
 ### Patch Changes
 

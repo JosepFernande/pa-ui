@@ -1,11 +1,11 @@
-# pa-ui
+# halo-ui
 
 > Librería de componentes Angular 19 accesible y basada en tokens, con una
 > arquitectura de variables CSS de 3 capas.
 
 [![npm version](https://img.shields.io/npm/v/@halolib-ui/angular)](https://www.npmjs.com/package/@halolib-ui/angular)
-[![license](https://img.shields.io/github/license/JosepFernande/pa-ui)](./LICENSE)
-[![build](https://img.shields.io/github/actions/workflow/status/JosepFernande/pa-ui/ci.yml?label=build)](https://github.com/JosepFernande/pa-ui/actions)
+[![license](https://img.shields.io/github/license/JosepFernande/halo-ui)](./LICENSE)
+[![build](https://img.shields.io/github/actions/workflow/status/JosepFernande/halo-ui/ci.yml?label=build)](https://github.com/JosepFernande/halo-ui/actions)
 
 ---
 
@@ -195,7 +195,7 @@ automáticamente los estados de hover, active y disabled.
 
 ## Accesibilidad
 
-Todo componente de pa-ui está construido con la accesibilidad como prioridad:
+Todo componente de halo-ui está construido con la accesibilidad como prioridad:
 
 - **Navegación por teclado** — Todos los elementos interactivos son alcanzables
   y operables por teclado. `FocusMonitor` de CDK rastrea el origen del foco para
@@ -218,7 +218,7 @@ Todo componente de pa-ui está construido con la accesibilidad como prioridad:
 ## Estructura del proyecto
 
 ```
-pa-ui/
+halo-ui/
 ├── libs/
 │   ├── button/          # @halolib-ui/button — componente HaButton
 │   ├── input-text/      # @halolib-ui/input-text — componente HaInputText
@@ -240,7 +240,7 @@ pa-ui/
 `docs/` en este repo es la fuente de verdad para arquitectura, testing y
 procesos, y la única garantizada disponible para cualquiera (o cualquier agente
 de IA) que clone el repo sin acceso a red. La
-[wiki del proyecto](https://github.com/JosepFernande/pa-ui/wiki) se mantiene
+[wiki del proyecto](https://github.com/JosepFernande/halo-ui/wiki) se mantiene
 como espejo histórico de acá en adelante; los cambios nuevos de documentación
 entran primero en `docs/`.
 

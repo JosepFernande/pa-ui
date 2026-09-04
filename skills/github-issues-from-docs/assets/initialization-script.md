@@ -82,7 +82,7 @@ function generateTags(content: string, file: string): string[] {
     tags.add('css-variables');
   if (contentLower.includes('viewencapsulation'))
     tags.add('view-encapsulation');
-  if (contentLower.includes('providepatheme')) tags.add('providePaTheme');
+  if (contentLower.includes('providehatheme')) tags.add('provideHaTheme');
   if (contentLower.includes('themeservice')) tags.add('ThemeService');
   if (contentLower.includes('controlvalueaccessor')) tags.add('cva');
   if (contentLower.includes('nx')) tags.add('nx');

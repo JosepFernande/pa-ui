@@ -1,4 +1,4 @@
-# Cómo contribuir a halo-ui (ex pa-ui)
+# Cómo contribuir a halo-ui
 
 ¡Gracias por tu interés en contribuir! Este documento cubre el flujo de
 desarrollo, el proceso de PR, las convenciones de changesets y el proceso de

@@ -1,6 +1,6 @@
 # Components
 
-Catalog of `pa-ui` components. Each row links to the package folder under
+Catalog of `halo-ui` components. Each row links to the package folder under
 `libs/`, where the source code, the package `README.md`, and usage examples
 live.
 

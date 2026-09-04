@@ -1,7 +1,7 @@
 # @halolib-ui/core
 
-Theming foundation for pa-ui components: design tokens, `provideHaTheme()`, and
-the static Foundation/Semantic/Component CSS layer.
+Theming foundation for halo-ui components: design tokens, `provideHaTheme()`,
+and the static Foundation/Semantic/Component CSS layer.
 
 ## Setup
 

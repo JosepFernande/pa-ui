@@ -19,7 +19,7 @@ revisar US-11
   → Criterios: 11 criterios encontrados en el body
 
 [2/6] Determinando tema del issue...
-  → Keywords extraídas: "Theme Engine", "providePaTheme", "colores", "tokens"
+  → Keywords extraídas: "Theme Engine", "provideHaTheme", "colores", "tokens"
   → Tema: Theming, tokens, colores personalizados
 
 [3/6] Cargando assets/document-index.json...
@@ -28,7 +28,7 @@ revisar US-11
 
 [4/6] Filtrando archivos relevantes...
   → Match de keywords vs tags:
-    - "theming-deep-dive.md" → score: 0.8 (tags: theme-engine, providePaTheme, colores)
+    - "theming-deep-dive.md" → score: 0.8 (tags: theme-engine, provideHaTheme, colores)
     - "css-strategy.md" → score: 0.5 (tags: tokens, theme-engine)
     - "architecture-and-foundation.md" → score: 0.4 (tags: tokens, arquitectura)
   → Archivos seleccionados: 3
@@ -42,7 +42,7 @@ revisar US-11
 [6/6] Analizando issue contra documentación...
   → Comparando criterios del issue #11 vs documentación:
     ✓ Theme Engine centralizado en core/theme
-    ✓ providePaTheme() expuesto
+    ✓ provideHaTheme() expuesto
     ✓ Default theme funcional
     ✗ Falta: algoritmo de derivación HSL (hover +8%, active -8%, contrast WCAG)
     ✗ Falta: ThemeService runtime API (applyTheme, overrideColor, reset)
@@ -140,9 +140,9 @@ crear issue para componente Avatar
     - Input src (URL de imagen)
     - Input initials (fallback cuando no hay imagen)
     - ViewEncapsulation.None
-    - Clases CSS con prefijo pa- (BEM)
+    - Clases CSS con prefijo ha- (BEM)
     - Solo tokens CSS
-    - Compatible con providePaTheme()
+    - Compatible con provideHaTheme()
     - Signals + OnPush
     - Tipado sin any
     - Archivo bajo 400 líneas

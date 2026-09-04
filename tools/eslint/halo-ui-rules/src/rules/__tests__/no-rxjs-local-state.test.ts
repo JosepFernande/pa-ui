@@ -18,7 +18,7 @@ ruleTester.run('no-rxjs-local-state', rule, {
 import { Component, signal, computed } from '@angular/core';
 
 @Component({
-  selector: 'pa-test',
+  selector: 'ha-test',
   template: '<div>{{ doubled() }}</div>',
 })
 export class TestComponent {
@@ -35,7 +35,7 @@ import { Component } from '@angular/core';
 import { map, filter } from 'rxjs/operators';
 
 @Component({
-  selector: 'pa-test',
+  selector: 'ha-test',
   template: '<div>hello</div>',
 })
 export class TestComponent {}
@@ -73,7 +73,7 @@ import { Component } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
-  selector: 'pa-test',
+  selector: 'ha-test',
   template: '<div>hello</div>',
 })
 export class TestComponent {
@@ -94,7 +94,7 @@ import { Component } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'pa-test',
+  selector: 'ha-test',
   template: '<div>hello</div>',
 })
 export class TestComponent {
@@ -115,7 +115,7 @@ import { Component } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
 @Component({
-  selector: 'pa-test',
+  selector: 'ha-test',
   template: '<div>hello</div>',
 })
 export class TestComponent {

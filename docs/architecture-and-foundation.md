@@ -1,6 +1,6 @@
 # Architecture & Foundation
 
-This is the deep reference for `pa-ui`'s architecture: the project vision, the
+This is the deep reference for `halo-ui`'s architecture: the project vision, the
 monorepo layout, the token system, and the design constraints behind every
 component. For the day-to-day operational contract (the six hard rules, decision
 gates, execution checklist) used when implementing or reviewing a change, see
@@ -176,7 +176,7 @@ contradicted by their absence in `button`/`input-text` today.)
 
 ### Prefix and selector shape
 
-Every component uses the `pa-` prefix. In practice, the two shipped components
+Every component uses the `ha-` prefix. In practice, the two shipped components
 attach as **attribute selectors on the semantically closest native element**,
 not as custom elements:
 
@@ -194,7 +194,7 @@ semantics are inherited for free instead of reimplemented behind a wrapper.
 <!-- TODO(verify): whether future components with no native element
 equivalent (dialog, dropdown, tooltip, toast) will keep this attribute-
 selector-on-native-element pattern where a native element fits, or introduce
-true custom elements (`<pa-dialog>`) where none does, is an open
+true custom elements (`<ha-dialog>`) where none does, is an open
 architecture decision — not something the current two components answer. -->
 
 ## Standard Variants

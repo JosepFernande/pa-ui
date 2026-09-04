@@ -2,7 +2,7 @@
  * Input dimension source data. Unlike Button — which has a Figma-confirmed
  * `md` row (`HA_BUTTON_FIGMA_DIMENSIONS`) and placeholder `sm`/`lg` — NO
  * Figma source exists for Input anywhere in
- * `pa-ui-default-theme-design-values`, so ALL sizes are placeholders.
+ * `halo-ui-default-theme-design-values`, so ALL sizes are placeholders.
  * Consumed by `component-defaults.tokens.ts` to build the `--ha-input-*`
  * defaults shipped in `theme.css`.
  *

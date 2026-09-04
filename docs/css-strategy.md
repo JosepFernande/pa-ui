@@ -1,9 +1,9 @@
 # CSS Strategy
 
-pa-ui styles every component through a strict 3-layer token system: **Foundation
-→ Semantic → Component**. This document is the reference for how the layers are
-defined, how they are distributed to a consumer app, and which product decisions
-are still open.
+halo-ui styles every component through a strict 3-layer token system:
+**Foundation → Semantic → Component**. This document is the reference for how
+the layers are defined, how they are distributed to a consumer app, and which
+product decisions are still open.
 
 See `skills/lib-ui-architecture/SKILL.md` for the architectural hard rules this
 document implements.
@@ -42,7 +42,7 @@ they never leave the Foundation layer as a numeric name — semantic color token
 
 ## Two Disjoint Pipelines
 
-pa-ui deliberately splits token delivery into two independent mechanisms
+halo-ui deliberately splits token delivery into two independent mechanisms
 depending on whether the value needs to change at runtime.
 
 ### 1. Color — runtime, via the Theme Engine

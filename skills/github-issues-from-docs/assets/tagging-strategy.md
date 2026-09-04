@@ -35,7 +35,7 @@ Extraer tags del contenido analizando:
 
 **APIs y patrones:**
 
-- `providePaTheme` → si define esta función
+- `provideHaTheme` → si define esta función
 - `ThemeService` → si expone este servicio
 - `ControlValueAccessor` → si implementa CVA
 - `ChangeDetectionStrategy.OnPush` → si requiere OnPush
@@ -90,13 +90,13 @@ Cuando un issue de GitHub menciona conceptos:
 
 **Ejemplo:**
 
-Issue US-11 menciona: "Theme Engine", "providePaTheme", "colores personalizados"
+Issue US-11 menciona: "Theme Engine", "provideHaTheme", "colores personalizados"
 
-Keywords extraídas: `theme-engine`, `providePaTheme`, `colores`
+Keywords extraídas: `theme-engine`, `provideHaTheme`, `colores`
 
 Match con documentos:
 
-- "Theming Deep-Dive" → tags: [`theme-engine`, `providePaTheme`, `colores`,
+- "Theming Deep-Dive" → tags: [`theme-engine`, `provideHaTheme`, `colores`,
   `HSL`, `SSR`] → score: 3/5 = 0.6
 - "CSS Strategy" → tags: [`theme-engine`, `tokens`, `colores`] → score: 2/3 =
   0.67
@@ -136,7 +136,7 @@ Mantener en `assets/known-tags.json`:
     "change-detection"
   ],
   "apis": [
-    "providePaTheme",
+    "provideHaTheme",
     "ThemeService",
     "ControlValueAccessor",
     "providePaComponents"
