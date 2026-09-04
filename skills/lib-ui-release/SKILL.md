@@ -48,9 +48,11 @@ modo pre de changesets", consolidated by `ee53fbd`). `.changeset/pre.json` no
 longer exists. `@pa-ui/core`, `@pa-ui/button`, `@pa-ui/input`, and
 `@pa-ui/angular` shipped their last stable versions (e.g. `@pa-ui/core@19.3.1`)
 under that scope before the #139 rename;
-`@halolib-ui/{core,button,input-text,select, angular}` continues the same `19.x`
-line (not a reset to `1.0.0`) and publishes under npm's default `latest` tag —
-there is no `alpha` tag anymore.
+`@halolib-ui/{core,button,input-text,select,angular}` deliberately reset to
+`19.0.1` (fixed changesets group) with a clean CHANGELOG at the `@halolib-ui`
+rebrand, rather than continuing from `19.3.1` — do not assume version continuity
+across the scope change. It publishes under npm's default `latest` tag — there
+is no `alpha` tag anymore.
 
 `release.yml` still carries two branches gated on `.changeset/pre.json` existing
 (the `Check for changesets` step's array-diff, and the
