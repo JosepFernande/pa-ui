@@ -7,12 +7,24 @@ import { provideHaTheme } from './theme-provider';
 import { HaThemeService } from './theme.service';
 
 describe('HaThemeService', () => {
+  let originalDocumentElementStyle: string | null;
+
+  beforeEach(() => {
+    originalDocumentElementStyle = document.documentElement.getAttribute('style');
+  });
+
   afterEach(() => {
     // `document.documentElement.style` is the same jsdom instance reused
     // across every test in this file; without restoring, `jest.spyOn`
     // returns the SAME already-spied mock instead of a fresh one, causing
     // call counts to accumulate across unrelated tests.
     jest.restoreAllMocks();
+
+    if (originalDocumentElementStyle === null) {
+      document.documentElement.removeAttribute('style');
+    } else {
+      document.documentElement.setAttribute('style', originalDocumentElementStyle);
+    }
   });
 
   function configureTestBed(
