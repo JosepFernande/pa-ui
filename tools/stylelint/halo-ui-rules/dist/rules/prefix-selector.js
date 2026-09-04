@@ -13,7 +13,7 @@ function isInsideKeyframes(node) {
     return false;
 }
 /**
- * Checks whether a token looks like a simple selector that should have a pa- prefix.
+ * Checks whether a token looks like a simple selector that should have a ha- prefix.
  * Skips pseudo-classes, pseudo-elements, attributes, combinators, and universal selectors.
  */
 function isSimpleSelector(token) {

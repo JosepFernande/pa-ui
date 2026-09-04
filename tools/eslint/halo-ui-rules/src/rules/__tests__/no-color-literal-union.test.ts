@@ -18,10 +18,10 @@ ruleTester.run('no-color-literal-union', rule, {
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'pa-button',
+  selector: 'ha-button',
   template: '<button></button>',
 })
-export class PaButton {
+export class HaButton {
   @Input() color: string = 'primary';
 }
       `,
@@ -32,10 +32,10 @@ export class PaButton {
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'pa-button',
+  selector: 'ha-button',
   template: '<button></button>',
 })
-export class PaButton {
+export class HaButton {
   @Input() size: 'sm' | 'md' | 'lg' = 'md';
   @Input() variant: 'solid' | 'outline' | 'ghost' = 'solid';
 }
@@ -61,10 +61,10 @@ export class PlainClass {
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'pa-button',
+  selector: 'ha-button',
   template: '<button></button>',
 })
-export class PaButton {
+export class HaButton {
   @Input() color: 'primary' | 'secondary' = 'primary';
 }
       `,
@@ -80,10 +80,10 @@ export class PaButton {
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'pa-button',
+  selector: 'ha-button',
   template: '<button></button>',
 })
-export class PaButton {
+export class HaButton {
   @Input() color: 'primary' = 'primary';
 }
       `,
@@ -99,10 +99,10 @@ export class PaButton {
 import { Component, input } from '@angular/core';
 
 @Component({
-  selector: 'pa-button',
+  selector: 'ha-button',
   template: '<button></button>',
 })
-export class PaButton {
+export class HaButton {
   readonly color = input<'primary' | 'secondary'>('primary');
 }
       `,

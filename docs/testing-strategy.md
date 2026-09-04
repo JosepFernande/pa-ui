@@ -1,6 +1,6 @@
 # Testing Strategy
 
-This is the deep reference for why and how `pa-ui` tests components — the
+This is the deep reference for why and how `halo-ui` tests components — the
 philosophy, the full a11y checklist, and the illustrative roadmap layer. For the
 concrete day-to-day patterns (exact `jest.config.ts` shape, CDK mocking
 snippets, required `describe` blocks, what gga flags), see the `lib-ui-testing`

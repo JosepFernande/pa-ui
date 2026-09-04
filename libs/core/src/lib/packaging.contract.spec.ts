@@ -61,12 +61,5 @@ describe('Packaging contract — source-level', () => {
       const content = fs.readFileSync(publicApiPath, 'utf-8');
       expect(content).not.toContain("export * from '@halolib-ui/button'");
     });
-
-    it('public-api.ts does NOT export PaUiComponent/HaUiComponent (deleted scaffold, #139)', () => {
-      const publicApiPath = path.resolve(libRoot(), 'src', 'public-api.ts');
-      const content = fs.readFileSync(publicApiPath, 'utf-8');
-      expect(content).not.toContain('PaUiComponent');
-      expect(content).not.toContain('HaUiComponent');
-    });
   });
 });

@@ -1,6 +1,6 @@
 # Showcase
 
-`pa-ui` uses `apps/showcase` — a real Angular application — as the local
+`halo-ui` uses `apps/showcase` — a real Angular application — as the local
 playground for every published component. There is no separate preview tool: the
 showcase app imports each library from its public entry point
 (`@halolib-ui/button`, `@halolib-ui/input-text`, `@halolib-ui/select`, ...)
@@ -18,7 +18,7 @@ npx nx build showcase
 
 ## Theme registration
 
-The showcase registers the pa-ui theme engine at bootstrap (`provideHaTheme()`
+The showcase registers the halo-ui theme engine at bootstrap (`provideHaTheme()`
 in `apps/showcase/src/app/app.config.ts`) and loads the Foundation stylesheet
 via the `build`/`serve` target's `styles` array
 (`libs/core/src/lib/foundation/theme.css`), so every route renders with

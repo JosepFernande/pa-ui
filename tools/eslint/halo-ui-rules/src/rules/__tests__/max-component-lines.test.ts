@@ -18,7 +18,7 @@ function generateLines(count: number): string {
   lines.push("import { Component } from '@angular/core';");
   lines.push('');
   lines.push('@Component({');
-  lines.push("  selector: 'pa-test',");
+  lines.push("  selector: 'ha-test',");
   lines.push("  template: '<div>hello</div>',");
   lines.push('})');
   lines.push('export class TestComponent {');
@@ -51,7 +51,7 @@ ruleTester.run('max-component-lines', rule, {
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'pa-test',
+  selector: 'ha-test',
   template: '<div>hello</div>',
 })
 export class TestComponent {}

@@ -12,7 +12,7 @@
  */
 
 /**
- * Figma-confirmed `md` Button dimensions (`pa-ui-default-theme-design-values`).
+ * Figma-confirmed `md` Button dimensions (`halo-ui-default-theme-design-values`).
  * `radius` (4px) is constant across all 3 sizes — also re-used verbatim by
  * `sm`/`lg` in `HA_BUTTON_PROVISIONAL_DIMENSIONS`.
  */
@@ -31,7 +31,7 @@ export const HA_BUTTON_FIGMA_DIMENSIONS = {
  * `sm` and `lg` are ASSISTANT-AUTHORED PLACEHOLDERS — a standard 8px
  * height-step / 4px padding-step / 2px gap-step progression around the
  * Figma-confirmed `md` row — explicitly requested by the user pending
- * designer validation (`pa-ui-default-theme-design-values`). They are NOT
+ * designer validation (`halo-ui-default-theme-design-values`). They are NOT
  * Figma-confirmed.
  *
  * `minWidth` for `sm` (200px) and `lg` (280px) IS Figma-confirmed and is

@@ -5,7 +5,7 @@
  * the runtime Theme Engine (Requirement: `deriveTokens()` Never Processes
  * Raw Scales).
  *
- * Values sourced from `pa-ui-default-theme-design-values` (color palette,
+ * Values sourced from `halo-ui-default-theme-design-values` (color palette,
  * icon sizes, typography font-size/weight) except where noted otherwise.
  */
 import type {
@@ -96,7 +96,7 @@ export const HA_FOUNDATION_PALETTE: HaFoundationPalette = {
 
 /**
  * Generic spacing scale. NOT sourced from any confirmed design value (no
- * spacing scale was ever provided — see `audit/pa-ui-foundation-tokens-triangulation`,
+ * spacing scale was ever provided — see `audit/halo-ui-foundation-tokens-triangulation`,
  * obs #341: "Spacing ... NO tienen diseño decidido en ninguna de las 3
  * fuentes"). Chosen as a conventional 4/8px-based progression; `md` (16px)
  * happens to match the Figma-confirmed Button `md` horizontal padding.
@@ -140,7 +140,7 @@ export const HA_RADIUS_SCALE: HaSizeScale = {
   xl: '24px',
 };
 
-/** Icon size scale — CONFIRMED design values (Flaticon-driven, `pa-ui-default-theme-design-values`). */
+/** Icon size scale — CONFIRMED design values (Flaticon-driven, `halo-ui-default-theme-design-values`). */
 export const HA_ICON_SIZE_SCALE: HaSizeScale = {
   xs: '16px',
   sm: '20px',
@@ -168,7 +168,7 @@ export const HA_FONT_FAMILY =
 
 /**
  * Typography scale. `fontSize`/`fontWeight` are CONFIRMED design values
- * (`pa-ui-default-theme-design-values`); `lineHeight` was not provided by
+ * (`halo-ui-default-theme-design-values`); `lineHeight` was not provided by
  * any source and is an assistant-authored standard convention (1.25 for
  * headings, 1.5 for body-scale text), pending design confirmation.
  * Role keys are kebab-case, matching the palette family key convention.

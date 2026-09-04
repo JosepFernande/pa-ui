@@ -60,7 +60,7 @@ export type ThemeCssVariables = Record<string, string>;
  * `mergeTheme()` uses this exact reference as its default merge base for
  * every call in the process.
  *
- * Roster source of truth: `decision/pa-ui-default-theme-color-naming`.
+ * Roster source of truth: `decision/halo-ui-default-theme-color-naming`.
  * - Literal brand hues (1:1 Figma/JSON traceability): `dark-blue`,
  *   `light-blue`, `dark-green`, `light-green`.
  * - Semantic aliases `primary`/`secondary`: the brand pattern is inverted
