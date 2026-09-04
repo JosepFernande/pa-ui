@@ -25,12 +25,14 @@
  * Two kinds of exception:
  *
  *  1. File-level allowlist — files that MUST legitimately still contain
- *     `--pa-*`: the legacy CSS-alias implementation/spec/artifact, every
- *     spec file that asserts the alias contract end-to-end (theme service/
- *     provider + the 3 libs' theme-runtime integration specs), the
- *     migration doc itself (which documents the old names by design), and
+ *     `--pa-*`: the migration doc itself (which documents the old names by
+ *     design, including the now-removed temporary alias window) and
  *     already-released package CHANGELOGs (historical record — a released
- *     changelog entry is immutable once shipped).
+ *     changelog entry is immutable once shipped). The temporary `--pa-*`
+ *     legacy-alias layer itself (`legacy-token-alias.ts` and every spec that
+ *     asserted it) was removed ahead of schedule — see
+ *     docs/migration-pa-ui-to-halo-ui.md — so those files are no longer
+ *     allowlisted here.
  *
  *  2. Line-level exceptions — individual matches that are legitimate no
  *     matter which file they're in, because the design explicitly decided
@@ -53,14 +55,6 @@ const scriptDir = fileURLToPath(new URL('.', import.meta.url));
 const repoRoot = resolve(scriptDir, '../..');
 
 const FILE_ALLOWLIST_EXACT = new Set([
-  'libs/core/src/lib/foundation/legacy-token-alias.ts',
-  'libs/core/src/lib/foundation/legacy-token-alias.spec.ts',
-  'libs/core/src/lib/foundation/theme.css',
-  'libs/core/src/lib/theme/theme.service.spec.ts',
-  'libs/core/src/lib/theme/theme-provider.spec.ts',
-  'libs/button/src/lib/theme-runtime.integration.spec.ts',
-  'libs/input-text/src/lib/theme-runtime.integration.spec.ts',
-  'libs/select/src/lib/theme-runtime.integration.spec.ts',
   'docs/migration-pa-ui-to-halo-ui.md',
   // Historical-rename narrative, deliberately worded with "formerly"/
   // "pre-#139"/"at the time of #85" qualifiers — same category as the
