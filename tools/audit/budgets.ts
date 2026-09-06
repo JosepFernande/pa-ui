@@ -21,8 +21,10 @@ export interface PackageBudget {
   name: string;
   /**
    * Path to the built ESM bundle, relative to the repo root.
-   * ng-packagr emits per-lib FESM bundles at `dist/libs/<lib>/fesm2022/<name>.mjs`;
-   * the umbrella `@halolib-ui/angular` barrel ships only `dist/libs/halo-ui/index.mjs`.
+   * ng-packagr derives the FESM bundle name from the real npm scope
+   * (`@halolib-ui/<lib>` → `halolib-ui-<lib>.mjs`), emitted at
+   * `dist/libs/<lib>/fesm2022/<name>.mjs`; the umbrella `@halolib-ui/angular`
+   * barrel ships only `dist/libs/halo-ui/index.mjs`.
    */
   file: string;
   /** Maximum allowed gzip byte length — exceeding this fails CI (real regression territory). */
@@ -45,7 +47,7 @@ const KB = 1024;
 export const PACKAGE_BUDGETS: readonly PackageBudget[] = [
   {
     name: '@halolib-ui/core',
-    file: 'dist/libs/core/fesm2022/halo-ui-core.mjs',
+    file: 'dist/libs/core/fesm2022/halolib-ui-core.mjs',
     // core carries the Foundation layer (palette + typography/spacing/icon
     // scales + a --ha-<component>-* default set per component), so it grows
     // with every new component by design — unlike button/input-text's thin
@@ -57,19 +59,19 @@ export const PACKAGE_BUDGETS: readonly PackageBudget[] = [
   },
   {
     name: '@halolib-ui/button',
-    file: 'dist/libs/button/fesm2022/halo-ui-button.mjs',
+    file: 'dist/libs/button/fesm2022/halolib-ui-button.mjs',
     maxGzipBytes: 4 * KB,
     baselineBytes: 2821,
   },
   {
     name: '@halolib-ui/input-text',
-    file: 'dist/libs/input-text/fesm2022/halo-ui-input-text.mjs',
+    file: 'dist/libs/input-text/fesm2022/halolib-ui-input-text.mjs',
     maxGzipBytes: 5 * KB,
     baselineBytes: 499,
   },
   {
     name: '@halolib-ui/select',
-    file: 'dist/libs/select/fesm2022/halo-ui-select.mjs',
+    file: 'dist/libs/select/fesm2022/halolib-ui-select.mjs',
     maxGzipBytes: 12 * KB,
     baselineBytes: 9060,
   },
