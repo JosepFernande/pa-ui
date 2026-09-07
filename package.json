@@ -21,7 +21,6 @@
     "changeset": "changeset",
     "tree-shaking": "source-map-explorer 'dist/libs/core/fesm2022/**/*.mjs'",
     "validate:packages": "node tools/release/validate-packages.mjs",
-    "check:residual": "node tools/release/check-residual.mjs",
     "prepare": "([ -n \"$CI\" ] && echo \"Skipping husky in CI\") || husky"
   },
   "private": true,

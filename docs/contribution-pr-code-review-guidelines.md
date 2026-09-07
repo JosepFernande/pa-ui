@@ -3,7 +3,7 @@
 ## Purpose
 
 Defines the code review checklist, the Definition of Done, and repo labels for
-`pa-ui`. For the day-to-day contribution workflow — branch setup, commit
+`halo-ui`. For the day-to-day contribution workflow — branch setup, commit
 conventions, the changeset flow, and the release mechanics — see
 [`CONTRIBUTING.md`](../CONTRIBUTING.md) at the repo root, which already covers
 that ground accurately; this document does not repeat it. Combine with

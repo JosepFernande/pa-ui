@@ -1,5 +1,5 @@
 {
-  "name": "@halo-ui/stylelint-plugin",
+  "name": "@halolib-ui/stylelint-plugin",
   "version": "1.0.0",
   "private": true,
   "type": "module",

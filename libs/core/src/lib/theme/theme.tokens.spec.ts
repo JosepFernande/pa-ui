@@ -13,7 +13,7 @@ import {
 const HEX_COLOR = /^#[0-9a-fA-F]{3,8}$/;
 
 /**
- * Full DEFAULT_THEME roster (decision/pa-ui-default-theme-color-naming):
+ * Full DEFAULT_THEME roster (decision/halo-ui-default-theme-color-naming):
  * literal brand hues + semantic primary/secondary aliases (explicit inverted
  * hover) + the 1:1 semantic set + `neutral`. `danger` is a deprecated twin
  * alias of `error`, asserted separately below — it is intentionally excluded
@@ -76,7 +76,7 @@ describe('theme.tokens', () => {
       },
     );
 
-    it('matches the exact roster from decision/pa-ui-default-theme-color-naming', () => {
+    it('matches the exact roster from decision/halo-ui-default-theme-color-naming', () => {
       expect(DEFAULT_THEME).toEqual({ colors: EXPECTED_ROSTER });
     });
 

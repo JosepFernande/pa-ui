@@ -1,7 +1,7 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/libs/button",
-  "allowedNonPeerDependencies": ["@halo-ui/core"],
+  "allowedNonPeerDependencies": ["@halolib-ui/core"],
   "lib": {
     "entryFile": "src/index.ts"
   },

@@ -1,6 +1,6 @@
 {
-  "name": "@halo-ui/input",
-  "version": "19.3.1",
+  "name": "@halolib-ui/input-text",
+  "version": "19.0.1",
   "license": "MIT",
   "description": "Accessible, token-driven Angular 19 input component with forms integration",
   "keywords": [
@@ -14,19 +14,19 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/JosepFernande/pa-ui",
-    "directory": "libs/input"
+    "url": "https://github.com/JosepFernande/halo-ui",
+    "directory": "libs/input-text"
   },
   "bugs": {
-    "url": "https://github.com/JosepFernande/pa-ui/issues"
+    "url": "https://github.com/JosepFernande/halo-ui/issues"
   },
-  "homepage": "https://github.com/JosepFernande/pa-ui#readme",
+  "homepage": "https://github.com/JosepFernande/halo-ui#readme",
   "author": "JosepFernande",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@halo-ui/core": "19.3.1"
+    "@halolib-ui/core": "19.0.1"
   },
   "peerDependencies": {
     "@angular/core": "^19.2.0",

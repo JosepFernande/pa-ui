@@ -81,19 +81,6 @@ describe('prefix-selector', () => {
   // Default option (['ha-']) — INVALID cases
   // ================================================================
 
-  it('should reject selectors starting with .pa- by default', async () => {
-    const result = await run('.pa-button { display: block; }');
-    expect(result.messages).toHaveLength(1);
-    expect(result.messages[0].text).toContain('prefix-selector');
-    expect(result.messages[0].text).toContain('.pa-button');
-  });
-
-  it('should reject element selectors starting with pa- by default', async () => {
-    const result = await run('pa-accordion { display: block; }');
-    expect(result.messages).toHaveLength(1);
-    expect(result.messages[0].text).toContain('pa-accordion');
-  });
-
   it('should reject selectors NOT starting with .ha-', async () => {
     const result = await run('.my-button { display: block; }');
     expect(result.messages).toHaveLength(1);
@@ -129,27 +116,33 @@ describe('prefix-selector', () => {
   });
 
   // ================================================================
-  // Transitional option { prefixes: ['ha-', 'pa-'] }
+  // Multi-prefix option { prefixes: ['ha-', 'legacy-'] }
   // ================================================================
 
-  it('should accept both .ha- and .pa- when transitional prefixes are configured', async () => {
-    const haResult = await run('.ha-button { display: flex; }', { prefixes: ['ha-', 'pa-'] });
+  it('should accept both .ha- and a configured second prefix', async () => {
+    const haResult = await run('.ha-button { display: flex; }', { prefixes: ['ha-', 'legacy-'] });
     expect(haResult.messages).toHaveLength(0);
 
-    const paResult = await run('.pa-button { display: flex; }', { prefixes: ['ha-', 'pa-'] });
-    expect(paResult.messages).toHaveLength(0);
+    const secondResult = await run('.legacy-button { display: flex; }', {
+      prefixes: ['ha-', 'legacy-'],
+    });
+    expect(secondResult.messages).toHaveLength(0);
   });
 
-  it('should accept both ha- and pa- element selectors when transitional prefixes are configured', async () => {
-    const haResult = await run('ha-accordion { display: block; }', { prefixes: ['ha-', 'pa-'] });
+  it('should accept both ha- and a configured second prefix for element selectors', async () => {
+    const haResult = await run('ha-accordion { display: block; }', {
+      prefixes: ['ha-', 'legacy-'],
+    });
     expect(haResult.messages).toHaveLength(0);
 
-    const paResult = await run('pa-accordion { display: block; }', { prefixes: ['ha-', 'pa-'] });
-    expect(paResult.messages).toHaveLength(0);
+    const secondResult = await run('legacy-accordion { display: block; }', {
+      prefixes: ['ha-', 'legacy-'],
+    });
+    expect(secondResult.messages).toHaveLength(0);
   });
 
-  it('should still reject unrelated prefixes when transitional prefixes are configured', async () => {
-    const result = await run('.foo-x { display: block; }', { prefixes: ['ha-', 'pa-'] });
+  it('should still reject unrelated prefixes when multiple prefixes are configured', async () => {
+    const result = await run('.foo-x { display: block; }', { prefixes: ['ha-', 'legacy-'] });
     expect(result.messages).toHaveLength(1);
     expect(result.messages[0].text).toContain('.foo-x');
   });

@@ -1,20 +1,20 @@
 ---
 name: lib-ui-coding-standards
 description:
-  'Trigger: pa-ui/halo-ui component implementation, refactor, code review, PR
+  'Trigger: halo-ui component implementation, refactor, code review, PR
   checklist. Enforces component file structure, input/output conventions, signal
   usage, CSS variable patterns, and gga review criteria.'
 license: MIT
 metadata:
   author: JosepFernande
   version: '1.0'
-  project: pa-ui
+  project: halo-ui
 ---
 
 ## Activation Contract
 
 Load this skill when implementing, refactoring, or reviewing Angular components
-in the `pa-ui` repository. This skill defines the concrete code patterns, file
+in the `halo-ui` repository. This skill defines the concrete code patterns, file
 organization, and review criteria that complement the architectural rules in
 `lib-ui-architecture`.
 
@@ -261,5 +261,5 @@ approve with the justification.
 - Contribution / PR / Code Review Guidelines:
   `../../docs/contribution-pr-code-review-guidelines.md`
 - Wiki — AI Code Review with gga (todavía no migrado a `docs/`):
-  `https://github.com/JosepFernande/pa-ui/wiki/AI-Code-Review-with-gga`
-- Repo: `https://github.com/JosepFernande/pa-ui`
+  `https://github.com/JosepFernande/halo-ui/wiki/AI-Code-Review-with-gga`
+- Repo: `https://github.com/JosepFernande/halo-ui`

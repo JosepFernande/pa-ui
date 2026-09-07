@@ -34,7 +34,7 @@ import { findOptionIndexByValue, firstEnabledIndex, nextSelectId, optionId } fro
 /**
  * Accessible, token-driven single-select combobox (custom element
  * `ha-select`, NOT an attribute selector — unlike `button[ha-button]`/
- * `input[ha-input]`, the trigger is a `<button role="combobox">` rendered
+ * `input[ha-input-text]`, the trigger is a `<button role="combobox">` rendered
  * inside the component's own template).
  *
  * The panel is a `CdkConnectedOverlay` (`disableClose=true` — Escape is
@@ -54,8 +54,8 @@ import { findOptionIndexByValue, firstEnabledIndex, nextSelectId, optionId } fro
  * options at either end — a deliberate deviation from design decision D5
  * ("clamp, not wrap"): the spec's keyboard matrix mandates wrap-around.
  *
- * Forms integration mirrors `HaInput`'s `NgControl` lazy-injection +
- * `validityVersion` idiom (D8, `libs/input/src/lib/input.component.ts:103-175`):
+ * Forms integration mirrors `HaInputText`'s `NgControl` lazy-injection +
+ * `validityVersion` idiom (D8, `libs/input-text/src/lib/input-text.component.ts`):
  * the bound form directive also injects `NG_VALUE_ACCESSOR` (this component),
  * so resolving `NgControl` eagerly would throw NG0200; resolving lazily
  * inside `hasError` breaks the cycle.
@@ -168,7 +168,7 @@ export class HaSelect implements ControlValueAccessor, OnInit {
 
   /**
    * Element injector used to resolve `NgControl` lazily (see class TSDoc —
-   * mirrors `HaInput`'s NG0200 workaround).
+   * mirrors `HaInputText`'s NG0200 workaround).
    */
   private readonly injector = inject(Injector);
 
@@ -270,7 +270,7 @@ export class HaSelect implements ControlValueAccessor, OnInit {
   }
 
   ngOnInit(): void {
-    // See `HaInput.ngOnInit` for why a subscription (not a computed()) is
+    // See `HaInputText.ngOnInit` for why a subscription (not a computed()) is
     // required to react to control.invalid/control.touched changes.
     const control = this.ngControl?.control;
     control?.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {

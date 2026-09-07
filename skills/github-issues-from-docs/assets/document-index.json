@@ -30,7 +30,7 @@
         "theme-engine",
         "theme.css",
         "capas",
-        "pa-prefix",
+        "ha-prefix",
         "stylelint",
         "eslint"
       ]
@@ -102,7 +102,7 @@
       "file": "theming-deep-dive.md",
       "tags": [
         "theme-engine",
-        "providePaTheme",
+        "provideHaTheme",
         "ThemeService",
         "colores",
         "HSL",
@@ -132,7 +132,7 @@
         "components",
         "catalog",
         "button",
-        "input",
+        "input-text",
         "select",
         "core",
         "umbrella",

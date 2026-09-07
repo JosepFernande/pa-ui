@@ -1,5 +1,5 @@
 /*
- * @halo-ui/core/theme.css — the Foundation static CSS artifact.
+ * @halolib-ui/core/theme.css — the Foundation static CSS artifact.
  *
  * Source of truth is TypeScript (`foundation.tokens.ts` + `foundation-css.ts`
  * + `component-defaults.tokens.ts` + `button-dimensions.tokens.ts`). This
@@ -18,17 +18,10 @@
  * radius/typography/icon-size, and component defaults built from them.
  *
  * Consumer setup: one import in addition to `provideHaTheme()`:
- *   @import '@halo-ui/core/theme.css';
+ *   @import '@halolib-ui/core/theme.css';
  *
  * Montserrat / Flaticon are NOT shipped here — declared by name/class only,
  * consumer responsibility (see docs/css-strategy.md).
- *
- * Transition (#139): every `--ha-*` custom property below is doubled with a
- * DEPRECATED `--pa-*` legacy alias carrying the real value
- * (`legacy-token-alias.ts`'s `withLegacyAliases`, applied by
- * `toFoundationCssVariables()`). `--pa-*` resolves to the same value as its
- * `--ha-*` counterpart for one minor version and is then removed — see
- * docs/migration-pa-ui-to-halo-ui.md.
  */
 
 :root {
@@ -165,399 +158,227 @@
   /* Semantic — non-color passthrough (--ha-*), 1:1 alias of foundation   */
   /* ------------------------------------------------------------------ */
 
-  --pa-spacing-xs: var(--spacing-xs);
-  --ha-spacing-xs: var(--pa-spacing-xs);
-  --pa-spacing-sm: var(--spacing-sm);
-  --ha-spacing-sm: var(--pa-spacing-sm);
-  --pa-spacing-md: var(--spacing-md);
-  --ha-spacing-md: var(--pa-spacing-md);
-  --pa-spacing-lg: var(--spacing-lg);
-  --ha-spacing-lg: var(--pa-spacing-lg);
-  --pa-spacing-xl: var(--spacing-xl);
-  --ha-spacing-xl: var(--pa-spacing-xl);
+  --ha-spacing-xs: var(--spacing-xs);
+  --ha-spacing-sm: var(--spacing-sm);
+  --ha-spacing-md: var(--spacing-md);
+  --ha-spacing-lg: var(--spacing-lg);
+  --ha-spacing-xl: var(--spacing-xl);
 
-  --pa-gap-xs: var(--gap-xs);
-  --ha-gap-xs: var(--pa-gap-xs);
-  --pa-gap-sm: var(--gap-sm);
-  --ha-gap-sm: var(--pa-gap-sm);
-  --pa-gap-md: var(--gap-md);
-  --ha-gap-md: var(--pa-gap-md);
-  --pa-gap-lg: var(--gap-lg);
-  --ha-gap-lg: var(--pa-gap-lg);
-  --pa-gap-xl: var(--gap-xl);
-  --ha-gap-xl: var(--pa-gap-xl);
+  --ha-gap-xs: var(--gap-xs);
+  --ha-gap-sm: var(--gap-sm);
+  --ha-gap-md: var(--gap-md);
+  --ha-gap-lg: var(--gap-lg);
+  --ha-gap-xl: var(--gap-xl);
 
-  --pa-radius-xs: var(--radius-xs);
-  --ha-radius-xs: var(--pa-radius-xs);
-  --pa-radius-sm: var(--radius-sm);
-  --ha-radius-sm: var(--pa-radius-sm);
-  --pa-radius-md: var(--radius-md);
-  --ha-radius-md: var(--pa-radius-md);
-  --pa-radius-lg: var(--radius-lg);
-  --ha-radius-lg: var(--pa-radius-lg);
-  --pa-radius-xl: var(--radius-xl);
-  --ha-radius-xl: var(--pa-radius-xl);
+  --ha-radius-xs: var(--radius-xs);
+  --ha-radius-sm: var(--radius-sm);
+  --ha-radius-md: var(--radius-md);
+  --ha-radius-lg: var(--radius-lg);
+  --ha-radius-xl: var(--radius-xl);
 
-  --pa-icon-size-xs: var(--icon-size-xs);
-  --ha-icon-size-xs: var(--pa-icon-size-xs);
-  --pa-icon-size-sm: var(--icon-size-sm);
-  --ha-icon-size-sm: var(--pa-icon-size-sm);
-  --pa-icon-size-md: var(--icon-size-md);
-  --ha-icon-size-md: var(--pa-icon-size-md);
-  --pa-icon-size-lg: var(--icon-size-lg);
-  --ha-icon-size-lg: var(--pa-icon-size-lg);
-  --pa-icon-size-xl: var(--icon-size-xl);
-  --ha-icon-size-xl: var(--pa-icon-size-xl);
+  --ha-icon-size-xs: var(--icon-size-xs);
+  --ha-icon-size-sm: var(--icon-size-sm);
+  --ha-icon-size-md: var(--icon-size-md);
+  --ha-icon-size-lg: var(--icon-size-lg);
+  --ha-icon-size-xl: var(--icon-size-xl);
 
-  --pa-font-size-h1: var(--font-size-h1);
-  --ha-font-size-h1: var(--pa-font-size-h1);
-  --pa-font-weight-h1: var(--font-weight-h1);
-  --ha-font-weight-h1: var(--pa-font-weight-h1);
-  --pa-line-height-h1: var(--line-height-h1);
-  --ha-line-height-h1: var(--pa-line-height-h1);
+  --ha-font-size-h1: var(--font-size-h1);
+  --ha-font-weight-h1: var(--font-weight-h1);
+  --ha-line-height-h1: var(--line-height-h1);
 
-  --pa-font-size-h2: var(--font-size-h2);
-  --ha-font-size-h2: var(--pa-font-size-h2);
-  --pa-font-weight-h2: var(--font-weight-h2);
-  --ha-font-weight-h2: var(--pa-font-weight-h2);
-  --pa-line-height-h2: var(--line-height-h2);
-  --ha-line-height-h2: var(--pa-line-height-h2);
+  --ha-font-size-h2: var(--font-size-h2);
+  --ha-font-weight-h2: var(--font-weight-h2);
+  --ha-line-height-h2: var(--line-height-h2);
 
-  --pa-font-size-h3: var(--font-size-h3);
-  --ha-font-size-h3: var(--pa-font-size-h3);
-  --pa-font-weight-h3: var(--font-weight-h3);
-  --ha-font-weight-h3: var(--pa-font-weight-h3);
-  --pa-line-height-h3: var(--line-height-h3);
-  --ha-line-height-h3: var(--pa-line-height-h3);
+  --ha-font-size-h3: var(--font-size-h3);
+  --ha-font-weight-h3: var(--font-weight-h3);
+  --ha-line-height-h3: var(--line-height-h3);
 
-  --pa-font-size-h4: var(--font-size-h4);
-  --ha-font-size-h4: var(--pa-font-size-h4);
-  --pa-font-weight-h4: var(--font-weight-h4);
-  --ha-font-weight-h4: var(--pa-font-weight-h4);
-  --pa-line-height-h4: var(--line-height-h4);
-  --ha-line-height-h4: var(--pa-line-height-h4);
+  --ha-font-size-h4: var(--font-size-h4);
+  --ha-font-weight-h4: var(--font-weight-h4);
+  --ha-line-height-h4: var(--line-height-h4);
 
-  --pa-font-size-body: var(--font-size-body);
-  --ha-font-size-body: var(--pa-font-size-body);
-  --pa-font-weight-body: var(--font-weight-body);
-  --ha-font-weight-body: var(--pa-font-weight-body);
-  --pa-line-height-body: var(--line-height-body);
-  --ha-line-height-body: var(--pa-line-height-body);
+  --ha-font-size-body: var(--font-size-body);
+  --ha-font-weight-body: var(--font-weight-body);
+  --ha-line-height-body: var(--line-height-body);
 
-  --pa-font-size-small-body: var(--font-size-small-body);
-  --ha-font-size-small-body: var(--pa-font-size-small-body);
-  --pa-font-weight-small-body: var(--font-weight-small-body);
-  --ha-font-weight-small-body: var(--pa-font-weight-small-body);
-  --pa-line-height-small-body: var(--line-height-small-body);
-  --ha-line-height-small-body: var(--pa-line-height-small-body);
+  --ha-font-size-small-body: var(--font-size-small-body);
+  --ha-font-weight-small-body: var(--font-weight-small-body);
+  --ha-line-height-small-body: var(--line-height-small-body);
 
-  --pa-font-size-caption: var(--font-size-caption);
-  --ha-font-size-caption: var(--pa-font-size-caption);
-  --pa-font-weight-caption: var(--font-weight-caption);
-  --ha-font-weight-caption: var(--pa-font-weight-caption);
-  --pa-line-height-caption: var(--line-height-caption);
-  --ha-line-height-caption: var(--pa-line-height-caption);
+  --ha-font-size-caption: var(--font-size-caption);
+  --ha-font-weight-caption: var(--font-weight-caption);
+  --ha-line-height-caption: var(--line-height-caption);
 
-  --pa-font-family: var(--font-family);
-  --ha-font-family: var(--pa-font-family);
+  --ha-font-family: var(--font-family);
 
   /* ------------------------------------------------------------------ */
   /* Component defaults — Button (D4)                                    */
   /* ------------------------------------------------------------------ */
 
-  --pa-button-bg: var(--ha-primary);
-  --ha-button-bg: var(--pa-button-bg);
-  --pa-button-color: var(--ha-primary-contrast);
-  --ha-button-color: var(--pa-button-color);
-  --pa-button-border: 1px solid var(--ha-primary);
-  --ha-button-border: var(--pa-button-border);
-  --pa-button-radius: 4px;
-  --ha-button-radius: var(--pa-button-radius);
-  --pa-button-gap: var(--gap-sm);
-  --ha-button-gap: var(--pa-button-gap);
-  --pa-button-font-family: var(--font-family);
-  --ha-button-font-family: var(--pa-button-font-family);
-  --pa-button-font-weight: var(--font-weight-semibold);
-  --ha-button-font-weight: var(--pa-button-font-weight);
-  --pa-button-line-height: var(--line-height-body);
-  --ha-button-line-height: var(--pa-button-line-height);
+  --ha-button-bg: var(--ha-primary);
+  --ha-button-color: var(--ha-primary-contrast);
+  --ha-button-border: 1px solid var(--ha-primary);
+  --ha-button-radius: 4px;
+  --ha-button-gap: var(--gap-sm);
+  --ha-button-font-family: var(--font-family);
+  --ha-button-font-weight: var(--font-weight-semibold);
+  --ha-button-line-height: var(--line-height-body);
 
   /* sm/lg padding sourced from HA_BUTTON_PROVISIONAL_DIMENSIONS (D5) */
-  --pa-button-padding-sm: 0 12px; /* provisional: pending design validation */
-  --ha-button-padding-sm: var(--pa-button-padding-sm); /* provisional: pending design validation */
-  --pa-button-padding-md: 0 16px;
-  --ha-button-padding-md: var(--pa-button-padding-md);
-  --pa-button-padding-lg: 0 20px; /* provisional: pending design validation */
-  --ha-button-padding-lg: var(--pa-button-padding-lg); /* provisional: pending design validation */
+  --ha-button-padding-sm: 0 12px; /* provisional: pending design validation */
+  --ha-button-padding-md: 0 16px;
+  --ha-button-padding-lg: 0 20px; /* provisional: pending design validation */
 
-  --pa-button-font-sm: var(--font-size-small-body);
-  --ha-button-font-sm: var(--pa-button-font-sm);
-  --pa-button-font-md: var(--font-size-body);
-  --ha-button-font-md: var(--pa-button-font-md);
-  --pa-button-font-lg: var(--font-size-body);
-  --ha-button-font-lg: var(--pa-button-font-lg);
+  --ha-button-font-sm: var(--font-size-small-body);
+  --ha-button-font-md: var(--font-size-body);
+  --ha-button-font-lg: var(--font-size-body);
 
   /* sm/lg min-height sourced from HA_BUTTON_PROVISIONAL_DIMENSIONS (D5) */
-  --pa-button-min-height-sm: 40px; /* provisional: pending design validation */
-  --ha-button-min-height-sm: var(--pa-button-min-height-sm); /* provisional */
-  --pa-button-min-height-md: 48px;
-  --ha-button-min-height-md: var(--pa-button-min-height-md);
-  --pa-button-min-height-lg: 56px; /* provisional: pending design validation */
-  --ha-button-min-height-lg: var(--pa-button-min-height-lg); /* provisional */
+  --ha-button-min-height-sm: 40px; /* provisional: pending design validation */
+  --ha-button-min-height-md: 48px;
+  --ha-button-min-height-lg: 56px; /* provisional: pending design validation */
 
   /* min-width is Figma-confirmed for ALL sizes, incl. sm/lg — never provisional */
-  --pa-button-min-width-sm: 200px;
-  --ha-button-min-width-sm: var(--pa-button-min-width-sm);
-  --pa-button-min-width-md: 224px;
-  --ha-button-min-width-md: var(--pa-button-min-width-md);
-  --pa-button-min-width-lg: 280px;
-  --ha-button-min-width-lg: var(--pa-button-min-width-lg);
+  --ha-button-min-width-sm: 200px;
+  --ha-button-min-width-md: 224px;
+  --ha-button-min-width-lg: 280px;
 
   /* sm/lg gap sourced from HA_BUTTON_PROVISIONAL_DIMENSIONS (D5) */
-  --pa-button-gap-sm: 8px; /* provisional: pending design validation */
-  --ha-button-gap-sm: var(--pa-button-gap-sm); /* provisional: pending design validation */
-  --pa-button-gap-md: 10px;
-  --ha-button-gap-md: var(--pa-button-gap-md);
-  --pa-button-gap-lg: 12px; /* provisional: pending design validation */
-  --ha-button-gap-lg: var(--pa-button-gap-lg); /* provisional: pending design validation */
+  --ha-button-gap-sm: 8px; /* provisional: pending design validation */
+  --ha-button-gap-md: 10px;
+  --ha-button-gap-lg: 12px; /* provisional: pending design validation */
 
-  --pa-button-focus-ring: 2px solid var(--ha-primary-hover);
-  --ha-button-focus-ring: var(--pa-button-focus-ring);
-  --pa-button-focus-ring-offset: 5px;
-  --ha-button-focus-ring-offset: var(--pa-button-focus-ring-offset);
-  --pa-button-hover-bg: var(--ha-primary-hover);
-  --ha-button-hover-bg: var(--pa-button-hover-bg);
-  --pa-button-active-bg: var(--ha-primary-active);
-  --ha-button-active-bg: var(--pa-button-active-bg);
-  --pa-button-disabled-bg: var(--neutral-200);
-  --ha-button-disabled-bg: var(--pa-button-disabled-bg);
-  --pa-button-disabled-color: var(--neutral-500);
-  --ha-button-disabled-color: var(--pa-button-disabled-color);
-  --pa-button-disabled-opacity: 0.6;
-  --ha-button-disabled-opacity: var(--pa-button-disabled-opacity);
-  --pa-button-solid-color: var(--ha-primary-contrast);
-  --ha-button-solid-color: var(--pa-button-solid-color);
-  --pa-button-transition-duration: 150ms;
-  --ha-button-transition-duration: var(--pa-button-transition-duration);
-  --pa-button-transition-easing: ease-in-out;
-  --ha-button-transition-easing: var(--pa-button-transition-easing);
-  --pa-button-loading-color: var(--ha-primary-contrast);
-  --ha-button-loading-color: var(--pa-button-loading-color);
-  --pa-button-spinner-size: 1em;
-  --ha-button-spinner-size: var(--pa-button-spinner-size);
-  --pa-button-spinner-border: 2px solid currentColor;
-  --ha-button-spinner-border: var(--pa-button-spinner-border);
-  --pa-button-spinner-duration: 600ms;
-  --ha-button-spinner-duration: var(--pa-button-spinner-duration);
-  --pa-button-sr-only-width: 1px;
-  --ha-button-sr-only-width: var(--pa-button-sr-only-width);
-  --pa-button-sr-only-height: 1px;
-  --ha-button-sr-only-height: var(--pa-button-sr-only-height);
-  --pa-button-sr-only-margin: -1px;
-  --ha-button-sr-only-margin: var(--pa-button-sr-only-margin);
+  --ha-button-focus-ring: 2px solid var(--ha-primary-hover);
+  --ha-button-focus-ring-offset: 5px;
+  --ha-button-hover-bg: var(--ha-primary-hover);
+  --ha-button-active-bg: var(--ha-primary-active);
+  --ha-button-disabled-bg: var(--neutral-200);
+  --ha-button-disabled-color: var(--neutral-500);
+  --ha-button-disabled-opacity: 0.6;
+  --ha-button-solid-color: var(--ha-primary-contrast);
+  --ha-button-transition-duration: 150ms;
+  --ha-button-transition-easing: ease-in-out;
+  --ha-button-loading-color: var(--ha-primary-contrast);
+  --ha-button-spinner-size: 1em;
+  --ha-button-spinner-border: 2px solid currentColor;
+  --ha-button-spinner-duration: 600ms;
+  --ha-button-sr-only-width: 1px;
+  --ha-button-sr-only-height: 1px;
+  --ha-button-sr-only-margin: -1px;
 
   /* ------------------------------------------------------------------ */
   /* Component defaults — Input (HA_INPUT_TOKEN_DEFAULTS)                */
   /* ------------------------------------------------------------------ */
 
-  --pa-input-bg: var(--neutral-50);
-  --ha-input-bg: var(--pa-input-bg);
-  --pa-input-color: var(--neutral-900);
-  --ha-input-color: var(--pa-input-color);
-  --pa-input-border: 1px solid var(--neutral-700);
-  --ha-input-border: var(--pa-input-border);
-  --pa-input-font-family: var(--font-family);
-  --ha-input-font-family: var(--pa-input-font-family);
-  --pa-input-font-weight: var(--font-weight-regular);
-  --ha-input-font-weight: var(--pa-input-font-weight);
-  --pa-input-line-height: var(--line-height-body);
-  --ha-input-line-height: var(--pa-input-line-height);
+  --ha-input-bg: var(--neutral-50);
+  --ha-input-color: var(--neutral-900);
+  --ha-input-border: 1px solid var(--neutral-700);
+  --ha-input-font-family: var(--font-family);
+  --ha-input-font-weight: var(--font-weight-regular);
+  --ha-input-line-height: var(--line-height-body);
 
   /* All dimensions sourced from HA_INPUT_PROVISIONAL_DIMENSIONS — NO Figma source for Input */
-  --pa-input-padding-sm: 0 12px; /* provisional: pending design validation */
-  --ha-input-padding-sm: var(--pa-input-padding-sm); /* provisional: pending design validation */
-  --pa-input-padding-md: 0 16px; /* provisional: pending design validation */
-  --ha-input-padding-md: var(--pa-input-padding-md); /* provisional: pending design validation */
-  --pa-input-padding-lg: 0 20px; /* provisional: pending design validation */
-  --ha-input-padding-lg: var(--pa-input-padding-lg); /* provisional: pending design validation */
+  --ha-input-padding-sm: 0 12px; /* provisional: pending design validation */
+  --ha-input-padding-md: 0 16px; /* provisional: pending design validation */
+  --ha-input-padding-lg: 0 20px; /* provisional: pending design validation */
 
-  --pa-input-font-sm: var(--font-size-small-body);
-  --ha-input-font-sm: var(--pa-input-font-sm);
-  --pa-input-font-md: var(--font-size-body);
-  --ha-input-font-md: var(--pa-input-font-md);
-  --pa-input-font-lg: var(--font-size-body);
-  --ha-input-font-lg: var(--pa-input-font-lg);
+  --ha-input-font-sm: var(--font-size-small-body);
+  --ha-input-font-md: var(--font-size-body);
+  --ha-input-font-lg: var(--font-size-body);
 
-  --pa-input-min-height-sm: 33px; /* provisional: pending design validation */
-  --ha-input-min-height-sm: var(--pa-input-min-height-sm); /* provisional */
-  --pa-input-min-height-md: 48px; /* provisional: pending design validation */
-  --ha-input-min-height-md: var(--pa-input-min-height-md); /* provisional */
-  --pa-input-min-height-lg: 56px; /* provisional: pending design validation */
-  --ha-input-min-height-lg: var(--pa-input-min-height-lg); /* provisional */
+  --ha-input-min-height-sm: 33px; /* provisional: pending design validation */
+  --ha-input-min-height-md: 48px; /* provisional: pending design validation */
+  --ha-input-min-height-lg: 56px; /* provisional: pending design validation */
 
-  --pa-input-radius-sm: 6px; /* provisional: pending design validation */
-  --ha-input-radius-sm: var(--pa-input-radius-sm); /* provisional: pending design validation */
-  --pa-input-radius-md: 4px; /* provisional: pending design validation */
-  --ha-input-radius-md: var(--pa-input-radius-md); /* provisional: pending design validation */
-  --pa-input-radius-lg: 8px; /* provisional: pending design validation */
-  --ha-input-radius-lg: var(--pa-input-radius-lg); /* provisional: pending design validation */
+  --ha-input-radius-sm: 6px; /* provisional: pending design validation */
+  --ha-input-radius-md: 4px; /* provisional: pending design validation */
+  --ha-input-radius-lg: 8px; /* provisional: pending design validation */
 
-  --pa-input-focus-border: var(--ha-primary);
-  --ha-input-focus-border: var(--pa-input-focus-border);
-  --pa-input-focus-ring: 2px solid var(--ha-primary-hover);
-  --ha-input-focus-ring: var(--pa-input-focus-ring);
-  --pa-input-focus-ring-offset: 5px;
-  --ha-input-focus-ring-offset: var(--pa-input-focus-ring-offset);
-  --pa-input-error-border: var(--ha-error);
-  --ha-input-error-border: var(--pa-input-error-border);
-  --pa-input-error-color: var(--ha-error);
-  --ha-input-error-color: var(--pa-input-error-color);
-  --pa-input-error-icon-color: var(--ha-error);
-  --ha-input-error-icon-color: var(--pa-input-error-icon-color);
-  --pa-input-disabled-bg: var(--neutral-200);
-  --ha-input-disabled-bg: var(--pa-input-disabled-bg);
-  --pa-input-disabled-color: var(--neutral-500);
-  --ha-input-disabled-color: var(--pa-input-disabled-color);
-  --pa-input-disabled-opacity: 0.6;
-  --ha-input-disabled-opacity: var(--pa-input-disabled-opacity);
-  --pa-input-readonly-bg: var(--neutral-50);
-  --ha-input-readonly-bg: var(--pa-input-readonly-bg);
-  --pa-input-readonly-border: 1px solid var(--neutral-200);
-  --ha-input-readonly-border: var(--pa-input-readonly-border);
-  --pa-input-hint-color: var(--neutral-500);
-  --ha-input-hint-color: var(--pa-input-hint-color);
-  --pa-input-hint-font-size: var(--font-size-caption);
-  --ha-input-hint-font-size: var(--pa-input-hint-font-size);
-  --pa-input-label-color: var(--neutral-700);
-  --ha-input-label-color: var(--pa-input-label-color);
-  --pa-input-label-font-size: var(--font-size-small-body);
-  --ha-input-label-font-size: var(--pa-input-label-font-size);
-  --pa-input-label-font-weight: var(--font-weight-semibold);
-  --ha-input-label-font-weight: var(--pa-input-label-font-weight);
-  --pa-input-transition-duration: 150ms;
-  --ha-input-transition-duration: var(--pa-input-transition-duration);
-  --pa-input-transition-easing: ease-in-out;
-  --ha-input-transition-easing: var(--pa-input-transition-easing);
-  --pa-input-placeholder-color: var(--neutral-500);
-  --ha-input-placeholder-color: var(--pa-input-placeholder-color);
+  --ha-input-focus-border: var(--ha-primary);
+  --ha-input-focus-ring: 2px solid var(--ha-primary-hover);
+  --ha-input-focus-ring-offset: 5px;
+  --ha-input-error-border: var(--ha-error);
+  --ha-input-error-color: var(--ha-error);
+  --ha-input-error-icon-color: var(--ha-error);
+  --ha-input-disabled-bg: var(--neutral-200);
+  --ha-input-disabled-color: var(--neutral-500);
+  --ha-input-disabled-opacity: 0.6;
+  --ha-input-readonly-bg: var(--neutral-50);
+  --ha-input-readonly-border: 1px solid var(--neutral-200);
+  --ha-input-hint-color: var(--neutral-500);
+  --ha-input-hint-font-size: var(--font-size-caption);
+  --ha-input-label-color: var(--neutral-700);
+  --ha-input-label-font-size: var(--font-size-small-body);
+  --ha-input-label-font-weight: var(--font-weight-semibold);
+  --ha-input-transition-duration: 150ms;
+  --ha-input-transition-easing: ease-in-out;
+  --ha-input-placeholder-color: var(--neutral-500);
 
   /* ------------------------------------------------------------------ */
   /* Component defaults — Select (HA_SELECT_TOKEN_DEFAULTS)              */
   /* ------------------------------------------------------------------ */
 
-  --pa-select-bg: var(--neutral-50);
-  --ha-select-bg: var(--pa-select-bg);
-  --pa-select-color: var(--neutral-900);
-  --ha-select-color: var(--pa-select-color);
-  --pa-select-border: 1px solid var(--neutral-700);
-  --ha-select-border: var(--pa-select-border);
-  --pa-select-font-family: var(--font-family);
-  --ha-select-font-family: var(--pa-select-font-family);
-  --pa-select-font-weight: var(--font-weight-regular);
-  --ha-select-font-weight: var(--pa-select-font-weight);
-  --pa-select-line-height: var(--line-height-body);
-  --ha-select-line-height: var(--pa-select-line-height);
+  --ha-select-bg: var(--neutral-50);
+  --ha-select-color: var(--neutral-900);
+  --ha-select-border: 1px solid var(--neutral-700);
+  --ha-select-font-family: var(--font-family);
+  --ha-select-font-weight: var(--font-weight-regular);
+  --ha-select-line-height: var(--line-height-body);
 
   /* Trigger dimensions sourced from HA_INPUT_PROVISIONAL_DIMENSIONS — a select trigger MUST match input field metrics exactly */
-  --pa-select-padding-sm: 0 12px; /* provisional: pending design validation */
-  --ha-select-padding-sm: var(--pa-select-padding-sm); /* provisional: pending design validation */
-  --pa-select-padding-md: 0 16px; /* provisional: pending design validation */
-  --ha-select-padding-md: var(--pa-select-padding-md); /* provisional: pending design validation */
-  --pa-select-padding-lg: 0 20px; /* provisional: pending design validation */
-  --ha-select-padding-lg: var(--pa-select-padding-lg); /* provisional: pending design validation */
+  --ha-select-padding-sm: 0 12px; /* provisional: pending design validation */
+  --ha-select-padding-md: 0 16px; /* provisional: pending design validation */
+  --ha-select-padding-lg: 0 20px; /* provisional: pending design validation */
 
-  --pa-select-font-sm: var(--font-size-small-body);
-  --ha-select-font-sm: var(--pa-select-font-sm);
-  --pa-select-font-md: var(--font-size-body);
-  --ha-select-font-md: var(--pa-select-font-md);
-  --pa-select-font-lg: var(--font-size-body);
-  --ha-select-font-lg: var(--pa-select-font-lg);
+  --ha-select-font-sm: var(--font-size-small-body);
+  --ha-select-font-md: var(--font-size-body);
+  --ha-select-font-lg: var(--font-size-body);
 
-  --pa-select-min-height-sm: 33px; /* provisional: pending design validation */
-  --ha-select-min-height-sm: var(--pa-select-min-height-sm); /* provisional */
-  --pa-select-min-height-md: 48px; /* provisional: pending design validation */
-  --ha-select-min-height-md: var(--pa-select-min-height-md); /* provisional */
-  --pa-select-min-height-lg: 56px; /* provisional: pending design validation */
-  --ha-select-min-height-lg: var(--pa-select-min-height-lg); /* provisional */
+  --ha-select-min-height-sm: 33px; /* provisional: pending design validation */
+  --ha-select-min-height-md: 48px; /* provisional: pending design validation */
+  --ha-select-min-height-lg: 56px; /* provisional: pending design validation */
 
-  --pa-select-radius-sm: 6px; /* provisional: pending design validation */
-  --ha-select-radius-sm: var(--pa-select-radius-sm); /* provisional: pending design validation */
-  --pa-select-radius-md: 4px; /* provisional: pending design validation */
-  --ha-select-radius-md: var(--pa-select-radius-md); /* provisional: pending design validation */
-  --pa-select-radius-lg: 8px; /* provisional: pending design validation */
-  --ha-select-radius-lg: var(--pa-select-radius-lg); /* provisional: pending design validation */
+  --ha-select-radius-sm: 6px; /* provisional: pending design validation */
+  --ha-select-radius-md: 4px; /* provisional: pending design validation */
+  --ha-select-radius-lg: 8px; /* provisional: pending design validation */
 
-  --pa-select-placeholder-color: var(--neutral-500);
-  --ha-select-placeholder-color: var(--pa-select-placeholder-color);
-  --pa-select-focus-border: var(--ha-primary);
-  --ha-select-focus-border: var(--pa-select-focus-border);
-  --pa-select-focus-ring: 2px solid var(--ha-primary-hover);
-  --ha-select-focus-ring: var(--pa-select-focus-ring);
-  --pa-select-focus-ring-offset: 5px;
-  --ha-select-focus-ring-offset: var(--pa-select-focus-ring-offset);
-  --pa-select-error-border: var(--ha-error);
-  --ha-select-error-border: var(--pa-select-error-border);
-  --pa-select-error-color: var(--ha-error);
-  --ha-select-error-color: var(--pa-select-error-color);
-  --pa-select-disabled-bg: var(--neutral-200);
-  --ha-select-disabled-bg: var(--pa-select-disabled-bg);
-  --pa-select-disabled-color: var(--neutral-500);
-  --ha-select-disabled-color: var(--pa-select-disabled-color);
-  --pa-select-disabled-opacity: 0.6;
-  --ha-select-disabled-opacity: var(--pa-select-disabled-opacity);
-  --pa-select-readonly-bg: var(--neutral-50);
-  --ha-select-readonly-bg: var(--pa-select-readonly-bg);
-  --pa-select-readonly-border: 1px solid var(--neutral-200);
-  --ha-select-readonly-border: var(--pa-select-readonly-border);
-  --pa-select-transition-duration: 150ms;
-  --ha-select-transition-duration: var(--pa-select-transition-duration);
-  --pa-select-transition-easing: ease-in-out;
-  --ha-select-transition-easing: var(--pa-select-transition-easing);
-  --pa-select-gap: var(--gap-sm);
-  --ha-select-gap: var(--pa-select-gap);
+  --ha-select-placeholder-color: var(--neutral-500);
+  --ha-select-focus-border: var(--ha-primary);
+  --ha-select-focus-ring: 2px solid var(--ha-primary-hover);
+  --ha-select-focus-ring-offset: 5px;
+  --ha-select-error-border: var(--ha-error);
+  --ha-select-error-color: var(--ha-error);
+  --ha-select-disabled-bg: var(--neutral-200);
+  --ha-select-disabled-color: var(--neutral-500);
+  --ha-select-disabled-opacity: 0.6;
+  --ha-select-readonly-bg: var(--neutral-50);
+  --ha-select-readonly-border: 1px solid var(--neutral-200);
+  --ha-select-transition-duration: 150ms;
+  --ha-select-transition-easing: ease-in-out;
+  --ha-select-gap: var(--gap-sm);
 
   /* Panel — no dimension here is sourced from HA_INPUT_PROVISIONAL_DIMENSIONS, so none are marked provisional */
-  --pa-select-panel-bg: var(--neutral-50);
-  --ha-select-panel-bg: var(--pa-select-panel-bg);
-  --pa-select-panel-border: 1px solid var(--neutral-200);
-  --ha-select-panel-border: var(--pa-select-panel-border);
-  --pa-select-panel-radius: var(--radius-sm);
-  --ha-select-panel-radius: var(--pa-select-panel-radius);
-  --pa-select-panel-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  --ha-select-panel-shadow: var(--pa-select-panel-shadow);
-  --pa-select-panel-max-height: 320px; /* v1 literal, no foundation scale match */
-  --ha-select-panel-max-height: var(--pa-select-panel-max-height);
-  --pa-select-panel-padding-y: var(--gap-xs);
-  --ha-select-panel-padding-y: var(--pa-select-panel-padding-y);
-  --pa-select-panel-offset: var(--gap-xs);
-  --ha-select-panel-offset: var(--pa-select-panel-offset);
+  --ha-select-panel-bg: var(--neutral-50);
+  --ha-select-panel-border: 1px solid var(--neutral-200);
+  --ha-select-panel-radius: var(--radius-sm);
+  --ha-select-panel-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --ha-select-panel-max-height: 320px; /* v1 literal, no foundation scale match */
+  --ha-select-panel-padding-y: var(--gap-xs);
+  --ha-select-panel-offset: var(--gap-xs);
 
-  --pa-select-option-color: var(--neutral-900);
-  --ha-select-option-color: var(--pa-select-option-color);
-  --pa-select-option-bg: transparent;
-  --ha-select-option-bg: var(--pa-select-option-bg);
-  --pa-select-option-padding-x: var(--spacing-md);
-  --ha-select-option-padding-x: var(--pa-select-option-padding-x);
-  --pa-select-option-padding-y: var(--spacing-sm);
-  --ha-select-option-padding-y: var(--pa-select-option-padding-y);
-  --pa-select-option-min-height: 40px; /* v1 literal, no foundation scale match */
-  --ha-select-option-min-height: var(--pa-select-option-min-height);
-  --pa-select-option-font-size: var(--font-size-body);
-  --ha-select-option-font-size: var(--pa-select-option-font-size);
-  --pa-select-option-hover-bg: var(--neutral-200);
-  --ha-select-option-hover-bg: var(--pa-select-option-hover-bg);
-  --pa-select-option-active-bg: var(--neutral-200);
-  --ha-select-option-active-bg: var(--pa-select-option-active-bg);
-  --pa-select-option-active-color: var(--neutral-900);
-  --ha-select-option-active-color: var(--pa-select-option-active-color);
-  --pa-select-option-selected-bg: var(--ha-primary-hover);
-  --ha-select-option-selected-bg: var(--pa-select-option-selected-bg);
-  --pa-select-option-selected-color: var(--ha-primary-contrast);
-  --ha-select-option-selected-color: var(--pa-select-option-selected-color);
-  --pa-select-option-selected-font-weight: var(--font-weight-semibold);
-  --ha-select-option-selected-font-weight: var(--pa-select-option-selected-font-weight);
-  --pa-select-option-disabled-color: var(--neutral-500);
-  --ha-select-option-disabled-color: var(--pa-select-option-disabled-color);
-  --pa-select-option-disabled-opacity: 0.6;
-  --ha-select-option-disabled-opacity: var(--pa-select-option-disabled-opacity);
+  --ha-select-option-color: var(--neutral-900);
+  --ha-select-option-bg: transparent;
+  --ha-select-option-padding-x: var(--spacing-md);
+  --ha-select-option-padding-y: var(--spacing-sm);
+  --ha-select-option-min-height: 40px; /* v1 literal, no foundation scale match */
+  --ha-select-option-font-size: var(--font-size-body);
+  --ha-select-option-hover-bg: var(--neutral-200);
+  --ha-select-option-active-bg: var(--neutral-200);
+  --ha-select-option-active-color: var(--neutral-900);
+  --ha-select-option-selected-bg: var(--ha-primary-hover);
+  --ha-select-option-selected-color: var(--ha-primary-contrast);
+  --ha-select-option-selected-font-weight: var(--font-weight-semibold);
+  --ha-select-option-disabled-color: var(--neutral-500);
+  --ha-select-option-disabled-opacity: 0.6;
 }

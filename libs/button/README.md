@@ -1,4 +1,4 @@
-# @halo-ui/button
+# @halolib-ui/button
 
 Standalone Angular 19 button component — variants, sizes, color, disabled, and
 loading states. Token-driven styling via CSS custom properties with CDK a11y
@@ -17,8 +17,8 @@ primitives.
 
 ## Usage
 
-`@halo-ui/button` only renders correctly when both theming pieces from
-`@halo-ui/core` are set up:
+`@halolib-ui/button` only renders correctly when both theming pieces from
+`@halolib-ui/core` are set up:
 
 ```ts
 // app.config.ts
@@ -27,7 +27,7 @@ providers: [provideHaTheme()];
 
 ```css
 /* styles.css (global stylesheet) */
-@import '@halo-ui/core/theme.css';
+@import '@halolib-ui/core/theme.css';
 ```
 
 `provideHaTheme()` alone only writes the runtime color variables. The `@import`

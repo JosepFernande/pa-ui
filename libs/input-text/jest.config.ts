@@ -1,8 +1,8 @@
 export default {
-  displayName: 'input',
+  displayName: 'input-text',
   preset: '../../jest.preset.cjs',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../coverage/libs/input',
+  coverageDirectory: '../../coverage/libs/input-text',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

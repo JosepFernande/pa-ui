@@ -1,4 +1,4 @@
-export const HA_INPUT_TOKENS = {
+export const HA_INPUT_TEXT_TOKENS = {
   bg: '--ha-input-bg',
   color: '--ha-input-color',
   border: '--ha-input-border',

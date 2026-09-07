@@ -1,4 +1,4 @@
-# Cómo contribuir a halo-ui (ex pa-ui)
+# Cómo contribuir a halo-ui
 
 ¡Gracias por tu interés en contribuir! Este documento cubre el flujo de
 desarrollo, el proceso de PR, las convenciones de changesets y el proceso de
@@ -25,8 +25,8 @@ npm run lint:css
 # Correr los tests de una sola librería
 npx nx test core
 npx nx test button
-npx nx test input
-npx nx test halo-ui   # paquete umbrella @halo-ui/angular
+npx nx test input-text
+npx nx test halo-ui   # paquete umbrella @halolib-ui/angular
 ```
 
 ### Comandos nx útiles
@@ -84,8 +84,8 @@ mensaje de commit debe seguir este patrón:
 **Tipos** (validados por `commitlint.config.js`): `feat`, `fix`, `docs`,
 `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
 
-**Scopes sugeridos**: `core`, `button`, `input`, `angular`, `showcase`, `repo`,
-`ci`
+**Scopes sugeridos**: `core`, `button`, `input-text`, `angular`, `showcase`,
+`repo`, `ci`
 
 Ejemplos:
 
@@ -108,8 +108,8 @@ versionado y changelogs.
 ### Cuándo se requiere un changeset
 
 Se requiere un changeset siempre que tu PR modifique un **paquete publicable**
-(`@halo-ui/core`, `@halo-ui/button`, `@halo-ui/input`, `@halo-ui/angular`). Esto
-incluye:
+(`@halolib-ui/core`, `@halolib-ui/button`, `@halolib-ui/input-text`,
+`@halolib-ui/angular`). Esto incluye:
 
 - Agregar nuevas features o componentes
 - Cambiar o remover APIs públicas
@@ -181,12 +181,12 @@ que efectivamente publica a npm.
 ### Estado actual: release estable (fuera de modo prerelease)
 
 El repo salió del modo prerelease de Changesets (`changeset pre exit`) y ya no
-usa `.changeset/pre.json`. Los cuatro paquetes (`@halo-ui/core`,
-`@halo-ui/button`, `@halo-ui/input`, `@halo-ui/angular`) tienen releases
-estables reales y se instalan sin ningún tag especial:
+usa `.changeset/pre.json`. Los cuatro paquetes (`@halolib-ui/core`,
+`@halolib-ui/button`, `@halolib-ui/input-text`, `@halolib-ui/angular`) tienen
+releases estables reales y se instalan sin ningún tag especial:
 
 ```bash
-npm install @halo-ui/core
+npm install @halolib-ui/core
 ```
 
 `release.yml` conserva lógica condicional para el caso en que el repo vuelva a

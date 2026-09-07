@@ -14,8 +14,8 @@ const { axe, toHaveNoViolations } = require('jest-axe') as {
   toHaveNoViolations: Record<string, jest.CustomMatcher>;
 };
 
-import { HaInput } from './input.component';
-import { HaInputSize } from './input.types';
+import { HaInputText } from './input-text.component';
+import { HaInputTextSize } from './input-text.types';
 
 expect.extend(toHaveNoViolations);
 
@@ -30,18 +30,18 @@ declare global {
 }
 
 /**
- * Test host that wraps HaInput in a reactive form, matching real consumer
- * usage with `<input ha-input [formControl]="control">`.
+ * Test host that wraps HaInputText in a reactive form, matching real consumer
+ * usage with `<input ha-input-text [formControl]="control">`.
  */
 @Component({
-  selector: 'ha-input-test-host',
+  selector: 'ha-input-text-test-host',
   standalone: true,
-  imports: [HaInput, ReactiveFormsModule],
+  imports: [HaInputText, ReactiveFormsModule],
   encapsulation: ViewEncapsulation.None,
   template: `
     <input
-      ha-input
-      id="ha-input-test"
+      ha-input-text
+      id="ha-input-text-test"
       [formControl]="control"
       [size]="size"
       [placeholder]="placeholder"
@@ -53,7 +53,7 @@ declare global {
 })
 class TestHost {
   control = new FormControl<string>('');
-  size: HaInputSize = 'md';
+  size: HaInputTextSize = 'md';
   placeholder = '';
   disabled = false;
   readonly = false;
@@ -61,19 +61,19 @@ class TestHost {
 }
 
 /**
- * Standalone host WITHOUT any form directive — proves HaInput works outside
+ * Standalone host WITHOUT any form directive — proves HaInputText works outside
  * a form (ngControl is null, typing works, no errors).
  */
 @Component({
-  selector: 'ha-input-standalone-host',
+  selector: 'ha-input-text-standalone-host',
   standalone: true,
-  imports: [HaInput],
+  imports: [HaInputText],
   encapsulation: ViewEncapsulation.None,
-  template: `<input ha-input placeholder="Write something" />`,
+  template: `<input ha-input-text placeholder="Write something" />`,
 })
 class StandaloneHost {}
 
-describe('HaInput', () => {
+describe('HaInputText', () => {
   let focusOrigin$: Subject<FocusOrigin>;
   let focusMonitorMock: { monitor: jest.Mock; stopMonitoring: jest.Mock };
 
@@ -123,11 +123,11 @@ describe('HaInput', () => {
       expect(byCss).not.toBeNull();
     });
 
-    it('should always have the base BEM class ha-input', () => {
+    it('should always have the base BEM class ha-input-text', () => {
       const { fixture, inputEl } = createTestHost();
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('ha-input')).toBe(true);
+      expect(inputEl.classList.contains('ha-input-text')).toBe(true);
     });
 
     it('should apply aria-label from the input', () => {
@@ -141,7 +141,7 @@ describe('HaInput', () => {
       const { fixture, inputEl } = createTestHost();
       fixture.detectChanges();
 
-      expect(inputEl.getAttribute('id')).toBe('ha-input-test');
+      expect(inputEl.getAttribute('id')).toBe('ha-input-text-test');
     });
 
     it('should always render a text input, overriding any consumer-set type attribute', () => {
@@ -157,28 +157,28 @@ describe('HaInput', () => {
   // Size classes
   // -----------------------------------------------------------------------
   describe('size classes', () => {
-    it('should apply ha-input--md by default', () => {
+    it('should apply ha-input-text--md by default', () => {
       const { fixture, host, inputEl } = createTestHost();
       host.size = 'md';
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('ha-input--md')).toBe(true);
+      expect(inputEl.classList.contains('ha-input-text--md')).toBe(true);
     });
 
-    it('should apply ha-input--sm when size is sm', () => {
+    it('should apply ha-input-text--sm when size is sm', () => {
       const { fixture, host, inputEl } = createTestHost();
       host.size = 'sm';
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('ha-input--sm')).toBe(true);
+      expect(inputEl.classList.contains('ha-input-text--sm')).toBe(true);
     });
 
-    it('should apply ha-input--lg when size is lg', () => {
+    it('should apply ha-input-text--lg when size is lg', () => {
       const { fixture, host, inputEl } = createTestHost();
       host.size = 'lg';
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('ha-input--lg')).toBe(true);
+      expect(inputEl.classList.contains('ha-input-text--lg')).toBe(true);
     });
 
     it('should NOT have classes for other sizes', () => {
@@ -186,8 +186,8 @@ describe('HaInput', () => {
       host.size = 'sm';
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('ha-input--md')).toBe(false);
-      expect(inputEl.classList.contains('ha-input--lg')).toBe(false);
+      expect(inputEl.classList.contains('ha-input-text--md')).toBe(false);
+      expect(inputEl.classList.contains('ha-input-text--lg')).toBe(false);
     });
   });
 
@@ -223,7 +223,7 @@ describe('HaInput', () => {
 
       expect(inputEl.disabled).toBe(true);
       expect(inputEl.getAttribute('aria-disabled')).toBe('true');
-      expect(inputEl.classList.contains('ha-input--disabled')).toBe(true);
+      expect(inputEl.classList.contains('ha-input-text--disabled')).toBe(true);
     });
 
     it('should NOT disable the input when [disabled] is false', () => {
@@ -232,7 +232,7 @@ describe('HaInput', () => {
       fixture.detectChanges();
 
       expect(inputEl.disabled).toBe(false);
-      expect(inputEl.classList.contains('ha-input--disabled')).toBe(false);
+      expect(inputEl.classList.contains('ha-input-text--disabled')).toBe(false);
     });
 
     it('should disable the native input when the control is disabled (CVA setDisabledState)', () => {
@@ -244,7 +244,7 @@ describe('HaInput', () => {
 
       expect(inputEl.disabled).toBe(true);
       expect(inputEl.getAttribute('aria-disabled')).toBe('true');
-      expect(inputEl.classList.contains('ha-input--disabled')).toBe(true);
+      expect(inputEl.classList.contains('ha-input-text--disabled')).toBe(true);
     });
 
     it('should re-enable the native input when the control is enabled (CVA setDisabledState)', () => {
@@ -259,7 +259,7 @@ describe('HaInput', () => {
       fixture.detectChanges();
 
       expect(inputEl.disabled).toBe(false);
-      expect(inputEl.classList.contains('ha-input--disabled')).toBe(false);
+      expect(inputEl.classList.contains('ha-input-text--disabled')).toBe(false);
     });
   });
 
@@ -274,7 +274,7 @@ describe('HaInput', () => {
 
       expect(inputEl.readOnly).toBe(true);
       expect(inputEl.hasAttribute('readonly')).toBe(true);
-      expect(inputEl.classList.contains('ha-input--readonly')).toBe(true);
+      expect(inputEl.classList.contains('ha-input-text--readonly')).toBe(true);
     });
 
     it('should remove the readonly state when [readonly] is false', () => {
@@ -284,7 +284,7 @@ describe('HaInput', () => {
 
       expect(inputEl.readOnly).toBe(false);
       expect(inputEl.hasAttribute('readonly')).toBe(false);
-      expect(inputEl.classList.contains('ha-input--readonly')).toBe(false);
+      expect(inputEl.classList.contains('ha-input-text--readonly')).toBe(false);
     });
   });
 
@@ -327,7 +327,7 @@ describe('HaInput', () => {
 
       const inputEl = fixture.nativeElement.querySelector('input') as HTMLInputElement;
       expect(inputEl).not.toBeNull();
-      expect(inputEl.classList.contains('ha-input')).toBe(true);
+      expect(inputEl.classList.contains('ha-input-text')).toBe(true);
 
       inputEl.value = 'typed without form';
       inputEl.dispatchEvent(new Event('input'));
@@ -340,7 +340,7 @@ describe('HaInput', () => {
   // Error state
   // -----------------------------------------------------------------------
   describe('error state', () => {
-    it('should apply .ha-input--error and aria-invalid="true" when the control is invalid and touched', () => {
+    it('should apply .ha-input-text--error and aria-invalid="true" when the control is invalid and touched', () => {
       const { fixture, host, inputEl } = createTestHost();
       fixture.detectChanges();
 
@@ -349,7 +349,7 @@ describe('HaInput', () => {
       host.control.markAsTouched();
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('ha-input--error')).toBe(true);
+      expect(inputEl.classList.contains('ha-input-text--error')).toBe(true);
       expect(inputEl.getAttribute('aria-invalid')).toBe('true');
     });
 
@@ -361,7 +361,7 @@ describe('HaInput', () => {
       host.control.updateValueAndValidity();
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('ha-input--error')).toBe(false);
+      expect(inputEl.classList.contains('ha-input-text--error')).toBe(false);
       expect(inputEl.getAttribute('aria-invalid')).toBeNull();
     });
 
@@ -373,12 +373,12 @@ describe('HaInput', () => {
       host.control.updateValueAndValidity();
       host.control.markAsTouched();
       fixture.detectChanges();
-      expect(inputEl.classList.contains('ha-input--error')).toBe(true);
+      expect(inputEl.classList.contains('ha-input-text--error')).toBe(true);
 
       host.control.setValue('ok');
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('ha-input--error')).toBe(false);
+      expect(inputEl.classList.contains('ha-input-text--error')).toBe(false);
       expect(inputEl.getAttribute('aria-invalid')).toBeNull();
     });
   });
@@ -394,37 +394,37 @@ describe('HaInput', () => {
       expect(focusMonitorMock.monitor).toHaveBeenCalledTimes(1);
     });
 
-    it('should apply ha-input--focused class on keyboard focus', () => {
+    it('should apply ha-input-text--focused class on keyboard focus', () => {
       const { fixture, inputEl } = createTestHost();
       fixture.detectChanges();
 
       focusOrigin$.next('keyboard');
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('ha-input--focused')).toBe(true);
+      expect(inputEl.classList.contains('ha-input-text--focused')).toBe(true);
     });
 
-    it('should also apply ha-input--focused class on mouse focus (any origin shows the focus color, not just keyboard)', () => {
+    it('should also apply ha-input-text--focused class on mouse focus (any origin shows the focus color, not just keyboard)', () => {
       const { fixture, inputEl } = createTestHost();
       fixture.detectChanges();
 
       focusOrigin$.next('mouse');
       fixture.detectChanges();
 
-      expect(inputEl.classList.contains('ha-input--focused')).toBe(true);
+      expect(inputEl.classList.contains('ha-input-text--focused')).toBe(true);
     });
 
-    it('should remove ha-input--focused when focus is lost (null origin)', () => {
+    it('should remove ha-input-text--focused when focus is lost (null origin)', () => {
       const { fixture, inputEl } = createTestHost();
       fixture.detectChanges();
 
       focusOrigin$.next('keyboard');
       fixture.detectChanges();
-      expect(inputEl.classList.contains('ha-input--focused')).toBe(true);
+      expect(inputEl.classList.contains('ha-input-text--focused')).toBe(true);
 
       focusOrigin$.next(null);
       fixture.detectChanges();
-      expect(inputEl.classList.contains('ha-input--focused')).toBe(false);
+      expect(inputEl.classList.contains('ha-input-text--focused')).toBe(false);
     });
 
     it('should call focusMonitor.stopMonitoring on destroy', () => {
@@ -445,7 +445,7 @@ describe('HaInput', () => {
       const { fixture } = createTestHost();
       fixture.detectChanges();
 
-      const inputDebug = fixture.debugElement.query(By.directive(HaInput));
+      const inputDebug = fixture.debugElement.query(By.directive(HaInputText));
       expect(inputDebug!.componentInstance).toBeDefined();
     });
 
@@ -458,7 +458,7 @@ describe('HaInput', () => {
 
       const inputEl = fixture.debugElement.query(By.css('input'))!
         .nativeElement as HTMLInputElement;
-      expect(inputEl.classList.contains('ha-input--lg')).toBe(true);
+      expect(inputEl.classList.contains('ha-input-text--lg')).toBe(true);
     });
 
     it('should update the DOM when a signal input is set via the host', () => {

@@ -2,8 +2,8 @@
 
 ## Purpose
 
-Defines the CI/CD pipeline for `pa-ui`: the jobs, the checks, the triggers, the
-artifacts, the release flow, and the branch protection rules. This is the
+Defines the CI/CD pipeline for `halo-ui`: the jobs, the checks, the triggers,
+the artifacts, the release flow, and the branch protection rules. This is the
 contract for how code moves from a PR to a published package.
 
 Complement this with

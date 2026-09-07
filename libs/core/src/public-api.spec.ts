@@ -59,11 +59,6 @@ describe('public-api — theme engine surface (Issue #46)', () => {
     expect((publicApi as unknown as Record<string, unknown>)['HA_THEME_TOKEN']).toBeUndefined();
     expect((publicApi as unknown as Record<string, unknown>)['HA_THEME_STATE_KEY']).toBeUndefined();
   });
-
-  it('does NOT export HaUiComponent/PaUiComponent — the dead scaffold was deleted, not renamed (#139)', () => {
-    expect((publicApi as unknown as Record<string, unknown>)['HaUiComponent']).toBeUndefined();
-    expect((publicApi as unknown as Record<string, unknown>)['PaUiComponent']).toBeUndefined();
-  });
 });
 
 describe('public-api — focus management surface (Issue #118)', () => {
@@ -110,7 +105,7 @@ describe('public-api — theme runtime surface (Issue #48, Phase 5)', () => {
   });
 });
 
-describe('public-api — Foundation surface (pa-default-theme, Phase 2)', () => {
+describe('public-api — Foundation surface (default-theme, Phase 2)', () => {
   it('exports HA_COLOR_SCALE_STEPS and HA_SIZE_STEPS as usable arrays', () => {
     expect(publicApi.HA_COLOR_SCALE_STEPS).toEqual([
       25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900,

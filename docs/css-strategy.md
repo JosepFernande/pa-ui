@@ -1,9 +1,9 @@
 # CSS Strategy
 
-pa-ui styles every component through a strict 3-layer token system: **Foundation
-→ Semantic → Component**. This document is the reference for how the layers are
-defined, how they are distributed to a consumer app, and which product decisions
-are still open.
+halo-ui styles every component through a strict 3-layer token system:
+**Foundation → Semantic → Component**. This document is the reference for how
+the layers are defined, how they are distributed to a consumer app, and which
+product decisions are still open.
 
 See `skills/lib-ui-architecture/SKILL.md` for the architectural hard rules this
 document implements.
@@ -33,7 +33,7 @@ Foundation              Semantic                  Component
 Scale naming for spacing, gap, radius, font-size, and icon-size is always
 `xs | sm | md | lg | xl` — never numeric-indexed (`-1`, `-2`, `-4`). This is a
 non-negotiable convention shared with the existing component-token vocabulary
-(`button.tokens.ts`, `input.tokens.ts`).
+(`button.tokens.ts`, `input-text.tokens.ts`).
 
 The color scale steps (`25` through `900`) are the one intentional exception:
 they are the Figma lightness axis of a raw color scale, not a size scale, and
@@ -42,7 +42,7 @@ they never leave the Foundation layer as a numeric name — semantic color token
 
 ## Two Disjoint Pipelines
 
-pa-ui deliberately splits token delivery into two independent mechanisms
+halo-ui deliberately splits token delivery into two independent mechanisms
 depending on whether the value needs to change at runtime.
 
 ### 1. Color — runtime, via the Theme Engine
@@ -80,7 +80,7 @@ next.
 
 Raw color scales, spacing, gap, radius, typography, icon sizes, and every
 component-token _default_ value are static: fixed at build time and shipped as a
-hand-authored `:root` stylesheet, `@halo-ui/core/theme.css`. They are never
+hand-authored `:root` stylesheet, `@halolib-ui/core/theme.css`. They are never
 runtime-mutable.
 
 The TypeScript constants in `libs/core/src/lib/foundation/`
@@ -114,7 +114,7 @@ between the TS constants and the shipped CSS file.
 Bootstrap example:
 
 ```typescript
-import { provideHaTheme } from '@halo-ui/core';
+import { provideHaTheme } from '@halolib-ui/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -139,7 +139,7 @@ Full setup is `provideHaTheme()` **plus one explicit CSS import**:
 
 ```typescript
 // app.config.ts
-import { provideHaTheme } from '@halo-ui/core';
+import { provideHaTheme } from '@halolib-ui/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideHaTheme()],
@@ -148,17 +148,17 @@ export const appConfig: ApplicationConfig = {
 
 ```css
 /* styles.css (or any global entry point) */
-@import '@halo-ui/core/theme.css';
+@import '@halolib-ui/core/theme.css';
 ```
 
 With both in place, a bare app renders a fully-styled `HaButton` — height,
 min-width, radius, padding, gap, color, typography — with zero consumer-authored
 `--ha-*` tokens.
 
-`@halo-ui/core/theme.css` is exposed as a package subpath export
+`@halolib-ui/core/theme.css` is exposed as a package subpath export
 (`libs/core/package.json` → `exports["./theme.css"]`) and shipped as an
 `ng-packagr` asset. It is not injected automatically by `provideHaTheme()`:
-`@halo-ui/core` declares `sideEffects: false` and has no global stylesheet
+`@halolib-ui/core` declares `sideEffects: false` and has no global stylesheet
 otherwise, so injecting ~180 static custom properties via JS on every bootstrap
 would defeat browser CSS caching and risk FOUC on SSR. Forgetting the import
 produces an unstyled-but-not-broken component, not a crash.
@@ -169,8 +169,8 @@ produces an unstyled-but-not-broken component, not a crash.
 `--icon-size-*` by name/size only. It does **not** ship a `@font-face`
 declaration, a Montserrat font file, a Flaticon icon font, or any CDN `@import`.
 Loading the actual Montserrat font and Flaticon icon assets is the consuming
-application's responsibility. This keeps `@halo-ui/core` free of a third-party
-asset dependency and keeps `sideEffects: false` honest.
+application's responsibility. This keeps `@halolib-ui/core` free of a
+third-party asset dependency and keeps `sideEffects: false` honest.
 
 ## Overriding Tokens
 
@@ -204,7 +204,7 @@ permanent decision**.
    "Consumer Setup" above), but the underlying product question — is one extra
    import step acceptable friction — has not been explicitly confirmed.
 3. **Montserrat and Flaticon are the consuming app's responsibility**, not
-   self-hosted or bundled by `@halo-ui/core`. No alternative delivery
+   self-hosted or bundled by `@halolib-ui/core`. No alternative delivery
    (self-hosted font file, CDN import) has been evaluated or approved.
 4. **Button `sm`/`lg` height, padding, and gap values are assistant-authored
    placeholders**, not Figma-confirmed, pending designer validation. Only `md`

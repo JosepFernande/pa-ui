@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { HaButton } from '@halo-ui/button';
-import type { HaButtonSize, HaButtonVariant } from '@halo-ui/button';
+import { HaButton } from '@halolib-ui/button';
+import type { HaButtonSize, HaButtonVariant } from '@halolib-ui/button';
 import { CodeBlockComponent } from '../../shared/code-block/code-block.component';
 
 /** Showcase playground for `ha-button` (`libs/button`): variants, sizes, colors, and states. */

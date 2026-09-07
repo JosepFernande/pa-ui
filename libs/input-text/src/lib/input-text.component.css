@@ -1,5 +1,5 @@
 /*
- * HaInput — BEM CSS classes
+ * HaInputText — BEM CSS classes
  * Every value comes from a --ha-* custom property. Zero hardcoded colors, spacing, or radii.
  *
  * Token mapping:
@@ -38,7 +38,7 @@
 /* Base                                                                 */
 /* ------------------------------------------------------------------ */
 
-.ha-input {
+.ha-input-text {
   display: block;
   width: 100%;
   box-sizing: border-box;
@@ -58,7 +58,7 @@
     box-shadow var(--ha-input-transition-duration) var(--ha-input-transition-easing);
 }
 
-.ha-input::placeholder {
+.ha-input-text::placeholder {
   color: var(--ha-input-placeholder-color);
 }
 
@@ -66,21 +66,21 @@
 /* Sizes                                                               */
 /* ------------------------------------------------------------------ */
 
-.ha-input--sm {
+.ha-input-text--sm {
   padding: var(--ha-input-padding-sm);
   font-size: var(--ha-input-font-sm);
   min-height: var(--ha-input-min-height-sm);
   border-radius: var(--ha-input-radius-sm);
 }
 
-.ha-input--md {
+.ha-input-text--md {
   padding: var(--ha-input-padding-md);
   font-size: var(--ha-input-font-md);
   min-height: var(--ha-input-min-height-md);
   border-radius: var(--ha-input-radius-md);
 }
 
-.ha-input--lg {
+.ha-input-text--lg {
   padding: var(--ha-input-padding-lg);
   font-size: var(--ha-input-font-lg);
   min-height: var(--ha-input-min-height-lg);
@@ -91,7 +91,7 @@
 /* Disabled                                                            */
 /* ------------------------------------------------------------------ */
 
-.ha-input--disabled {
+.ha-input-text--disabled {
   opacity: var(--ha-input-disabled-opacity);
   cursor: not-allowed;
   background-color: var(--ha-input-disabled-bg);
@@ -102,7 +102,7 @@
 /* Readonly                                                            */
 /* ------------------------------------------------------------------ */
 
-.ha-input--readonly {
+.ha-input-text--readonly {
   background-color: var(--ha-input-readonly-bg);
   border: var(--ha-input-readonly-border);
 }
@@ -111,7 +111,7 @@
 /* Error                                                               */
 /* ------------------------------------------------------------------ */
 
-.ha-input--error {
+.ha-input-text--error {
   border-color: var(--ha-input-error-border);
   color: var(--ha-input-error-color);
 }
@@ -120,13 +120,13 @@
 /* Focus (CDK FocusMonitor) — any origin: mouse, touch, keyboard, program */
 /* ------------------------------------------------------------------ */
 
-.ha-input--focused {
+.ha-input-text--focused {
   border-color: var(--ha-input-focus-border);
   outline: none;
 }
 
 /* Keyboard-only ring (CDK FocusMonitor origin === 'keyboard'), on top of the any-origin border above */
-.ha-input--keyboard-focused {
+.ha-input-text--keyboard-focused {
   outline: var(--ha-input-focus-ring);
   outline-offset: var(--ha-input-focus-ring-offset);
 }
@@ -136,7 +136,7 @@
 /* ------------------------------------------------------------------ */
 
 @media (prefers-reduced-motion: reduce) {
-  .ha-input {
+  .ha-input-text {
     transition: none;
   }
 }

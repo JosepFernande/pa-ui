@@ -145,11 +145,11 @@ export function extractPublishOrder(step) {
 
 /**
  * Threat Matrix — Push state (#139 S4 task 4.9/4.12): the umbrella package
- * depends on core/button/input/select, so it must always publish AFTER all
- * four. A `for src_pkg in libs/` wildcard package.json glob sorts
- * alphabetically as button, core, halo-ui, input, select — publishing the
- * umbrella before input/select even though it depends on them, leaving it
- * briefly uninstallable. This check requires an EXPLICIT ordered list
+ * depends on core/button/input-text/select, so it must always publish AFTER
+ * all four. A `for src_pkg in libs/` wildcard package.json glob sorts
+ * alphabetically as button, core, halo-ui, input-text, select — publishing
+ * the umbrella before input-text/select even though it depends on them,
+ * leaving it briefly uninstallable. This check requires an EXPLICIT ordered list
  * (never a glob) covering exactly the publishable libs, with core first
  * and the umbrella last.
  */

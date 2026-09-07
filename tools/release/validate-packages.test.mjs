@@ -79,25 +79,25 @@ test('checkTagPushInvariant fails on a force-push or refspec escape hatch', () =
 // ----------------------------------------------------------------------
 // Publish-order invariant (#139 S4 task 4.9/4.12 — the umbrella-publishes-
 // before-its-deps risk: a `libs/*/package.json` glob sorts alphabetically
-// as button, core, halo-ui, input, select, publishing the umbrella before
-// input/select even though it depends on them).
+// as button, core, halo-ui, input-text, select, publishing the umbrella
+// before input-text/select even though it depends on them).
 // ----------------------------------------------------------------------
 
-const FIVE_LIBS = ['core', 'button', 'input', 'select', 'halo-ui'];
+const FIVE_LIBS = ['core', 'button', 'input-text', 'select', 'halo-ui'];
 
 test('extractPublishOrder reads the explicit `for lib_dir in ...` list in dependency order', () => {
   const order = extractPublishOrder(
     PUBLISH_STEP_OK.replace(
       'for src_pkg in libs/*/package.json; do\n      lib_dir="$(dirname "$src_pkg")"',
-      'for lib_dir in libs/core libs/button libs/input libs/select libs/halo-ui; do\n      src_pkg="$lib_dir/package.json"',
+      'for lib_dir in libs/core libs/button libs/input-text libs/select libs/halo-ui; do\n      src_pkg="$lib_dir/package.json"',
     ),
   );
-  assert.deepEqual(order, ['core', 'button', 'input', 'select', 'halo-ui']);
+  assert.deepEqual(order, ['core', 'button', 'input-text', 'select', 'halo-ui']);
 });
 
 test('checkPublishOrderInvariant passes for the explicit dependency-ordered list covering exactly the 5 publishable libs', () => {
   const result = checkPublishOrderInvariant(
-    ['core', 'button', 'input', 'select', 'halo-ui'],
+    ['core', 'button', 'input-text', 'select', 'halo-ui'],
     FIVE_LIBS,
   );
   assert.equal(result.ok, true);
@@ -110,14 +110,14 @@ test('checkPublishOrderInvariant fails when the step reverts to a libs/*/package
 });
 
 test('checkPublishOrderInvariant fails when a publishable lib is missing from the list', () => {
-  const result = checkPublishOrderInvariant(['core', 'button', 'input', 'halo-ui'], FIVE_LIBS);
+  const result = checkPublishOrderInvariant(['core', 'button', 'input-text', 'halo-ui'], FIVE_LIBS);
   assert.equal(result.ok, false);
   assert.match(result.reason, /select/);
 });
 
 test('checkPublishOrderInvariant fails when the umbrella is listed before one of its dependencies', () => {
   const result = checkPublishOrderInvariant(
-    ['core', 'button', 'halo-ui', 'input', 'select'],
+    ['core', 'button', 'halo-ui', 'input-text', 'select'],
     FIVE_LIBS,
   );
   assert.equal(result.ok, false);
@@ -126,7 +126,7 @@ test('checkPublishOrderInvariant fails when the umbrella is listed before one of
 
 test('checkPublishOrderInvariant fails when core is listed after a dependent', () => {
   const result = checkPublishOrderInvariant(
-    ['button', 'core', 'input', 'select', 'halo-ui'],
+    ['button', 'core', 'input-text', 'select', 'halo-ui'],
     FIVE_LIBS,
   );
   assert.equal(result.ok, false);
