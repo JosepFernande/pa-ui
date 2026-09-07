@@ -5,7 +5,7 @@
  * that collides with ts-jest's CommonJS transform's ambient `__filename`.
  */
 
-/** The halo-ui brand selector/token prefix (issue #139 — migrated from `pa-`). */
+/** The halo-ui brand selector/token prefix (issue #139 — migrated from the previous brand's prefix). */
 export const SELECTOR_PREFIX = 'ha-';
 
 /** Extract ha- prefixed selectors from CSS content (class selectors and element selectors). */

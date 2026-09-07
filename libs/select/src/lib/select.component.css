@@ -5,7 +5,7 @@
  *
  * Host (`ha-select`) carries size/state modifier classes; the trigger
  * (`.ha-select__trigger`) is the visible, styled `<button role="combobox">`
- * rendered inside — unlike `HaButton`/`HaInput`, the host is a genuine
+ * rendered inside — unlike `HaButton`/`HaInputText`, the host is a genuine
  * custom element, not an attribute selector on a native control.
  *
  * Token mapping:

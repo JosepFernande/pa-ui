@@ -7,12 +7,24 @@ import { provideHaTheme } from './theme-provider';
 import { HaThemeService } from './theme.service';
 
 describe('HaThemeService', () => {
+  let originalDocumentElementStyle: string | null;
+
+  beforeEach(() => {
+    originalDocumentElementStyle = document.documentElement.getAttribute('style');
+  });
+
   afterEach(() => {
     // `document.documentElement.style` is the same jsdom instance reused
     // across every test in this file; without restoring, `jest.spyOn`
     // returns the SAME already-spied mock instead of a fresh one, causing
     // call counts to accumulate across unrelated tests.
     jest.restoreAllMocks();
+
+    if (originalDocumentElementStyle === null) {
+      document.documentElement.removeAttribute('style');
+    } else {
+      document.documentElement.setAttribute('style', originalDocumentElementStyle);
+    }
   });
 
   function configureTestBed(
@@ -76,10 +88,7 @@ describe('HaThemeService', () => {
 
       TestBed.inject(HaThemeService);
 
-      // Legacy-first chain (Requirement: Temporary CSS Alias): the raw value
-      // is carried by --pa-primary; --ha-primary aliases it via var().
-      expect(setPropertySpy).toHaveBeenCalledWith('--pa-primary', '#111111');
-      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', 'var(--pa-primary)');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', '#111111');
     });
 
     it('propagates a custom error color to the signal and the --ha-error semantic var (REQ-4 transitive chain)', () => {
@@ -93,8 +102,7 @@ describe('HaThemeService', () => {
       const service = configureTestBed('browser', { colors: { error: '#8b0000' } });
 
       expect(service.theme().colors['error']).toBe('#8b0000');
-      expect(setPropertySpy).toHaveBeenCalledWith('--pa-error', '#8b0000');
-      expect(setPropertySpy).toHaveBeenCalledWith('--ha-error', 'var(--pa-error)');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-error', '#8b0000');
     });
   });
 
@@ -110,8 +118,7 @@ describe('HaThemeService', () => {
 
       expect(service.theme().colors['primary']).toBe('#000000');
       expect(service.theme().colors['success']).toBe('#16a34a');
-      expect(setPropertySpy).toHaveBeenCalledWith('--pa-primary', '#000000');
-      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', 'var(--pa-primary)');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', '#000000');
     });
 
     it('never throws on an empty overrides object (Task 2.7 — smoke, delegates to mergeTheme never-throw contract)', () => {
@@ -132,8 +139,7 @@ describe('HaThemeService', () => {
 
       expect(service.theme().colors['primary']).toBe('#0f0f0f');
       expect(service.theme().colors['success']).toBe('#16a34a');
-      expect(setPropertySpy).toHaveBeenCalledWith('--pa-primary', '#0f0f0f');
-      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', 'var(--pa-primary)');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', '#0f0f0f');
     });
   });
 
@@ -147,8 +153,7 @@ describe('HaThemeService', () => {
       service.reset();
 
       expect(service.theme().colors['primary']).toBe('#123456');
-      expect(setPropertySpy).toHaveBeenCalledWith('--pa-primary', '#123456');
-      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', 'var(--pa-primary)');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', '#123456');
     });
   });
 
@@ -208,10 +213,8 @@ describe('HaThemeService', () => {
       expect(() => service.applyTheme({ primary: 'not-a-color', success: '#0f0' })).not.toThrow();
 
       expect(warnSpy).toHaveBeenCalled();
-      expect(setPropertySpy).not.toHaveBeenCalledWith('--pa-primary', expect.anything());
       expect(setPropertySpy).not.toHaveBeenCalledWith('--ha-primary', expect.anything());
-      expect(setPropertySpy).toHaveBeenCalledWith('--pa-success', '#0f0');
-      expect(setPropertySpy).toHaveBeenCalledWith('--ha-success', 'var(--pa-success)');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-success', '#0f0');
 
       warnSpy.mockRestore();
     });
@@ -256,10 +259,8 @@ describe('HaThemeService', () => {
 
       expect(service.theme().colors['primary']).toBe('#334455');
       // Fully re-derived hover must NOT equal the dropped explicit hover.
-      expect(setPropertySpy).not.toHaveBeenCalledWith('--pa-primary-hover', '#0a4f6b');
       expect(setPropertySpy).not.toHaveBeenCalledWith('--ha-primary-hover', '#0a4f6b');
-      expect(setPropertySpy).toHaveBeenCalledWith('--pa-primary', '#334455');
-      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', 'var(--pa-primary)');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', '#334455');
     });
 
     it('applyTheme with a plain string over an object entry drops explicit variants for that color (Task 4.2)', () => {
@@ -287,8 +288,7 @@ describe('HaThemeService', () => {
       service.reset();
 
       expect(service.theme().colors['primary']).toEqual({ base: '#16709e', hover: '#0a4f6b' });
-      expect(setPropertySpy).toHaveBeenCalledWith('--pa-primary-hover', '#0a4f6b');
-      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary-hover', 'var(--pa-primary-hover)');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary-hover', '#0a4f6b');
     });
   });
 });

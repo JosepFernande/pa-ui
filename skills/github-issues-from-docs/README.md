@@ -10,7 +10,7 @@ actualización de work items ocurre siempre en GitHub Issues vía `gh` CLI, para
 integrarse de forma nativa con PRs.
 
 > **Nota histórica:** esta skill usaba antes un cache híbrido sobre un clone del
-> GitHub Wiki (`pa-ui.wiki.git`), porque la documentación de referencia vivía
+> GitHub Wiki (`halo-ui.wiki.git`), porque la documentación de referencia vivía
 > ahí. Desde que esa documentación se migró a `docs/` (ver
 > [`README.md`](../../README.md) del repo, sección "Documentación"), toda esa
 > maquinaria de clone/pull/HEAD-SHA dejó de tener sentido: `docs/` ya está en el
@@ -202,13 +202,13 @@ del issue en GitHub.
 ### ¿Por qué la documentación de referencia vive en `docs/` y no en la wiki?
 
 Nota histórica: esta documentación vivía antes en Notion, después se migró al
-GitHub Wiki del repo (`pa-ui.wiki.git`) cuando Notion perdió su único rol activo
-en el flujo de trabajo. Después se migró de nuevo, esta vez a `docs/`, porque el
-Wiki no viaja con el repo (`.wiki-cache/` estaba gitignoreado) — un colaborador
-o un agente de IA sin acceso a red perdía por completo ese contexto al clonar.
-`docs/` sí viaja con cada clone y se revisa en el mismo PR que el código que
-documenta. La wiki queda como espejo histórico; ver la sección "Documentación"
-del `README.md` del repo.
+GitHub Wiki del repo (`halo-ui.wiki.git`) cuando Notion perdió su único rol
+activo en el flujo de trabajo. Después se migró de nuevo, esta vez a `docs/`,
+porque el Wiki no viaja con el repo (`.wiki-cache/` estaba gitignoreado) — un
+colaborador o un agente de IA sin acceso a red perdía por completo ese contexto
+al clonar. `docs/` sí viaja con cada clone y se revisa en el mismo PR que el
+código que documenta. La wiki queda como espejo histórico; ver la sección
+"Documentación" del `README.md` del repo.
 
 ### ¿Por qué un índice de tags y no leer siempre los ~10 archivos completos?
 

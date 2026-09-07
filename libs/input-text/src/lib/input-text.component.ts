@@ -16,11 +16,11 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FocusMonitor, FocusOrigin } from '@angular/cdk/a11y';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
-import { withFocusMonitor } from '@halo-ui/core';
-import type { HaInputSize } from './input.types';
+import { withFocusMonitor } from '@halolib-ui/core';
+import type { HaInputTextSize } from './input-text.types';
 
 /**
- * Accessible, token-driven native text input (selector `input[ha-input]`).
+ * Accessible, token-driven native text input (selector `input[ha-input-text]`).
  * Text-only: password, email, and number inputs are separate components.
  *
  * The host IS the native `<input>` element (mirroring `button[ha-button]`),
@@ -32,23 +32,25 @@ import type { HaInputSize } from './input.types';
  * both reactive `[formControl]`/`formControlName` and template-driven
  * `[(ngModel)]`). Angular's `selectValueAccessor` prefers this custom
  * accessor over the native `DefaultValueAccessor`, so a `[formControl]` on
- * the same element wires to `HaInput`.
+ * the same element wires to `HaInputText`.
  *
- * Error state (`invalid && touched`) is surfaced via `.ha-input--error` and
+ * Error state (`invalid && touched`) is surfaced via `.ha-input-text--error` and
  * `aria-invalid`. Validity/touched changes come from the form control, which
  * is NOT signal-based, so `ngOnInit` subscribes to the control's `events`
  * stream to invalidate the `hasError` computed — `computed()` cannot observe
  * `control.invalid`/`control.touched` directly.
  */
 @Component({
-  selector: 'input[ha-input]',
+  selector: 'input[ha-input-text]',
   standalone: true,
   imports: [],
   template: '',
-  styleUrl: './input.component.css',
+  styleUrl: './input-text.component.css',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => HaInput), multi: true }],
+  providers: [
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => HaInputText), multi: true },
+  ],
   host: {
     '[class]': 'hostClasses()',
     '[disabled]': 'effectiveDisabled()',
@@ -68,9 +70,9 @@ import type { HaInputSize } from './input.types';
     '(blur)': 'onBlur()',
   },
 })
-export class HaInput implements ControlValueAccessor, OnInit {
+export class HaInputText implements ControlValueAccessor, OnInit {
   /** Size preset: sm, md, or lg. */
-  readonly size = input<HaInputSize>('md');
+  readonly size = input<HaInputTextSize>('md');
 
   /** Whether the input is disabled. Overridden by the form control when disabled. */
   readonly disabled = input(false);
@@ -122,7 +124,7 @@ export class HaInput implements ControlValueAccessor, OnInit {
 
   /**
    * Computed: `true` when the bound control is invalid AND touched — drives
-   * `.ha-input--error` and `aria-invalid`. Reactive via `validityVersion`.
+   * `.ha-input-text--error` and `aria-invalid`. Reactive via `validityVersion`.
    */
   protected readonly hasError = computed(() => {
     this.validityVersion();
@@ -133,13 +135,13 @@ export class HaInput implements ControlValueAccessor, OnInit {
   /** Computed: BEM class string for the host input element. */
   protected readonly hostClasses = computed(() =>
     [
-      'ha-input',
-      `ha-input--${this.size()}`,
-      this.effectiveDisabled() ? 'ha-input--disabled' : '',
-      this.readonly() ? 'ha-input--readonly' : '',
-      this.hasError() ? 'ha-input--error' : '',
-      this.focusOrigin() !== null ? 'ha-input--focused' : '',
-      this.focusOrigin() === 'keyboard' ? 'ha-input--keyboard-focused' : '',
+      'ha-input-text',
+      `ha-input-text--${this.size()}`,
+      this.effectiveDisabled() ? 'ha-input-text--disabled' : '',
+      this.readonly() ? 'ha-input-text--readonly' : '',
+      this.hasError() ? 'ha-input-text--error' : '',
+      this.focusOrigin() !== null ? 'ha-input-text--focused' : '',
+      this.focusOrigin() === 'keyboard' ? 'ha-input-text--keyboard-focused' : '',
     ]
       .filter(Boolean)
       .join(' '),

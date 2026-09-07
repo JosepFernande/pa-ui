@@ -1,7 +1,7 @@
 {
-  "name": "input",
+  "name": "input-text",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/input/src",
+  "sourceRoot": "libs/input-text/src",
   "prefix": "ha",
   "projectType": "library",
   "release": {
@@ -19,14 +19,14 @@
       "executor": "@nx/angular:package",
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {
-        "project": "libs/input/ng-package.json"
+        "project": "libs/input-text/ng-package.json"
       },
       "configurations": {
         "production": {
-          "tsConfig": "libs/input/tsconfig.lib.prod.json"
+          "tsConfig": "libs/input-text/tsconfig.lib.prod.json"
         },
         "development": {
-          "tsConfig": "libs/input/tsconfig.lib.json"
+          "tsConfig": "libs/input-text/tsconfig.lib.json"
         }
       },
       "defaultConfiguration": "production"
@@ -40,7 +40,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/input/jest.config.ts"
+        "jestConfig": "libs/input-text/jest.config.ts"
       }
     },
     "lint": {

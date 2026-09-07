@@ -1,6 +1,5 @@
 import { DOCUMENT, isPlatformServer } from '@angular/common';
 import { Injectable, PLATFORM_ID, Signal, inject, signal } from '@angular/core';
-import { withLegacyAliases } from '../foundation/legacy-token-alias';
 import { deriveTokens } from './color-derivation';
 import { toSemanticCssVariables } from './semantic-tokens';
 import { mergeTheme } from './theme-engine';
@@ -104,7 +103,7 @@ export class HaThemeService {
       return;
     }
 
-    const vars = withLegacyAliases(toSemanticCssVariables(deriveTokens(theme)));
+    const vars = toSemanticCssVariables(deriveTokens(theme));
     const root = this.document.documentElement;
     for (const [prop, value] of Object.entries(vars)) {
       root.style.setProperty(prop, value);

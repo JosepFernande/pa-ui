@@ -23,11 +23,6 @@ describe('parseSelectors', () => {
     expect(parseSelectors(css)).toEqual(['ha-accordion', 'ha-select']);
   });
 
-  it('does NOT match legacy pa- selectors (#139 — prefix migrated)', () => {
-    const css = '.pa-button { display: flex; } pa-accordion { display: block; }';
-    expect(parseSelectors(css)).toEqual([]);
-  });
-
   it('returns an empty, sorted array for CSS with no ha- selectors', () => {
     expect(parseSelectors('.generic { color: red; }')).toEqual([]);
   });
@@ -37,11 +32,6 @@ describe('parseTokens', () => {
   it('matches design tokens under var(--ha-*)', () => {
     const css = '.ha-button { background: var(--ha-primary); color: var(--ha-primary-contrast); }';
     expect(parseTokens(css)).toEqual(['--ha-primary', '--ha-primary-contrast']);
-  });
-
-  it('does NOT match legacy var(--pa-*) tokens (#139 — canonical form migrated)', () => {
-    const css = '.ha-button { background: var(--pa-primary); }';
-    expect(parseTokens(css)).toEqual([]);
   });
 
   it('returns an empty array for CSS with no --ha- custom properties', () => {

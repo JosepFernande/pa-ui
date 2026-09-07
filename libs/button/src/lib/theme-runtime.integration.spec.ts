@@ -5,11 +5,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FocusMonitor, FocusOrigin } from '@angular/cdk/a11y';
 import { Subject } from 'rxjs';
-import { provideHaTheme } from '@halo-ui/core';
+import { provideHaTheme } from '@halolib-ui/core';
 import { HaButton } from './button.component';
 
 /** Reads the actual shipped Foundation stylesheet — the same artifact a real
- * consumer app imports once (`@halo-ui/core/theme.css`, D1). Resolved from
+ * consumer app imports once (`@halolib-ui/core/theme.css`, D1). Resolved from
  * source (not `dist/`) so this test exercises the file this repo edits. */
 function readFoundationThemeCss(): string {
   return fs.readFileSync(
@@ -92,10 +92,7 @@ describe('Theme runtime integration — Button resolves a custom color with zero
       TestBed.createComponent(ThemeRuntimeTestHost);
     fixture.detectChanges();
 
-    expect(document.documentElement.style.getPropertyValue('--pa-primary')).toBe('#111111');
-    expect(document.documentElement.style.getPropertyValue('--ha-primary')).toBe(
-      'var(--pa-primary)',
-    );
+    expect(document.documentElement.style.getPropertyValue('--ha-primary')).toBe('#111111');
 
     const buttonEl = fixture.debugElement.query(By.css('button[ha-button]'))
       .nativeElement as HTMLButtonElement;
@@ -147,10 +144,7 @@ describe('Theme runtime integration — Button resolves a custom "secondary" col
     );
     fixture.detectChanges();
 
-    expect(document.documentElement.style.getPropertyValue('--pa-secondary')).toBe('#222222');
-    expect(document.documentElement.style.getPropertyValue('--ha-secondary')).toBe(
-      'var(--pa-secondary)',
-    );
+    expect(document.documentElement.style.getPropertyValue('--ha-secondary')).toBe('#222222');
 
     const buttonEl = fixture.debugElement.query(By.css('button[ha-button]'))
       .nativeElement as HTMLButtonElement;
@@ -170,7 +164,7 @@ describe('Theme runtime integration — Button resolves a custom "secondary" col
 
 /**
  * Phase 3 (Task 3.4/3.5): proves the static Foundation stylesheet
- * (`@halo-ui/core/theme.css`) and the runtime Theme Engine compose correctly
+ * (`@halolib-ui/core/theme.css`) and the runtime Theme Engine compose correctly
  * for Button's dimension tokens, and that `button.component.css` actually
  * wires the per-size `min-width`/`gap` custom properties (not just declares
  * defaults for them in `theme.css`).
@@ -212,69 +206,35 @@ describe('Theme runtime integration — Foundation theme.css resolves Button dim
     styleEl.remove();
   });
 
-  it('--ha-primary (default theme, no config) resolves through the legacy alias chain, and the Foundation default for --ha-button-bg follows the same one-hop indirection (#139 legacy-first chain)', () => {
+  it('--ha-primary (default theme, no config) resolves directly to its real value, and the Foundation default for --ha-button-bg references it', () => {
     const fixture: ComponentFixture<ThemeRuntimeTestHost> =
       TestBed.createComponent(ThemeRuntimeTestHost);
     fixture.detectChanges();
 
     // Runtime color layer (Phase 1): provideHaTheme() with no config writes
-    // DEFAULT_THEME's primary base color as an inline style on documentElement,
-    // doubled by withLegacyAliases (Requirement: Temporary CSS Alias) —
-    // --pa-primary carries the real value, --ha-primary aliases it via var().
-    expect(document.documentElement.style.getPropertyValue('--pa-primary')).toBe('#16709e');
-    expect(document.documentElement.style.getPropertyValue('--ha-primary')).toBe(
-      'var(--pa-primary)',
-    );
+    // DEFAULT_THEME's primary base color as an inline style on documentElement.
+    expect(document.documentElement.style.getPropertyValue('--ha-primary')).toBe('#16709e');
 
-    // Static Foundation layer (theme.css, Phase 2), also doubled: the shipped
-    // default for --pa-button-bg keeps its original reference verbatim
-    // (var(--ha-primary)); --ha-button-bg aliases the legacy declaration.
+    // Static Foundation layer (theme.css, Phase 2): the shipped default for
+    // --ha-button-bg references --ha-primary directly.
     const rootStyle = getComputedStyle(document.documentElement);
-    expect(rootStyle.getPropertyValue('--pa-button-bg').trim()).toBe('var(--ha-primary)');
-    expect(rootStyle.getPropertyValue('--ha-button-bg').trim()).toBe('var(--pa-button-bg)');
+    expect(rootStyle.getPropertyValue('--ha-button-bg').trim()).toBe('var(--ha-primary)');
   });
 
-  it('theme.css declares the md Button dimensions matching Figma exactly (48/224/4/0-16/10), reachable through the legacy alias for each', () => {
+  it('theme.css declares the md Button dimensions matching Figma exactly (48/224/4/0-16/10)', () => {
     TestBed.createComponent(ThemeRuntimeTestHost).detectChanges();
     const rootStyle = getComputedStyle(document.documentElement);
 
-    const dimensions: Array<[legacy: string, value: string]> = [
-      ['--pa-button-min-height-md', '48px'],
-      ['--pa-button-min-width-md', '224px'],
-      ['--pa-button-radius', '4px'],
-      ['--pa-button-padding-md', '0 16px'],
-      ['--pa-button-gap-md', '10px'],
+    const dimensions: Array<[key: string, value: string]> = [
+      ['--ha-button-min-height-md', '48px'],
+      ['--ha-button-min-width-md', '224px'],
+      ['--ha-button-radius', '4px'],
+      ['--ha-button-padding-md', '0 16px'],
+      ['--ha-button-gap-md', '10px'],
     ];
 
-    for (const [legacyKey, value] of dimensions) {
-      const haKey = '--ha-' + legacyKey.slice('--pa-'.length);
-      expect(rootStyle.getPropertyValue(legacyKey).trim()).toBe(value);
-      expect(rootStyle.getPropertyValue(haKey).trim()).toBe(`var(${legacyKey})`);
-    }
-  });
-
-  it('a :root-level consumer override of the legacy --pa-button-bg alias reaches --ha-button-bg through the var() chain (Requirement: Temporary CSS Alias, "Alias resolves during the window")', () => {
-    TestBed.createComponent(ThemeRuntimeTestHost).detectChanges();
-
-    // Simulates a real consumer stylesheet overriding the DEPRECATED legacy
-    // custom property at :root, appended AFTER theme.css so it wins the
-    // cascade for --pa-button-bg specifically (same specificity, later wins).
-    const overrideStyleEl = document.createElement('style');
-    overrideStyleEl.textContent = ':root { --pa-button-bg: red; }';
-    document.head.appendChild(overrideStyleEl);
-
-    try {
-      const rootStyle = getComputedStyle(document.documentElement);
-      // The override is observable on the legacy property itself...
-      expect(rootStyle.getPropertyValue('--pa-button-bg').trim()).toBe('red');
-      // ...and --ha-button-bg's declared value is an unchanged structural
-      // pointer at --pa-button-bg, so it "reaches" whatever the legacy
-      // property currently resolves to (full var() resolution across this
-      // hop is a real-browser guarantee outside jsdom's scope — see the
-      // file-level comment on jsdom's var() resolution ceiling).
-      expect(rootStyle.getPropertyValue('--ha-button-bg').trim()).toBe('var(--pa-button-bg)');
-    } finally {
-      overrideStyleEl.remove();
+    for (const [key, value] of dimensions) {
+      expect(rootStyle.getPropertyValue(key).trim()).toBe(value);
     }
   });
 

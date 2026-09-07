@@ -1,14 +1,14 @@
 ---
 name: lib-ui-testing
 description:
-  'Trigger: writing or reviewing tests for pa-ui/halo-ui Angular components,
+  'Trigger: writing or reviewing tests for halo-ui Angular components,
   directives, pipes, or services. Defines test patterns, jest-axe a11y, coverage
   thresholds, and CDK mocking conventions.'
 license: MIT
 metadata:
   author: JosepFernande
   version: '1.0'
-  project: pa-ui
+  project: halo-ui
 ---
 
 ## Activation Contract
@@ -373,4 +373,4 @@ to catch by eye.
 - Architecture & Foundation: `../../docs/architecture-and-foundation.md`
 - jest-axe docs: https://github.com/nickcolley/jest-axe
 - jest-preset-angular docs: https://github.com/thymikee/jest-preset-angular
-- Repo: `https://github.com/JosepFernande/pa-ui`
+- Repo: `https://github.com/JosepFernande/halo-ui`

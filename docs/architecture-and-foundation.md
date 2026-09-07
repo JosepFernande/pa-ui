@@ -1,6 +1,6 @@
 # Architecture & Foundation
 
-This is the deep reference for `pa-ui`'s architecture: the project vision, the
+This is the deep reference for `halo-ui`'s architecture: the project vision, the
 monorepo layout, the token system, and the design constraints behind every
 component. For the day-to-day operational contract (the six hard rules, decision
 gates, execution checklist) used when implementing or reviewing a change, see
@@ -52,9 +52,9 @@ apps/
 libs/
  ├── core/       (includes foundation/ and theme/ — see below)
  ├── button/
- ├── input/
+ ├── input-text/
  ├── select/
- └── halo-ui/    (umbrella package @halo-ui/angular, re-exports button/core/input/select)
+ └── halo-ui/    (umbrella package @halolib-ui/angular, re-exports button/core/input-text/select)
 ```
 
 Roadmap — planned libs, not yet scaffolded:
@@ -170,31 +170,31 @@ convention for constants or utilities exists yet; that content, when it applies,
 lives in `*.tokens.ts` or directly in the component. (The
 `lib-ui-coding-standards` skill documents `.constants.ts`/`.utils.ts` as part of
 the target file layout for future components with that need — it is not
-contradicted by their absence in `button`/`input` today.)
+contradicted by their absence in `button`/`input-text` today.)
 
 ## Naming Convention
 
 ### Prefix and selector shape
 
-Every component uses the `pa-` prefix. In practice, the two shipped components
+Every component uses the `ha-` prefix. In practice, the two shipped components
 attach as **attribute selectors on the semantically closest native element**,
 not as custom elements:
 
 ```html
-<button ha-button>Save</button> <input ha-input />
+<button ha-button>Save</button> <input ha-input-text />
 ```
 
 This is a correction to the original architecture plan, which assumed custom
-elements (`<ha-button />`, `<ha-input />`). The real selectors are
+elements (`<ha-button />`, `<ha-input-text />`). The real selectors are
 `button[ha-button]` (`libs/button/src/lib/button.component.ts:17`) and
-`input[ha-input]` (`libs/input/src/lib/input.component.ts:44`) — the host IS the
-native element, so keyboard behavior, forms integration, and native semantics
-are inherited for free instead of reimplemented behind a wrapper.
+`input[ha-input-text]` (`libs/input-text/src/lib/input-text.component.ts`) — the
+host IS the native element, so keyboard behavior, forms integration, and native
+semantics are inherited for free instead of reimplemented behind a wrapper.
 
 <!-- TODO(verify): whether future components with no native element
 equivalent (dialog, dropdown, tooltip, toast) will keep this attribute-
 selector-on-native-element pattern where a native element fits, or introduce
-true custom elements (`<pa-dialog>`) where none does, is an open
+true custom elements (`<ha-dialog>`) where none does, is an open
 architecture decision — not something the current two components answer. -->
 
 ## Standard Variants
@@ -203,8 +203,8 @@ architecture decision — not something the current two components answer. -->
 - **variant**: `solid | outline | ghost`
 
 Both are closed unions in the real types (`HaButtonSize`, `HaButtonVariant`,
-`HaInputSize` in `libs/button/src/lib/button.types.ts` and
-`libs/input/src/lib/input.types.ts`).
+`HaInputTextSize` in `libs/button/src/lib/button.types.ts` and
+`libs/input-text/src/lib/input-text.types.ts`).
 
 `color` is **not** a closed variant — it is typed `string` and resolved by the
 Theme Engine at runtime (hard rule 6, consistent APIs). The names below are the

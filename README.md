@@ -1,11 +1,11 @@
-# pa-ui
+# halo-ui
 
 > Librería de componentes Angular 19 accesible y basada en tokens, con una
 > arquitectura de variables CSS de 3 capas.
 
-[![npm version](https://img.shields.io/npm/v/@halo-ui/angular)](https://www.npmjs.com/package/@halo-ui/angular)
-[![license](https://img.shields.io/github/license/JosepFernande/pa-ui)](./LICENSE)
-[![build](https://img.shields.io/github/actions/workflow/status/JosepFernande/pa-ui/ci.yml?label=build)](https://github.com/JosepFernande/pa-ui/actions)
+[![npm version](https://img.shields.io/npm/v/@halolib-ui/angular)](https://www.npmjs.com/package/@halolib-ui/angular)
+[![license](https://img.shields.io/github/license/JosepFernande/halo-ui)](./LICENSE)
+[![build](https://img.shields.io/github/actions/workflow/status/JosepFernande/halo-ui/ci.yml?label=build)](https://github.com/JosepFernande/halo-ui/actions)
 
 ---
 
@@ -14,7 +14,7 @@
 ### 1. Instalar
 
 ```bash
-npm install @halo-ui/angular @angular/cdk
+npm install @halolib-ui/angular @angular/cdk
 ```
 
 ### 2. Configurar el Theme Engine
@@ -22,7 +22,7 @@ npm install @halo-ui/angular @angular/cdk
 ```typescript
 // app.config.ts
 import { ApplicationConfig } from '@angular/core';
-import { provideHaTheme } from '@halo-ui/core';
+import { provideHaTheme } from '@halolib-ui/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -41,7 +41,7 @@ estilizados sin configuración adicional:
 
 ```css
 /* styles.css (o cualquier hoja de estilos global) */
-@import '@halo-ui/core/theme.css';
+@import '@halolib-ui/core/theme.css';
 ```
 
 Olvidar este import no rompe la app — los componentes quedan sin estilo, usando
@@ -98,7 +98,7 @@ personalización visual.
 ### Tema por defecto (sin configuración)
 
 ```typescript
-import { provideHaTheme } from '@halo-ui/core';
+import { provideHaTheme } from '@halolib-ui/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideHaTheme()],
@@ -195,7 +195,7 @@ automáticamente los estados de hover, active y disabled.
 
 ## Accesibilidad
 
-Todo componente de pa-ui está construido con la accesibilidad como prioridad:
+Todo componente de halo-ui está construido con la accesibilidad como prioridad:
 
 - **Navegación por teclado** — Todos los elementos interactivos son alcanzables
   y operables por teclado. `FocusMonitor` de CDK rastrea el origen del foco para
@@ -218,13 +218,13 @@ Todo componente de pa-ui está construido con la accesibilidad como prioridad:
 ## Estructura del proyecto
 
 ```
-pa-ui/
+halo-ui/
 ├── libs/
-│   ├── button/          # @halo-ui/button — componente HaButton
-│   ├── input/           # @halo-ui/input — componente HaInput
-│   ├── select/          # @halo-ui/select — componente HaSelect
-│   ├── core/            # @halo-ui/core — Theme Engine (provideHaTheme) + capa Foundation
-│   └── halo-ui/         # @halo-ui/angular — paquete umbrella (re-exporta el resto)
+│   ├── button/          # @halolib-ui/button — componente HaButton
+│   ├── input-text/      # @halolib-ui/input-text — componente HaInputText
+│   ├── select/          # @halolib-ui/select — componente HaSelect
+│   ├── core/            # @halolib-ui/core — Theme Engine (provideHaTheme) + capa Foundation
+│   └── halo-ui/         # @halolib-ui/angular — paquete umbrella (re-exporta el resto)
 ├── apps/
 │   └── showcase/        # App de demo con ejemplos en vivo
 └── skills/              # Skills de agentes de IA para hacer cumplir la arquitectura
@@ -240,7 +240,7 @@ pa-ui/
 `docs/` en este repo es la fuente de verdad para arquitectura, testing y
 procesos, y la única garantizada disponible para cualquiera (o cualquier agente
 de IA) que clone el repo sin acceso a red. La
-[wiki del proyecto](https://github.com/JosepFernande/pa-ui/wiki) se mantiene
+[wiki del proyecto](https://github.com/JosepFernande/halo-ui/wiki) se mantiene
 como espejo histórico de acá en adelante; los cambios nuevos de documentación
 entran primero en `docs/`.
 

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal, ViewEncapsulation } from '@angular/core';
-import { HaSelect } from '@halo-ui/select';
-import type { HaSelectOption, HaSelectSize } from '@halo-ui/select';
+import { HaSelect } from '@halolib-ui/select';
+import type { HaSelectOption, HaSelectSize } from '@halolib-ui/select';
 import { CodeBlockComponent } from '../../shared/code-block/code-block.component';
 
 /** Showcase playground for `ha-select` (`libs/select`): sizes, states, and its `valueChange`/`opened`/`closed` outputs. */

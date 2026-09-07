@@ -9,8 +9,8 @@
  *
  * Scope note: both `--ha-button-*` and `--ha-input-*` defaults are populated
  * here. The `--ha-input-*` defaults were previously deferred until a real
- * Input template shipped — that deferral ends with the `HaInput` component
- * (`libs/input/src/lib/input.component.css`). ALL Input dimensions
+ * Input template shipped — that deferral ends with the `HaInputText` component
+ * (`libs/input-text/src/lib/input-text.component.css`). ALL Input dimensions
  * (`padding-*`, `min-height-*`) come from `HA_INPUT_PROVISIONAL_DIMENSIONS`
  * — assistant-authored, pending design validation (no Figma source exists
  * for Input), unlike Button whose `md` row is Figma-confirmed.
@@ -77,7 +77,7 @@ const HA_BUTTON_TOKEN_DEFAULTS: Readonly<Record<string, string>> = {
 
 /**
  * Every `--ha-input-*` custom property referenced by
- * `libs/input/src/lib/input.component.css`. Values mirror the Button
+ * `libs/input-text/src/lib/input-text.component.css`. Values mirror the Button
  * defaults where the semantics match (font/transition/disabled) and use
  * foundation + semantic references otherwise. Dimension values (padding,
  * min-height) come from `HA_INPUT_PROVISIONAL_DIMENSIONS`.

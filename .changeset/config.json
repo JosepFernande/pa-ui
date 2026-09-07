@@ -3,7 +3,13 @@
   "changelog": "@changesets/cli/changelog",
   "commit": false,
   "fixed": [
-    ["@halo-ui/core", "@halo-ui/button", "@halo-ui/input", "@halo-ui/select", "@halo-ui/angular"]
+    [
+      "@halolib-ui/core",
+      "@halolib-ui/button",
+      "@halolib-ui/input-text",
+      "@halolib-ui/select",
+      "@halolib-ui/angular"
+    ]
   ],
   "linked": [],
   "access": "public",

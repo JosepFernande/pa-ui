@@ -1,4 +1,4 @@
-import { HA_COMPONENT_TOKEN_DEFAULTS } from '@halo-ui/core';
+import { HA_COMPONENT_TOKEN_DEFAULTS } from '@halolib-ui/core';
 import { HA_SELECT_TOKENS } from './select.tokens';
 
 describe('Select Tokens', () => {

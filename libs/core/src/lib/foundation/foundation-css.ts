@@ -7,14 +7,13 @@
  *
  * Deliberately NOT exported from `public-api.ts` (D4) — there is no public
  * runtime path to these values, which is how "Foundation is static, not
- * runtime-mutable" (decision/pa-ui-default-theme-static-css) is enforced
+ * runtime-mutable" (decision/halo-ui-default-theme-static-css) is enforced
  * structurally (no code path exists) rather than by convention. The ONLY
  * consumer of this function is `foundation-css.spec.ts`, which uses it to
  * assert `theme.css` (the actually shipped artifact) never drifts from it.
  */
 import type { ThemeCssVariables } from '../theme/theme.tokens';
 import { HA_COMPONENT_TOKEN_DEFAULTS } from './component-defaults.tokens';
-import { withLegacyAliases } from './legacy-token-alias';
 import {
   HA_FONT_FAMILY,
   HA_FONT_WEIGHT_SCALE,
@@ -94,7 +93,7 @@ function semanticNonColorPassthrough(): ThemeCssVariables {
  * `theme.css`. Pure — no DOM writes, no side effects.
  */
 export function toFoundationCssVariables(): ThemeCssVariables {
-  return withLegacyAliases({
+  return {
     ...paletteToCssVariables(),
     ...sizeScaleToCssVariables('spacing', HA_SPACING_SCALE),
     ...sizeScaleToCssVariables('gap', HA_GAP_SCALE),
@@ -107,5 +106,5 @@ export function toFoundationCssVariables(): ThemeCssVariables {
     '--font-weight-bold': HA_FONT_WEIGHT_SCALE.bold,
     ...semanticNonColorPassthrough(),
     ...HA_COMPONENT_TOKEN_DEFAULTS,
-  });
+  };
 }

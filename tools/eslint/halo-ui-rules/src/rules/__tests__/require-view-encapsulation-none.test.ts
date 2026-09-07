@@ -18,7 +18,7 @@ ruleTester.run('require-view-encapsulation-none', rule, {
 import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'pa-test',
+  selector: 'ha-test',
   encapsulation: ViewEncapsulation.None,
   template: '<div></div>',
 })
@@ -31,13 +31,13 @@ export class TestComponent {}
 import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-  selector: 'pa-button',
+  selector: 'ha-button',
   standalone: true,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './button.component.html',
 })
-export class PaButton {}
+export class HaButton {}
       `,
     },
     {
@@ -60,7 +60,7 @@ export class PlainClass {
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'pa-broken',
+  selector: 'ha-broken',
   template: '<div></div>',
 })
 export class BrokenComponent {}
@@ -77,7 +77,7 @@ export class BrokenComponent {}
 import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'pa-broken',
+  selector: 'ha-broken',
   encapsulation: ViewEncapsulation.Emulated,
   template: '<div></div>',
 })
@@ -95,7 +95,7 @@ export class BrokenComponent {}
 import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'pa-broken',
+  selector: 'ha-broken',
   encapsulation: ViewEncapsulation.ShadowDom,
   template: '<div></div>',
 })

@@ -44,29 +44,22 @@ describe('Packaging contract — source-level', () => {
       expect(peers!['@angular/forms']).toBeDefined();
     });
 
-    it('name is @halo-ui/core (public package)', () => {
-      expect(pkg['name']).toBe('@halo-ui/core');
+    it('name is @halolib-ui/core (public package)', () => {
+      expect(pkg['name']).toBe('@halolib-ui/core');
     });
 
-    it('does NOT include @halo-ui/button in peerDependencies', () => {
+    it('does NOT include @halolib-ui/button in peerDependencies', () => {
       const peers = pkg['peerDependencies'] as Record<string, string> | undefined;
       expect(peers).toBeDefined();
-      expect(peers!['@halo-ui/button']).toBeUndefined();
+      expect(peers!['@halolib-ui/button']).toBeUndefined();
     });
   });
 
   describe('public-api exports', () => {
-    it('public-api.ts does NOT re-export from @halo-ui/button', () => {
+    it('public-api.ts does NOT re-export from @halolib-ui/button', () => {
       const publicApiPath = path.resolve(libRoot(), 'src', 'public-api.ts');
       const content = fs.readFileSync(publicApiPath, 'utf-8');
-      expect(content).not.toContain("export * from '@halo-ui/button'");
-    });
-
-    it('public-api.ts does NOT export PaUiComponent/HaUiComponent (deleted scaffold, #139)', () => {
-      const publicApiPath = path.resolve(libRoot(), 'src', 'public-api.ts');
-      const content = fs.readFileSync(publicApiPath, 'utf-8');
-      expect(content).not.toContain('PaUiComponent');
-      expect(content).not.toContain('HaUiComponent');
+      expect(content).not.toContain("export * from '@halolib-ui/button'");
     });
   });
 });

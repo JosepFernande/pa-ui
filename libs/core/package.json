@@ -1,6 +1,6 @@
 {
-  "name": "@halo-ui/core",
-  "version": "19.3.1",
+  "name": "@halolib-ui/core",
+  "version": "19.0.1",
   "license": "MIT",
   "description": "Accessible, token-driven Angular 19 UI component library with Theme Engine",
   "keywords": [
@@ -14,13 +14,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/JosepFernande/pa-ui",
+    "url": "https://github.com/JosepFernande/halo-ui",
     "directory": "libs/core"
   },
   "bugs": {
-    "url": "https://github.com/JosepFernande/pa-ui/issues"
+    "url": "https://github.com/JosepFernande/halo-ui/issues"
   },
-  "homepage": "https://github.com/JosepFernande/pa-ui#readme",
+  "homepage": "https://github.com/JosepFernande/halo-ui#readme",
   "author": "JosepFernande",
   "publishConfig": {
     "access": "public"

@@ -2,7 +2,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 
 /** Reads the actual shipped Foundation stylesheet — the same artifact a real
- * consumer app imports once (`@halo-ui/core/theme.css`). Resolved from
+ * consumer app imports once (`@halolib-ui/core/theme.css`). Resolved from
  * source (not `dist/`) so this test exercises the file this repo edits. */
 function readFoundationThemeCss(): string {
   return fs.readFileSync(
@@ -39,26 +39,24 @@ describe('Theme runtime integration — Foundation theme.css ships Select defaul
     styleEl.remove();
   });
 
-  it('declares the key --ha-select-* defaults a consumer gets from @halo-ui/core/theme.css, reachable through the legacy --pa-* alias (#139)', () => {
+  it('declares the key --ha-select-* defaults a consumer gets from @halolib-ui/core/theme.css', () => {
     const rootStyle = getComputedStyle(document.documentElement);
 
-    const entries: Array<[legacy: string, value: string]> = [
-      ['--pa-select-bg', 'var(--neutral-50)'],
-      ['--pa-select-focus-border', 'var(--ha-primary)'],
-      ['--pa-select-focus-ring', '2px solid var(--ha-primary-hover)'],
-      ['--pa-select-focus-ring-offset', '5px'],
-      ['--pa-select-error-border', 'var(--ha-error)'],
-      ['--pa-select-error-color', 'var(--ha-error)'],
-      ['--pa-select-radius-sm', '6px'],
-      ['--pa-select-radius-md', '4px'],
-      ['--pa-select-radius-lg', '8px'],
-      ['--pa-select-panel-radius', 'var(--radius-sm)'],
+    const entries: Array<[key: string, value: string]> = [
+      ['--ha-select-bg', 'var(--neutral-50)'],
+      ['--ha-select-focus-border', 'var(--ha-primary)'],
+      ['--ha-select-focus-ring', '2px solid var(--ha-primary-hover)'],
+      ['--ha-select-focus-ring-offset', '5px'],
+      ['--ha-select-error-border', 'var(--ha-error)'],
+      ['--ha-select-error-color', 'var(--ha-error)'],
+      ['--ha-select-radius-sm', '6px'],
+      ['--ha-select-radius-md', '4px'],
+      ['--ha-select-radius-lg', '8px'],
+      ['--ha-select-panel-radius', 'var(--radius-sm)'],
     ];
 
-    for (const [legacyKey, value] of entries) {
-      const haKey = '--ha-' + legacyKey.slice('--pa-'.length);
-      expect(rootStyle.getPropertyValue(legacyKey).trim()).toBe(value);
-      expect(rootStyle.getPropertyValue(haKey).trim()).toBe(`var(${legacyKey})`);
+    for (const [key, value] of entries) {
+      expect(rootStyle.getPropertyValue(key).trim()).toBe(value);
     }
   });
 
