@@ -46,9 +46,9 @@ describe('deriveTokens() never processes raw Foundation color scales', () => {
   it('sanity check: the detector actually recognizes a real Foundation scale as scale-shaped', () => {
     // Proves the detector above is not a tautology — it must flag a REAL
     // Foundation palette entry, or the previous assertion would be trivial.
-    expect(isColorScaleShaped(HA_FOUNDATION_PALETTE['dark-blue'])).toBe(true);
-    expect(isColorScaleShaped('#0a4f6b')).toBe(false);
-    expect(isColorScaleShaped({ base: '#0a4f6b', hover: '#083f55' })).toBe(false);
+    expect(isColorScaleShaped(HA_FOUNDATION_PALETTE['primary'])).toBe(true);
+    expect(isColorScaleShaped('#4f46e5')).toBe(false);
+    expect(isColorScaleShaped({ base: '#4f46e5', hover: '#4338ca' })).toBe(false);
   });
 
   it('theme-engine.ts and theme.tokens.ts never import from foundation/ (no code path for a raw scale to reach mergeTheme/deriveTokens)', () => {

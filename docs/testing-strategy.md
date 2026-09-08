@@ -2,7 +2,7 @@
 
 This is the deep reference for why and how `halo-ui` tests components — the
 philosophy, the full a11y checklist, and the illustrative roadmap layer. For the
-concrete day-to-day patterns (exact `jest.config.ts` shape, CDK mocking
+concrete day-to-day patterns (exact `jest.config.cjs` shape, CDK mocking
 snippets, required `describe` blocks, what gga flags), see the `lib-ui-testing`
 skill (`skills/lib-ui-testing/SKILL.md`) — this document does not duplicate that
 operational checklist.
@@ -197,7 +197,7 @@ CI must fail if coverage drops below these thresholds:
 | Lines      | 80%              |
 
 These values are centralized in `jest.preset.cjs` (repo root) — each lib's
-`jest.config.ts` inherits the preset, it does not declare its own
+`jest.config.cjs` inherits the preset, it does not declare its own
 `coverageThreshold`. The real preset also excludes story files from coverage
 accounting:
 

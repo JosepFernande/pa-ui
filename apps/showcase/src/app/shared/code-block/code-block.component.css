@@ -2,13 +2,13 @@
   display: block;
 
   --code-block-label-color: var(--neutral-700);
-  --code-block-bg: var(--dark-blue-800);
-  --code-block-bar-border: var(--dark-blue-700);
+  --code-block-bg: var(--primary-800);
+  --code-block-bar-border: var(--primary-700);
   --code-block-lang-color: var(--neutral-50);
-  --code-block-copy-bg: var(--dark-blue-700);
-  --code-block-copy-color: var(--dark-blue-100);
-  --code-block-copy-hover-bg: var(--dark-blue-600);
-  --code-block-code-color: var(--dark-blue-50);
+  --code-block-copy-bg: var(--primary-700);
+  --code-block-copy-color: var(--primary-100);
+  --code-block-copy-hover-bg: var(--primary-600);
+  --code-block-code-color: var(--primary-50);
 }
 
 .code-block {

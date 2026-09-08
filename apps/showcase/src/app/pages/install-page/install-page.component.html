@@ -1,52 +1,93 @@
 <h1 class="install-page__title">Instalación y configuración</h1>
-<p class="install-page__subtitle">De cero a tu primer componente en menos de 5 minutos.</p>
+<p class="install-page__subtitle">
+  Instalá la librería, configurala en tu proyecto Angular y creá tu primer componente en minutos.
+</p>
 
-<ol class="install-page__steps">
-  <li class="install-page__step">
-    <span class="install-page__step-number">1</span>
-    <div class="install-page__step-body">
-      <h2 class="install-page__step-title">Instalar el paquete</h2>
-      <p class="install-page__step-description">
-        Instalá el paquete principal junto con Angular CDK, la única dependencia externa.
-      </p>
-      <pre class="install-page__code">npm install &#64;halo-ui/angular &#64;angular/cdk</pre>
-    </div>
-  </li>
+<section class="install-page__section">
+  <h2 class="install-page__section-title">Requisitos previos</h2>
+  <ul class="install-page__requisites">
+    <li class="install-page__requisite">
+      <span class="install-page__requisite-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      Angular 19.2 o superior
+    </li>
+    <li class="install-page__requisite">
+      <span class="install-page__requisite-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      Angular CDK 19.2 o superior
+    </li>
+    <li class="install-page__requisite">
+      <span class="install-page__requisite-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      TypeScript 5.7 o superior
+    </li>
+    <li class="install-page__requisite">
+      <span class="install-page__requisite-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      Conocimientos básicos de Angular standalone components
+    </li>
+  </ul>
+</section>
 
-  <li class="install-page__step">
-    <span class="install-page__step-number">2</span>
-    <div class="install-page__step-body">
-      <h2 class="install-page__step-title">Configurar el Theme Engine</h2>
-      <p class="install-page__step-description">
-        Agregá el provider en app.config.ts — con el tema por defecto no necesitás pasarle nada.
-      </p>
-      <pre class="install-page__code">
-import {{ '{' }} provideHaTheme {{ '}' }} from '&#64;halo-ui/core';
-providers: [ provideHaTheme() ]</pre>
-    </div>
-  </li>
+<section class="install-page__section">
+  <h2 class="install-page__section-title">Instalación</h2>
+  <p class="install-page__section-description">
+    Instalá el paquete principal junto con Angular CDK, su única dependencia externa.
+  </p>
+  <app-code-block label="Instalación" language="bash" code="npm install &#64;halolib-ui/angular &#64;angular/cdk" />
+</section>
 
-  <li class="install-page__step">
-    <span class="install-page__step-number">3</span>
-    <div class="install-page__step-body">
-      <h2 class="install-page__step-title">Importar el CSS de Foundation</h2>
-      <p class="install-page__step-description">
-        Sumá los estilos base una sola vez, en cualquier hoja de estilos global. Si te olvidás este import, los
-        componentes quedan sin estilo hasta que lo agregues.
-      </p>
-      <pre class="install-page__code">&#64;import '&#64;halo-ui/core/theme.css';</pre>
-    </div>
-  </li>
+<section class="install-page__section">
+  <h2 class="install-page__section-title">Configuración</h2>
+  <p class="install-page__section-description">
+    Registrá el provider del Theme Engine en app.config.ts — con el tema por defecto no necesitás pasarle nada.
+  </p>
+  <app-code-block
+    label="app.config.ts"
+    language="typescript"
+    code="import { provideHaTheme } from '&#64;halolib-ui/core';
 
-  <li class="install-page__step">
-    <span class="install-page__step-number">4</span>
-    <div class="install-page__step-body">
-      <h2 class="install-page__step-title">Usar un componente</h2>
-      <p class="install-page__step-description">
-        Eso es todo — no hay NgModules ni configuración adicional. Importá el componente standalone que necesites y
-        listo.
-      </p>
-      <a class="install-page__gallery-link" routerLink="/componentes/boton">Ver galería de componentes →</a>
-    </div>
-  </li>
-</ol>
+export const appConfig: ApplicationConfig = {
+  providers: [provideHaTheme()],
+};"
+  />
+  <p class="install-page__section-description">
+    Sumá también los estilos base de Foundation en una hoja de estilos global. Si te olvidás este import, los
+    componentes quedan sin estilo hasta que lo agregues.
+  </p>
+  <app-code-block label="styles.css" language="css" code="&#64;import '&#64;halolib-ui/core/theme.css';" />
+</section>
+
+<section class="install-page__section">
+  <h2 class="install-page__section-title">Primer componente</h2>
+  <p class="install-page__section-description">
+    Eso es todo — no hay NgModules ni configuración adicional. Importá el componente standalone que necesites y listo.
+  </p>
+  <app-code-block
+    label="example.component.ts"
+    language="typescript"
+    code='import { Component } from &apos;&#64;angular/core&apos;;
+import { HaButton } from &apos;&#64;halolib-ui/angular&apos;;
+
+@Component({
+  standalone: true,
+  imports: [HaButton],
+  template: `&lt;button ha-button variant="solid" size="md" color="primary"&gt;Hola mundo&lt;/button&gt;`,
+})
+export class ExampleComponent {}'
+  />
+</section>
+
+<a class="install-page__next-link" routerLink="/componentes/boton">Siguiente &rarr; Componentes</a>

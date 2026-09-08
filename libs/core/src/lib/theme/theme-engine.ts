@@ -5,12 +5,12 @@ import type { HaThemeConfig, HaThemeOptions, ResolvedTheme } from './theme.token
  * The base color keys every default palette must provide. Used to detect
  * gaps when `extendDefaults` is `false` (Requirement: Color Merge Behavior).
  * Matches the `DEFAULT_THEME` roster's semantic set (design D3) — the
- * literal brand hues (`dark-blue`/`light-blue`/`dark-green`/`light-green`)
- * and the deprecated `danger` alias are deliberately NOT required here.
+ * deprecated `danger` alias is deliberately NOT required here. `secondary`
+ * was removed entirely (breaking change, no alias kept) alongside the raw
+ * `dark-blue`/`light-blue`/`dark-green`/`light-green` brand families.
  */
 const BASE_COLOR_KEYS = [
   'primary',
-  'secondary',
   'success',
   'error',
   'warning',

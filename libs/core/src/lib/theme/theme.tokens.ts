@@ -60,25 +60,21 @@ export type ThemeCssVariables = Record<string, string>;
  * `mergeTheme()` uses this exact reference as its default merge base for
  * every call in the process.
  *
- * Roster source of truth: `decision/halo-ui-default-theme-color-naming`.
- * - Literal brand hues (1:1 Figma/JSON traceability): `dark-blue`,
- *   `light-blue`, `dark-green`, `light-green`.
- * - Semantic aliases `primary`/`secondary`: the brand pattern is inverted
- *   relative to auto-derivation — the LIGHT tone is `base` and the DARK tone
- *   is the explicit `hover` override, so a plain string entry's auto-derived
- *   hover is never used for these two keys.
+ * Roster source of truth: `decision/halo-ui-default-theme-color-naming`,
+ * updated by the single-brand-scale breaking change (raw `dark-blue`/
+ * `light-blue`/`dark-green`/`light-green` families and the `secondary` token
+ * removed entirely — no alias kept).
+ * - `primary` is an explicit `{ base, hover }` pair sourced from the new
+ *   Foundation `primary` scale (`primary-600` base, `primary-700` hover),
+ *   keeping the same explicit-hover convention the old brand aliases used —
+ *   a plain string entry's auto-derived hover is never used for this key.
  * - `success`/`warning`/`alert`/`info` already match the source palette 1:1.
  * - `neutral` is `neutral-900` (#4c4c4c), matching the typographic text
  *   color, not `neutral-500`.
  */
 export const DEFAULT_THEME: ResolvedTheme = Object.freeze({
   colors: Object.freeze({
-    'dark-blue': '#0a4f6b',
-    'light-blue': '#16709e',
-    'dark-green': '#507802',
-    'light-green': '#8fbf21',
-    primary: Object.freeze({ base: '#16709e', hover: '#0a4f6b' }),
-    secondary: Object.freeze({ base: '#8fbf21', hover: '#507802' }),
+    primary: Object.freeze({ base: '#4f46e5', hover: '#4338ca' }),
     success: '#8fbf21',
     error: '#d71608',
     /**

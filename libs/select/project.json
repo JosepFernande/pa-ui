@@ -40,7 +40,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/select/jest.config.ts"
+        "jestConfig": "libs/select/jest.config.cjs"
       }
     },
     "lint": {

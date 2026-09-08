@@ -267,14 +267,14 @@ describe('HaThemeService', () => {
       const service = configureTestBed('browser', {
         colors: {
           primary: { base: '#16709e', hover: '#0a4f6b' },
-          secondary: { base: '#222222', hover: '#111111' },
+          accent: { base: '#222222', hover: '#111111' },
         },
       });
 
-      service.applyTheme({ primary: '#111111', secondary: '#222222' });
+      service.applyTheme({ primary: '#111111', accent: '#222222' });
 
       expect(service.theme().colors['primary']).toBe('#111111');
-      expect(service.theme().colors['secondary']).toBe('#222222');
+      expect(service.theme().colors['accent']).toBe('#222222');
     });
 
     it('reset() after an override restores the bootstrap object entry and its explicit hover verbatim (Task 4.3)', () => {

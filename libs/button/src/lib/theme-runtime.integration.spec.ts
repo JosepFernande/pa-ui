@@ -54,18 +54,18 @@ function readButtonComponentCss(): string {
 class ThemeRuntimeTestHost {}
 
 /**
- * Second host registered with a custom "secondary" color (Issue #59
+ * Second host registered with a custom "accent" color (Issue #59
  * triangulation) — proves the `--ha-{name}-*` mapping is generic and not
  * hardcoded to "primary".
  */
 @Component({
-  selector: 'ha-theme-runtime-secondary-test-host',
+  selector: 'ha-theme-runtime-accent-test-host',
   standalone: true,
   imports: [HaButton],
   encapsulation: ViewEncapsulation.None,
-  template: `<button ha-button color="secondary">Test</button>`,
+  template: `<button ha-button color="accent">Test</button>`,
 })
-class ThemeRuntimeSecondaryTestHost {}
+class ThemeRuntimeAccentTestHost {}
 
 describe('Theme runtime integration — Button resolves a custom color with zero Button changes', () => {
   let focusOrigin$: Subject<FocusOrigin>;
@@ -118,7 +118,7 @@ describe('Theme runtime integration — Button resolves a custom color with zero
   });
 });
 
-describe('Theme runtime integration — Button resolves a custom "secondary" color (triangulation)', () => {
+describe('Theme runtime integration — Button resolves a custom "accent" color (triangulation)', () => {
   let focusOrigin$: Subject<FocusOrigin>;
   let focusMonitorMock: { monitor: jest.Mock; stopMonitoring: jest.Mock };
 
@@ -130,34 +130,32 @@ describe('Theme runtime integration — Button resolves a custom "secondary" col
     };
 
     await TestBed.configureTestingModule({
-      imports: [ThemeRuntimeSecondaryTestHost],
+      imports: [ThemeRuntimeAccentTestHost],
       providers: [
-        provideHaTheme({ colors: { secondary: '#222222' } }),
+        provideHaTheme({ colors: { accent: '#222222' } }),
         { provide: FocusMonitor, useValue: focusMonitorMock },
       ],
     }).compileComponents();
   });
 
-  it('resolves the 4 derived variants against --ha-secondary-* for a registered secondary color', () => {
-    const fixture: ComponentFixture<ThemeRuntimeSecondaryTestHost> = TestBed.createComponent(
-      ThemeRuntimeSecondaryTestHost,
+  it('resolves the 4 derived variants against --ha-accent-* for a registered accent color', () => {
+    const fixture: ComponentFixture<ThemeRuntimeAccentTestHost> = TestBed.createComponent(
+      ThemeRuntimeAccentTestHost,
     );
     fixture.detectChanges();
 
-    expect(document.documentElement.style.getPropertyValue('--ha-secondary')).toBe('#222222');
+    expect(document.documentElement.style.getPropertyValue('--ha-accent')).toBe('#222222');
 
     const buttonEl = fixture.debugElement.query(By.css('button[ha-button]'))
       .nativeElement as HTMLButtonElement;
 
-    expect(buttonEl.style.getPropertyValue('--ha-button-bg')).toBe('var(--ha-secondary)');
-    expect(buttonEl.style.getPropertyValue('--ha-button-hover-bg')).toBe(
-      'var(--ha-secondary-hover)',
-    );
+    expect(buttonEl.style.getPropertyValue('--ha-button-bg')).toBe('var(--ha-accent)');
+    expect(buttonEl.style.getPropertyValue('--ha-button-hover-bg')).toBe('var(--ha-accent-hover)');
     expect(buttonEl.style.getPropertyValue('--ha-button-active-bg')).toBe(
-      'var(--ha-secondary-active)',
+      'var(--ha-accent-active)',
     );
     expect(buttonEl.style.getPropertyValue('--ha-button-solid-color')).toBe(
-      'var(--ha-secondary-contrast)',
+      'var(--ha-accent-contrast)',
     );
   });
 });

@@ -1,8 +1,8 @@
-export default {
-  displayName: 'showcase',
+module.exports = {
+  displayName: 'input-text',
   preset: '../../jest.preset.cjs',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../coverage/apps/showcase',
+  coverageDirectory: '../../coverage/libs/input-text',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

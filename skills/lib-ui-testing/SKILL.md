@@ -32,10 +32,10 @@ No `@testing-library/angular`, no `ComponentHarness`. Use `TestBed` +
 
 ## Project Configuration
 
-### Per-lib jest.config.ts
+### Per-lib jest.config.cjs
 
-```typescript
-export default {
+```javascript
+module.exports = {
   displayName: '<lib-name>',
   preset: '../../jest.preset.cjs',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],

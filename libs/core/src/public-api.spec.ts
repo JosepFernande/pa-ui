@@ -16,14 +16,9 @@ describe('public-api — theme engine surface (Issue #46)', () => {
     expect(typeof publicApi.HaThemeService).toBe('function');
   });
 
-  it('exports DEFAULT_THEME with the full color roster (literals + primary/secondary variants + semantic set + deprecated danger alias)', () => {
+  it('exports DEFAULT_THEME with the full color roster (primary variant + semantic set + deprecated danger alias)', () => {
     expect(publicApi.DEFAULT_THEME.colors).toEqual({
-      'dark-blue': expect.any(String),
-      'light-blue': expect.any(String),
-      'dark-green': expect.any(String),
-      'light-green': expect.any(String),
       primary: { base: expect.any(String), hover: expect.any(String) },
-      secondary: { base: expect.any(String), hover: expect.any(String) },
       success: expect.any(String),
       error: expect.any(String),
       danger: expect.any(String),
@@ -113,14 +108,11 @@ describe('public-api — Foundation surface (default-theme, Phase 2)', () => {
     expect(publicApi.HA_SIZE_STEPS).toEqual(['xs', 'sm', 'md', 'lg', 'xl']);
   });
 
-  it('exports HA_FOUNDATION_PALETTE with all 4 brand families at full 11-step completeness', () => {
-    const families = ['dark-blue', 'light-blue', 'dark-green', 'light-green'] as const;
-    for (const family of families) {
-      expect(
-        Object.keys(publicApi.HA_FOUNDATION_PALETTE[family]).sort((a, b) => Number(a) - Number(b)),
-      ).toEqual(['25', '50', '100', '200', '300', '400', '500', '600', '700', '800', '900']);
-    }
-    expect(publicApi.HA_FOUNDATION_PALETTE['dark-blue'][500]).toBe('#0a4f6b');
+  it('exports HA_FOUNDATION_PALETTE with the single "primary" brand family at full 11-step completeness', () => {
+    expect(
+      Object.keys(publicApi.HA_FOUNDATION_PALETTE['primary']).sort((a, b) => Number(a) - Number(b)),
+    ).toEqual(['25', '50', '100', '200', '300', '400', '500', '600', '700', '800', '900']);
+    expect(publicApi.HA_FOUNDATION_PALETTE['primary'][600]).toBe('#4f46e5');
   });
 
   it('exports HA_SPACING_SCALE, HA_GAP_SCALE, HA_RADIUS_SCALE, HA_ICON_SIZE_SCALE with all 5 size steps', () => {

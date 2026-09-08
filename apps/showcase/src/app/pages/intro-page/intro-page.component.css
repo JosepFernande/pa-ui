@@ -1,0 +1,166 @@
+:host {
+  display: block;
+  padding: var(--ha-spacing-xl) calc(var(--ha-spacing-xl) * 2);
+
+  --intro-page-title-color: var(--neutral-900);
+  --intro-page-subtitle-color: var(--neutral-700);
+  --intro-page-code-bg: var(--neutral-200);
+  --intro-page-code-color: var(--primary-700);
+  --intro-page-icon-bg: var(--primary-50);
+  --intro-page-callout-bg: var(--primary-25);
+  --intro-page-callout-border: var(--primary-200);
+}
+
+.intro-page__title {
+  margin: 0;
+  font-size: var(--ha-font-size-h1);
+  font-weight: var(--ha-font-weight-h1);
+  line-height: var(--ha-line-height-h1);
+  color: var(--intro-page-title-color);
+}
+
+.intro-page__subtitle {
+  max-width: 720px;
+  margin: var(--ha-gap-md) 0 0;
+  font-size: var(--ha-font-size-body);
+  font-weight: var(--ha-font-weight-body);
+  line-height: var(--ha-line-height-body);
+  color: var(--intro-page-subtitle-color);
+}
+
+.intro-page__inline-code {
+  padding: 2px var(--ha-spacing-xs);
+  border-radius: var(--ha-radius-xs);
+  background: var(--intro-page-code-bg);
+  color: var(--intro-page-code-color);
+  font-family: Consolas, Monaco, monospace;
+  font-size: 0.9em;
+}
+
+.intro-page__divider {
+  margin: var(--ha-gap-xl) 0;
+  border: none;
+  border-top: 1px solid var(--neutral-200);
+}
+
+.intro-page__section + .intro-page__section {
+  margin-top: var(--ha-gap-xl);
+}
+
+.intro-page__section-title {
+  margin: 0 0 var(--ha-gap-lg);
+  font-size: var(--ha-font-size-h3);
+  font-weight: var(--ha-font-weight-h3);
+  line-height: var(--ha-line-height-h3);
+  color: var(--intro-page-title-color);
+}
+
+.intro-page__feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--ha-gap-lg);
+}
+
+.intro-page__feature {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ha-gap-sm);
+  padding: var(--ha-spacing-lg);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--ha-radius-lg);
+}
+
+.intro-page__feature-icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--ha-radius-md);
+  background: var(--intro-page-icon-bg);
+  color: var(--ha-primary);
+}
+
+.intro-page__feature-icon svg {
+  width: var(--ha-icon-size-sm);
+  height: var(--ha-icon-size-sm);
+}
+
+.intro-page__feature-title {
+  margin: 0;
+  font-size: var(--ha-font-size-h4);
+  font-weight: var(--ha-font-weight-h4);
+  line-height: var(--ha-line-height-h4);
+  color: var(--intro-page-title-color);
+}
+
+.intro-page__feature-description {
+  margin: 0;
+  font-size: var(--ha-font-size-small-body);
+  font-weight: var(--ha-font-weight-small-body);
+  line-height: var(--ha-line-height-small-body);
+  color: var(--intro-page-subtitle-color);
+}
+
+.intro-page__philosophy {
+  max-width: 720px;
+  margin: 0;
+  font-size: var(--ha-font-size-body);
+  font-weight: var(--ha-font-weight-body);
+  line-height: var(--ha-line-height-body);
+  color: var(--intro-page-subtitle-color);
+}
+
+.intro-page__callout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ha-gap-md);
+  margin-top: var(--ha-gap-xl);
+  padding: var(--ha-spacing-lg);
+  border: 1px solid var(--intro-page-callout-border);
+  border-radius: var(--ha-radius-lg);
+  background: var(--intro-page-callout-bg);
+}
+
+.intro-page__callout-icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--ha-icon-size-md);
+  height: var(--ha-icon-size-md);
+  color: var(--ha-primary);
+}
+
+.intro-page__callout-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.intro-page__callout-text {
+  margin: 0;
+  font-size: var(--ha-font-size-small-body);
+  font-weight: var(--ha-font-weight-small-body);
+  line-height: var(--ha-line-height-small-body);
+  color: var(--intro-page-title-color);
+}
+
+.intro-page__next-link {
+  display: inline-block;
+  margin-top: var(--ha-gap-xl);
+  color: var(--ha-primary);
+  font-size: var(--ha-font-size-small-body);
+  font-weight: var(--ha-font-weight-semibold);
+  text-decoration: none;
+}
+
+.intro-page__next-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 720px) {
+  .intro-page__feature-grid {
+    grid-template-columns: 1fr;
+  }
+}

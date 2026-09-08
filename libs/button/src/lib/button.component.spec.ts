@@ -319,20 +319,20 @@ describe('HaButton', () => {
       );
     });
 
-    it('should resolve all 4 variants against --ha-secondary-* for color=secondary', () => {
+    it('should resolve all 4 variants against --ha-accent-* for color=accent (proves the mechanism is generic, not hardcoded to a built-in color)', () => {
       const { fixture, host, buttonEl } = createTestHost();
-      host.color = 'secondary';
+      host.color = 'accent';
       fixture.detectChanges();
 
-      expect(buttonEl.style.getPropertyValue('--ha-button-bg')).toBe('var(--ha-secondary)');
+      expect(buttonEl.style.getPropertyValue('--ha-button-bg')).toBe('var(--ha-accent)');
       expect(buttonEl.style.getPropertyValue('--ha-button-hover-bg')).toBe(
-        'var(--ha-secondary-hover)',
+        'var(--ha-accent-hover)',
       );
       expect(buttonEl.style.getPropertyValue('--ha-button-active-bg')).toBe(
-        'var(--ha-secondary-active)',
+        'var(--ha-accent-active)',
       );
       expect(buttonEl.style.getPropertyValue('--ha-button-solid-color')).toBe(
-        'var(--ha-secondary-contrast)',
+        'var(--ha-accent-contrast)',
       );
     });
   });
