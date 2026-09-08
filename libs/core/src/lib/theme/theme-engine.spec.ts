@@ -86,11 +86,10 @@ describe('mergeTheme', () => {
     });
   });
 
-  describe('extendDefaults false with all 8 base colors given', () => {
+  describe('extendDefaults false with all 7 base colors given', () => {
     const fullBaseConfig: HaThemeConfig = {
       colors: {
         primary: '#111111',
-        secondary: '#222222',
         success: '#333333',
         error: '#444444',
         warning: '#555555',
@@ -116,7 +115,6 @@ describe('mergeTheme', () => {
       const config: HaThemeConfig = { colors: { primary: '#f00' } };
       const result = mergeTheme(config, { extendDefaults: false });
       expect(result.colors).toEqual({ primary: '#f00' });
-      expect(result.colors['secondary']).toBeUndefined();
       expect(result.colors['success']).toBeUndefined();
       expect(result.colors['error']).toBeUndefined();
       expect(result.colors['warning']).toBeUndefined();
@@ -130,7 +128,6 @@ describe('mergeTheme', () => {
       mergeTheme(config, { extendDefaults: false });
       expect(warnSpy).toHaveBeenCalledTimes(1);
       const [message] = warnSpy.mock.calls[0] as [string];
-      expect(message).toEqual(expect.stringContaining('secondary'));
       expect(message).toEqual(expect.stringContaining('success'));
       expect(message).toEqual(expect.stringContaining('error'));
       expect(message).toEqual(expect.stringContaining('warning'));
@@ -145,13 +142,12 @@ describe('mergeTheme', () => {
       expect(() => mergeTheme(config, { extendDefaults: false })).not.toThrow();
     });
 
-    it('emits console.warn even when colors is an empty object, naming all 8 base keys', () => {
+    it('emits console.warn even when colors is an empty object, naming all 7 base keys', () => {
       const config: HaThemeConfig = { colors: {} };
       mergeTheme(config, { extendDefaults: false });
       expect(warnSpy).toHaveBeenCalledTimes(1);
       const [message] = warnSpy.mock.calls[0] as [string];
       expect(message).toEqual(expect.stringContaining('primary'));
-      expect(message).toEqual(expect.stringContaining('secondary'));
       expect(message).toEqual(expect.stringContaining('success'));
       expect(message).toEqual(expect.stringContaining('error'));
       expect(message).toEqual(expect.stringContaining('warning'));
@@ -164,7 +160,6 @@ describe('mergeTheme', () => {
       const config: HaThemeConfig = {
         colors: {
           primary: '#111111',
-          secondary: '#222222',
           success: '#333333',
           error: '#444444',
           warning: '#555555',

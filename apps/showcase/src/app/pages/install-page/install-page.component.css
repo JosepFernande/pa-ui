@@ -4,9 +4,7 @@
 
   --install-page-title-color: var(--neutral-900);
   --install-page-subtitle-color: var(--neutral-700);
-  --install-page-step-number-color: var(--neutral-50);
-  --install-page-code-bg: var(--dark-blue-800);
-  --install-page-code-color: var(--dark-blue-50);
+  --install-page-requisite-icon-bg: var(--primary-50);
 }
 
 .install-page__title {
@@ -18,6 +16,7 @@
 }
 
 .install-page__subtitle {
+  max-width: 720px;
   margin: var(--ha-gap-md) 0 0;
   font-size: var(--ha-font-size-body);
   font-weight: var(--ha-font-weight-body);
@@ -25,43 +24,14 @@
   color: var(--install-page-subtitle-color);
 }
 
-.install-page__steps {
+.install-page__section {
   display: flex;
   flex-direction: column;
-  gap: var(--ha-gap-xl);
-  margin: var(--ha-gap-xl) 0 0;
-  padding: 0;
-  list-style: none;
+  gap: var(--ha-gap-md);
+  margin-top: var(--ha-gap-xl);
 }
 
-.install-page__step {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--ha-gap-lg);
-}
-
-.install-page__step-number {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--ha-primary);
-  color: var(--install-page-step-number-color);
-  font-size: var(--ha-font-size-body);
-  font-weight: var(--ha-font-weight-bold);
-}
-
-.install-page__step-body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ha-gap-sm);
-  min-width: 0;
-}
-
-.install-page__step-title {
+.install-page__section-title {
   margin: 0;
   font-size: var(--ha-font-size-h3);
   font-weight: var(--ha-font-weight-h3);
@@ -69,35 +39,63 @@
   color: var(--install-page-title-color);
 }
 
-.install-page__step-description {
+.install-page__section-description {
   margin: 0;
+  max-width: 720px;
   font-size: var(--ha-font-size-small-body);
   font-weight: var(--ha-font-weight-small-body);
   line-height: var(--ha-line-height-small-body);
   color: var(--install-page-subtitle-color);
 }
 
-.install-page__code {
+.install-page__requisites {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ha-gap-md);
   margin: 0;
-  padding: var(--ha-spacing-md) var(--ha-spacing-lg);
-  border-radius: var(--ha-radius-md);
-  background: var(--install-page-code-bg);
-  color: var(--install-page-code-color);
-  font-family: Consolas, Monaco, monospace;
-  font-size: var(--ha-font-size-small-body);
-  line-height: var(--ha-line-height-small-body);
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
+  padding: var(--ha-spacing-lg);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--ha-radius-lg);
+  list-style: none;
 }
 
-.install-page__gallery-link {
-  align-self: flex-start;
+.install-page__requisite {
+  display: flex;
+  align-items: center;
+  gap: var(--ha-gap-sm);
+  font-size: var(--ha-font-size-small-body);
+  font-weight: var(--ha-font-weight-small-body);
+  line-height: var(--ha-line-height-small-body);
+  color: var(--install-page-title-color);
+}
+
+.install-page__requisite-icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--ha-icon-size-md);
+  height: var(--ha-icon-size-md);
+  border-radius: 50%;
+  background: var(--install-page-requisite-icon-bg);
+  color: var(--ha-primary);
+}
+
+.install-page__requisite-icon svg {
+  width: var(--ha-icon-size-sm);
+  height: var(--ha-icon-size-sm);
+}
+
+.install-page__next-link {
+  display: inline-block;
+  align-self: flex-end;
+  margin-top: var(--ha-gap-xl);
   color: var(--ha-primary);
   font-size: var(--ha-font-size-small-body);
   font-weight: var(--ha-font-weight-semibold);
   text-decoration: none;
 }
 
-.install-page__gallery-link:hover {
+.install-page__next-link:hover {
   text-decoration: underline;
 }

@@ -41,12 +41,7 @@ provideHaTheme({
 provideHaTheme(
   {
     colors: {
-      'dark-blue': '#0a4f6b',
-      'light-blue': '#16709e',
-      'dark-green': '#507802',
-      'light-green': '#8fbf21',
-      primary: { base: '#16709e', hover: '#0a4f6b' },
-      secondary: { base: '#8fbf21', hover: '#507802' },
+      primary: { base: '#4f46e5', hover: '#4338ca' },
       success: '#8fbf21',
       error: '#d71608',
       warning: '#ed9613',
@@ -95,12 +90,7 @@ type ThemeCssVariables = Record<string, string>;
 ```typescript
 {
   colors: {
-    'dark-blue':   '#0a4f6b',
-    'light-blue':  '#16709e',
-    'dark-green':  '#507802',
-    'light-green': '#8fbf21',
-    primary:   { base: '#16709e', hover: '#0a4f6b' }, // alias: light-blue base, dark-blue hover
-    secondary: { base: '#8fbf21', hover: '#507802' }, // alias: light-green base, dark-green hover
+    primary: { base: '#4f46e5', hover: '#4338ca' }, // primary-600 base, primary-700 hover
     success: '#8fbf21',
     error:   '#d71608',
     warning: '#ed9613',
@@ -111,6 +101,13 @@ type ThemeCssVariables = Record<string, string>;
   },
 }
 ```
+
+**Breaking change:** the former literal `dark-blue`/`light-blue`/`dark-green`/
+`light-green` brand hues and the `secondary` semantic alias have been removed
+entirely — no deprecated shim or backwards-compatible mapping is kept. The
+Foundation layer now ships a single `primary` raw scale (25-900) instead of the
+two-brand-family palette; see [CSS Strategy](./css-strategy.md) for the full
+scale values.
 
 `danger` is marked `@deprecated` in code
 (`libs/core/src/lib/theme/theme.tokens.ts`) and is deliberately excluded from
@@ -127,15 +124,15 @@ when `extendDefaults` is `true` (the default).
   `config.colors` is merged over `DEFAULT_THEME.colors` — unspecified colors
   keep their default value, specified ones win.
 - `false`: **only** `config.colors` is used, with no fallback to the defaults.
-  If any of the required base colors is missing — `primary`, `secondary`,
-  `success`, `error`, `warning`, `alert`, `info`, `neutral` — a `console.warn`
-  names the missing keys. It never throws and never backfills silently.
+  If any of the required base colors is missing — `primary`, `success`, `error`,
+  `warning`, `alert`, `info`, `neutral` — a `console.warn` names the missing
+  keys. It never throws and never backfills silently.
 
-  This base-key list (`BASE_COLOR_KEYS` in `theme-engine.ts`) is exactly these 8
-  semantic keys — it deliberately does **not** include the four literal brand
-  hues (`dark-blue`, `light-blue`, `dark-green`, `light-green`) or the
-  deprecated `danger` alias, since those aren't required for a self-consistent
-  palette.
+  This base-key list (`BASE_COLOR_KEYS` in `theme-engine.ts`) is exactly these 7
+  semantic keys — it deliberately does **not** include the deprecated `danger`
+  alias, since it isn't required for a self-consistent palette. (The former
+  literal brand hues and `secondary` were removed from the roster entirely —
+  breaking change, no alias kept.)
 
 ## How the Theme Engine Works
 

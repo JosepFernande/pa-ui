@@ -7,7 +7,7 @@
  * caught by `foundation-css.spec.ts`, not by a build step.
  *
  * Three layers, in order (skills/lib-ui-architecture/SKILL.md:24-32):
- *   1. Foundation   — raw values, UNPREFIXED  (--dark-blue-500, --spacing-md)
+ *   1. Foundation   — raw values, UNPREFIXED  (--primary-500, --spacing-md)
  *   2. Semantic     — --ha-* non-color passthrough (--ha-spacing-md, --ha-font-size-h1)
  *   3. Component    — --ha-button-* defaults, referencing (1) and runtime (2)
  *
@@ -29,53 +29,17 @@
   /* Foundation — raw color scales (25-900), unprefixed                  */
   /* ------------------------------------------------------------------ */
 
-  --dark-blue-25: #f2f6f7;
-  --dark-blue-50: #e6edf0;
-  --dark-blue-100: #cedbe1;
-  --dark-blue-200: #9db8c3;
-  --dark-blue-300: #6c95a6;
-  --dark-blue-400: #3b7288;
-  --dark-blue-500: #0a4f6b;
-  --dark-blue-600: #083f55;
-  --dark-blue-700: #062f40;
-  --dark-blue-800: #041f2a;
-  --dark-blue-900: #020f15;
-
-  --light-blue-25: #f3f7fa;
-  --light-blue-50: #e7f0f5;
-  --light-blue-100: #d0e2eb;
-  --light-blue-200: #a1c5d8;
-  --light-blue-300: #73a9c4;
-  --light-blue-400: #448cb1;
-  --light-blue-500: #16709e;
-  --light-blue-600: #11597e;
-  --light-blue-700: #0d435e;
-  --light-blue-800: #082c3f;
-  --light-blue-900: #04161f;
-
-  --dark-green-25: #f6f8f2;
-  --dark-green-50: #edf1e5;
-  --dark-green-100: #dce4cc;
-  --dark-green-200: #b9c999;
-  --dark-green-300: #96ae67;
-  --dark-green-400: #739334;
-  --dark-green-500: #507802;
-  --dark-green-600: #406001;
-  --dark-green-700: #304801;
-  --dark-green-800: #203000;
-  --dark-green-900: #101800;
-
-  --light-green-25: #f9fbf3;
-  --light-green-50: #f3f8e8;
-  --light-green-100: #e8f2d2;
-  --light-green-200: #d2e5a6;
-  --light-green-300: #bbd879;
-  --light-green-400: #a5cb4d;
-  --light-green-500: #8fbf21;
-  --light-green-600: #72981a;
-  --light-green-700: #557213;
-  --light-green-800: #394c0d;
-  --light-green-900: #1c2606;
+  --primary-25: #f8faff;
+  --primary-50: #eef2ff;
+  --primary-100: #d4ddff;
+  --primary-200: #a9bbff;
+  --primary-300: #818cf8;
+  --primary-400: #6366f1;
+  --primary-500: #5956eb;
+  --primary-600: #4f46e5;
+  --primary-700: #4338ca;
+  --primary-800: #3730a3;
+  --primary-900: #312e81;
 
   --neutral-50: #fafafa;
   --neutral-200: #ededed;

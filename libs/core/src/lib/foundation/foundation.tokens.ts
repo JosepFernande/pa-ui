@@ -18,65 +18,32 @@ import type {
 } from './foundation.types';
 
 /**
- * The 4 brand families, each a complete 11-step scale (25-900). `satisfies`
+ * The single brand family, a complete 11-step scale (25-900). `satisfies`
  * enforces completeness here — omitting a step is a compile error — while
  * the exported constant widens to the open `HaFoundationPalette` type
  * (Requirement: adding a 5th family requires no type change).
+ *
+ * Replaces the former `dark-blue`/`light-blue`/`dark-green`/`light-green`
+ * two-brand-family palette (removed — breaking change, no alias kept). 100,
+ * 200, and 600 are the product-specified anchors (`#d4ddff`, `#a9bbff`,
+ * `#4f46e5`); the remaining steps are interpolated to keep a smooth,
+ * monotonically-darkening scale consistent with the previous scales' shape.
  */
 const HA_BRAND_PALETTE = {
-  'dark-blue': {
-    25: '#f2f6f7',
-    50: '#e6edf0',
-    100: '#cedbe1',
-    200: '#9db8c3',
-    300: '#6c95a6',
-    400: '#3b7288',
-    500: '#0a4f6b',
-    600: '#083f55',
-    700: '#062f40',
-    800: '#041f2a',
-    900: '#020f15',
+  primary: {
+    25: '#f8faff',
+    50: '#eef2ff',
+    100: '#d4ddff',
+    200: '#a9bbff',
+    300: '#818cf8',
+    400: '#6366f1',
+    500: '#5956eb',
+    600: '#4f46e5',
+    700: '#4338ca',
+    800: '#3730a3',
+    900: '#312e81',
   },
-  'light-blue': {
-    25: '#f3f7fa',
-    50: '#e7f0f5',
-    100: '#d0e2eb',
-    200: '#a1c5d8',
-    300: '#73a9c4',
-    400: '#448cb1',
-    500: '#16709e',
-    600: '#11597e',
-    700: '#0d435e',
-    800: '#082c3f',
-    900: '#04161f',
-  },
-  'dark-green': {
-    25: '#f6f8f2',
-    50: '#edf1e5',
-    100: '#dce4cc',
-    200: '#b9c999',
-    300: '#96ae67',
-    400: '#739334',
-    500: '#507802',
-    600: '#406001',
-    700: '#304801',
-    800: '#203000',
-    900: '#101800',
-  },
-  'light-green': {
-    25: '#f9fbf3',
-    50: '#f3f8e8',
-    100: '#e8f2d2',
-    200: '#d2e5a6',
-    300: '#bbd879',
-    400: '#a5cb4d',
-    500: '#8fbf21',
-    600: '#72981a',
-    700: '#557213',
-    800: '#394c0d',
-    900: '#1c2606',
-  },
-} satisfies Record<'dark-blue' | 'light-blue' | 'dark-green' | 'light-green', HaColorScale>;
+} satisfies Record<'primary', HaColorScale>;
 
 /** `neutral` ships only 5 of 11 steps (design data) — `HaPartialColorScale`, not `HaColorScale`. */
 const HA_NEUTRAL_PALETTE = {

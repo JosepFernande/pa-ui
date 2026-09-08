@@ -211,19 +211,20 @@ Theme Engine at runtime (hard rule 6, consistent APIs). The names below are the
 _default theme's_ color roster, not an enum a component enforces:
 
 ```
-dark-blue, light-blue, dark-green, light-green,
-primary, secondary,
+primary,
 success, error, warning, alert, info, neutral,
 danger   (deprecated, alias of error)
 ```
 
-The literal names (`dark-blue`, `light-blue`, `dark-green`, `light-green`) map
-1:1 to Figma/JSON and coexist with the semantic aliases `primary`/ `secondary`
-(same color pair each, with an explicit inverted hover: `light-*` as base,
-`dark-*` as hover). `danger` remains as a deprecated alias of `error` (identical
-hex) for backward compatibility — do not use it in new code. See
-[Theming Deep-Dive](./theming-deep-dive.md) for the full derivation algorithm
-and hex values.
+**Breaking change:** the former literal brand hues (`dark-blue`, `light-blue`,
+`dark-green`, `light-green`) and the `secondary` semantic alias have been
+removed entirely — no deprecated shim or backwards-compatible mapping is kept.
+The Foundation layer now ships a single `primary` raw scale (25-900), and the
+semantic `primary` theme color is an explicit `{ base, hover }` pair sourced
+from it (`primary-600` base, `primary-700` hover). `danger` remains as a
+deprecated alias of `error` (identical hex) for backward compatibility — do not
+use it in new code. See [Theming Deep-Dive](./theming-deep-dive.md) for the full
+derivation algorithm and hex values.
 
 ## Tokens Architecture
 

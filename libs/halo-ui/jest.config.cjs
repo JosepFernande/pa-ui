@@ -1,8 +1,8 @@
-export default {
-  displayName: 'select',
+module.exports = {
+  displayName: 'halo-ui',
   preset: '../../jest.preset.cjs',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../coverage/libs/select',
+  coverageDirectory: '../../coverage/libs/halo-ui',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

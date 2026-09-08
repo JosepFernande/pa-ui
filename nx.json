@@ -50,7 +50,7 @@
       "!{projectRoot}/tsconfig.spec.json",
       "!{projectRoot}/**/*.spec.[jt]s",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
-      "!{projectRoot}/jest.config.[jt]s",
+      "!{projectRoot}/jest.config.*",
       "!{projectRoot}/src/test-setup.[jt]s",
       "!{projectRoot}/test-setup.[jt]s"
     ]

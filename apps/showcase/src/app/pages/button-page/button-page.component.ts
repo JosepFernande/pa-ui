@@ -16,5 +16,5 @@ import { CodeBlockComponent } from '../../shared/code-block/code-block.component
 export class ButtonPageComponent {
   protected readonly variants: readonly HaButtonVariant[] = ['solid', 'outline', 'ghost'];
   protected readonly sizes: readonly HaButtonSize[] = ['sm', 'md', 'lg'];
-  protected readonly colors: readonly string[] = ['primary', 'secondary', 'success', 'error'];
+  protected readonly colors: readonly string[] = ['primary', 'success', 'error'];
 }

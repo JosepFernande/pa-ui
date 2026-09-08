@@ -1,8 +1,8 @@
-export default {
-  displayName: 'core',
+module.exports = {
+  displayName: 'select',
   preset: '../../jest.preset.cjs',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../coverage/libs/core',
+  coverageDirectory: '../../coverage/libs/select',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

@@ -1,0 +1,95 @@
+<h1 class="intro-page__title">Introducción</h1>
+<p class="intro-page__subtitle">
+  halo-ui es una librería de componentes standalone para Angular, construida sobre señales y
+  <code class="intro-page__inline-code">OnPush</code> de fábrica. Expone una API tipada de punta a punta y soporte
+  WAI-ARIA en cada componente, sin NgModules ni configuración adicional.
+</p>
+
+<hr class="intro-page__divider" />
+
+<section class="intro-page__section">
+  <h2 class="intro-page__section-title">Por qué usar esta librería</h2>
+
+  <div class="intro-page__feature-grid">
+    <article class="intro-page__feature">
+      <span class="intro-page__feature-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="m9 12 2 2 4-4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <h3 class="intro-page__feature-title">Accesibilidad nativa</h3>
+      <p class="intro-page__feature-description">
+        Roles, estados y navegación por teclado WAI-ARIA incluidos en cada componente, sin trabajo extra de tu parte.
+      </p>
+    </article>
+
+    <article class="intro-page__feature">
+      <span class="intro-page__feature-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M12 2c-3.5 4.2-6 7.6-6 11a6 6 0 0 0 12 0c0-3.4-2.5-6.8-6-11Z"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </span>
+      <h3 class="intro-page__feature-title">Theming basado en tokens</h3>
+      <p class="intro-page__feature-description">
+        Colores, tipografía, espaciados y radios expuestos como custom properties en Foundation CSS: personalizá sin
+        tocar el código fuente.
+      </p>
+    </article>
+
+    <article class="intro-page__feature">
+      <span class="intro-page__feature-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m16 18 6-6-6-6M8 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <h3 class="intro-page__feature-title">TypeScript estricto</h3>
+      <p class="intro-page__feature-description">
+        Componentes standalone, señales y tipado estricto de punta a punta para que los errores aparezcan en tu editor,
+        no en producción.
+      </p>
+    </article>
+
+    <article class="intro-page__feature">
+      <span class="intro-page__feature-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <h3 class="intro-page__feature-title">Rendimiento optimizado</h3>
+      <p class="intro-page__feature-description">
+        Detección de cambios <code class="intro-page__inline-code">OnPush</code> y componentes standalone lazy-loadable
+        para bundles livianos y renders predecibles.
+      </p>
+    </article>
+  </div>
+</section>
+
+<section class="intro-page__section">
+  <h2 class="intro-page__section-title">Filosofía de diseño</h2>
+  <p class="intro-page__philosophy">
+    halo-ui se apoya en tres principios: <strong>convención</strong> sobre configuración, para que cada componente se
+    comporte como esperás sin leer la documentación entera; <strong>composición</strong> sobre herencia, favoreciendo
+    inputs, outputs y content projection frente a jerarquías rígidas; y <strong>transparencia</strong>, exponiendo
+    tokens y estados internos en vez de esconderlos detrás de opciones cerradas.
+  </p>
+</section>
+
+<div class="intro-page__callout" role="note">
+  <span class="intro-page__callout-icon" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 16v-4m0-4h.01" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </span>
+  <p class="intro-page__callout-text">
+    <strong>Requiere Angular 19.2+.</strong> Los componentes standalone y las señales que usa halo-ui internamente
+    necesitan como mínimo esta versión de Angular.
+  </p>
+</div>
+
+<a class="intro-page__next-link" routerLink="/configuracion">Siguiente &rarr; Configuración</a>

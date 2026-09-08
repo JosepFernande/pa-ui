@@ -13,15 +13,15 @@ document implements.
 ```
 Foundation              Semantic                  Component
 ──────────              ────────                  ─────────
---light-blue-500   ──►  --ha-primary         ──►  --ha-button-bg
---dark-blue-500    ──►  --ha-primary-hover   ──►  --ha-button-hover-bg
+--primary-600      ──►  --ha-primary         ──►  --ha-button-bg
+--primary-700      ──►  --ha-primary-hover   ──►  --ha-button-hover-bg
 --spacing-md       ──►  --ha-spacing-md      ──►  --ha-button-padding-md
 --font-size-body   ──►  --ha-font-size-body  ──►  --ha-button-font-md
 ```
 
 1. **Foundation** — raw values. Unprefixed CSS custom properties:
-   `--dark-blue-500`, `--light-blue-500`, `--spacing-md`, `--radius-md`,
-   `--font-size-body`, `--icon-size-md`. Never consumed directly by components.
+   `--primary-500`, `--spacing-md`, `--radius-md`, `--font-size-body`,
+   `--icon-size-md`. Never consumed directly by components.
 2. **Semantic** — `--ha-*` names with product meaning: `--ha-primary`,
    `--ha-spacing-md`, `--ha-font-size-h1`. Colors are resolved at runtime by the
    Theme Engine (see below); every other semantic scale (spacing, gap, radius,
@@ -47,9 +47,8 @@ depending on whether the value needs to change at runtime.
 
 ### 1. Color — runtime, via the Theme Engine
 
-Color **bases** (`primary`, `secondary`, `success`, `error`, `warning`, `alert`,
-`info`, `neutral`, and any app-registered custom color) go through the Theme
-Engine:
+Color **bases** (`primary`, `success`, `error`, `warning`, `alert`, `info`,
+`neutral`, and any app-registered custom color) go through the Theme Engine:
 
 ```
 provideHaTheme(config?) → mergeTheme() → DEFAULT_THEME + config
@@ -76,6 +75,22 @@ never appear as a `HaThemeConfig.colors` entry — they have no interactive stat
 would be meaningless for them. They live only in the static layer described
 next.
 
+The Foundation layer ships a single `primary` raw brand scale (breaking change —
+replaces the former `dark-blue`/`light-blue`/`dark-green`/ `light-green`
+two-brand-family palette, no alias kept):
+
+| Step | Value     | Step | Value     |
+| ---- | --------- | ---- | --------- |
+| 25   | `#f8faff` | 500  | `#5956eb` |
+| 50   | `#eef2ff` | 600  | `#4f46e5` |
+| 100  | `#d4ddff` | 700  | `#4338ca` |
+| 200  | `#a9bbff` | 800  | `#3730a3` |
+| 300  | `#818cf8` | 900  | `#312e81` |
+| 400  | `#6366f1` |      |           |
+
+`primary-600`/`primary-700` are the anchors the semantic `primary` theme color
+(base/hover) is derived from — see the roster table below.
+
 ### 2. Everything else — static, via `theme.css`
 
 Raw color scales, spacing, gap, radius, typography, icon sizes, and every
@@ -95,21 +110,23 @@ between the TS constants and the shipped CSS file.
 `DEFAULT_THEME` (the base every `provideHaTheme()` call merges against,
 `libs/core/src/lib/theme/theme.tokens.ts`):
 
-| Key                     | Value                                   | Notes                                                      |
-| ----------------------- | --------------------------------------- | ---------------------------------------------------------- |
-| `dark-blue`             | `#0a4f6b`                               | Literal brand hue                                          |
-| `light-blue`            | `#16709e`                               | Literal brand hue                                          |
-| `dark-green`            | `#507802`                               | Literal brand hue                                          |
-| `light-green`           | `#8fbf21`                               | Literal brand hue                                          |
-| `primary`               | `{ base: '#16709e', hover: '#0a4f6b' }` | Explicit inverted hover — light is `base`, dark is `hover` |
-| `secondary`             | `{ base: '#8fbf21', hover: '#507802' }` | Explicit inverted hover, same pattern as `primary`         |
-| `success`               | `#8fbf21`                               |                                                            |
-| `error`                 | `#d71608`                               |                                                            |
-| `warning`               | `#ed9613`                               |                                                            |
-| `alert`                 | `#f8e115`                               |                                                            |
-| `info`                  | `#16a3c3`                               |                                                            |
-| `neutral`               | `#4c4c4c`                               |                                                            |
-| `danger` _(deprecated)_ | `#d71608`                               | Alias of `error`, see "Open Product Assumptions" below     |
+| Key                     | Value                                   | Notes                                                    |
+| ----------------------- | --------------------------------------- | -------------------------------------------------------- |
+| `primary`               | `{ base: '#4f46e5', hover: '#4338ca' }` | Explicit hover — `primary-600` base, `primary-700` hover |
+| `success`               | `#8fbf21`                               |                                                          |
+| `error`                 | `#d71608`                               |                                                          |
+| `warning`               | `#ed9613`                               |                                                          |
+| `alert`                 | `#f8e115`                               |                                                          |
+| `info`                  | `#16a3c3`                               |                                                          |
+| `neutral`               | `#4c4c4c`                               |                                                          |
+| `danger` _(deprecated)_ | `#d71608`                               | Alias of `error`, see "Open Product Assumptions" below   |
+
+> **Breaking change:** the literal `dark-blue`/`light-blue`/`dark-green`/
+> `light-green` brand hues and the `secondary` semantic alias have been removed
+> entirely — no deprecated shim or backwards-compatible mapping is kept. The
+> Foundation layer now ships a single `primary` raw scale (25-900, see the table
+> above the "Everything else — static" section) instead of the former
+> two-brand-family palette.
 
 Bootstrap example:
 
