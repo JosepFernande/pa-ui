@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, signal, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HaInputText } from '@halolib-ui/input-text';
@@ -37,16 +43,33 @@ export class InputTextPageComponent {
       name: 'disabled',
       type: 'boolean',
       default: 'false',
-      description: 'Deshabilita el input. También se activa solo si el `FormControl` asociado está disabled.',
+      description:
+        'Deshabilita el input. También se activa solo si el `FormControl` asociado está disabled.',
     },
-    { name: 'readonly', type: 'boolean', default: 'false', description: 'Aplica el atributo `readonly` nativo.' },
-    { name: 'placeholder', type: 'string', default: `''`, description: 'Placeholder nativo, mostrado con el input vacío.' },
-    { name: 'ariaLabel', type: 'string', default: `''`, description: 'Valor del atributo `aria-label`.' },
+    {
+      name: 'readonly',
+      type: 'boolean',
+      default: 'false',
+      description: 'Aplica el atributo `readonly` nativo.',
+    },
+    {
+      name: 'placeholder',
+      type: 'string',
+      default: `''`,
+      description: 'Placeholder nativo, mostrado con el input vacío.',
+    },
+    {
+      name: 'ariaLabel',
+      type: 'string',
+      default: `''`,
+      description: 'Valor del atributo `aria-label`.',
+    },
     {
       name: 'ariaDescribedBy',
       type: 'string',
       default: `''`,
-      description: 'Ids separados por coma para `aria-describedby` (p. ej. tu propio hint o mensaje de error).',
+      description:
+        'Ids separados por coma para `aria-describedby` (p. ej. tu propio hint o mensaje de error).',
     },
   ];
 

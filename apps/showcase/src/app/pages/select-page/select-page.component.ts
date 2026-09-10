@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, signal, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HaSelect } from '@halolib-ui/select';
@@ -52,14 +58,21 @@ export class SelectPageComponent {
       name: 'options',
       type: 'HaSelectOption[]',
       default: '[]',
-      description: '`{ label: string; value: T; disabled?: boolean }[]` — datos de las opciones del panel.',
+      description:
+        '`{ label: string; value: T; disabled?: boolean }[]` — datos de las opciones del panel.',
     },
-    { name: 'size', type: `'sm' | 'md' | 'lg'`, default: `'md'`, description: 'Tamaño del trigger.' },
+    {
+      name: 'size',
+      type: `'sm' | 'md' | 'lg'`,
+      default: `'md'`,
+      description: 'Tamaño del trigger.',
+    },
     {
       name: 'disabled',
       type: 'boolean',
       default: 'false',
-      description: 'Deshabilita el trigger. También se activa solo si el `FormControl` asociado está disabled.',
+      description:
+        'Deshabilita el trigger. También se activa solo si el `FormControl` asociado está disabled.',
     },
     {
       name: 'readonly',
@@ -73,7 +86,12 @@ export class SelectPageComponent {
       default: `''`,
       description: 'Texto mostrado en el trigger mientras no hay opción seleccionada.',
     },
-    { name: 'ariaLabel', type: 'string', default: `''`, description: 'Valor del atributo `aria-label` del trigger.' },
+    {
+      name: 'ariaLabel',
+      type: 'string',
+      default: `''`,
+      description: 'Valor del atributo `aria-label` del trigger.',
+    },
     {
       name: 'ariaDescribedBy',
       type: 'string',
