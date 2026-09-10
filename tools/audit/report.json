@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-08-27T19:03:32.722Z",
+  "timestamp": "2026-09-10T18:21:39.913Z",
   "components": [
     {
-      "path": "libs/button/src/lib/button.component.ts",
+      "path": "libs\\halo-ui\\button\\src\\lib\\button.component.ts",
       "selector": "button[ha-button]",
       "encapsulation": "None",
       "tokens": [
@@ -36,9 +36,10 @@
         "--ha-button-padding-lg",
         "--ha-button-padding-md",
         "--ha-button-padding-sm",
-        "--ha-button-radius",
+        "--ha-button-radius-lg",
+        "--ha-button-radius-md",
+        "--ha-button-radius-sm",
         "--ha-button-solid-color",
-        "--ha-button-spinner-border",
         "--ha-button-spinner-duration",
         "--ha-button-spinner-size",
         "--ha-button-sr-only-height",
@@ -49,8 +50,8 @@
       ]
     },
     {
-      "path": "libs/input/src/lib/input.component.ts",
-      "selector": "input[ha-input]",
+      "path": "libs\\halo-ui\\input-text\\src\\lib\\input-text.component.ts",
+      "selector": "input[ha-input-text]",
       "encapsulation": "None",
       "tokens": [
         "--ha-input-bg",
@@ -87,7 +88,7 @@
       ]
     },
     {
-      "path": "libs/select/src/lib/select.component.ts",
+      "path": "libs\\halo-ui\\select\\src\\lib\\select.component.ts",
       "selector": "ha-select",
       "encapsulation": "None",
       "tokens": [
@@ -147,7 +148,7 @@
       ]
     }
   ],
-  "selectors": ["button[ha-button]", "ha-select", "input[ha-input]"],
+  "selectors": ["button[ha-button]", "ha-select", "input[ha-input-text]"],
   "violations": [],
   "status": "pass"
 }

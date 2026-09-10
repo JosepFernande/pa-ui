@@ -20,7 +20,7 @@ CSS-variable write happens at bootstrap, without any consumer having to inject
 the service manually.
 
 ```typescript
-import { provideHaTheme } from '@halolib-ui/core';
+import { provideHaTheme } from '@halolib-ui/angular/core';
 
 // Minimal (uses the default theme)
 provideHaTheme();
@@ -259,7 +259,7 @@ read via `var(--ha-primary)`, etc.) is **always** the semantic layer, never
 
 ```typescript
 import { inject } from '@angular/core';
-import { HaThemeService } from '@halolib-ui/core';
+import { HaThemeService } from '@halolib-ui/angular/core';
 
 @Component({/* ... */})
 export class ThemeSwitcherComponent {
@@ -307,8 +307,8 @@ partial object-over-object merge.
 
 ## Public Low-Level Utilities
 
-Exported from `@halolib-ui/core` for anyone composing their own color logic
-(advanced use, not needed for normal consumption):
+Exported from `@halolib-ui/angular/core` for anyone composing their own color
+logic (advanced use, not needed for normal consumption):
 
 - `hexToRgb`, `rgbToHsl`, `hslToRgb`, `hexToHsl`, `hslToHex`,
   `relativeLuminance` — pure color-space conversion and WCAG luminance

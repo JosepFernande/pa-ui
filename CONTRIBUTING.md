@@ -107,9 +107,9 @@ versionado y changelogs.
 
 ### Cuándo se requiere un changeset
 
-Se requiere un changeset siempre que tu PR modifique un **paquete publicable**
-(`@halolib-ui/core`, `@halolib-ui/button`, `@halolib-ui/input-text`,
-`@halolib-ui/angular`). Esto incluye:
+Se requiere un changeset siempre que tu PR modifique el **paquete publicable**
+`@halolib-ui/angular` (incluye sus entry points secundarios `core`, `button`,
+`input-text`, `select`). Esto incluye:
 
 - Agregar nuevas features o componentes
 - Cambiar o remover APIs públicas
@@ -142,9 +142,9 @@ La CLI te va a pedir:
 Esto crea un archivo `.md` en `.changeset/` con un nombre aleatorio único.
 Commiteá ese archivo junto con tus cambios.
 
-Los cuatro paquetes publicables están configurados como `fixed` en
-`.changeset/config.json`: siempre se versionan juntos con el mismo número,
-aunque el changeset solo mencione a uno de ellos.
+Hay un único paquete publicable (`@halolib-ui/angular`), así que
+`.changeset/config.json` no tiene grupos `fixed`/`linked` (ambos son `[]`) — no
+hay nada que mantener en lockstep.
 
 ### Tipos de bump
 
@@ -168,11 +168,13 @@ a `main`**, no uno:
    hay nada nuevo para versionar, así que corre:
    - `npm audit --omit=dev --audit-level=critical` sobre las dependencias de
      producción (**no bloqueante** — es advisory, se sube como artifact)
-   - `npm run validate:packages` (**bloqueante** — falla el release si el
-     `package.json` de algún paquete en `dist/` perdió su entry point
-     `main`/`exports["."]`/`typings`, o si el workflow dejó de publicar desde
-     `dist/<lib>`)
-   - `changeset publish`, que crea el tag git y publica el GitHub Release
+   - `npm run validate:packages` (**bloqueante** — falla el release si
+     `dist/libs/halo-ui/package.json` perdió alguno de sus 5 entry points (`.`,
+     `./core`, `./button`, `./input-text`, `./select`), si reapareció una
+     dependencia `@halolib-ui/*` obsoleta, o si el workflow dejó de publicar
+     desde `dist/libs/halo-ui`)
+   - un publish directo (`npm publish "dist/libs/halo-ui"`), que crea el tag git
+     y publica el GitHub Release
 
 Si no ves una publicación después de mergear tu PR con changesets, revisá si se
 abrió el PR de version-packages y si ya fue mergeado — ese segundo merge es el
@@ -181,12 +183,11 @@ que efectivamente publica a npm.
 ### Estado actual: release estable (fuera de modo prerelease)
 
 El repo salió del modo prerelease de Changesets (`changeset pre exit`) y ya no
-usa `.changeset/pre.json`. Los cuatro paquetes (`@halolib-ui/core`,
-`@halolib-ui/button`, `@halolib-ui/input-text`, `@halolib-ui/angular`) tienen
-releases estables reales y se instalan sin ningún tag especial:
+usa `.changeset/pre.json`. El paquete publicable (`@halolib-ui/angular`) tiene
+releases estables reales y se instala sin ningún tag especial:
 
 ```bash
-npm install @halolib-ui/core
+npm install @halolib-ui/angular
 ```
 
 `release.yml` conserva lógica condicional para el caso en que el repo vuelva a
