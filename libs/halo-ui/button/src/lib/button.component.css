@@ -96,6 +96,13 @@
   background-color: var(--ha-button-active-bg);
 }
 
+/* Outline & ghost hover backgrounds are close in hue to the text color;
+   switch to the solid variant's contrast color to keep the label legible. */
+.ha-button--outline:not(.ha-button--disabled):hover,
+.ha-button--ghost:not(.ha-button--disabled):hover {
+  color: var(--ha-button-solid-color);
+}
+
 /* ------------------------------------------------------------------ */
 /* Sizes                                                               */
 /* ------------------------------------------------------------------ */
