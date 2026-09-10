@@ -26,13 +26,14 @@
       </svg>
       Playground
     </a>
-    <a
-      href="#api-reference"
-      class="inline-flex items-center gap-1.5 font-semibold text-brand-700 hover:text-brand-500"
-    >
+    <a href="#api-reference" class="inline-flex items-center gap-1.5 font-semibold text-brand-700 hover:text-brand-500">
       <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke-linecap="round" stroke-linejoin="round" />
-        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" stroke-linecap="round" stroke-linejoin="round" />
+        <path
+          d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
       </svg>
       API Docs
     </a>
@@ -256,14 +257,14 @@
     <app-code-block
       label="save-button.component.ts"
       language="typescript"
-      code='import { Component, signal } from &apos;&#64;angular/core&apos;;
-import { HaButton } from &apos;&#64;halolib-ui/angular&apos;;
+      code="import { Component, signal } from '&#64;angular/core';
+import { HaButton } from '&#64;halolib-ui/angular';
 
 &#64;Component({
   standalone: true,
   imports: [HaButton],
   template: `
-    &lt;button ha-button [loading]="isSaving()" (click)="save()"&gt;
+    &lt;button ha-button [loading]=&quot;isSaving()&quot; (click)=&quot;save()&quot;&gt;
       Guardar
     &lt;/button&gt;
   `,
@@ -276,7 +277,7 @@ export class SaveButtonComponent {
     await this.persist();
     this.isSaving.set(false);
   }
-}'
+}"
     />
   </div>
 </section>
@@ -369,11 +370,7 @@ export class SaveButtonComponent {
     <div class="flex items-start gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
       <span class="mt-0.5 shrink-0 text-brand-700" aria-hidden="true">
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path
-            d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
+          <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" stroke-linecap="round" stroke-linejoin="round" />
           <circle cx="12" cy="12" r="3" />
         </svg>
       </span>

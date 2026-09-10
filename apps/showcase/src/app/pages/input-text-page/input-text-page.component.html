@@ -13,7 +13,9 @@
     >
     <span class="rounded-full bg-green-50 px-2.5 py-1 text-xs font-semibold text-green-700">Estable</span>
     <span class="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">v19.0.1</span>
-    <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700">Angular Forms nativo</span>
+    <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700"
+      >Angular Forms nativo</span
+    >
     <span class="rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-semibold text-zinc-600">Angular 19.2+</span>
   </div>
   <p class="max-w-3xl text-[15px] font-normal leading-relaxed text-zinc-600 sm:text-base">
@@ -29,13 +31,14 @@
       </svg>
       Playground
     </a>
-    <a
-      href="#api-reference"
-      class="inline-flex items-center gap-1.5 font-semibold text-brand-700 hover:text-brand-500"
-    >
+    <a href="#api-reference" class="inline-flex items-center gap-1.5 font-semibold text-brand-700 hover:text-brand-500">
       <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke-linecap="round" stroke-linejoin="round" />
-        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" stroke-linecap="round" stroke-linejoin="round" />
+        <path
+          d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
       </svg>
       API Docs
     </a>
@@ -140,21 +143,22 @@
   <div class="mt-6 rounded-2xl border border-surface-border bg-white p-6 shadow-sm">
     <h3 class="mb-1 text-sm font-bold text-zinc-900">Validación real con Angular Forms</h3>
     <p class="mb-5 max-w-2xl text-xs leading-relaxed text-zinc-600">
-      El único estado semántico real de <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
-        >HaInputText</code
-      >
-      es el de error, y es 100% automático: se calcula a partir de <code
-        class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
-        >invalid &amp;&amp; touched</code
-      >
-      del <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">FormControl</code> conectado — no
+      El único estado semántico real de
+      <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">HaInputText</code> es el de error, y es
+      100% automático: se calcula a partir de
+      <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">invalid &amp;&amp; touched</code> del
+      <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">FormControl</code> conectado — no
       existe forma de setearlo a mano. Escribí un email inválido abajo y salí del campo (blur) para verlo.
     </p>
     <div class="max-w-sm">
       <label
         for="email-demo-input"
         class="mb-1.5 block text-[13px] font-semibold"
-        style="color: var(--ha-input-label-color); font-size: var(--ha-input-label-font-size); font-weight: var(--ha-input-label-font-weight)"
+        style="
+          color: var(--ha-input-label-color);
+          font-size: var(--ha-input-label-font-size);
+          font-weight: var(--ha-input-label-font-weight);
+        "
         >Email</label
       >
       <input
@@ -196,15 +200,14 @@
       <h3 class="mb-2 text-sm font-bold text-zinc-900">El host ES el &lt;input&gt; nativo</h3>
       <p class="text-xs leading-relaxed text-zinc-600">
         <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">HaInputText</code> se aplica como
-        atributo (<code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
-          >input[ha-input-text]</code
-        >) sobre un <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">&lt;input&gt;</code>
-        nativo. No renderiza template propio (<code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
+        atributo (<code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">input[ha-input-text]</code
+        >) sobre un
+        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">&lt;input&gt;</code> nativo. No
+        renderiza template propio (<code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
           >template: ''</code
         >): no hay wrapper, no hay slots de label, prefix, suffix ni helper. Semántica nativa, teclado y foco vienen
-        gratis, igual que en <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
-          >button[ha-button]</code
-        >.
+        gratis, igual que en
+        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">button[ha-button]</code>.
       </p>
     </div>
     <div class="rounded-2xl border border-surface-border bg-white p-6 shadow-sm">
@@ -213,12 +216,11 @@
         La librería reserva tokens de label y de hint (<code
           class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
           >--ha-input-label-color</code
-        >,
-        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">--ha-input-hint-color</code>, etc.)
-        aunque nunca dibuja esos elementos. Vos escribís tu propio
+        >, <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">--ha-input-hint-color</code>,
+        etc.) aunque nunca dibuja esos elementos. Vos escribís tu propio
         <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">&lt;label&gt;</code> y párrafo de
-        ayuda/error, y los estilizás con esos mismos tokens para que combinen visualmente sin que la librería posea
-        ese markup.
+        ayuda/error, y los estilizás con esos mismos tokens para que combinen visualmente sin que la librería posea ese
+        markup.
       </p>
     </div>
   </div>
@@ -265,7 +267,8 @@
           <div>
             <p class="font-mono text-xs font-semibold text-zinc-900">&lt;p&gt; (hint / error)</p>
             <p class="text-xs text-zinc-600">
-              Lo escribís vos, condicionado a <code class="rounded bg-zinc-200 px-1 py-0.5 text-[0.9em]"
+              Lo escribís vos, condicionado a
+              <code class="rounded bg-zinc-200 px-1 py-0.5 text-[0.9em]"
                 >control.invalid &amp;&amp; control.touched</code
               >, coloreado con `--ha-input-hint-color`.
             </p>
@@ -288,9 +291,8 @@
     <div class="flex flex-col gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
       <input ha-input-text placeholder="Enfocame con Tab" autofocus />
       <span class="text-xs font-semibold text-zinc-500"
-        >Focus (real, vía teclado — anillo <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
-          >--ha-input-focus-ring</code
-        >)</span
+        >Focus (real, vía teclado — anillo
+        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">--ha-input-focus-ring</code>)</span
       >
     </div>
     <div class="flex flex-col gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
@@ -304,8 +306,8 @@
     <div class="flex flex-col gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
       <input ha-input-text placeholder="Email" [formControl]="errorGalleryControl" />
       <span class="text-xs font-semibold text-zinc-500"
-        >Error (real, <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
-          >invalid &amp;&amp; touched</code
+        >Error (real,
+        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">invalid &amp;&amp; touched</code
         >)</span
       >
     </div>
@@ -408,12 +410,13 @@ export class UserProfileEmailFieldComponent {
 
   <h3 class="mb-3 text-xs font-bold uppercase tracking-wider text-zinc-500">Outputs</h3>
   <p class="mb-8 max-w-3xl text-sm leading-relaxed text-zinc-600">
-    No expone <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">&#64;Output()</code> propios
-    — la integración es vía <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700"
-      >ControlValueAccessor</code
+    No expone <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">&#64;Output()</code> propios —
+    la integración es vía
+    <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">ControlValueAccessor</code> (<code
+      class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700"
+      >[formControl]</code
     >
-    (<code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">[formControl]</code> /
-    <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">[(ngModel)]</code>), igual que
+    / <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">[(ngModel)]</code>), igual que
     cualquier <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">&lt;input&gt;</code> nativo
     envuelto en Angular Forms.
   </p>
@@ -424,9 +427,9 @@ export class UserProfileEmailFieldComponent {
     <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">template</code> propio (<code
       class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700"
       >template: ''</code
-    >), así que no puede proyectar <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700"
-      >&lt;ng-content&gt;</code
-    >. No existen slots de prefix/suffix.
+    >), así que no puede proyectar
+    <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">&lt;ng-content&gt;</code>. No existen
+    slots de prefix/suffix.
   </p>
 </section>
 
@@ -453,21 +456,18 @@ export class UserProfileEmailFieldComponent {
     <div class="flex items-start gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
       <span class="mt-0.5 shrink-0 text-brand-700" aria-hidden="true">
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path
-            d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
+          <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" stroke-linecap="round" stroke-linejoin="round" />
           <circle cx="12" cy="12" r="3" />
         </svg>
       </span>
       <div>
         <h3 class="mb-1 text-sm font-bold text-zinc-900">Foco por teclado</h3>
         <p class="text-xs leading-relaxed text-zinc-600">
-          Angular CDK <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">FocusMonitor</code>
-          distingue el origen del foco: el anillo extra
-          (<code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">--ha-input-focus-ring</code>)
-          solo aparece cuando el foco se originó por teclado, no con clicks de mouse.
+          Angular CDK
+          <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">FocusMonitor</code> distingue el
+          origen del foco: el anillo extra (<code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
+            >--ha-input-focus-ring</code
+          >) solo aparece cuando el foco se originó por teclado, no con clicks de mouse.
         </p>
       </div>
     </div>
@@ -475,7 +475,11 @@ export class UserProfileEmailFieldComponent {
     <div class="flex items-start gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
       <span class="mt-0.5 shrink-0 text-brand-700" aria-hidden="true">
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 22a10 10 0 1 1 10-10c0 1.7-1.3 3-3 3h-2.3a1.7 1.7 0 0 0-1.2 2.9c.3.3.5.7.5 1.1 0 1.3-1.7 2.3-4 3Z" stroke-linecap="round" stroke-linejoin="round" />
+          <path
+            d="M12 22a10 10 0 1 1 10-10c0 1.7-1.3 3-3 3h-2.3a1.7 1.7 0 0 0-1.2 2.9c.3.3.5.7.5 1.1 0 1.3-1.7 2.3-4 3Z"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
           <circle cx="7.5" cy="10.5" r="1" fill="currentColor" stroke="none" />
           <circle cx="10.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
           <circle cx="15" cy="6.5" r="1" fill="currentColor" stroke="none" />
@@ -485,13 +489,12 @@ export class UserProfileEmailFieldComponent {
       <div>
         <h3 class="mb-1 text-sm font-bold text-zinc-900">Atributos ARIA reales</h3>
         <p class="text-xs leading-relaxed text-zinc-600">
-          El host bindea directamente <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
-            >aria-invalid</code
-          >,
+          El host bindea directamente
+          <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">aria-invalid</code>,
           <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">aria-disabled</code>,
           <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">aria-describedby</code> y
-          <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">aria-label</code> según los
-          inputs y el estado del form control.
+          <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">aria-label</code> según los inputs
+          y el estado del form control.
         </p>
       </div>
     </div>

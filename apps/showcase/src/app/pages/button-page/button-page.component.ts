@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, signal, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HaButton } from '@halolib-ui/button';
 import type { HaButtonSize, HaButtonVariant } from '@halolib-ui/button';
@@ -60,9 +66,21 @@ export class ButtonPageComponent {
 
   /** The 3 real variants with short real-world guidance on when to use each. */
   protected readonly variantInfo: readonly VariantInfo[] = [
-    { variant: 'solid', title: 'Solid', description: 'Fondo sólido. Para la acción principal de la pantalla.' },
-    { variant: 'outline', title: 'Outline', description: 'Borde sin relleno. Para una acción secundaria.' },
-    { variant: 'ghost', title: 'Ghost', description: 'Sin fondo ni borde. Para una acción terciaria de bajo énfasis.' },
+    {
+      variant: 'solid',
+      title: 'Solid',
+      description: 'Fondo sólido. Para la acción principal de la pantalla.',
+    },
+    {
+      variant: 'outline',
+      title: 'Outline',
+      description: 'Borde sin relleno. Para una acción secundaria.',
+    },
+    {
+      variant: 'ghost',
+      title: 'Ghost',
+      description: 'Sin fondo ni borde. Para una acción terciaria de bajo énfasis.',
+    },
   ];
 
   /** The 3 real sizes with their Figma-sourced `min-height`/`min-width` (`libs/core/.../button-dimensions.tokens.ts`). */
