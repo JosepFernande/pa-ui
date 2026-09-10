@@ -33,6 +33,7 @@
     "@angular/platform-browser": "^19.2.0",
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
+    "prismjs": "^1.30.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
@@ -60,6 +61,7 @@
     "@tailwindcss/postcss": "^4.3.3",
     "@types/jest": "^29.5.12",
     "@types/node": "18.16.9",
+    "@types/prismjs": "^1.26.6",
     "@typescript-eslint/eslint-plugin": "^8.61.1",
     "@typescript-eslint/parser": "^8.61.1",
     "@typescript-eslint/rule-tester": "^8.64.0",

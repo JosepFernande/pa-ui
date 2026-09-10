@@ -22,7 +22,8 @@
           }
         ],
         "styles": ["apps/showcase/src/styles.css"],
-        "scripts": []
+        "scripts": [],
+        "allowedCommonJsDependencies": ["prismjs"]
       },
       "configurations": {
         "production": {
