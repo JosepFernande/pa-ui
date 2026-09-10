@@ -32,10 +32,5 @@
     "@angular/forms": "^19.2.0"
   },
   "sideEffects": false,
-  "type": "module",
-  "exports": {
-    "./theme.css": {
-      "default": "./theme.css"
-    }
-  }
+  "type": "module"
 }

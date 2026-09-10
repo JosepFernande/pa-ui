@@ -130,11 +130,13 @@ green for two releases while being completely unusable — nothing in the pipeli
 ever installed the package and tried to use it. Two more real bugs (#88) were
 found the same way (against the button package under the pre-#139 npm scope —
 the same class of bug applies verbatim to `@halolib-ui/button` today): the
-`loading` input rejects the bare-attribute usage its own README documents, and
-no README mentions that `@halolib-ui/core/theme.css` must be imported separately
-or the button renders with correct colors but no padding/height/font/gap/radius
-— `provideHaTheme()` only ever writes color variables at runtime; every other
-design token is a static CSS file the consumer has to opt into.
+`loading` input rejects the bare-attribute usage its own README documents. (A
+third historical bug in this same class — a README never mentioning that the
+Foundation stylesheet had to be imported separately, or the button rendered with
+correct colors but no padding/height/font/gap/radius — no longer applies: the
+Theme Engine now writes every design token, Foundation and Component included,
+at runtime via `provideHaTheme()` alone, so there is no separate static
+stylesheet to forget.)
 
 The pre-publish harness above checks entry points and the publish-directory
 invariant. It intentionally does NOT cover runtime/API/docs correctness — the

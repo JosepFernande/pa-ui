@@ -5,7 +5,7 @@ import {
   HA_THEME_STATE_KEY,
   type HaColorValue,
   type HaColorVariants,
-  type HaThemeConfig,
+  type HaTheme,
   type HaThemeOptions,
   type ResolvedTheme,
 } from './theme.tokens';
@@ -121,9 +121,9 @@ describe('theme.tokens', () => {
   });
 
   describe('type contracts', () => {
-    it('HaThemeConfig accepts an open colors dictionary', () => {
-      const config: HaThemeConfig = { colors: { primary: '#111111', brand: '#00ff00' } };
-      expect(config.colors['brand']).toBe('#00ff00');
+    it('HaTheme.semantic accepts an open colors dictionary', () => {
+      const theme: HaTheme = { semantic: { primary: '#111111', brand: '#00ff00' } };
+      expect(theme.semantic?.['brand']).toBe('#00ff00');
     });
 
     it('HaThemeOptions makes extendDefaults an optional boolean', () => {
@@ -138,17 +138,17 @@ describe('theme.tokens', () => {
       expect(resolved.colors['primary']).toBe(DEFAULT_THEME.colors['primary']);
     });
 
-    it('HaThemeConfig accepts an object-shaped color entry (HaColorVariants) alongside plain strings', () => {
-      const config: HaThemeConfig = {
-        colors: {
+    it('HaTheme.semantic accepts an object-shaped color entry (HaColorVariants) alongside plain strings', () => {
+      const theme: HaTheme = {
+        semantic: {
           primary: { base: '#16709e', hover: '#0a4f6b' },
           brand: '#00ff00',
         },
       };
-      const primary = config.colors['primary'] as HaColorVariants;
+      const primary = theme.semantic?.['primary'] as HaColorVariants;
       expect(primary.base).toBe('#16709e');
       expect(primary.hover).toBe('#0a4f6b');
-      expect(config.colors['brand']).toBe('#00ff00');
+      expect(theme.semantic?.['brand']).toBe('#00ff00');
     });
 
     it('ResolvedTheme accepts an object-shaped color entry and DEFAULT_THEME stays assignable', () => {

@@ -2,7 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DEFAULT_THEME, HA_THEME_TOKEN } from './theme.tokens';
-import type { HaColorVariants, HaThemeConfig, HaThemeOptions } from './theme.tokens';
+import type { HaColorVariants, HaTheme, HaThemeOptions } from './theme.tokens';
 import { provideHaTheme } from './theme-provider';
 import { HaThemeService } from './theme.service';
 
@@ -29,11 +29,11 @@ describe('HaThemeService', () => {
 
   function configureTestBed(
     platform: 'server' | 'browser' = 'browser',
-    config?: HaThemeConfig,
+    theme?: HaTheme,
     options?: HaThemeOptions,
   ): HaThemeService {
     TestBed.configureTestingModule({
-      providers: [provideHaTheme(config, options), { provide: PLATFORM_ID, useValue: platform }],
+      providers: [provideHaTheme(theme, options), { provide: PLATFORM_ID, useValue: platform }],
     });
     return TestBed.inject(HaThemeService);
   }
@@ -47,13 +47,13 @@ describe('HaThemeService', () => {
     });
 
     it('exposes theme as a readonly Signal (callable, returns the current snapshot)', () => {
-      const service = configureTestBed('browser', { colors: { primary: '#f00' } });
+      const service = configureTestBed('browser', { semantic: { primary: '#f00' } });
       expect(typeof service.theme).toBe('function');
       expect(service.theme().colors['primary']).toBe('#f00');
     });
 
     it('reflects the merged snapshot for a partial custom config', () => {
-      const service = configureTestBed('browser', { colors: { primary: '#111' } });
+      const service = configureTestBed('browser', { semantic: { primary: '#111' } });
       expect(service.theme().colors['primary']).toBe('#111');
       expect(service.theme().colors['success']).toBe(DEFAULT_THEME.colors['success']);
     });
@@ -81,7 +81,7 @@ describe('HaThemeService', () => {
 
       TestBed.configureTestingModule({
         providers: [
-          provideHaTheme({ colors: { primary: '#111111' } }),
+          provideHaTheme({ semantic: { primary: '#111111' } }),
           { provide: PLATFORM_ID, useValue: 'browser' },
         ],
       });
@@ -99,7 +99,7 @@ describe('HaThemeService', () => {
       // DOM is the jsdom-feasible proof of REQ-4.
       const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');
 
-      const service = configureTestBed('browser', { colors: { error: '#8b0000' } });
+      const service = configureTestBed('browser', { semantic: { error: '#8b0000' } });
 
       expect(service.theme().colors['error']).toBe('#8b0000');
       expect(setPropertySpy).toHaveBeenCalledWith('--ha-error', '#8b0000');
@@ -109,7 +109,7 @@ describe('HaThemeService', () => {
   describe('applyTheme (Req: applyTheme Merges Overrides and Re-Derives)', () => {
     it('merges overrides over the current colors, preserves untouched colors, and writes the semantic DOM var for the changed color', () => {
       const service = configureTestBed('browser', {
-        colors: { primary: '#2563eb', success: '#16a34a' },
+        semantic: { primary: '#2563eb', success: '#16a34a' },
       });
       const document = TestBed.inject(DOCUMENT);
       const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');
@@ -122,7 +122,7 @@ describe('HaThemeService', () => {
     });
 
     it('never throws on an empty overrides object (Task 2.7 — smoke, delegates to mergeTheme never-throw contract)', () => {
-      const service = configureTestBed('browser', { colors: { primary: '#2563eb' } });
+      const service = configureTestBed('browser', { semantic: { primary: '#2563eb' } });
       expect(() => service.applyTheme({})).not.toThrow();
     });
   });
@@ -130,7 +130,7 @@ describe('HaThemeService', () => {
   describe('overrideColor (Req: overrideColor Convenience Wrapper)', () => {
     it('behaves identically to applyTheme({ [name]: hex }) for a single key', () => {
       const service = configureTestBed('browser', {
-        colors: { primary: '#2563eb', success: '#16a34a' },
+        semantic: { primary: '#2563eb', success: '#16a34a' },
       });
       const document = TestBed.inject(DOCUMENT);
       const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');
@@ -145,7 +145,7 @@ describe('HaThemeService', () => {
 
   describe('reset (Req: reset Restores Bootstrap-Time Theme)', () => {
     it('restores the bootstrap snapshot from provideHaTheme (not DEFAULT_THEME) in both the signal and the DOM after overrides', () => {
-      const service = configureTestBed('browser', { colors: { primary: '#123456' } });
+      const service = configureTestBed('browser', { semantic: { primary: '#123456' } });
       const document = TestBed.inject(DOCUMENT);
       const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');
 
@@ -159,7 +159,7 @@ describe('HaThemeService', () => {
 
   describe('getResolvedTheme (Req: getResolvedTheme Snapshot Accessor)', () => {
     it('returns content identical to theme() after a mutation', () => {
-      const service = configureTestBed('browser', { colors: { primary: '#2563eb' } });
+      const service = configureTestBed('browser', { semantic: { primary: '#2563eb' } });
       service.overrideColor('primary', '#fff000');
       expect(service.getResolvedTheme()).toEqual(service.theme());
     });
@@ -167,44 +167,44 @@ describe('HaThemeService', () => {
 
   describe('reactive change notification via the existing theme signal (Req: Reactive Change Notification via Existing Signal)', () => {
     it('reflects each mutation through the theme signal with zero RxJS subscription anywhere in this test', () => {
-      const service = configureTestBed('browser', { colors: { primary: '#2563eb' } });
+      const service = configureTestBed('browser', { semantic: { primary: '#2563eb' } });
       expect(service.theme().colors['primary']).toBe('#2563eb');
       service.overrideColor('primary', '#fff000');
       expect(service.theme().colors['primary']).toBe('#fff000');
     });
   });
 
-  describe('SSR-safe DOM writes (Req: SSR-Safe DOM Writes)', () => {
-    it('applyTheme updates the signal on the server without ever calling document.documentElement.style.setProperty', () => {
-      const service = configureTestBed('server', { colors: { primary: '#2563eb' } });
+  describe('SSR DOM writes (Foundation is no longer skipped on SSR — closes the FOUC gap)', () => {
+    it('applyTheme updates the signal on the server AND calls document.documentElement.style.setProperty', () => {
+      const service = configureTestBed('server', { semantic: { primary: '#2563eb' } });
       const document = TestBed.inject(DOCUMENT);
       const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');
 
       expect(() => service.applyTheme({ primary: '#000000' })).not.toThrow();
 
       expect(service.theme().colors['primary']).toBe('#000000');
-      expect(setPropertySpy).not.toHaveBeenCalled();
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', '#000000');
     });
 
-    it('overrideColor and reset also update the signal on the server without calling setProperty', () => {
-      const service = configureTestBed('server', { colors: { primary: '#2563eb' } });
+    it('overrideColor and reset also update the signal on the server AND call setProperty', () => {
+      const service = configureTestBed('server', { semantic: { primary: '#2563eb' } });
       const document = TestBed.inject(DOCUMENT);
       const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');
 
       service.overrideColor('primary', '#000000');
       expect(service.theme().colors['primary']).toBe('#000000');
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', '#000000');
 
       service.reset();
       expect(service.theme().colors['primary']).toBe('#2563eb');
-
-      expect(setPropertySpy).not.toHaveBeenCalled();
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', '#2563eb');
     });
   });
 
   describe('fail-soft malformed color handling (Req: Fail-Soft Malformed Color Handling)', () => {
     it('warns for a malformed hex, skips its DOM write, but still writes valid colors and never throws', () => {
       const service = configureTestBed('browser', {
-        colors: { primary: '#2563eb', success: '#16a34a' },
+        semantic: { primary: '#2563eb', success: '#16a34a' },
       });
       const document = TestBed.inject(DOCUMENT);
       const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');
@@ -241,7 +241,7 @@ describe('HaThemeService', () => {
 
     it('normalizes an object-shaped entry to its base hex string (Task 4.1, Req: getColor Returns Base Hex Only)', () => {
       const service = configureTestBed('browser', {
-        colors: { primary: { base: '#16709e', hover: '#0a4f6b' } },
+        semantic: { primary: { base: '#16709e', hover: '#0a4f6b' } },
       });
       expect(service.getColor('primary')).toBe('#16709e');
     });
@@ -250,7 +250,7 @@ describe('HaThemeService', () => {
   describe('object-shaped bootstrap colors — runtime mutation drops explicit variants (Phase 4)', () => {
     it('overrideColor with a plain string over an object entry drops explicit variants and fully re-derives hover/active/contrast (Task 4.2)', () => {
       const service = configureTestBed('browser', {
-        colors: { primary: { base: '#16709e', hover: '#0a4f6b' } },
+        semantic: { primary: { base: '#16709e', hover: '#0a4f6b' } },
       });
       const document = TestBed.inject(DOCUMENT);
       const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');
@@ -265,7 +265,7 @@ describe('HaThemeService', () => {
 
     it('applyTheme with a plain string over an object entry drops explicit variants for that color (Task 4.2)', () => {
       const service = configureTestBed('browser', {
-        colors: {
+        semantic: {
           primary: { base: '#16709e', hover: '#0a4f6b' },
           accent: { base: '#222222', hover: '#111111' },
         },
@@ -279,7 +279,7 @@ describe('HaThemeService', () => {
 
     it('reset() after an override restores the bootstrap object entry and its explicit hover verbatim (Task 4.3)', () => {
       const service = configureTestBed('browser', {
-        colors: { primary: { base: '#16709e', hover: '#0a4f6b' } },
+        semantic: { primary: { base: '#16709e', hover: '#0a4f6b' } },
       });
       const document = TestBed.inject(DOCUMENT);
       const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');

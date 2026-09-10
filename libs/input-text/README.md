@@ -5,9 +5,9 @@ Accessible, token-driven Angular 19 input component with forms integration.
 ## Architecture
 
 - **Tokens first** — Every value comes from `var(--ha-input-*)` CSS custom
-  properties. Zero hardcoded colors, spacing, or radii.
-  `@halolib-ui/core/theme.css` ships defaults for all 36 input tokens, so no
-  tokens need to be authored by the consumer.
+  properties. Zero hardcoded colors, spacing, or radii. The `@halolib-ui/core`
+  Theme Engine writes defaults for all 36 input tokens at runtime, so no tokens
+  need to be authored by the consumer.
 - **Standalone only** — No NgModule. Component is `standalone: true`.
 - **Signals first** — All inputs are signals; derived state via `computed()`.
 - **CDK over custom** — Uses `FocusMonitor` from `@angular/cdk/a11y` for
@@ -22,13 +22,11 @@ Accessible, token-driven Angular 19 input component with forms integration.
 
 ## Setup
 
-Import the foundation theme once (provides the token defaults) and call
-`provideHaTheme()` for the runtime color layer:
+Call `provideHaTheme()` — it writes the token defaults and the runtime color
+layer, both:
 
 ```ts
 import { provideHaTheme } from '@halolib-ui/core';
-// styles.scss
-// @import '@halolib-ui/core/theme.css';
 
 bootstrapApplication(App, {
   providers: [provideHaTheme()],

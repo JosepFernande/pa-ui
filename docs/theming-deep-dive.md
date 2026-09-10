@@ -27,12 +27,12 @@ provideHaTheme();
 
 // Override some colors (the rest keep their default)
 provideHaTheme({
-  colors: { primary: '#0ea5e9' },
+  semantic: { primary: '#0ea5e9' },
 });
 
 // Explicit override of specific variants
 provideHaTheme({
-  colors: {
+  semantic: {
     primary: { base: '#16709e', hover: '#0a4f6b' },
   },
 });
@@ -40,7 +40,7 @@ provideHaTheme({
 // Replace the entire palette (no fallback to defaults)
 provideHaTheme(
   {
-    colors: {
+    semantic: {
       primary: { base: '#4f46e5', hover: '#4338ca' },
       success: '#8fbf21',
       error: '#d71608',
@@ -52,6 +52,20 @@ provideHaTheme(
   },
   { extendDefaults: false },
 );
+
+// Override Foundation raw values and/or component-level tokens directly —
+// no CSS required. Every field is deep-partial: send only what you want to
+// change.
+provideHaTheme({
+  foundation: {
+    palette: { primary: { 600: '#00897b' } },
+    spacing: { md: '20px' },
+  },
+  components: {
+    button: { surface: { bg: 'var(--ha-primary)' } },
+    select: { option: { optionSelectedBg: 'var(--ha-accent)' } },
+  },
+});
 ```
 
 Never throws — if anything fails while computing the snapshot, it falls back to
@@ -70,12 +84,50 @@ interface HaColorVariants {
 
 type HaColorValue = string | HaColorVariants;
 
-interface HaThemeConfig {
-  colors: Record<string, HaColorValue>; // open dictionary — any color name
+// Recursive partial: every nested object is partial too, not just the
+// top-level keys (same ergonomics as PrimeNG's `definePreset`).
+type HaDeepPartial<T> = T extends object
+  ? { [K in keyof T]?: HaDeepPartial<T[K]> }
+  : T;
+
+interface HaFoundationThemeInput {
+  palette?: Record<
+    string,
+    Partial<
+      Record<
+        25 | 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900,
+        string
+      >
+    >
+  >;
+  spacing?: Partial<Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', string>>;
+  gap?: Partial<Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', string>>;
+  radius?: Partial<Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', string>>;
+  iconSize?: Partial<Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', string>>;
+  fontWeight?: Partial<Record<'regular' | 'semibold' | 'bold', string>>;
+  fontFamily?: string;
+  typography?: Record<
+    string,
+    Partial<{ fontSize: string; fontWeight: string; lineHeight: string }>
+  >;
+}
+
+interface HaComponentsThemeInput {
+  button?: HaDeepPartial<HaButtonTokens>; // nested by semantic group: surface, typography, sizing, focus, states, transition, loading, accessibility
+  inputText?: HaDeepPartial<HaInputTextTokens>;
+  select?: HaDeepPartial<HaSelectTokens>; // nested by UI anatomy: trigger, panel, option
+}
+
+// The single argument to `provideHaTheme()`. Every layer is optional and
+// deep-partial — send only the keys you want to change.
+interface HaTheme {
+  foundation?: HaFoundationThemeInput;
+  semantic?: Record<string, HaColorValue>; // open dictionary — any color name; replaces the former `HaThemeConfig.colors`
+  components?: HaComponentsThemeInput;
 }
 
 interface HaThemeOptions {
-  extendDefaults?: boolean; // default: true
+  extendDefaults?: boolean; // default: true — governs the `semantic` layer only
 }
 
 interface ResolvedTheme {
@@ -121,9 +173,9 @@ when `extendDefaults` is `true` (the default).
 ### `extendDefaults`: merge vs. full replacement
 
 - `true` (default, including when `options` is omitted entirely):
-  `config.colors` is merged over `DEFAULT_THEME.colors` — unspecified colors
+  `theme.semantic` is merged over `DEFAULT_THEME.colors` — unspecified colors
   keep their default value, specified ones win.
-- `false`: **only** `config.colors` is used, with no fallback to the defaults.
+- `false`: **only** `theme.semantic` is used, with no fallback to the defaults.
   If any of the required base colors is missing — `primary`, `success`, `error`,
   `warning`, `alert`, `info`, `neutral` — a `console.warn` names the missing
   keys. It never throws and never backfills silently.
@@ -148,7 +200,8 @@ when `extendDefaults` is `true` (the default).
 4. The snapshot is frozen (`Object.freeze`, deep for object-shaped entries)
    before being exposed — nobody can mutate it afterward.
 5. `HaThemeService` is instantiated eagerly at bootstrap; its constructor runs
-   the first CSS-variable write to the DOM (skipped on the server).
+   the first CSS-variable write to the DOM — on **both** server and browser (the
+   write is no longer skipped on the server; see "SSR Considerations" below).
 
 ### Token derivation algorithm (`deriveTokens`)
 
@@ -285,12 +338,21 @@ The Theme Engine is SSR-safe:
 - On the browser, if that snapshot is already in `TransferState`, it's reused
   without recomputation — guaranteeing server and client see exactly the same
   theme.
-- The actual CSS-variable write to the DOM (`HaThemeService.writeToDom`) is
-  fully skipped on the server — there's no `document` there.
+- The actual CSS-variable write to the DOM (`HaThemeService.writeToDom`) now
+  runs on **both** server and browser, via Angular's `DOCUMENT` token (which
+  `@angular/platform-server` backs with a real, SSR-safe document). This closes
+  a FOUC gap that existed while the write was server-skipped: the
+  server-rendered HTML now already carries every resolved `--ha-*` custom
+  property inline on `<html>`, instead of relying on a static CSS file to cover
+  the pre-hydration paint.
 - Any error during computation falls back to `DEFAULT_THEME` with a
   `console.warn`, never blocking bootstrap.
 
-No additional configuration is needed for SSR consumers.
+No additional configuration is needed for SSR consumers. Note: this repo has no
+real SSR app to exercise end-to-end (no `main.server.ts`/
+`provideClientHydration` anywhere) — the behavior above is verified at the
+`TestBed` + mocked-`PLATFORM_ID` unit level, not against a real Angular
+Universal pipeline.
 
 ## Rules of the Team
 

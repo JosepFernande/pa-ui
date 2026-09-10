@@ -21,7 +21,7 @@
             "input": "apps/showcase/public"
           }
         ],
-        "styles": ["apps/showcase/src/styles.css", "libs/core/src/lib/foundation/theme.css"],
+        "styles": ["apps/showcase/src/styles.css"],
         "scripts": []
       },
       "configurations": {

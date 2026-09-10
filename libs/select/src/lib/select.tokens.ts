@@ -1,65 +1,17 @@
 /**
- * `--ha-select-*` component tokens (53 keys), following the same
- * camelCase-key -> kebab-name convention and per-size suffix scheme as
- * `HA_INPUT_TEXT_TOKENS`. Grouped as trigger (32), panel (7), and option (14).
+ * `HaSelectTokens` and its matching `HA_SELECT_TOKENS` CSS-variable-name
+ * registry now live in `@halolib-ui/core` (`component-token-shapes.ts`) so
+ * `core` can build `HaTheme.components.select` and walk a consumer's Select
+ * overrides against this exact registry without importing FROM
+ * `@halolib-ui/select` — `select` already depends on `core`
+ * (`select.tokens.spec.ts` imports `HA_COMPONENT_TOKEN_DEFAULTS` from it), so
+ * the reverse import would be a circular project dependency.
+ *
+ * Re-exported here verbatim so this file — and therefore
+ * `libs/select/src/public-api.ts`'s existing
+ * `export { HA_SELECT_TOKENS } from './lib/select.tokens';` /
+ * `export type { HaSelectTokens } from './lib/select.tokens';` — keeps
+ * working with zero further changes.
  */
-export const HA_SELECT_TOKENS = {
-  // Trigger (32)
-  bg: '--ha-select-bg',
-  color: '--ha-select-color',
-  border: '--ha-select-border',
-  fontFamily: '--ha-select-font-family',
-  fontWeight: '--ha-select-font-weight',
-  lineHeight: '--ha-select-line-height',
-  paddingSm: '--ha-select-padding-sm',
-  paddingMd: '--ha-select-padding-md',
-  paddingLg: '--ha-select-padding-lg',
-  fontSm: '--ha-select-font-sm',
-  fontMd: '--ha-select-font-md',
-  fontLg: '--ha-select-font-lg',
-  minHeightSm: '--ha-select-min-height-sm',
-  minHeightMd: '--ha-select-min-height-md',
-  minHeightLg: '--ha-select-min-height-lg',
-  radiusSm: '--ha-select-radius-sm',
-  radiusMd: '--ha-select-radius-md',
-  radiusLg: '--ha-select-radius-lg',
-  placeholderColor: '--ha-select-placeholder-color',
-  focusBorder: '--ha-select-focus-border',
-  focusRing: '--ha-select-focus-ring',
-  focusRingOffset: '--ha-select-focus-ring-offset',
-  errorBorder: '--ha-select-error-border',
-  errorColor: '--ha-select-error-color',
-  disabledBg: '--ha-select-disabled-bg',
-  disabledColor: '--ha-select-disabled-color',
-  disabledOpacity: '--ha-select-disabled-opacity',
-  readonlyBg: '--ha-select-readonly-bg',
-  readonlyBorder: '--ha-select-readonly-border',
-  transitionDuration: '--ha-select-transition-duration',
-  transitionEasing: '--ha-select-transition-easing',
-  gap: '--ha-select-gap',
-
-  // Panel (7)
-  panelBg: '--ha-select-panel-bg',
-  panelBorder: '--ha-select-panel-border',
-  panelRadius: '--ha-select-panel-radius',
-  panelShadow: '--ha-select-panel-shadow',
-  panelMaxHeight: '--ha-select-panel-max-height',
-  panelPaddingY: '--ha-select-panel-padding-y',
-  panelOffset: '--ha-select-panel-offset',
-
-  // Option (14)
-  optionColor: '--ha-select-option-color',
-  optionBg: '--ha-select-option-bg',
-  optionPaddingX: '--ha-select-option-padding-x',
-  optionPaddingY: '--ha-select-option-padding-y',
-  optionMinHeight: '--ha-select-option-min-height',
-  optionFontSize: '--ha-select-option-font-size',
-  optionHoverBg: '--ha-select-option-hover-bg',
-  optionActiveBg: '--ha-select-option-active-bg',
-  optionActiveColor: '--ha-select-option-active-color',
-  optionSelectedBg: '--ha-select-option-selected-bg',
-  optionSelectedColor: '--ha-select-option-selected-color',
-  optionSelectedFontWeight: '--ha-select-option-selected-font-weight',
-  optionDisabledColor: '--ha-select-option-disabled-color',
-  optionDisabledOpacity: '--ha-select-option-disabled-opacity',
-} as const;
+export { HA_SELECT_TOKENS } from '@halolib-ui/core';
+export type { HaSelectTokens } from '@halolib-ui/core';

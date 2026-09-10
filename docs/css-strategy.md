@@ -40,12 +40,20 @@ they are the Figma lightness axis of a raw color scale, not a size scale, and
 they never leave the Foundation layer as a numeric name — semantic color tokens
 (`--ha-primary`, `--ha-success`, ...) carry no numeric suffix.
 
-## Two Disjoint Pipelines
+## One Runtime Pipeline
 
-halo-ui deliberately splits token delivery into two independent mechanisms
-depending on whether the value needs to change at runtime.
+Every token layer — color, Foundation, and Component — is now built by the same
+runtime Theme Engine and written inline on `documentElement` by
+`HaThemeService`, on both the server and the browser. There is no longer a
+hand-authored static CSS file: `HA_DEFAULT_THEME`
+(`libs/core/src/lib/theme/default-theme.ts`) is the single, fully-specified
+default theme object, and the Foundation/Component "override" builders
+(`foundation-overrides.ts`/`component-overrides.ts`) are full builders — they
+deep-merge a consumer's `HaTheme.foundation`/`HaTheme.components` input over
+`HA_DEFAULT_THEME`'s matching branch and emit the COMPLETE flattened CSS var map
+every time, not just the overridden subset.
 
-### 1. Color — runtime, via the Theme Engine
+### 1. Color — via the Theme Engine's semantic pipeline
 
 Color **bases** (`primary`, `success`, `error`, `warning`, `alert`, `info`,
 `neutral`, and any app-registered custom color) go through the Theme Engine:
@@ -67,13 +75,15 @@ or replaces it entirely (`extendDefaults: false`).
 
 Because these are written as **inline styles** on `documentElement`, they
 outrank any `:root` stylesheet rule automatically — no `!important`, no
-load-order coupling between the Theme Engine and the static CSS file below.
+load-order coupling, and (unlike a later-loaded consumer stylesheet rule) a
+provider's configured value can never be silently outranked.
 
 Raw color scales (the 25→900 steps) are never passed to `deriveTokens()` and
 never appear as a `HaThemeConfig.colors` entry — they have no interactive states
 (hover/active/contrast make no sense for a fixed swatch), so runtime derivation
-would be meaningless for them. They live only in the static layer described
-next.
+would be meaningless for them. They are still written to the DOM — by the
+separate Foundation builder described next — just never through the color-math
+pipeline.
 
 The Foundation layer ships a single `primary` raw brand scale (breaking change —
 replaces the former `dark-blue`/`light-blue`/`dark-green`/ `light-green`
@@ -91,19 +101,35 @@ two-brand-family palette, no alias kept):
 `primary-600`/`primary-700` are the anchors the semantic `primary` theme color
 (base/hover) is derived from — see the roster table below.
 
-### 2. Everything else — static, via `theme.css`
+### 2. Everything else — Foundation and Component, via the Theme Engine
 
 Raw color scales, spacing, gap, radius, typography, icon sizes, and every
-component-token _default_ value are static: fixed at build time and shipped as a
-hand-authored `:root` stylesheet, `@halolib-ui/core/theme.css`. They are never
-runtime-mutable.
+component-token _default_ value are fixed by `HA_DEFAULT_THEME`
+(`libs/core/src/lib/theme/default-theme.ts`), but — unlike color — they never
+route through `deriveTokens()`/the hex-HSL color-math pipeline (Requirement:
+`deriveTokens()` Never Processes Raw Scales). `HaThemeService.writeToDom()` runs
+two dedicated full builders instead:
+
+- `foundation-overrides.ts`'s `toFoundationCssVariables()` — palette,
+  spacing/gap/radius/icon-size, typography, font family/weight, and the `--ha-*`
+  non-color semantic passthrough aliases.
+- `component-overrides.ts`'s `toComponentCssVariables()` — every
+  `--ha-button-*`/`--ha-input-*`/`--ha-select-*` default.
+
+Both deep-merge a consumer's `HaTheme.foundation`/`HaTheme.components` input
+over `HA_DEFAULT_THEME`'s matching branch and emit the complete flattened var
+map on every write, so an app that only overrides one leaf (e.g.
+`components.button.surface.bg`) still gets every other token's default, written
+by the same call.
 
 The TypeScript constants in `libs/core/src/lib/foundation/`
-(`foundation.tokens.ts`, `foundation.types.ts`, `component-defaults.tokens.ts`,
-`button-dimensions.tokens.ts`) are the source of truth. `theme.css` is a mirror
-of what those constants would emit; drift between the two is caught by a parity
-test (`foundation-css.spec.ts`), not by a build step — there is no codegen step
-between the TS constants and the shipped CSS file.
+(`foundation.tokens.ts`, `foundation.types.ts`,
+`component-default-values.tokens.ts`, `button-dimensions.tokens.ts`) remain the
+source of truth for every default value; `HA_DEFAULT_THEME` assembles them, and
+the two builders above are the only code that reads it. There is no longer a
+hand-authored static CSS file and no CSS/TS parity test — the Foundation and
+Component layers ARE the runtime output of these builders, so there is nothing
+to drift.
 
 ### Default Theme color roster
 
@@ -152,7 +178,7 @@ provideHaTheme({
 
 ## Consumer Setup
 
-Full setup is `provideHaTheme()` **plus one explicit CSS import**:
+Full setup is `provideHaTheme()` alone — **no CSS import required**:
 
 ```typescript
 // app.config.ts
@@ -163,26 +189,24 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-```css
-/* styles.css (or any global entry point) */
-@import '@halolib-ui/core/theme.css';
-```
-
-With both in place, a bare app renders a fully-styled `HaButton` — height,
+With this in place, a bare app renders a fully-styled `HaButton` — height,
 min-width, radius, padding, gap, color, typography — with zero consumer-authored
-`--ha-*` tokens.
+`--ha-*` tokens. `HaThemeService` writes every custom property (color,
+Foundation, Component) inline on `documentElement` at bootstrap, on both the
+server and the browser, so there is no FOUC gap and no load-order coupling to
+manage.
 
-`@halolib-ui/core/theme.css` is exposed as a package subpath export
-(`libs/core/package.json` → `exports["./theme.css"]`) and shipped as an
-`ng-packagr` asset. It is not injected automatically by `provideHaTheme()`:
-`@halolib-ui/core` declares `sideEffects: false` and has no global stylesheet
-otherwise, so injecting ~180 static custom properties via JS on every bootstrap
-would defeat browser CSS caching and risk FOUC on SSR. Forgetting the import
-produces an unstyled-but-not-broken component, not a crash.
+`@halolib-ui/core` still declares `sideEffects: false` — it ships zero global
+stylesheets and zero CSS assets. The runtime write happens once per bootstrap
+(and once per explicit `applyTheme`/`overrideColor`/`reset` call), computing
+~180+ custom properties via `deriveTokens()` plus the two full builders
+described above; there is no memoization for the common no-override case, so
+this is a real (small, one-time) per-request cost on SSR, not a free static
+include.
 
 ## Fonts and Icons Are the Consumer's Responsibility
 
-`theme.css` declares `--font-family: 'Montserrat', -apple-system, ...` and
+The Theme Engine writes `--font-family: 'Montserrat', -apple-system, ...` and
 `--icon-size-*` by name/size only. It does **not** ship a `@font-face`
 declaration, a Montserrat font file, a Flaticon icon font, or any CDN `@import`.
 Loading the actual Montserrat font and Flaticon icon assets is the consuming
@@ -215,11 +239,13 @@ permanent decision**.
    version so existing `color="danger"` usage keeps resolving without a runtime
    error, instead of a hard pre-1.0 break. Pending product sign-off; must be
    revisited before the next minor release. See design decision D3.
-2. **One explicit CSS import is acceptable consumer setup.** The alternative
-   (fully self-installing theme via `provideHaTheme()` alone, injecting the
-   static sheet from JS) was rejected on caching/SSR/`sideEffects` grounds (see
-   "Consumer Setup" above), but the underlying product question — is one extra
-   import step acceptable friction — has not been explicitly confirmed.
+2. **`provideHaTheme()` alone, with no CSS import, is the full consumer setup.**
+   The Theme Engine computes and writes the complete Foundation/Component var
+   set via JS on every bootstrap (server and browser) instead of shipping a
+   cacheable static stylesheet. This trades a small per-bootstrap compute cost
+   (see "Consumer Setup" above) for zero setup friction and no FOUC gap; no
+   memoization for the no-override case is planned unless it becomes a measured
+   problem.
 3. **Montserrat and Flaticon are the consuming app's responsibility**, not
    self-hosted or bundled by `@halolib-ui/core`. No alternative delivery
    (self-hosted font file, CDN import) has been evaluated or approved.
@@ -227,16 +253,26 @@ permanent decision**.
    placeholders**, not Figma-confirmed, pending designer validation. Only `md`
    dimensions and `min-width` for all three sizes are Figma-confirmed.
    Placeholder values are isolated in `HA_BUTTON_PROVISIONAL_DIMENSIONS`
-   (`libs/core/src/lib/foundation/button-dimensions.tokens.ts`) and marked with
-   `/* provisional: pending design validation */` in `theme.css`, so updating
-   them later only touches that one constant — no API or logic change.
+   (`libs/core/src/lib/foundation/button-dimensions.tokens.ts`), so updating
+   them later only touches that one constant — no API or logic change. The
+   `/* provisional: pending design validation */` CSS comment marker that used
+   to accompany these values in the now-removed static Foundation stylesheet has
+   no equivalent in the JS-computed inline-style output — a `style.setProperty`
+   call cannot carry a trailing comment — so "provisional" is now a
+   documentation-only concept, recorded in this file's header comments and here,
+   not a runtime-verifiable CSS artifact.
 
 ## Reference
 
 - `libs/core/src/lib/theme/theme.tokens.ts` — `DEFAULT_THEME`, color merge base
 - `libs/core/src/lib/theme/theme-engine.ts` — `mergeTheme`, `deriveTokens`
-- `libs/core/src/lib/foundation/` — Foundation types, constants, and the shipped
-  `theme.css`
+- `libs/core/src/lib/theme/default-theme.ts` — `HA_DEFAULT_THEME`, the single
+  fully-specified default theme object every builder merges against
+- `libs/core/src/lib/theme/foundation-overrides.ts` / `component-overrides.ts` —
+  the full Foundation/Component CSS-variable builders
+- `libs/core/src/lib/theme/theme.service.ts` — `HaThemeService.writeToDom()`,
+  runs all three builders on both server and browser
+- `libs/core/src/lib/foundation/` — Foundation types and constants
 - `libs/button/src/lib/button.tokens.ts` — first real component consumer
 - `skills/lib-ui-architecture/SKILL.md` — the 6 hard rules and 3-layer contract
   this document implements

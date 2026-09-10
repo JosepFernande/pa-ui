@@ -6,11 +6,6 @@
   },
   "assets": [
     {
-      "glob": "theme.css",
-      "input": "src/lib/foundation",
-      "output": "."
-    },
-    {
       "glob": "README.md",
       "input": ".",
       "output": "."

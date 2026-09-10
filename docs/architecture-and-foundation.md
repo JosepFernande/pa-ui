@@ -329,7 +329,7 @@ Valid colors are defined by the Theme Engine, not by the component.
 
 ```typescript
 provideHaTheme({
-  colors: {
+  semantic: {
     primary: '#2563eb',
     treasury: '#7c3aed',
     accounting: '#059669',
