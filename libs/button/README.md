@@ -17,23 +17,16 @@ primitives.
 
 ## Usage
 
-`@halolib-ui/button` only renders correctly when both theming pieces from
-`@halolib-ui/core` are set up:
+`@halolib-ui/button` renders correctly once `provideHaTheme()` from
+`@halolib-ui/core` is registered — no additional CSS import is required:
 
 ```ts
 // app.config.ts
 providers: [provideHaTheme()];
 ```
 
-```css
-/* styles.css (global stylesheet) */
-@import '@halolib-ui/core/theme.css';
-```
-
-`provideHaTheme()` alone only writes the runtime color variables. The `@import`
-is required for padding, font-size, min-height, gap, and radius — without it the
-button renders with correct colors but looks "half broken" (no
-padding/height/font/gap/radius), with no error in the console.
+`provideHaTheme()` writes every CSS custom property Button consumes — colors,
+padding, font-size, min-height, gap, and radius — via the runtime Theme Engine.
 
 ```html
 <button ha-button>Solid Primary</button>

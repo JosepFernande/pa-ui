@@ -1,39 +1,17 @@
-export const HA_INPUT_TEXT_TOKENS = {
-  bg: '--ha-input-bg',
-  color: '--ha-input-color',
-  border: '--ha-input-border',
-  fontFamily: '--ha-input-font-family',
-  fontWeight: '--ha-input-font-weight',
-  lineHeight: '--ha-input-line-height',
-  paddingSm: '--ha-input-padding-sm',
-  paddingMd: '--ha-input-padding-md',
-  paddingLg: '--ha-input-padding-lg',
-  fontSm: '--ha-input-font-sm',
-  fontMd: '--ha-input-font-md',
-  fontLg: '--ha-input-font-lg',
-  minHeightSm: '--ha-input-min-height-sm',
-  minHeightMd: '--ha-input-min-height-md',
-  minHeightLg: '--ha-input-min-height-lg',
-  radiusSm: '--ha-input-radius-sm',
-  radiusMd: '--ha-input-radius-md',
-  radiusLg: '--ha-input-radius-lg',
-  focusBorder: '--ha-input-focus-border',
-  focusRing: '--ha-input-focus-ring',
-  focusRingOffset: '--ha-input-focus-ring-offset',
-  errorBorder: '--ha-input-error-border',
-  errorColor: '--ha-input-error-color',
-  errorIconColor: '--ha-input-error-icon-color',
-  disabledBg: '--ha-input-disabled-bg',
-  disabledColor: '--ha-input-disabled-color',
-  disabledOpacity: '--ha-input-disabled-opacity',
-  readonlyBg: '--ha-input-readonly-bg',
-  readonlyBorder: '--ha-input-readonly-border',
-  hintColor: '--ha-input-hint-color',
-  hintFontSize: '--ha-input-hint-font-size',
-  labelColor: '--ha-input-label-color',
-  labelFontSize: '--ha-input-label-font-size',
-  labelFontWeight: '--ha-input-label-font-weight',
-  transitionDuration: '--ha-input-transition-duration',
-  transitionEasing: '--ha-input-transition-easing',
-  placeholderColor: '--ha-input-placeholder-color',
-} as const;
+/**
+ * `HaInputTextTokens` and its matching `HA_INPUT_TEXT_TOKENS` CSS-variable-
+ * name registry now live in `@halolib-ui/core` (`component-token-shapes.ts`)
+ * so `core` can build `HaTheme.components.inputText` and walk a consumer's
+ * Input overrides against this exact registry without importing FROM
+ * `@halolib-ui/input-text` — `input-text` already depends on `core`
+ * (`input-text.tokens.spec.ts` imports `HA_COMPONENT_TOKEN_DEFAULTS` from
+ * it), so the reverse import would be a circular project dependency.
+ *
+ * Re-exported here verbatim so this file — and therefore
+ * `libs/input-text/src/public-api.ts`'s existing
+ * `export { HA_INPUT_TEXT_TOKENS } from './lib/input-text.tokens';` /
+ * `export type { HaInputTextTokens } from './lib/input-text.tokens';` —
+ * keeps working with zero further changes.
+ */
+export { HA_INPUT_TEXT_TOKENS } from '@halolib-ui/core';
+export type { HaInputTextTokens } from '@halolib-ui/core';

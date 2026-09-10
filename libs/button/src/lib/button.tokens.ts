@@ -1,45 +1,17 @@
-export const HA_BUTTON_TOKENS = {
-  bg: '--ha-button-bg',
-  color: '--ha-button-color',
-  border: '--ha-button-border',
-  radius: '--ha-button-radius',
-  gap: '--ha-button-gap',
-  fontFamily: '--ha-button-font-family',
-  fontWeight: '--ha-button-font-weight',
-  lineHeight: '--ha-button-line-height',
-  paddingSm: '--ha-button-padding-sm',
-  paddingMd: '--ha-button-padding-md',
-  paddingLg: '--ha-button-padding-lg',
-  fontSm: '--ha-button-font-sm',
-  fontMd: '--ha-button-font-md',
-  fontLg: '--ha-button-font-lg',
-  minHeightSm: '--ha-button-min-height-sm',
-  minHeightMd: '--ha-button-min-height-md',
-  minHeightLg: '--ha-button-min-height-lg',
-  /** Per-size min-width (Phase 3, additive — see design D4). */
-  minWidthSm: '--ha-button-min-width-sm',
-  minWidthMd: '--ha-button-min-width-md',
-  minWidthLg: '--ha-button-min-width-lg',
-  /** Per-size gap (Phase 3, additive — coexists with the unsized `gap` above). */
-  gapSm: '--ha-button-gap-sm',
-  gapMd: '--ha-button-gap-md',
-  gapLg: '--ha-button-gap-lg',
-  focusRing: '--ha-button-focus-ring',
-  focusRingOffset: '--ha-button-focus-ring-offset',
-  hoverBg: '--ha-button-hover-bg',
-  activeBg: '--ha-button-active-bg',
-  disabledBg: '--ha-button-disabled-bg',
-  disabledColor: '--ha-button-disabled-color',
-  disabledOpacity: '--ha-button-disabled-opacity',
-  solidColor: '--ha-button-solid-color',
-  transitionDuration: '--ha-button-transition-duration',
-  transitionEasing: '--ha-button-transition-easing',
-  loadingColor: '--ha-button-loading-color',
-  spinnerSize: '--ha-button-spinner-size',
-  spinnerBorder: '--ha-button-spinner-border',
-  spinnerDuration: '--ha-button-spinner-duration',
-  /** Visually-hidden screen reader only — width, height, and margin tokens */
-  srOnlyWidth: '--ha-button-sr-only-width',
-  srOnlyHeight: '--ha-button-sr-only-height',
-  srOnlyMargin: '--ha-button-sr-only-margin',
-} as const;
+/**
+ * `HaButtonTokens` and its matching `HA_BUTTON_TOKENS` CSS-variable-name
+ * registry now live in `@halolib-ui/core` (`component-token-shapes.ts`) so
+ * `core` can build `HaTheme.components.button` and walk a consumer's Button
+ * overrides against this exact registry without importing FROM
+ * `@halolib-ui/button` — `button` already depends on `core`
+ * (`button.tokens.spec.ts` imports `HA_COMPONENT_TOKEN_DEFAULTS` from it), so
+ * the reverse import would be a circular project dependency.
+ *
+ * Re-exported here verbatim so this file — and therefore
+ * `libs/button/src/public-api.ts`'s existing
+ * `export { HA_BUTTON_TOKENS } from './lib/button.tokens';` /
+ * `export type { HaButtonTokens } from './lib/button.tokens';` — keeps
+ * working with zero further changes.
+ */
+export { HA_BUTTON_TOKENS } from '@halolib-ui/core';
+export type { HaButtonTokens } from '@halolib-ui/core';

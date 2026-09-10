@@ -1,7 +1,7 @@
 import { EnvironmentInjector, PLATFORM_ID, TransferState } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DEFAULT_THEME, HA_THEME_STATE_KEY, HA_THEME_TOKEN } from './theme.tokens';
-import type { HaThemeConfig, HaThemeOptions, ResolvedTheme } from './theme.tokens';
+import type { HaTheme, HaThemeOptions, ResolvedTheme } from './theme.tokens';
 import { mergeTheme } from './theme-engine';
 import { provideHaTheme } from './theme-provider';
 
@@ -40,11 +40,11 @@ describe('provideHaTheme', () => {
 
   function configureTestBed(
     platform: 'server' | 'browser',
-    config?: HaThemeConfig,
+    theme?: HaTheme,
     options?: HaThemeOptions,
   ): void {
     TestBed.configureTestingModule({
-      providers: [provideHaTheme(config, options), { provide: PLATFORM_ID, useValue: platform }],
+      providers: [provideHaTheme(theme, options), { provide: PLATFORM_ID, useValue: platform }],
     });
   }
 
@@ -73,12 +73,12 @@ describe('provideHaTheme', () => {
   });
 
   describe('partial config forwarding (browser, triangulation)', () => {
-    it('forwards config and options to mergeTheme and exposes the merged snapshot on the token', () => {
-      const config: HaThemeConfig = { colors: { primary: '#f00' } };
+    it('forwards theme.semantic and options to mergeTheme and exposes the merged snapshot on the token', () => {
+      const themeConfig: HaTheme = { semantic: { primary: '#f00' } };
       const options: HaThemeOptions = { extendDefaults: true };
-      configureTestBed('browser', config, options);
+      configureTestBed('browser', themeConfig, options);
       const theme = TestBed.inject(HA_THEME_TOKEN);
-      expect(mergeThemeMock).toHaveBeenCalledWith(config, options);
+      expect(mergeThemeMock).toHaveBeenCalledWith(themeConfig.semantic, options);
       expect(theme.colors['primary']).toBe('#f00');
       expect(theme.colors['success']).toBe(DEFAULT_THEME.colors['success']);
     });
@@ -139,7 +139,7 @@ describe('provideHaTheme', () => {
       mergeThemeMock.mockImplementation(() => {
         throw new Error('boom');
       });
-      configureTestBed('browser', { colors: {} });
+      configureTestBed('browser', { semantic: {} });
 
       let theme: ResolvedTheme | undefined;
       expect(() => {
@@ -188,10 +188,10 @@ describe('provideHaTheme', () => {
 
   describe('deep-freeze of object-shaped color entries (Phase 3)', () => {
     it('deep-freezes a nested object entry, and a strict-mode mutation of one of its variants throws (Task 3.1)', () => {
-      const config: HaThemeConfig = {
-        colors: { primary: { base: '#16709e', hover: '#0a4f6b' } },
+      const themeConfig: HaTheme = {
+        semantic: { primary: { base: '#16709e', hover: '#0a4f6b' } },
       };
-      configureTestBed('browser', config);
+      configureTestBed('browser', themeConfig);
       const theme = TestBed.inject(HA_THEME_TOKEN);
 
       expect(Object.isFrozen(theme.colors['primary'])).toBe(true);
@@ -204,8 +204,8 @@ describe('provideHaTheme', () => {
 
     it('freezes an independent copy of an object entry, so mutating the caller-owned config object afterward never affects the snapshot (Task 3.2)', () => {
       const primaryEntry = { base: '#16709e', hover: '#0a4f6b' };
-      const config: HaThemeConfig = { colors: { primary: primaryEntry } };
-      configureTestBed('browser', config);
+      const themeConfig: HaTheme = { semantic: { primary: primaryEntry } };
+      configureTestBed('browser', themeConfig);
       const theme = TestBed.inject(HA_THEME_TOKEN);
 
       // Mutate the caller's own object AFTER bootstrap.
@@ -258,7 +258,7 @@ describe('provideHaTheme', () => {
       // running before a spy attached afterward could observe it.
       const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');
 
-      configureTestBed('browser', { colors: { primary: '#111111' } });
+      configureTestBed('browser', { semantic: { primary: '#111111' } });
 
       // Force environment-injector construction WITHOUT ever calling
       // TestBed.inject(HaThemeService) explicitly.
@@ -267,14 +267,14 @@ describe('provideHaTheme', () => {
       expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', '#111111');
     });
 
-    it('also constructs the service on the server without any document access (Task 3.4 — triangulation)', () => {
+    it('also constructs the service on the server and DOES write the DOM (Foundation is no longer skipped on SSR — closes the FOUC gap)', () => {
       const setPropertySpy = jest.spyOn(document.documentElement.style, 'setProperty');
 
-      configureTestBed('server', { colors: { primary: '#111111' } });
+      configureTestBed('server', { semantic: { primary: '#111111' } });
 
       expect(() => TestBed.inject(EnvironmentInjector)).not.toThrow();
 
-      expect(setPropertySpy).not.toHaveBeenCalled();
+      expect(setPropertySpy).toHaveBeenCalledWith('--ha-primary', '#111111');
     });
   });
 });

@@ -1,4 +1,5 @@
 import { InjectionToken, makeStateKey } from '@angular/core';
+import type { HaButtonTokens, HaInputTextTokens, HaSelectTokens } from './component-token-shapes';
 
 /**
  * Explicit hover/active/contrast overrides for a single bootstrap color
@@ -21,12 +22,83 @@ export interface HaColorVariants {
 export type HaColorValue = string | HaColorVariants;
 
 /**
- * Consumer-provided theme configuration passed to `provideHaTheme()`.
- * `colors` is an open dictionary — any string key is accepted, not just the
- * 5 default base colors (Requirement: Open Color Dictionary).
+ * Recursive partial: makes every nested object partial too, not just the
+ * top-level keys — the same ergonomics as PrimeNG's `definePreset`, so a
+ * consumer of `HaTheme` only ever specifies the leaves they want to change.
  */
-export interface HaThemeConfig {
-  colors: Record<string, HaColorValue>;
+export type HaDeepPartial<T> = T extends object ? { [K in keyof T]?: HaDeepPartial<T[K]> } : T;
+
+/**
+ * Consumer-provided Foundation-layer overrides for `HaTheme.foundation`.
+ *
+ * Every field mirrors a raw scale exposed by `foundation/foundation.tokens.ts`
+ * (`HA_FOUNDATION_PALETTE`, `HA_SPACING_SCALE`, `HA_GAP_SCALE`,
+ * `HA_RADIUS_SCALE`, `HA_ICON_SIZE_SCALE`, `HA_FONT_WEIGHT_SCALE`,
+ * `HA_FONT_FAMILY`, `HA_TYPOGRAPHY_SCALE`), but the step-key literal unions
+ * below (`25-900`, `xs-xl`, `regular|semibold|bold`) are deliberately
+ * duplicated here at the type level instead of imported from
+ * `foundation/foundation.types.ts`. `no-raw-scale-in-theme-engine.spec.ts`
+ * hard-asserts, via a source-text check, that this file never contains an
+ * import matching `from ['"].*foundation` — type-only imports included.
+ * Duplicating a handful of literal-type unions is a far smaller cost than
+ * weakening that spec. No runtime value ever crosses this boundary either
+ * way: Foundation overrides are written to the DOM by a completely separate
+ * pure helper (`foundation-overrides.ts`) that never calls `deriveTokens()`.
+ */
+export interface HaFoundationThemeInput {
+  /**
+   * Existing palette families (`primary`, `neutral`, ...) may have any of
+   * their steps overridden, and entirely new families may be added — the
+   * open string index mirrors `HaFoundationPalette`'s own index signature.
+   */
+  palette?: Record<
+    string,
+    Partial<Record<25 | 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900, string>>
+  >;
+  spacing?: Partial<Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', string>>;
+  gap?: Partial<Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', string>>;
+  radius?: Partial<Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', string>>;
+  iconSize?: Partial<Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', string>>;
+  fontWeight?: Partial<Record<'regular' | 'semibold' | 'bold', string>>;
+  fontFamily?: string;
+  typography?: Record<
+    string,
+    Partial<{ fontSize: string; fontWeight: string; lineHeight: string }>
+  >;
+}
+
+/**
+ * Consumer-provided Component-layer overrides for `HaTheme.components`. Each
+ * field is a deep-partial mirror of the matching component's NAME-shape
+ * registry (`HaButtonTokens`/`HaInputTextTokens`/`HaSelectTokens`, declared
+ * in `component-token-shapes.ts` — same lib, so importing them here is not a
+ * `type:ui` -> `type:core` -> `type:ui` cycle).
+ */
+export interface HaComponentsThemeInput {
+  button?: HaDeepPartial<HaButtonTokens>;
+  inputText?: HaDeepPartial<HaInputTextTokens>;
+  select?: HaDeepPartial<HaSelectTokens>;
+}
+
+/**
+ * Consumer-provided theme configuration passed to `provideHaTheme()`. Every
+ * layer is deep-partial and independently optional — a consumer only
+ * specifies the keys they want to change, mirroring the existing three-layer
+ * token pipeline (foundation -> semantic -> component).
+ *
+ * Replaces the former `HaThemeConfig` (`{ colors: {...} }`) — a deliberate
+ * breaking change with no compat alias, consistent with this repo's
+ * existing convention for breaking token-shape changes (see
+ * `foundation.tokens.ts`'s header comment on the brand-palette breaking
+ * change). `semantic` takes over `colors`'s exact role (fed into
+ * `mergeTheme()`/`deriveTokens()` unchanged); `foundation` and `components`
+ * are new, additive layers written to the DOM through separate pure helpers
+ * that never touch the color-derivation pipeline.
+ */
+export interface HaTheme {
+  foundation?: HaFoundationThemeInput;
+  semantic?: Record<string, HaColorValue>;
+  components?: HaComponentsThemeInput;
 }
 
 /**
@@ -104,3 +176,28 @@ export const HA_THEME_TOKEN = new InjectionToken<ResolvedTheme>('ha-theme');
  * Computation).
  */
 export const HA_THEME_STATE_KEY = makeStateKey<ResolvedTheme>('ha-theme');
+
+/**
+ * The Foundation and Component override layers of a `HaTheme` input, carried
+ * separately from `HA_THEME_TOKEN`/`HA_THEME_STATE_KEY`. Unlike the semantic
+ * `colors` layer, these are NOT routed through `mergeTheme`/`deriveTokens`
+ * (Requirement: `deriveTokens()` Never Processes Raw Scales) and do not need
+ * `TransferState` round-tripping — they are a deterministic, same-tick
+ * pass-through of the literal object a consumer passed to `provideHaTheme()`,
+ * identical on server and browser, applied to the DOM by
+ * `HaThemeService.writeToDom()` via `foundation-overrides.ts`/
+ * `component-overrides.ts`.
+ */
+export interface HaThemeOverridesSnapshot {
+  foundation?: HaFoundationThemeInput;
+  components?: HaComponentsThemeInput;
+}
+
+/**
+ * DI token carrying the Foundation/Component override layers registered by
+ * `provideHaTheme()`. Always provided (possibly with `undefined` fields)
+ * whenever `provideHaTheme()` is used.
+ */
+export const HA_THEME_OVERRIDES_TOKEN = new InjectionToken<HaThemeOverridesSnapshot | undefined>(
+  'ha-theme-overrides',
+);

@@ -1,4 +1,4 @@
-import { DEFAULT_THEME, type HaThemeConfig, type HaThemeOptions } from './theme.tokens';
+import { DEFAULT_THEME, type HaColorValue, type HaThemeOptions } from './theme.tokens';
 import { mergeTheme } from './theme-engine';
 
 describe('mergeTheme', () => {
@@ -13,7 +13,7 @@ describe('mergeTheme', () => {
   });
 
   describe('no config provided', () => {
-    it('returns DEFAULT_THEME exactly when config is undefined', () => {
+    it('returns DEFAULT_THEME exactly when semantic is undefined', () => {
       const result = mergeTheme(undefined, undefined);
       expect(result).toEqual(DEFAULT_THEME);
     });
@@ -32,8 +32,8 @@ describe('mergeTheme', () => {
 
   describe('extendDefaults true (default) merges over defaults', () => {
     it('overrides the given key and keeps the other 4 defaults when options is undefined', () => {
-      const config: HaThemeConfig = { colors: { primary: '#f00' } };
-      const result = mergeTheme(config, undefined);
+      const semantic: Record<string, HaColorValue> = { primary: '#f00' };
+      const result = mergeTheme(semantic, undefined);
       expect(result.colors['primary']).toBe('#f00');
       expect(result.colors['success']).toBe(DEFAULT_THEME.colors['success']);
       expect(result.colors['danger']).toBe(DEFAULT_THEME.colors['danger']);
@@ -42,9 +42,9 @@ describe('mergeTheme', () => {
     });
 
     it('overrides the given key and keeps the other 4 defaults when extendDefaults is explicitly true', () => {
-      const config: HaThemeConfig = { colors: { danger: '#123456' } };
+      const semantic: Record<string, HaColorValue> = { danger: '#123456' };
       const options: HaThemeOptions = { extendDefaults: true };
-      const result = mergeTheme(config, options);
+      const result = mergeTheme(semantic, options);
       expect(result.colors['danger']).toBe('#123456');
       expect(result.colors['primary']).toBe(DEFAULT_THEME.colors['primary']);
       expect(result.colors['success']).toBe(DEFAULT_THEME.colors['success']);
@@ -53,13 +53,13 @@ describe('mergeTheme', () => {
     });
 
     it('does not emit a console.warn', () => {
-      mergeTheme({ colors: { primary: '#f00' } }, undefined);
+      mergeTheme({ primary: '#f00' }, undefined);
       expect(warnSpy).not.toHaveBeenCalled();
     });
 
     it('Task 1.6 — includes a custom "brand" color alongside every entry of the new full DEFAULT_THEME roster', () => {
-      const config: HaThemeConfig = { colors: { brand: '#ec4899' } };
-      const result = mergeTheme(config, undefined);
+      const semantic: Record<string, HaColorValue> = { brand: '#ec4899' };
+      const result = mergeTheme(semantic, undefined);
       expect(result.colors['brand']).toBe('#ec4899');
       for (const key of Object.keys(DEFAULT_THEME.colors)) {
         expect(result.colors[key]).toEqual(DEFAULT_THEME.colors[key]);
@@ -69,8 +69,8 @@ describe('mergeTheme', () => {
 
   describe('open color dictionary', () => {
     it('includes a custom key alongside the 5 defaults with extendDefaults true', () => {
-      const config: HaThemeConfig = { colors: { brand: '#00f' } };
-      const result = mergeTheme(config, { extendDefaults: true });
+      const semantic: Record<string, HaColorValue> = { brand: '#00f' };
+      const result = mergeTheme(semantic, { extendDefaults: true });
       expect(result.colors['brand']).toBe('#00f');
       expect(result.colors['primary']).toBe(DEFAULT_THEME.colors['primary']);
       expect(result.colors['success']).toBe(DEFAULT_THEME.colors['success']);
@@ -80,40 +80,38 @@ describe('mergeTheme', () => {
     });
 
     it('does not validate keys against a closed enum', () => {
-      const config: HaThemeConfig = { colors: { 'anything-goes': '#abcdef' } };
-      const result = mergeTheme(config, { extendDefaults: true });
+      const semantic: Record<string, HaColorValue> = { 'anything-goes': '#abcdef' };
+      const result = mergeTheme(semantic, { extendDefaults: true });
       expect(result.colors['anything-goes']).toBe('#abcdef');
     });
   });
 
   describe('extendDefaults false with all 7 base colors given', () => {
-    const fullBaseConfig: HaThemeConfig = {
-      colors: {
-        primary: '#111111',
-        success: '#333333',
-        error: '#444444',
-        warning: '#555555',
-        alert: '#666666',
-        info: '#777777',
-        neutral: '#888888',
-      },
+    const fullBaseSemantic: Record<string, HaColorValue> = {
+      primary: '#111111',
+      success: '#333333',
+      error: '#444444',
+      warning: '#555555',
+      alert: '#666666',
+      info: '#777777',
+      neutral: '#888888',
     };
 
     it('returns ONLY the given keys, with no defaults merged in', () => {
-      const result = mergeTheme(fullBaseConfig, { extendDefaults: false });
-      expect(result.colors).toEqual(fullBaseConfig.colors);
+      const result = mergeTheme(fullBaseSemantic, { extendDefaults: false });
+      expect(result.colors).toEqual(fullBaseSemantic);
     });
 
     it('does not emit a console.warn', () => {
-      mergeTheme(fullBaseConfig, { extendDefaults: false });
+      mergeTheme(fullBaseSemantic, { extendDefaults: false });
       expect(warnSpy).not.toHaveBeenCalled();
     });
   });
 
   describe('extendDefaults false with missing base colors', () => {
     it('returns ONLY the given colors, without backfilling the missing base keys', () => {
-      const config: HaThemeConfig = { colors: { primary: '#f00' } };
-      const result = mergeTheme(config, { extendDefaults: false });
+      const semantic: Record<string, HaColorValue> = { primary: '#f00' };
+      const result = mergeTheme(semantic, { extendDefaults: false });
       expect(result.colors).toEqual({ primary: '#f00' });
       expect(result.colors['success']).toBeUndefined();
       expect(result.colors['error']).toBeUndefined();
@@ -124,8 +122,8 @@ describe('mergeTheme', () => {
     });
 
     it('emits exactly one console.warn naming the missing base colors', () => {
-      const config: HaThemeConfig = { colors: { primary: '#f00' } };
-      mergeTheme(config, { extendDefaults: false });
+      const semantic: Record<string, HaColorValue> = { primary: '#f00' };
+      mergeTheme(semantic, { extendDefaults: false });
       expect(warnSpy).toHaveBeenCalledTimes(1);
       const [message] = warnSpy.mock.calls[0] as [string];
       expect(message).toEqual(expect.stringContaining('success'));
@@ -138,13 +136,13 @@ describe('mergeTheme', () => {
     });
 
     it('does not throw', () => {
-      const config: HaThemeConfig = { colors: {} };
-      expect(() => mergeTheme(config, { extendDefaults: false })).not.toThrow();
+      const semantic: Record<string, HaColorValue> = {};
+      expect(() => mergeTheme(semantic, { extendDefaults: false })).not.toThrow();
     });
 
-    it('emits console.warn even when colors is an empty object, naming all 7 base keys', () => {
-      const config: HaThemeConfig = { colors: {} };
-      mergeTheme(config, { extendDefaults: false });
+    it('emits console.warn even when semantic is an empty object, naming all 7 base keys', () => {
+      const semantic: Record<string, HaColorValue> = {};
+      mergeTheme(semantic, { extendDefaults: false });
       expect(warnSpy).toHaveBeenCalledTimes(1);
       const [message] = warnSpy.mock.calls[0] as [string];
       expect(message).toEqual(expect.stringContaining('primary'));
@@ -157,24 +155,22 @@ describe('mergeTheme', () => {
     });
 
     it('does NOT require the deprecated "danger" alias key (D3 — deprecated aliases are deliberately not required)', () => {
-      const config: HaThemeConfig = {
-        colors: {
-          primary: '#111111',
-          success: '#333333',
-          error: '#444444',
-          warning: '#555555',
-          alert: '#666666',
-          info: '#777777',
-          neutral: '#888888',
-        },
+      const semantic: Record<string, HaColorValue> = {
+        primary: '#111111',
+        success: '#333333',
+        error: '#444444',
+        warning: '#555555',
+        alert: '#666666',
+        info: '#777777',
+        neutral: '#888888',
       };
-      mergeTheme(config, { extendDefaults: false });
+      mergeTheme(semantic, { extendDefaults: false });
       expect(warnSpy).not.toHaveBeenCalled();
     });
   });
 
   describe('custom defaults parameter', () => {
-    it('uses the provided defaults instead of DEFAULT_THEME when config is undefined', () => {
+    it('uses the provided defaults instead of DEFAULT_THEME when semantic is undefined', () => {
       const customDefaults = { colors: { primary: '#custom' } };
       const result = mergeTheme(undefined, undefined, customDefaults);
       expect(result).toEqual(customDefaults);

@@ -1,5 +1,5 @@
 import { DEFAULT_THEME } from './theme.tokens';
-import type { HaThemeConfig, HaThemeOptions, ResolvedTheme } from './theme.tokens';
+import type { HaColorValue, HaThemeOptions, ResolvedTheme } from './theme.tokens';
 
 /**
  * The base color keys every default palette must provide. Used to detect
@@ -20,47 +20,46 @@ const BASE_COLOR_KEYS = [
 ] as const;
 
 /**
- * Pure, framework-free merge of consumer theme config over a default
- * palette. Zero `@angular/*` imports so it stays unit-testable without
- * `TestBed` and reusable outside DI (Requirement: Color Merge Behavior,
- * Open Color Dictionary).
+ * Pure, framework-free merge of a consumer's semantic color layer
+ * (`HaTheme.semantic`) over a default palette. Zero `@angular/*` imports so
+ * it stays unit-testable without `TestBed` and reusable outside DI
+ * (Requirement: Color Merge Behavior, Open Color Dictionary).
  *
- * - No `config` → returns a fresh copy of `defaults` (never the shared
+ * - No `semantic` → returns a fresh copy of `defaults` (never the shared
  *   reference, so callers can never mutate the DEFAULT_THEME singleton).
  * - `extendDefaults` true (default, including when `options` is omitted) →
- *   `config.colors` merged over `defaults.colors`, consumer values winning
- *   on key collision.
- * - `extendDefaults` false → returns ONLY `config.colors`, with no fallback
- *   to `defaults` for absent keys. If any of the 8 base color keys is
- *   missing from `config.colors`, emits a single `console.warn` naming the
- *   missing keys and returns the partial map — never throws, never
- *   backfills.
+ *   `semantic` merged over `defaults.colors`, consumer values winning on key
+ *   collision.
+ * - `extendDefaults` false → returns ONLY `semantic`, with no fallback to
+ *   `defaults` for absent keys. If any of the 8 base color keys is missing
+ *   from `semantic`, emits a single `console.warn` naming the missing keys
+ *   and returns the partial map — never throws, never backfills.
  */
 export function mergeTheme(
-  config: HaThemeConfig | undefined,
+  semantic: Record<string, HaColorValue> | undefined,
   options: HaThemeOptions | undefined,
   defaults: ResolvedTheme = DEFAULT_THEME,
 ): ResolvedTheme {
-  if (!config) {
+  if (!semantic) {
     return { colors: { ...defaults.colors } };
   }
 
   const extendDefaults = options?.extendDefaults ?? true;
 
   if (!extendDefaults) {
-    const missingKeys = BASE_COLOR_KEYS.filter((key) => !(key in config.colors));
+    const missingKeys = BASE_COLOR_KEYS.filter((key) => !(key in semantic));
     if (missingKeys.length > 0) {
       console.warn(
         `[halo-ui] provideHaTheme: extendDefaults is false and config.colors is missing base color(s): ${missingKeys.join(', ')}. These keys will NOT be backfilled with defaults.`,
       );
     }
-    return { colors: { ...config.colors } };
+    return { colors: { ...semantic } };
   }
 
   return {
     colors: {
       ...defaults.colors,
-      ...config.colors,
+      ...semantic,
     },
   };
 }

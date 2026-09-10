@@ -31,25 +31,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-### 3. Importar el CSS de Foundation
-
-Además de `provideHaTheme()`, hace falta un import explícito de CSS — trae los
-valores por defecto estáticos de las capas Foundation/Semantic/Component
-(spacing, radius, tipografía, tamaños de íconos, defaults de tokens de
-componente) que hacen que los componentes se rendericen completamente
-estilizados sin configuración adicional:
-
-```css
-/* styles.css (o cualquier hoja de estilos global) */
-@import '@halolib-ui/core/theme.css';
-```
-
-Olvidar este import no rompe la app — los componentes quedan sin estilo, usando
-las custom properties `--ha-*` sin resolver, hasta que se agregue. Ver
-[CSS Strategy](./docs/css-strategy.md) para el detalle completo de las capas y
-la estrategia de distribución.
-
-### 4. Usar un componente
+### 3. Usar un componente
 
 Cada componente en `libs/` tiene su propia implementación y ejemplos de uso
 documentados. Consultá el [catálogo de componentes](./docs/components.md) para
@@ -112,7 +94,7 @@ variantes de hover, active y contraste.
 
 ```typescript
 provideHaTheme({
-  colors: {
+  semantic: {
     primary: { 500: '#0066cc' },
     secondary: { 500: '#6c757d' },
     treasury: { 500: '#0d6efd' },
@@ -134,14 +116,16 @@ Usá `extendDefaults: false` cuando quieras control total — solo se registran 
 colores.
 
 ```typescript
-provideHaTheme({
-  extendDefaults: false,
-  colors: {
-    primary: { 500: '#1a1a2e' },
-    secondary: { 500: '#16213e' },
-    accent: { 500: '#e94560' },
+provideHaTheme(
+  {
+    semantic: {
+      primary: { 500: '#1a1a2e' },
+      secondary: { 500: '#16213e' },
+      accent: { 500: '#e94560' },
+    },
   },
-});
+  { extendDefaults: false },
+);
 ```
 
 ---
@@ -175,7 +159,7 @@ lados:
 
 ```typescript
 provideHaTheme({
-  colors: {
+  semantic: {
     accounting: { 500: '#28a745' },
   },
 });
