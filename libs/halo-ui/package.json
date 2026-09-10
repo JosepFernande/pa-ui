@@ -25,23 +25,25 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./index.mjs",
-  "types": "./index.d.mts",
-  "typings": "./index.d.mts",
   "exports": {
     "./package.json": {
       "default": "./package.json"
     },
     ".": {
-      "types": "./index.d.mts",
-      "default": "./index.mjs"
+      "default": "./src/index.ts"
+    },
+    "./core": {
+      "default": "./core/src/index.ts"
+    },
+    "./button": {
+      "default": "./button/src/index.ts"
+    },
+    "./input-text": {
+      "default": "./input-text/src/index.ts"
+    },
+    "./select": {
+      "default": "./select/src/index.ts"
     }
-  },
-  "dependencies": {
-    "@halolib-ui/button": "19.0.1",
-    "@halolib-ui/core": "19.0.1",
-    "@halolib-ui/input-text": "19.0.1",
-    "@halolib-ui/select": "19.0.1"
   },
   "peerDependencies": {
     "@angular/common": "^19.2.0",

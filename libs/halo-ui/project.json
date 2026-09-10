@@ -13,14 +13,27 @@
       }
     }
   },
-  "tags": ["type:umbrella"],
+  "tags": ["type:ui"],
   "targets": {
     "build": {
-      "executor": "nx:run-commands",
+      "executor": "@nx/angular:package",
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
-      "inputs": ["production", "^production", "{workspaceRoot}/README.md"],
       "options": {
-        "command": "node tools/release/build-halo-ui.mjs"
+        "project": "libs/halo-ui/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/halo-ui/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/halo-ui/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/{projectRoot}"
       }
     },
     "test": {
@@ -32,6 +45,13 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint"
+    },
+    "stylelint": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "npx stylelint \"{projectRoot}/**/*.css\" --allow-empty-input"
+      }
     }
   }
 }

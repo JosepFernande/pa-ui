@@ -7,8 +7,8 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HaSelect } from '@halolib-ui/select';
-import type { HaSelectOption, HaSelectSize } from '@halolib-ui/select';
+import { HaSelect } from '@halolib-ui/angular/select';
+import type { HaSelectOption, HaSelectSize } from '@halolib-ui/angular/select';
 import { CodeBlockComponent } from '../../shared/code-block/code-block.component';
 
 /** One row of the real `HaSelect` Inputs API reference table. */

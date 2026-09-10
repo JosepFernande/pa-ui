@@ -7,8 +7,8 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HaInputText } from '@halolib-ui/input-text';
-import type { HaInputTextSize } from '@halolib-ui/input-text';
+import { HaInputText } from '@halolib-ui/angular/input-text';
+import type { HaInputTextSize } from '@halolib-ui/angular/input-text';
 import { CodeBlockComponent } from '../../shared/code-block/code-block.component';
 
 /** One row of the real `HaInputText` Inputs API reference table. */
