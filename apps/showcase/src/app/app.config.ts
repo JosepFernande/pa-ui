@@ -1,6 +1,6 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHaTheme } from '@halolib-ui/core';
+import { provideHaTheme } from '@halolib-ui/angular/core';
 
 import { routes } from './app.routes';
 

@@ -6,8 +6,8 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { HaButton } from '@halolib-ui/button';
-import type { HaButtonSize, HaButtonVariant } from '@halolib-ui/button';
+import { HaButton } from '@halolib-ui/angular/button';
+import type { HaButtonSize, HaButtonVariant } from '@halolib-ui/angular/button';
 import { CodeBlockComponent } from '../../shared/code-block/code-block.component';
 
 /** One real theme color usable via `[color]`, paired with its resolved hex for display. */

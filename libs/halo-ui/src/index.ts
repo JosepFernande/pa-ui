@@ -1,1 +1,4 @@
-export * from './public-api';
+export * from '@halolib-ui/angular/core';
+export * from '@halolib-ui/angular/button';
+export * from '@halolib-ui/angular/input-text';
+export * from '@halolib-ui/angular/select';
