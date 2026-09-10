@@ -6,7 +6,6 @@ import { By } from '@angular/platform-browser';
 import { FocusMonitor, FocusOrigin } from '@angular/cdk/a11y';
 import { Subject } from 'rxjs';
 import { DEFAULT_THEME, provideHaTheme } from '@halolib-ui/angular/core';
-import type { HaColorVariants } from '@halolib-ui/angular/core';
 import { HaButton } from './button.component';
 
 /** Reads the actual `button.component.css` source (not a mock). */
@@ -190,7 +189,7 @@ describe('Theme runtime integration — Theme Engine resolves Button dimension t
     // Runtime color layer: provideHaTheme() with no config writes
     // DEFAULT_THEME's real primary base color as an inline style on documentElement.
     expect(document.documentElement.style.getPropertyValue('--ha-primary')).toBe(
-      (DEFAULT_THEME.colors['primary'] as HaColorVariants).base,
+      DEFAULT_THEME.colors['primary'] as string,
     );
 
     // Component layer, built by the Theme Engine: the default for
@@ -260,7 +259,7 @@ describe('Theme runtime integration — Theme Engine resolves Button dimension t
    * `.ha-button` rule; none of the `.ha-button--sm`/`--md`/`--lg` blocks wire
    * a per-size `--ha-button-radius-{size}` custom property the way they do
    * for `min-height`/`min-width`/`gap`. Per `HA_BUTTON_DIMENSIONS`
-   * (button-dimensions.tokens.ts), sm/md/lg radii are actually 12px/24px/32px
+   * (button-default-values.tokens.ts), sm/md/lg radii are actually 12px/24px/32px
    * — distinct per size — so every size currently renders whatever
    * `--ha-button-radius` resolves to (today, md's 24px), not its own value.
    */

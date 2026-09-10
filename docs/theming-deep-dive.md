@@ -94,16 +94,13 @@ interface HaFoundationThemeInput {
   palette?: Record<
     string,
     Partial<
-      Record<
-        25 | 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900,
-        string
-      >
+      Record<50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900, string>
     >
   >;
-  spacing?: Partial<Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', string>>;
-  gap?: Partial<Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', string>>;
-  radius?: Partial<Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', string>>;
-  iconSize?: Partial<Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', string>>;
+  spacing?: Partial<Record<'sm' | 'md' | 'lg', string>>;
+  gap?: Partial<Record<'sm' | 'md' | 'lg', string>>;
+  radius?: Partial<Record<'sm' | 'md' | 'lg', string>>;
+  iconSize?: Partial<Record<'sm' | 'md' | 'lg', string>>;
   fontWeight?: Partial<Record<'regular' | 'semibold' | 'bold', string>>;
   fontFamily?: string;
   typography?: Record<

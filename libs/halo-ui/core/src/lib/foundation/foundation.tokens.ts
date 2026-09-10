@@ -39,25 +39,23 @@ import type {
  * Replaces the former `dark-blue`/`light-blue`/`dark-green`/`light-green`
  * two-brand-family palette (removed — breaking change, no alias kept). 100,
  * 200, and 600 are the product-specified anchors (`#d4ddff`, `#a9bbff`,
- * `#4f46e5`); the remaining steps are interpolated to keep a smooth,
+ * `#6f5de8`); the remaining steps are interpolated to keep a smooth,
  * monotonically-darkening scale consistent with the previous scales' shape.
  */
 const HA_BRAND_PALETTE = {
   primary: {
-    25: '#f8faff',
-    50: '#eef2ff',
-    100: '#d4ddff',
-    200: '#a9bbff',
-    300: '#818cf8',
-    400: '#6366f1',
-    500: '#5956eb',
-    600: '#4f46e5',
-    700: '#4338ca',
-    800: '#3730a3',
-    900: '#312e81',
+    50: '#ccc5fd',
+    100: '#bcb3fa',
+    200: '#ada2f6',
+    300: '#9c8ff5',
+    400: '#8d7ef0',
+    500: '#7e6dec',
+    600: '#6f5de8',
+    700: '#624fe2',
+    800: '#5642dd',
+    900: '#432dd7',
   },
 } satisfies Record<'primary', HaColorScale>;
-
 /** `neutral` ships only 5 of 11 steps (design data) — `HaPartialColorScale`, not `HaColorScale`. */
 const HA_NEUTRAL_PALETTE = {
   neutral: {
@@ -73,6 +71,18 @@ export const HA_FOUNDATION_PALETTE: HaFoundationPalette = {
   ...HA_BRAND_PALETTE,
   ...HA_NEUTRAL_PALETTE,
 };
+
+/**
+ * Resolved `primary-900` anchor, precisely typed as `string` (not
+ * `string | undefined`). `HA_FOUNDATION_PALETTE`'s index signature widens
+ * `.primary` to `HaPartialColorScale` — fine for the open-dictionary
+ * requirement it exists for, but it loses the completeness `HA_BRAND_PALETTE`
+ * actually has. This constant is read directly off `HA_BRAND_PALETTE` (still
+ * a complete `HaColorScale` at this point) so the semantic layer
+ * (`theme/theme.tokens.ts`'s `DEFAULT_THEME`) can reference one resolved
+ * scalar without indexing the widened dictionary or asserting non-null.
+ */
+export const HA_PRIMARY_ANCHOR: string = HA_BRAND_PALETTE.primary[900];
 
 /**
  * Generic spacing scale. NOT sourced from any confirmed design value (no
@@ -105,7 +115,7 @@ export const HA_GAP_SCALE: HaSizeScale = {
 
 /**
  * Generic radius scale — assistant-authored, same status as spacing/gap.
- * Consumed by Button's per-size `radius` (`button-dimensions.tokens.ts`).
+ * Consumed by Button's per-size `radius` (`button-default-values.tokens.ts`).
  */
 export const HA_RADIUS_SCALE: HaSizeScale = {
   sm: '12px',
@@ -114,16 +124,55 @@ export const HA_RADIUS_SCALE: HaSizeScale = {
 };
 
 /**
+ *
+ */
+export const HA_BORDER_SCALE = '1px solid var(--ha-primary)';
+
+/**
  * Generic horizontal-padding scale — assistant-authored, same status as
  * spacing/gap/radius. Extracted here because Button's and Input's
- * `paddingX` (`button-dimensions.tokens.ts` / `input-dimensions.tokens.ts`)
- * independently landed on the exact same sm/md/lg values.
+ * `paddingX` (`button/button-default-values.tokens.ts` /
+ * `input-text/input-text-default-values.tokens.ts`) independently landed on
+ * the exact same sm/md/lg values.
  */
 export const HA_PADDING_X_SCALE: HaSizeScale = {
   sm: '12px',
   md: '16px',
   lg: '20px',
 };
+
+/**
+ * Input dimension scale (min-height/padding-x/radius per size). ASSISTANT-
+ * AUTHORED PLACEHOLDERS pending design validation — no Figma source exists
+ * for Input anywhere in `halo-ui-default-theme-design-values`, so every size
+ * is provisional, including `md`. `sm.minHeight` (33px) is an explicit
+ * user-provided value, not an 8px-step derivation like the rest of the scale.
+ * `paddingX`/`radius` reuse `HA_PADDING_X_SCALE`/`HA_RADIUS_SCALE` above.
+ *
+ * Promoted here (rather than living in Input's own `*-dimensions.tokens.ts`,
+ * the way Button's used to) because it is shared verbatim by two components:
+ * Input's own field (`input-text/input-text-default-values.tokens.ts`) and
+ * Select's trigger (`select/select-default-values.tokens.ts`), which MUST
+ * match Input's metrics exactly — a select trigger is visually an input, and
+ * a copied table would drift.
+ */
+export const HA_INPUT_DIMENSIONS_SCALE = {
+  sm: {
+    minHeight: '33px',
+    paddingX: HA_PADDING_X_SCALE.sm,
+    radius: HA_RADIUS_SCALE.sm,
+  },
+  md: {
+    minHeight: '48px',
+    paddingX: HA_PADDING_X_SCALE.md,
+    radius: HA_RADIUS_SCALE.md,
+  },
+  lg: {
+    minHeight: '56px',
+    paddingX: HA_PADDING_X_SCALE.lg,
+    radius: HA_RADIUS_SCALE.lg,
+  },
+} as const;
 
 /** Icon size scale — CONFIRMED design values (Flaticon-driven, `halo-ui-default-theme-design-values`). */
 export const HA_ICON_SIZE_SCALE: HaSizeScale = {

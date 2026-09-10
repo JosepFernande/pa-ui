@@ -47,13 +47,13 @@ describe('toFoundationCssVariables', () => {
       spacing: { md: '20px' },
       gap: { sm: '6px' },
       radius: { lg: '18px' },
-      iconSize: { xl: '48px' },
+      iconSize: { md: '48px' },
     });
     expect(result['--spacing-md']).toBe('20px');
     expect(result['--spacing-sm']).toBe(HA_DEFAULT_THEME.foundation.spacing.sm);
     expect(result['--gap-sm']).toBe('6px');
     expect(result['--radius-lg']).toBe('18px');
-    expect(result['--icon-size-xl']).toBe('48px');
+    expect(result['--icon-size-md']).toBe('48px');
   });
 
   it('overrides ONE font weight while every other weight keeps its default', () => {

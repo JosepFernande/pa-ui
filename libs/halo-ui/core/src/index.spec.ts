@@ -16,16 +16,9 @@ describe('core entry barrel — theme engine surface (Issue #46)', () => {
     expect(typeof coreApi.HaThemeService).toBe('function');
   });
 
-  it('exports DEFAULT_THEME with the full color roster (primary variant + semantic set + deprecated danger alias)', () => {
+  it("exports DEFAULT_THEME with only the brand-anchor `primary` color — every other semantic color lives in the consuming page's own provider", () => {
     expect(coreApi.DEFAULT_THEME.colors).toEqual({
-      primary: { base: expect.any(String), hover: expect.any(String) },
-      success: expect.any(String),
-      error: expect.any(String),
-      danger: expect.any(String),
-      warning: expect.any(String),
-      alert: expect.any(String),
-      info: expect.any(String),
-      neutral: expect.any(String),
+      primary: expect.any(String),
     });
   });
 
@@ -102,17 +95,15 @@ describe('core entry barrel — theme runtime surface (Issue #48, Phase 5)', () 
 
 describe('core entry barrel — Foundation surface (default-theme, Phase 2)', () => {
   it('exports HA_COLOR_SCALE_STEPS and HA_SIZE_STEPS as usable arrays', () => {
-    expect(coreApi.HA_COLOR_SCALE_STEPS).toEqual([
-      25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900,
-    ]);
+    expect(coreApi.HA_COLOR_SCALE_STEPS).toEqual([50, 100, 200, 300, 400, 500, 600, 700, 800, 900]);
     expect(coreApi.HA_SIZE_STEPS).toEqual(['sm', 'md', 'lg']);
   });
 
-  it('exports HA_FOUNDATION_PALETTE with the single "primary" brand family at full 11-step completeness', () => {
+  it('exports HA_FOUNDATION_PALETTE with the single "primary" brand family at full 10-step completeness', () => {
     expect(
       Object.keys(coreApi.HA_FOUNDATION_PALETTE['primary']).sort((a, b) => Number(a) - Number(b)),
-    ).toEqual(['25', '50', '100', '200', '300', '400', '500', '600', '700', '800', '900']);
-    expect(coreApi.HA_FOUNDATION_PALETTE['primary'][600]).toBe('#4f46e5');
+    ).toEqual(['50', '100', '200', '300', '400', '500', '600', '700', '800', '900']);
+    expect(coreApi.HA_FOUNDATION_PALETTE['primary'][600]).toBe('#6f5de8');
   });
 
   it('exports HA_SPACING_SCALE, HA_GAP_SCALE, HA_RADIUS_SCALE, HA_PADDING_X_SCALE, HA_ICON_SIZE_SCALE with all 3 size steps', () => {

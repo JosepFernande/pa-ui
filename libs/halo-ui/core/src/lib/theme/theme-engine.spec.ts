@@ -25,31 +25,24 @@ describe('mergeTheme', () => {
 
     it('returns a fresh copy, never the DEFAULT_THEME reference — mutating the result must not corrupt the shared singleton', () => {
       const result = mergeTheme(undefined, undefined);
-      result.colors['success'] = 'mutated';
-      expect(DEFAULT_THEME.colors['success']).toBe('#8fbf21');
+      result.colors['primary'] = 'mutated';
+      expect(DEFAULT_THEME.colors['primary']).not.toBe('mutated');
     });
   });
 
   describe('extendDefaults true (default) merges over defaults', () => {
-    it('overrides the given key and keeps the other 4 defaults when options is undefined', () => {
+    it('overrides the given key when options is undefined', () => {
       const semantic: Record<string, HaColorValue> = { primary: '#f00' };
       const result = mergeTheme(semantic, undefined);
       expect(result.colors['primary']).toBe('#f00');
-      expect(result.colors['success']).toBe(DEFAULT_THEME.colors['success']);
-      expect(result.colors['danger']).toBe(DEFAULT_THEME.colors['danger']);
-      expect(result.colors['warning']).toBe(DEFAULT_THEME.colors['warning']);
-      expect(result.colors['neutral']).toBe(DEFAULT_THEME.colors['neutral']);
     });
 
-    it('overrides the given key and keeps the other 4 defaults when extendDefaults is explicitly true', () => {
-      const semantic: Record<string, HaColorValue> = { danger: '#123456' };
+    it("overrides a custom key and keeps `primary`'s default when extendDefaults is explicitly true", () => {
+      const semantic: Record<string, HaColorValue> = { brand: '#123456' };
       const options: HaThemeOptions = { extendDefaults: true };
       const result = mergeTheme(semantic, options);
-      expect(result.colors['danger']).toBe('#123456');
+      expect(result.colors['brand']).toBe('#123456');
       expect(result.colors['primary']).toBe(DEFAULT_THEME.colors['primary']);
-      expect(result.colors['success']).toBe(DEFAULT_THEME.colors['success']);
-      expect(result.colors['warning']).toBe(DEFAULT_THEME.colors['warning']);
-      expect(result.colors['neutral']).toBe(DEFAULT_THEME.colors['neutral']);
     });
 
     it('does not emit a console.warn', () => {
@@ -57,7 +50,7 @@ describe('mergeTheme', () => {
       expect(warnSpy).not.toHaveBeenCalled();
     });
 
-    it('Task 1.6 — includes a custom "brand" color alongside every entry of the new full DEFAULT_THEME roster', () => {
+    it('includes a custom "brand" color alongside every entry of the DEFAULT_THEME roster', () => {
       const semantic: Record<string, HaColorValue> = { brand: '#ec4899' };
       const result = mergeTheme(semantic, undefined);
       expect(result.colors['brand']).toBe('#ec4899');
@@ -68,15 +61,11 @@ describe('mergeTheme', () => {
   });
 
   describe('open color dictionary', () => {
-    it('includes a custom key alongside the 5 defaults with extendDefaults true', () => {
+    it('includes a custom key alongside the default with extendDefaults true', () => {
       const semantic: Record<string, HaColorValue> = { brand: '#00f' };
       const result = mergeTheme(semantic, { extendDefaults: true });
       expect(result.colors['brand']).toBe('#00f');
       expect(result.colors['primary']).toBe(DEFAULT_THEME.colors['primary']);
-      expect(result.colors['success']).toBe(DEFAULT_THEME.colors['success']);
-      expect(result.colors['danger']).toBe(DEFAULT_THEME.colors['danger']);
-      expect(result.colors['warning']).toBe(DEFAULT_THEME.colors['warning']);
-      expect(result.colors['neutral']).toBe(DEFAULT_THEME.colors['neutral']);
     });
 
     it('does not validate keys against a closed enum', () => {
@@ -86,15 +75,9 @@ describe('mergeTheme', () => {
     });
   });
 
-  describe('extendDefaults false with all 7 base colors given', () => {
+  describe('extendDefaults false with the base color given', () => {
     const fullBaseSemantic: Record<string, HaColorValue> = {
       primary: '#111111',
-      success: '#333333',
-      error: '#444444',
-      warning: '#555555',
-      alert: '#666666',
-      info: '#777777',
-      neutral: '#888888',
     };
 
     it('returns ONLY the given keys, with no defaults merged in', () => {
@@ -108,31 +91,20 @@ describe('mergeTheme', () => {
     });
   });
 
-  describe('extendDefaults false with missing base colors', () => {
-    it('returns ONLY the given colors, without backfilling the missing base keys', () => {
-      const semantic: Record<string, HaColorValue> = { primary: '#f00' };
+  describe('extendDefaults false with the base color missing', () => {
+    it('returns ONLY the given colors, without backfilling the missing base key', () => {
+      const semantic: Record<string, HaColorValue> = { brand: '#f00' };
       const result = mergeTheme(semantic, { extendDefaults: false });
-      expect(result.colors).toEqual({ primary: '#f00' });
-      expect(result.colors['success']).toBeUndefined();
-      expect(result.colors['error']).toBeUndefined();
-      expect(result.colors['warning']).toBeUndefined();
-      expect(result.colors['alert']).toBeUndefined();
-      expect(result.colors['info']).toBeUndefined();
-      expect(result.colors['neutral']).toBeUndefined();
+      expect(result.colors).toEqual({ brand: '#f00' });
+      expect(result.colors['primary']).toBeUndefined();
     });
 
-    it('emits exactly one console.warn naming the missing base colors', () => {
-      const semantic: Record<string, HaColorValue> = { primary: '#f00' };
+    it('emits exactly one console.warn naming the missing base color', () => {
+      const semantic: Record<string, HaColorValue> = { brand: '#f00' };
       mergeTheme(semantic, { extendDefaults: false });
       expect(warnSpy).toHaveBeenCalledTimes(1);
       const [message] = warnSpy.mock.calls[0] as [string];
-      expect(message).toEqual(expect.stringContaining('success'));
-      expect(message).toEqual(expect.stringContaining('error'));
-      expect(message).toEqual(expect.stringContaining('warning'));
-      expect(message).toEqual(expect.stringContaining('alert'));
-      expect(message).toEqual(expect.stringContaining('info'));
-      expect(message).toEqual(expect.stringContaining('neutral'));
-      expect(message).not.toEqual(expect.stringContaining('primary,'));
+      expect(message).toEqual(expect.stringContaining('primary'));
     });
 
     it('does not throw', () => {
@@ -140,32 +112,12 @@ describe('mergeTheme', () => {
       expect(() => mergeTheme(semantic, { extendDefaults: false })).not.toThrow();
     });
 
-    it('emits console.warn even when semantic is an empty object, naming all 7 base keys', () => {
+    it('emits console.warn even when semantic is an empty object', () => {
       const semantic: Record<string, HaColorValue> = {};
       mergeTheme(semantic, { extendDefaults: false });
       expect(warnSpy).toHaveBeenCalledTimes(1);
       const [message] = warnSpy.mock.calls[0] as [string];
       expect(message).toEqual(expect.stringContaining('primary'));
-      expect(message).toEqual(expect.stringContaining('success'));
-      expect(message).toEqual(expect.stringContaining('error'));
-      expect(message).toEqual(expect.stringContaining('warning'));
-      expect(message).toEqual(expect.stringContaining('alert'));
-      expect(message).toEqual(expect.stringContaining('info'));
-      expect(message).toEqual(expect.stringContaining('neutral'));
-    });
-
-    it('does NOT require the deprecated "danger" alias key (D3 — deprecated aliases are deliberately not required)', () => {
-      const semantic: Record<string, HaColorValue> = {
-        primary: '#111111',
-        success: '#333333',
-        error: '#444444',
-        warning: '#555555',
-        alert: '#666666',
-        info: '#777777',
-        neutral: '#888888',
-      };
-      mergeTheme(semantic, { extendDefaults: false });
-      expect(warnSpy).not.toHaveBeenCalled();
     });
   });
 

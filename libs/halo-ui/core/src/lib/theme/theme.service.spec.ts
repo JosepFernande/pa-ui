@@ -2,7 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DEFAULT_THEME, HA_THEME_TOKEN } from './theme.tokens';
-import type { HaColorVariants, HaTheme, HaThemeOptions } from './theme.tokens';
+import type { HaTheme, HaThemeOptions } from './theme.tokens';
 import { provideHaTheme } from './theme-provider';
 import { HaThemeService } from './theme.service';
 
@@ -52,10 +52,10 @@ describe('HaThemeService', () => {
       expect(service.theme().colors['primary']).toBe('#f00');
     });
 
-    it('reflects the merged snapshot for a partial custom config', () => {
-      const service = configureTestBed('browser', { semantic: { primary: '#111' } });
+    it('reflects the merged snapshot for a partial custom config, keeping other custom keys untouched', () => {
+      const service = configureTestBed('browser', { semantic: { primary: '#111', brand: '#00f' } });
       expect(service.theme().colors['primary']).toBe('#111');
-      expect(service.theme().colors['success']).toBe(DEFAULT_THEME.colors['success']);
+      expect(service.theme().colors['brand']).toBe('#00f');
     });
   });
 
@@ -223,14 +223,12 @@ describe('HaThemeService', () => {
   describe('getColor convenience getter', () => {
     it('returns the color value for a known key synchronously', () => {
       const service = configureTestBed();
-      expect(service.getColor('success')).toBe(DEFAULT_THEME.colors['success']);
+      expect(service.getColor('primary')).toBe(DEFAULT_THEME.colors['primary']);
     });
 
-    it('normalizes the default bootstrap `primary` object-shaped entry to its base hex string', () => {
+    it('returns the default bootstrap `primary` plain hex string as-is (no object-shaped entry to normalize)', () => {
       const service = configureTestBed();
-      expect(service.getColor('primary')).toBe(
-        (DEFAULT_THEME.colors['primary'] as HaColorVariants).base,
-      );
+      expect(service.getColor('primary')).toBe(DEFAULT_THEME.colors['primary'] as string);
     });
 
     it('returns undefined for an unknown color key without throwing', () => {

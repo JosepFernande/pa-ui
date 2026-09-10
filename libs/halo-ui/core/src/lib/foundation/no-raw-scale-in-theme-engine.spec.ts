@@ -15,10 +15,14 @@ import { HA_FOUNDATION_PALETTE } from './foundation.tokens';
  *    `HaColorScale`/`HaPartialColorScale`-shaped object (i.e. an object
  *    whose keys are all valid scale steps).
  * 2. Static source-inspection check — `theme/theme-engine.ts` and
- *    `theme/theme.tokens.ts` (the only two producers of `ResolvedTheme`)
- *    never import anything from the `foundation/` directory, so there is no
- *    code path through which a raw scale could reach `mergeTheme`/
- *    `deriveTokens` even indirectly.
+ *    `theme/color-derivation.ts` (where the HSL derivation math actually
+ *    runs) never import anything from the `foundation/` directory, so there
+ *    is no code path through which a raw scale could reach `mergeTheme`/
+ *    `deriveTokens` even indirectly. `theme/theme.tokens.ts` MAY import from
+ *    `foundation/` to reference a single resolved scalar (e.g.
+ *    `DEFAULT_THEME.colors.primary = HA_PRIMARY_ANCHOR`) — proof 1 below is
+ *    what actually guards against a raw scale object reaching
+ *    `deriveTokens()` through it.
  */
 
 function isColorScaleShaped(value: unknown): boolean {
@@ -51,13 +55,9 @@ describe('deriveTokens() never processes raw Foundation color scales', () => {
     expect(isColorScaleShaped({ base: '#4f46e5', hover: '#4338ca' })).toBe(false);
   });
 
-  it('theme-engine.ts and theme.tokens.ts never import from foundation/ (no code path for a raw scale to reach mergeTheme/deriveTokens)', () => {
+  it('theme-engine.ts and color-derivation.ts never import from foundation/ (no code path for a raw scale to reach mergeTheme/deriveTokens)', () => {
     const themeEngineSource = fs.readFileSync(
       path.resolve(__dirname, '../theme/theme-engine.ts'),
-      'utf-8',
-    );
-    const themeTokensSource = fs.readFileSync(
-      path.resolve(__dirname, '../theme/theme.tokens.ts'),
       'utf-8',
     );
     const colorDerivationSource = fs.readFileSync(
@@ -66,7 +66,6 @@ describe('deriveTokens() never processes raw Foundation color scales', () => {
     );
 
     expect(themeEngineSource).not.toMatch(/from ['"].*foundation/);
-    expect(themeTokensSource).not.toMatch(/from ['"].*foundation/);
     expect(colorDerivationSource).not.toMatch(/from ['"].*foundation/);
   });
 });

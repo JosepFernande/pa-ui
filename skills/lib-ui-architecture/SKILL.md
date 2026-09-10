@@ -57,8 +57,8 @@ Three layers, in order of definition:
    `--ha-input-focus-ring`.
 
 Scale naming (spacing, radius, font-size, size) is **semantic**
-(`xs`/`sm`/`md`/`lg`/`xl`), never numeric (`-1`, `-2`, `-4`). This matches the
-suffix convention already shipped in component tokens (`button.tokens.ts`,
+(`sm`/`md`/`lg`), never numeric (`-1`, `-2`, `-4`). This matches the suffix
+convention already shipped in component tokens (`button.tokens.ts`,
 `input-text.tokens.ts`) — do not introduce a numeric-indexed scale anywhere in
 the token system.
 
