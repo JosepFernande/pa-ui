@@ -1,8 +1,8 @@
 /**
  * Typed foundation source (Requirement: Typed Foundation Source, No `any`).
  * Zero `any`, zero type assertions. These types describe the RAW 25-900
- * color scales, the generic `xs|sm|md|lg|xl` size scale (spacing/gap/radius/
- * icon-size), and the typography role scale — the Foundation layer of the
+ * color scales, the generic `sm|md|lg` size scale (spacing/gap/radius/
+ * padding-x/icon-size), and the typography role scale — the Foundation layer of the
  * three-layer token system (`skills/lib-ui-architecture/SKILL.md:24-32`).
  *
  * These types are intentionally never consumed by `theme/theme-engine.ts` or
@@ -23,7 +23,7 @@ export type HaColorScaleStep = (typeof HA_COLOR_SCALE_STEPS)[number];
  * Note (pre-empting a verify-phase false blocker): the numeric 25-900 keys
  * are the Figma *lightness* axis of a raw color scale, not a t-shirt-size
  * scale. The "no numeric-indexed scale names" hard rule applies to
- * spacing/radius/font-size/size — all of which use `xs|sm|md|lg|xl` in this
+ * spacing/radius/font-size/size — all of which use `sm|md|lg` in this
  * file — and does not apply to this raw color-scale axis.
  */
 export type HaColorScale = { readonly [S in HaColorScaleStep]: string };
@@ -42,12 +42,12 @@ export interface HaFoundationPalette {
   readonly [family: string]: HaPartialColorScale;
 }
 
-/** The 5 semantic size steps used end-to-end (foundation -> semantic -> component). Never numeric. */
-export const HA_SIZE_STEPS = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
+/** The 3 semantic size steps used end-to-end (foundation -> semantic -> component). Never numeric. */
+export const HA_SIZE_STEPS = ['sm', 'md', 'lg'] as const;
 
 export type HaSizeStep = (typeof HA_SIZE_STEPS)[number];
 
-/** A complete `xs|sm|md|lg|xl` scale of CSS length strings; used for spacing, gap, radius, and icon-size. */
+/** A complete `sm|md|lg` scale of CSS length strings; used for spacing, gap, radius, padding-x, and icon-size. */
 export type HaSizeScale = { readonly [K in HaSizeStep]: string };
 
 /** A single typographic role's resolved values (e.g. the `h1` role). */

@@ -1,15 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-
-/** Reads the actual shipped Foundation stylesheet — the same artifact a real
- * consumer app imports once (`@halolib-ui/core/theme.css`). Resolved from
- * source (not `dist/`) so this test exercises the file this repo edits. */
-function readFoundationThemeCss(): string {
-  return fs.readFileSync(
-    path.resolve(__dirname, '../../../core/src/lib/foundation/theme.css'),
-    'utf-8',
-  );
-}
+import { TestBed } from '@angular/core/testing';
+import { HaThemeService, provideHaTheme } from '@halolib-ui/core';
 
 /** Reads the actual `select.component.css` source (not a mock). */
 function readSelectComponentCss(): string {
@@ -17,30 +9,37 @@ function readSelectComponentCss(): string {
 }
 
 /**
- * jsdom does not perform CSS `var()` resolution/cascade, so a custom property
- * declared as a literal under `:root` (e.g. `--ha-select-radius-md`) IS
- * readable via `getComputedStyle`, but a property whose declared value is
- * itself `var(--other)` is returned unresolved (the literal string
- * `"var(--other)"`), and full multi-hop resolution is a real-browser-only
- * guarantee. Each assertion below is written to be genuinely falsifiable
- * within that real jsdom ceiling — not weakened to a tautology (same caveat
- * as Input's and Button's equivalent integration specs).
+ * Proves the runtime Theme Engine writes Select's Component-layer defaults
+ * directly onto `documentElement` as inline styles — no static stylesheet
+ * involved anymore. `HaThemeService` is constructed via `TestBed`
+ * (`provideHaTheme()` eagerly instantiates it), and assertions read
+ * `document.documentElement.style` directly, which now carries the FULL var
+ * set (Foundation included), rather than injecting a static Foundation
+ * stylesheet as a `<style>` tag and reading it back through
+ * `getComputedStyle`.
  */
-describe('Theme runtime integration — Foundation theme.css ships Select defaults', () => {
-  let styleEl: HTMLStyleElement;
+describe('Theme runtime integration — Theme Engine writes Select defaults', () => {
+  let originalDocumentElementStyle: string | null;
 
   beforeEach(() => {
-    styleEl = document.createElement('style');
-    styleEl.textContent = readFoundationThemeCss();
-    document.head.appendChild(styleEl);
+    originalDocumentElementStyle = document.documentElement.getAttribute('style');
+    TestBed.configureTestingModule({ providers: [provideHaTheme()] });
+    // provideHaTheme() eagerly instantiates HaThemeService via
+    // provideEnvironmentInitializer(), but forcing an explicit inject here
+    // makes the eager construction (and its DOM write) unambiguous.
+    TestBed.inject(HaThemeService);
   });
 
   afterEach(() => {
-    styleEl.remove();
+    if (originalDocumentElementStyle === null) {
+      document.documentElement.removeAttribute('style');
+    } else {
+      document.documentElement.setAttribute('style', originalDocumentElementStyle);
+    }
   });
 
-  it('declares the key --ha-select-* defaults a consumer gets from @halolib-ui/core/theme.css', () => {
-    const rootStyle = getComputedStyle(document.documentElement);
+  it('writes the key --ha-select-* defaults a consumer gets from provideHaTheme() alone', () => {
+    const rootStyle = document.documentElement.style;
 
     const entries: Array<[key: string, value: string]> = [
       ['--ha-select-bg', 'var(--neutral-50)'],
@@ -49,34 +48,14 @@ describe('Theme runtime integration — Foundation theme.css ships Select defaul
       ['--ha-select-focus-ring-offset', '5px'],
       ['--ha-select-error-border', 'var(--ha-error)'],
       ['--ha-select-error-color', 'var(--ha-error)'],
-      ['--ha-select-radius-sm', '6px'],
-      ['--ha-select-radius-md', '4px'],
-      ['--ha-select-radius-lg', '8px'],
+      ['--ha-select-radius-sm', '12px'],
+      ['--ha-select-radius-md', '16px'],
+      ['--ha-select-radius-lg', '24px'],
       ['--ha-select-panel-radius', 'var(--radius-sm)'],
     ];
 
     for (const [key, value] of entries) {
-      expect(rootStyle.getPropertyValue(key).trim()).toBe(value);
-    }
-  });
-
-  it('marks ALL select dimension declarations (padding sm/md/lg + min-height sm/md/lg + radius sm/md/lg) as provisional', () => {
-    const css = readFoundationThemeCss();
-    for (const key of [
-      '--ha-select-padding-sm',
-      '--ha-select-padding-md',
-      '--ha-select-padding-lg',
-      '--ha-select-min-height-sm',
-      '--ha-select-min-height-md',
-      '--ha-select-min-height-lg',
-      '--ha-select-radius-sm',
-      '--ha-select-radius-md',
-      '--ha-select-radius-lg',
-    ]) {
-      const lineRegex = new RegExp(`${key}\\s*:[^;]+;[^\\n]*`);
-      const match = css.match(lineRegex);
-      expect(match).not.toBeNull();
-      expect(match![0]).toContain('provisional');
+      expect(rootStyle.getPropertyValue(key)).toBe(value);
     }
   });
 });

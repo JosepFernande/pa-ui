@@ -5,18 +5,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FocusMonitor, FocusOrigin } from '@angular/cdk/a11y';
 import { Subject } from 'rxjs';
-import { provideHaTheme } from '@halolib-ui/core';
+import { DEFAULT_THEME, provideHaTheme } from '@halolib-ui/core';
+import type { HaColorVariants } from '@halolib-ui/core';
 import { HaButton } from './button.component';
-
-/** Reads the actual shipped Foundation stylesheet — the same artifact a real
- * consumer app imports once (`@halolib-ui/core/theme.css`, D1). Resolved from
- * source (not `dist/`) so this test exercises the file this repo edits. */
-function readFoundationThemeCss(): string {
-  return fs.readFileSync(
-    path.resolve(__dirname, '../../../core/src/lib/foundation/theme.css'),
-    'utf-8',
-  );
-}
 
 /** Reads the actual `button.component.css` source (not a mock). */
 function readButtonComponentCss(): string {
@@ -81,7 +72,7 @@ describe('Theme runtime integration — Button resolves a custom color with zero
     await TestBed.configureTestingModule({
       imports: [ThemeRuntimeTestHost],
       providers: [
-        provideHaTheme({ colors: { primary: '#111111' } }),
+        provideHaTheme({ semantic: { primary: '#111111' } }),
         { provide: FocusMonitor, useValue: focusMonitorMock },
       ],
     }).compileComponents();
@@ -132,7 +123,7 @@ describe('Theme runtime integration — Button resolves a custom "accent" color 
     await TestBed.configureTestingModule({
       imports: [ThemeRuntimeAccentTestHost],
       providers: [
-        provideHaTheme({ colors: { accent: '#222222' } }),
+        provideHaTheme({ semantic: { accent: '#222222' } }),
         { provide: FocusMonitor, useValue: focusMonitorMock },
       ],
     }).compileComponents();
@@ -161,33 +152,24 @@ describe('Theme runtime integration — Button resolves a custom "accent" color 
 });
 
 /**
- * Phase 3 (Task 3.4/3.5): proves the static Foundation stylesheet
- * (`@halolib-ui/core/theme.css`) and the runtime Theme Engine compose correctly
- * for Button's dimension tokens, and that `button.component.css` actually
- * wires the per-size `min-width`/`gap` custom properties (not just declares
- * defaults for them in `theme.css`).
+ * Proves the runtime Theme Engine (`HaThemeService`'s full Foundation/
+ * Component builders, `foundation-overrides.ts`/`component-overrides.ts`)
+ * writes Button's dimension tokens directly onto `documentElement` as inline
+ * styles — no static stylesheet involved anymore — and that
+ * `button.component.css` actually wires the per-size `min-width`/`gap`
+ * custom properties (not just declares defaults for them).
  *
- * jsdom does not resolve nested `var()` chains in computed shorthand-ish
- * properties (documented above and re-verified for this batch): a custom
- * property declared as a literal under `:root` (e.g. `--ha-button-min-width-md:
- * 224px`) IS readable via `getComputedStyle`, but a property whose declared
- * value is itself `var(--other)` is returned unresolved (the literal string
- * `"var(--other)"`), and full multi-hop resolution (e.g. `min-width` on an
- * element resolving all the way through two `var()` hops to a pixel value)
- * is a real-browser-only guarantee. Each assertion below is written to be
- * genuinely falsifiable within that real jsdom ceiling — not weakened to a
- * tautology.
+ * Unlike this describe block's previous, now-removed static-stylesheet-based
+ * version, these assertions read `document.documentElement.style` directly
+ * (an inline style written by `HaThemeService`), not `getComputedStyle`
+ * against an injected `<style>` tag — no jsdom `var()`-resolution caveat
+ * applies to a direct inline-style read.
  */
-describe('Theme runtime integration — Foundation theme.css resolves Button dimension tokens (Phase 3)', () => {
+describe('Theme runtime integration — Theme Engine resolves Button dimension tokens', () => {
   let focusOrigin$: Subject<FocusOrigin>;
   let focusMonitorMock: { monitor: jest.Mock; stopMonitoring: jest.Mock };
-  let styleEl: HTMLStyleElement;
 
   beforeEach(async () => {
-    styleEl = document.createElement('style');
-    styleEl.textContent = readFoundationThemeCss();
-    document.head.appendChild(styleEl);
-
     focusOrigin$ = new Subject<FocusOrigin>();
     focusMonitorMock = {
       monitor: jest.fn().mockReturnValue(focusOrigin$.asObservable()),
@@ -200,39 +182,38 @@ describe('Theme runtime integration — Foundation theme.css resolves Button dim
     }).compileComponents();
   });
 
-  afterEach(() => {
-    styleEl.remove();
-  });
-
   it('--ha-primary (default theme, no config) resolves directly to its real value, and the Foundation default for --ha-button-bg references it', () => {
     const fixture: ComponentFixture<ThemeRuntimeTestHost> =
       TestBed.createComponent(ThemeRuntimeTestHost);
     fixture.detectChanges();
 
-    // Runtime color layer (Phase 1): provideHaTheme() with no config writes
-    // DEFAULT_THEME's primary base color as an inline style on documentElement.
-    expect(document.documentElement.style.getPropertyValue('--ha-primary')).toBe('#16709e');
+    // Runtime color layer: provideHaTheme() with no config writes
+    // DEFAULT_THEME's real primary base color as an inline style on documentElement.
+    expect(document.documentElement.style.getPropertyValue('--ha-primary')).toBe(
+      (DEFAULT_THEME.colors['primary'] as HaColorVariants).base,
+    );
 
-    // Static Foundation layer (theme.css, Phase 2): the shipped default for
+    // Component layer, built by the Theme Engine: the default for
     // --ha-button-bg references --ha-primary directly.
-    const rootStyle = getComputedStyle(document.documentElement);
-    expect(rootStyle.getPropertyValue('--ha-button-bg').trim()).toBe('var(--ha-primary)');
+    expect(document.documentElement.style.getPropertyValue('--ha-button-bg')).toBe(
+      'var(--ha-primary)',
+    );
   });
 
-  it('theme.css declares the md Button dimensions matching Figma exactly (48/224/4/0-16/10)', () => {
+  it('the Theme Engine writes the md Button dimensions matching HA_BUTTON_DIMENSIONS.md (40/224/16/0-16/16)', () => {
     TestBed.createComponent(ThemeRuntimeTestHost).detectChanges();
-    const rootStyle = getComputedStyle(document.documentElement);
+    const rootStyle = document.documentElement.style;
 
     const dimensions: Array<[key: string, value: string]> = [
-      ['--ha-button-min-height-md', '48px'],
+      ['--ha-button-min-height-md', '40px'],
       ['--ha-button-min-width-md', '224px'],
-      ['--ha-button-radius', '4px'],
+      ['--ha-button-radius', '16px'],
       ['--ha-button-padding-md', '0 16px'],
-      ['--ha-button-gap-md', '10px'],
+      ['--ha-button-gap-md', '16px'],
     ];
 
     for (const [key, value] of dimensions) {
-      expect(rootStyle.getPropertyValue(key).trim()).toBe(value);
+      expect(rootStyle.getPropertyValue(key)).toBe(value);
     }
   });
 
@@ -241,14 +222,13 @@ describe('Theme runtime integration — Foundation theme.css resolves Button dim
    * `button.component.css` here: this jsdom/jest-preset-angular combination
    * does not insert Angular component styles into `document.styleSheets` or
    * `document.adoptedStyleSheets` under `TestBed` (re-verified for this
-   * batch — 0 style tags/adopted sheets originate from Angular, only the
-   * one manually injected above). A `getComputedStyle`-on-rendered-element
-   * assertion would therefore always read empty regardless of the CSS
-   * source, i.e. it could never move from RED to GREEN for the right
-   * reason. The real, falsifiable equivalent is a static read of the actual
-   * `button.component.css` source (same fs-based pattern already proven in
-   * `foundation-css.spec.ts`), asserting each `.ha-button--{size}` rule
-   * wires `min-width`/`gap` to the size-specific custom property.
+   * batch — 0 style tags/adopted sheets originate from Angular in this
+   * suite). A `getComputedStyle`-on-rendered-element assertion would
+   * therefore always read empty regardless of the CSS source, i.e. it could
+   * never move from RED to GREEN for the right reason. The real, falsifiable
+   * equivalent is a static read of the actual `button.component.css` source,
+   * asserting each `.ha-button--{size}` rule wires `min-width`/`gap` to the
+   * size-specific custom property.
    */
   it('button.component.css wires min-width and gap for every size to the matching per-size custom property (Task 3.3)', () => {
     const css = readButtonComponentCss();
@@ -271,5 +251,31 @@ describe('Theme runtime integration — Foundation theme.css resolves Button dim
     const baseBlock = css.match(/\.ha-button\s*\{([^}]*)\}/);
     expect(baseBlock).not.toBeNull();
     expect(baseBlock![1]).toMatch(/gap:\s*var\(--ha-button-gap\)/);
+  });
+
+  /**
+   * Bug: unlike min-width/gap (Task 3.3 above), `border-radius` is NOT split
+   * per size. `button.component.css` only ever declares
+   * `border-radius: var(--ha-button-radius)` once on the unsized base
+   * `.ha-button` rule; none of the `.ha-button--sm`/`--md`/`--lg` blocks wire
+   * a per-size `--ha-button-radius-{size}` custom property the way they do
+   * for `min-height`/`min-width`/`gap`. Per `HA_BUTTON_DIMENSIONS`
+   * (button-dimensions.tokens.ts), sm/md/lg radii are actually 12px/24px/32px
+   * — distinct per size — so every size currently renders whatever
+   * `--ha-button-radius` resolves to (today, md's 24px), not its own value.
+   */
+  it('button.component.css wires border-radius per size to a distinct --ha-button-radius-{size} custom property, like min-width/gap (currently missing)', () => {
+    const css = readButtonComponentCss();
+
+    const sizeBlock = (size: 'sm' | 'md' | 'lg'): string => {
+      const match = css.match(new RegExp(`\\.ha-button--${size}\\s*\\{([^}]*)\\}`));
+      expect(match).not.toBeNull();
+      return match![1];
+    };
+
+    for (const size of ['sm', 'md', 'lg'] as const) {
+      const block = sizeBlock(size);
+      expect(block).toMatch(new RegExp(`border-radius:\\s*var\\(--ha-button-radius-${size}\\)`));
+    }
   });
 });

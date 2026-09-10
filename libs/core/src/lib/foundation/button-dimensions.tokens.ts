@@ -1,3 +1,5 @@
+import { HA_GAP_SCALE, HA_PADDING_X_SCALE, HA_RADIUS_SCALE } from './foundation.tokens';
+
 /**
  * Button dimension source data, split into a confirmed set and a
  * placeholder set — physically separate constants so a reader cannot
@@ -14,22 +16,22 @@ export const HA_BUTTON_DIMENSIONS = {
   sm: {
     minHeight: '32px',
     minWidth: '200px',
-    radius: '12px',
-    paddingX: '12px',
-    gap: '8px',
+    radius: HA_RADIUS_SCALE.sm,
+    paddingX: HA_PADDING_X_SCALE.sm,
+    gap: HA_GAP_SCALE.sm,
   },
   md: {
     minHeight: '40px',
     minWidth: '224px',
-    radius: '24px',
-    paddingX: '16px',
-    gap: '10px',
+    radius: HA_RADIUS_SCALE.md,
+    paddingX: HA_PADDING_X_SCALE.md,
+    gap: HA_GAP_SCALE.md,
   },
   lg: {
     minHeight: '48px',
     minWidth: '280px',
-    radius: '32px',
-    paddingX: '20px',
-    gap: '12px',
+    radius: HA_RADIUS_SCALE.lg,
+    paddingX: HA_PADDING_X_SCALE.lg,
+    gap: HA_GAP_SCALE.lg,
   },
 } as const;
