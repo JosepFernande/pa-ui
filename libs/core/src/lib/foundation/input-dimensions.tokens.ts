@@ -1,45 +1,48 @@
+import { HA_PADDING_X_SCALE, HA_RADIUS_SCALE } from './foundation.tokens';
+
 /**
  * Input dimension source data. Unlike Button — which has a Figma-confirmed
  * `md` row (`HA_BUTTON_FIGMA_DIMENSIONS`) and placeholder `sm`/`lg` — NO
  * Figma source exists for Input anywhere in
  * `halo-ui-default-theme-design-values`, so ALL sizes are placeholders.
- * Consumed by `component-defaults.tokens.ts` to build the `--ha-input-*`
- * defaults shipped in `theme.css`.
+ * Consumed by `component-default-values.tokens.ts` to build the
+ * `--ha-input-*` (and, for the trigger, `--ha-select-*`) defaults the
+ * runtime Theme Engine writes.
  *
  * `minHeight` is intentionally realized downstream as `min-height` (D6): a
  * fixed `height` would clip wrapped/long content. This file stores the raw
  * "height" concept; the CSS property choice is made by the consumer.
+ *
+ * `paddingX` reuses `HA_PADDING_X_SCALE` (`foundation.tokens.ts`) — Button
+ * landed on the exact same sm/md/lg values independently.
  */
 
 /**
  * @deprecated-style banner (mirror of D5 point 2, adapted for Input):
- * every `minHeight`/`paddingX`/`radius` value below is ASSISTANT-AUTHORED
- * PLACEHOLDERS, explicitly requested by the user pending designer validation.
- * They are NOT Figma-confirmed; NO Figma source exists for Input.
- * `sm.minHeight` (33px) and the per-size `radius` values are explicit
- * user-provided values, not an 8px-step derivation like the rest of the scale
- * (`md.radius`/`lg.radius` happen to coincide with the foundation
- * `--radius-sm`/`--radius-md` steps, but are declared as literals here, not
- * `var()` references, since `sm.radius` has no foundation match).
+ * `minHeight`/`paddingX` values below are ASSISTANT-AUTHORED PLACEHOLDERS,
+ * explicitly requested by the user pending designer validation. They are NOT
+ * Figma-confirmed; NO Figma source exists for Input. `sm.minHeight` (33px)
+ * is an explicit user-provided value, not an 8px-step derivation like the
+ * rest of the scale. `radius` reuses `HA_RADIUS_SCALE` (`foundation.tokens.ts`)
+ * — unified with Button's radius, not an Input-specific value.
  *
- * `foundation-css.spec.ts` asserts `theme.css` marks every declaration
- * sourced from this object as provisional — including `md`, because unlike
- * Button, no size is confirmed for Input.
+ * Every dimension sourced from this object is provisional — including `md`,
+ * because unlike Button, no size is confirmed for Input.
  */
 export const HA_INPUT_PROVISIONAL_DIMENSIONS = {
   sm: {
     minHeight: '33px',
-    paddingX: '12px',
-    radius: '6px',
+    paddingX: HA_PADDING_X_SCALE.sm,
+    radius: HA_RADIUS_SCALE.sm,
   },
   md: {
     minHeight: '48px',
-    paddingX: '16px',
-    radius: '4px',
+    paddingX: HA_PADDING_X_SCALE.md,
+    radius: HA_RADIUS_SCALE.md,
   },
   lg: {
     minHeight: '56px',
-    paddingX: '20px',
-    radius: '8px',
+    paddingX: HA_PADDING_X_SCALE.lg,
+    radius: HA_RADIUS_SCALE.lg,
   },
 } as const;

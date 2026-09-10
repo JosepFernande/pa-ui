@@ -6,7 +6,7 @@
  *   --ha-button-bg             → background-color
  *   --ha-button-color          → color (text / icon)
  *   --ha-button-border         → border shorthand
- *   --ha-button-radius         → border-radius
+ *   --ha-button-radius-*       → border-radius (sm/md/lg)
  *   --ha-button-padding-sm     → padding (sm)
  *   --ha-button-padding-md     → padding (md)
  *   --ha-button-padding-lg     → padding (lg)
@@ -48,7 +48,6 @@
   line-height: var(--ha-button-line-height);
 
   border: var(--ha-button-border);
-  border-radius: var(--ha-button-radius);
 
   background-color: var(--ha-button-bg);
   color: var(--ha-button-color);
@@ -107,6 +106,7 @@
   min-height: var(--ha-button-min-height-sm);
   min-width: var(--ha-button-min-width-sm);
   gap: var(--ha-button-gap-sm);
+  border-radius: var(--ha-button-radius-sm);
 }
 
 .ha-button--md {
@@ -115,6 +115,7 @@
   min-height: var(--ha-button-min-height-md);
   min-width: var(--ha-button-min-width-md);
   gap: var(--ha-button-gap-md);
+  border-radius: var(--ha-button-radius-md);
 }
 
 .ha-button--lg {
@@ -123,6 +124,7 @@
   min-height: var(--ha-button-min-height-lg);
   min-width: var(--ha-button-min-width-lg);
   gap: var(--ha-button-gap-lg);
+  border-radius: var(--ha-button-radius-lg);
 }
 
 /* ------------------------------------------------------------------ */

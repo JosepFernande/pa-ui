@@ -1,12 +1,25 @@
 /**
  * Foundation layer constants: raw color scales, generic size scales
- * (spacing/gap/radius/icon-size), and the typography scale. Static,
- * unprefixed, shipped as CSS via `theme.css` (D1) — never routed through
- * the runtime Theme Engine (Requirement: `deriveTokens()` Never Processes
- * Raw Scales).
+ * (spacing/gap/radius/padding-x/icon-size), and the typography scale. Static,
+ * unprefixed default values, assembled into `HA_DEFAULT_THEME`
+ * (`theme/default-theme.ts`) and built into `--*` CSS custom properties at
+ * runtime by `theme/foundation-overrides.ts` — but NEVER passed to
+ * `deriveTokens()`/routed through the hex-HSL color-math pipeline
+ * (Requirement: `deriveTokens()` Never Processes Raw Scales).
  *
  * Values sourced from `halo-ui-default-theme-design-values` (color palette,
  * icon sizes, typography font-size/weight) except where noted otherwise.
+ *
+ * Growth policy for the generic scales below: this file is NOT a place to
+ * pre-populate every dimension a component might one day need. Add a new
+ * generic scale (or reference an existing one from a component's
+ * `*-dimensions.tokens.ts`) only when its per-size values genuinely match
+ * what another component already defines — e.g. `HA_PADDING_X_SCALE` is
+ * shared verbatim by Button and Input. A dimension whose values are specific
+ * to one component (even if conceptually similar, like Button's and Input's
+ * differently-sized `minHeight`) stays local to that component's own
+ * `*-dimensions.tokens.ts` file — do not force a shared scale onto values
+ * that only coincidentally have the same shape.
  */
 import type {
   HaColorScale,
@@ -73,11 +86,9 @@ export const HA_FOUNDATION_PALETTE: HaFoundationPalette = {
  * generic scale).
  */
 export const HA_SPACING_SCALE: HaSizeScale = {
-  xs: '4px',
   sm: '8px',
   md: '16px',
   lg: '24px',
-  xl: '32px',
 };
 
 /**
@@ -87,33 +98,38 @@ export const HA_SPACING_SCALE: HaSizeScale = {
  * scales, even though the two currently share identical values.
  */
 export const HA_GAP_SCALE: HaSizeScale = {
-  xs: '4px',
   sm: '8px',
   md: '16px',
   lg: '24px',
-  xl: '32px',
 };
 
 /**
  * Generic radius scale — assistant-authored, same status as spacing/gap.
- * `sm` (4px) intentionally matches the Figma-confirmed Button radius (4px,
- * constant across all sizes) as a real anchor point.
+ * Consumed by Button's per-size `radius` (`button-dimensions.tokens.ts`).
  */
 export const HA_RADIUS_SCALE: HaSizeScale = {
-  xs: '2px',
-  sm: '4px',
-  md: '8px',
-  lg: '16px',
-  xl: '24px',
+  sm: '12px',
+  md: '16px',
+  lg: '24px',
+};
+
+/**
+ * Generic horizontal-padding scale — assistant-authored, same status as
+ * spacing/gap/radius. Extracted here because Button's and Input's
+ * `paddingX` (`button-dimensions.tokens.ts` / `input-dimensions.tokens.ts`)
+ * independently landed on the exact same sm/md/lg values.
+ */
+export const HA_PADDING_X_SCALE: HaSizeScale = {
+  sm: '12px',
+  md: '16px',
+  lg: '20px',
 };
 
 /** Icon size scale — CONFIRMED design values (Flaticon-driven, `halo-ui-default-theme-design-values`). */
 export const HA_ICON_SIZE_SCALE: HaSizeScale = {
-  xs: '16px',
   sm: '20px',
   md: '24px',
   lg: '32px',
-  xl: '40px',
 };
 
 /**

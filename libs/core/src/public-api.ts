@@ -4,11 +4,25 @@ export { DEFAULT_THEME } from './lib/theme/theme.tokens';
 export type {
   HaColorValue,
   HaColorVariants,
-  HaThemeConfig,
+  HaComponentsThemeInput,
+  HaDeepPartial,
+  HaFoundationThemeInput,
+  HaTheme,
   HaThemeOptions,
   ResolvedTheme,
   ThemeCssVariables,
 } from './lib/theme/theme.tokens';
+
+export {
+  HA_BUTTON_TOKENS,
+  HA_INPUT_TEXT_TOKENS,
+  HA_SELECT_TOKENS,
+} from './lib/theme/component-token-shapes';
+export type {
+  HaButtonTokens,
+  HaInputTextTokens,
+  HaSelectTokens,
+} from './lib/theme/component-token-shapes';
 
 export {
   hexToRgb,
@@ -48,15 +62,13 @@ export {
   HA_FOUNDATION_PALETTE,
   HA_GAP_SCALE,
   HA_ICON_SIZE_SCALE,
+  HA_PADDING_X_SCALE,
   HA_RADIUS_SCALE,
   HA_SPACING_SCALE,
   HA_TYPOGRAPHY_SCALE,
 } from './lib/foundation/foundation.tokens';
 
-export {
-  HA_BUTTON_FIGMA_DIMENSIONS,
-  HA_BUTTON_PROVISIONAL_DIMENSIONS,
-} from './lib/foundation/button-dimensions.tokens';
+export { HA_BUTTON_DIMENSIONS } from './lib/foundation/button-dimensions.tokens';
 
 export { HA_COMPONENT_TOKEN_DEFAULTS } from './lib/foundation/component-defaults.tokens';
 
