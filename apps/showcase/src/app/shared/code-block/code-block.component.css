@@ -1,77 +1,8 @@
 :host {
   display: block;
-
-  --code-block-label-color: var(--neutral-700);
-  --code-block-bg: var(--primary-800);
-  --code-block-bar-border: var(--primary-700);
-  --code-block-lang-color: var(--neutral-50);
-  --code-block-copy-bg: var(--primary-700);
-  --code-block-copy-color: var(--primary-100);
-  --code-block-copy-hover-bg: var(--primary-600);
-  --code-block-code-color: var(--primary-50);
-}
-
-.code-block {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ha-gap-xs);
-}
-
-.code-block__label {
-  font-size: var(--ha-font-size-caption);
-  font-weight: var(--ha-font-weight-semibold);
-  color: var(--code-block-label-color);
-}
-
-.code-block__card {
-  display: flex;
-  flex-direction: column;
-  border-radius: var(--ha-radius-md);
-  background: var(--code-block-bg);
-  overflow: hidden;
-}
-
-.code-block__bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--ha-gap-sm) var(--ha-spacing-md);
-  border-bottom: 1px solid var(--code-block-bar-border);
-}
-
-.code-block__lang {
-  font-size: var(--ha-font-size-caption);
-  font-weight: var(--ha-font-weight-semibold);
-  color: var(--code-block-lang-color);
-}
-
-.code-block__copy {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--ha-gap-xs);
-  padding: var(--ha-gap-xs) var(--ha-gap-sm);
-  border: none;
-  border-radius: var(--ha-radius-sm);
-  background: var(--code-block-copy-bg);
-  color: var(--code-block-copy-color);
-  font-family: var(--ha-font-family);
-  font-size: var(--ha-font-size-caption);
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 150ms ease-in-out;
-}
-
-.code-block__copy:hover {
-  background: var(--code-block-copy-hover-bg);
 }
 
 .code-block__code {
-  margin: 0;
-  padding: var(--ha-spacing-md) var(--ha-spacing-lg);
-  color: var(--code-block-code-color);
-  font-family: Consolas, Monaco, monospace;
-  font-size: var(--ha-font-size-small-body);
-  line-height: var(--ha-line-height-small-body);
   white-space: pre-wrap;
   overflow-wrap: break-word;
 }

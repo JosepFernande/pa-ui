@@ -1,197 +1,367 @@
-<header class="home-page__header">
-  <div class="home-page__header-inner">
-    <div class="home-page__brand">
-      <span class="home-page__badge" aria-hidden="true">
-        <svg class="home-page__badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2 3 7v6c0 5 3.8 8.6 9 9 5.2-.4 9-4 9-9V7l-9-5Z" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </span>
-      <span class="home-page__wordmark">halo-ui</span>
-    </div>
-
-    <nav class="home-page__nav">
-      <a class="home-page__nav-link" routerLink="/instalacion">Instalación</a>
-      <a class="home-page__nav-link" routerLink="/componentes/boton">Componentes</a>
-    </nav>
-
-    <a class="home-page__btn home-page__btn--primary home-page__btn--sm" routerLink="/instalacion">Empezar</a>
-  </div>
-</header>
-
-<main class="home-page__main">
-  <section class="home-page__hero">
-    <div class="home-page__hero-content">
-      <span class="home-page__hero-badge">v19.0.1 · Angular 19</span>
-
-      <h1 class="home-page__hero-title">Interfaces Angular rápidas, accesibles y con estilo propio</h1>
-      <p class="home-page__hero-subtitle">
-        halo-ui es una librería de componentes standalone para Angular: theming con variables CSS, soporte WAI-ARIA de
-        fábrica y una API tipada de punta a punta.
-      </p>
-
-      <div class="home-page__hero-actions">
-        <a class="home-page__btn home-page__btn--primary" routerLink="/instalacion">Empezar ahora</a>
-        <a class="home-page__btn home-page__btn--secondary" routerLink="/componentes/boton">Ver componentes</a>
+<div
+  class="flex min-h-screen flex-col bg-surface-base text-zinc-800 antialiased selection:bg-brand-100 selection:text-brand-700"
+>
+  <header class="sticky top-0 z-50 w-full border-b border-surface-border/60 bg-surface-base/90 backdrop-blur-md">
+    <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
+      <div class="flex shrink-0 items-center gap-3">
+        <span
+          class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-700 text-white shadow-md shadow-brand-700/20"
+          aria-hidden="true"
+        >
+          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M12 2 3 7v6c0 5 3.8 8.6 9 9 5.2-.4 9-4 9-9V7l-9-5Z"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </span>
+        <span class="text-xl font-bold tracking-tight text-zinc-900">halo-ui</span>
       </div>
 
-      <div class="home-page__terminal">
-        <div class="home-page__terminal-header">
-          <span class="home-page__terminal-dot home-page__terminal-dot--red"></span>
-          <span class="home-page__terminal-dot home-page__terminal-dot--amber"></span>
-          <span class="home-page__terminal-dot home-page__terminal-dot--green"></span>
+      <nav class="hidden items-center gap-8 text-sm font-medium text-zinc-600 md:flex">
+        <a class="transition-colors hover:text-brand-700" routerLink="/instalacion">Instalación</a>
+        <a class="transition-colors hover:text-brand-700" routerLink="/componentes/boton">Componentes</a>
+        <a class="transition-colors hover:text-brand-700" routerLink="/configuracion">Configuración</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a
+          class="hidden items-center gap-2 rounded-full border border-surface-border bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm transition-all hover:border-surface-borderstrong hover:bg-zinc-50 sm:inline-flex"
+          href="https://github.com/JosepFernande/halo-ui"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24">
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+            />
+          </svg>
+          <span>GitHub</span>
+        </a>
+        <a
+          class="inline-flex items-center justify-center rounded-full bg-brand-700 px-5 py-2 text-sm font-semibold text-white shadow-md shadow-brand-700/25 transition-all hover:bg-brand-600"
+          routerLink="/instalacion"
+        >
+          Empezar
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="grow">
+    <section class="relative overflow-hidden px-6 py-20 md:py-24">
+      <div class="mx-auto flex max-w-4xl flex-col items-center text-center">
+        <div
+          class="mb-8 inline-flex items-center gap-2 rounded-full border border-surface-border bg-brand-50 px-4 py-1.5 text-xs font-semibold tracking-wide text-brand-700"
+        >
+          <span class="h-1.5 w-1.5 rounded-full bg-brand-700"></span>
+          <span>v19.0.1 · Angular 19</span>
         </div>
-        <div class="home-page__terminal-body">
-          <span class="home-page__terminal-prompt">$</span>
-          <code class="home-page__terminal-command">npm install &#64;halo-ui/angular &#64;angular/cdk</code>
-          <button
-            type="button"
-            class="home-page__terminal-copy"
-            [attr.aria-label]="copied() ? 'Comando copiado' : 'Copiar comando'"
-            (click)="copyInstallCommand()"
+
+        <h1 class="mb-6 text-4xl font-extrabold leading-[1.15] tracking-tight text-zinc-950 sm:text-5xl md:text-6xl">
+          Interfaces Angular rápidas, accesibles y con estilo propio
+        </h1>
+        <p class="mx-auto mb-10 max-w-2xl text-lg font-normal leading-relaxed text-zinc-600 md:text-xl">
+          halo-ui es una librería de componentes standalone para Angular: theming con variables CSS, soporte WAI-ARIA de
+          fábrica y una API tipada de punta a punta.
+        </p>
+
+        <div class="mb-14 flex flex-wrap items-center justify-center gap-4">
+          <a
+            class="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-7 py-3.5 text-sm font-semibold text-white shadow-md transition-all hover:bg-zinc-800"
+            routerLink="/instalacion"
           >
-            @if (copied()) {
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="m5 12 5 5L20 7" stroke-linecap="round" stroke-linejoin="round" />
+            <span>Empezar ahora</span>
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </a>
+          <a
+            class="inline-flex items-center gap-2 rounded-full border border-surface-border bg-white px-7 py-3.5 text-sm font-semibold text-zinc-800 shadow-sm transition-all hover:border-surface-borderstrong hover:bg-zinc-50"
+            routerLink="/componentes/boton"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" rx="1.5" />
+              <rect x="14" y="3" width="7" height="7" rx="1.5" />
+              <rect x="14" y="14" width="7" height="7" rx="1.5" />
+              <rect x="3" y="14" width="7" height="7" rx="1.5" />
+            </svg>
+            <span>Ver componentes</span>
+          </a>
+        </div>
+
+        <div
+          class="w-full max-w-2xl rounded-2xl border border-zinc-800/80 bg-[#12131A] p-4 text-left shadow-2xl sm:p-5"
+        >
+          <div class="mb-3 flex items-center justify-between border-b border-zinc-800/50 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="h-3 w-3 rounded-full bg-[#EF4444]"></span>
+              <span class="h-3 w-3 rounded-full bg-[#F59E0B]"></span>
+              <span class="h-3 w-3 rounded-full bg-[#10B981]"></span>
+            </div>
+            <button
+              type="button"
+              class="inline-flex items-center gap-1.5 rounded bg-zinc-800/60 px-2.5 py-1 text-xs text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white"
+              [attr.aria-label]="copied() ? 'Comando copiado' : 'Copiar comando'"
+              (click)="copyInstallCommand()"
+            >
+              @if (copied()) {
+                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="m5 12 5 5L20 7" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span>Copiado</span>
+              } @else {
+                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="12" height="12" rx="2" stroke-linecap="round" stroke-linejoin="round" />
+                  <path
+                    d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span>Copiar</span>
+              }
+            </button>
+          </div>
+          <div
+            class="flex items-center gap-3 overflow-x-auto py-1 text-sm sm:text-base"
+            style="font-family: 'JetBrains Mono', monospace"
+          >
+            <span class="select-none font-semibold text-zinc-500">$</span>
+            <code class="text-zinc-200">npm install &#64;halo-ui/angular &#64;angular/cdk</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-7xl px-6 py-16 md:py-20">
+      <div class="mx-auto mb-16 max-w-xl text-center">
+        <h2 class="mb-3 text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl">
+          Todo lo que necesitás para construir UI
+        </h2>
+        <p class="text-base font-normal text-zinc-600 sm:text-lg">
+          Pensado para equipos que valoran la consistencia y la velocidad.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+        <article
+          class="flex flex-col justify-start rounded-3xl border border-surface-border bg-surface-card p-8 shadow-soft-airy transition-all hover:border-surface-borderstrong hover:shadow-card-hover"
+        >
+          <div class="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-700">
+            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="m9 12 2 2 4-4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h3 class="mb-3 text-xl font-bold tracking-tight text-zinc-900">Accesibilidad WAI-ARIA</h3>
+          <p class="text-sm font-normal leading-relaxed text-zinc-600">
+            Roles, estados y navegación por teclado incluidos en cada componente, sin trabajo extra de tu parte.
+          </p>
+        </article>
+
+        <article
+          class="flex flex-col justify-start rounded-3xl border border-surface-border bg-surface-card p-8 shadow-soft-airy transition-all hover:border-surface-borderstrong hover:shadow-card-hover"
+        >
+          <div class="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-700">
+            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M12 2c-3.5 4.2-6 7.6-6 11a6 6 0 0 0 12 0c0-3.4-2.5-6.8-6-11Z"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          <h3 class="mb-3 text-xl font-bold tracking-tight text-zinc-900">Theming con variables CSS</h3>
+          <p class="text-sm font-normal leading-relaxed text-zinc-600">
+            Colores, tipografía, espaciados y radios expuestos como custom properties: personalizá sin tocar el código
+            fuente.
+          </p>
+        </article>
+
+        <article
+          class="flex flex-col justify-start rounded-3xl border border-surface-border bg-surface-card p-8 shadow-soft-airy transition-all hover:border-surface-borderstrong hover:shadow-card-hover"
+        >
+          <div class="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-700">
+            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m16 18 6-6-6-6M8 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h3 class="mb-3 text-xl font-bold tracking-tight text-zinc-900">TypeScript estricto</h3>
+          <p class="text-sm font-normal leading-relaxed text-zinc-600">
+            Componentes standalone, señales y tipado estricto de punta a punta para que los errores aparezcan en tu
+            editor, no en producción.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-7xl px-6 py-16 md:py-20">
+      <div class="mx-auto mb-16 max-w-xl text-center">
+        <h2 class="mb-3 text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl">Explorá la documentación</h2>
+        <p class="text-base font-normal text-zinc-600 sm:text-lg">
+          Todo lo que necesitás para arrancar tu próximo proyecto.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+        <a
+          class="group relative flex flex-col justify-between rounded-3xl border border-surface-border bg-surface-card p-8 shadow-soft-airy transition-all hover:border-brand-600/40 hover:shadow-card-hover"
+          routerLink="/instalacion"
+        >
+          <div class="mb-8 flex items-start justify-between">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-700 transition-transform group-hover:scale-105"
+            >
+              <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 3v12m0 0 4-4m-4 4-4-4" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
-            } @else {
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="9" y="9" width="12" height="12" rx="2" stroke-linecap="round" stroke-linejoin="round" />
+            </div>
+            <span
+              class="text-zinc-400 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand-700"
+            >
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <line x1="7" x2="17" y1="17" y2="7" />
+                <polyline points="7 7 17 7 17 17" />
+              </svg>
+            </span>
+          </div>
+          <div>
+            <h3
+              class="mb-3 text-xl font-bold tracking-tight text-zinc-900 transition-colors group-hover:text-brand-700"
+            >
+              Instalación
+            </h3>
+            <p class="text-sm font-normal leading-relaxed text-zinc-600">
+              Instalá el paquete y configurá el theme engine en minutos.
+            </p>
+          </div>
+        </a>
+
+        <a
+          class="group relative flex flex-col justify-between rounded-3xl border border-surface-border bg-surface-card p-8 shadow-soft-airy transition-all hover:border-brand-600/40 hover:shadow-card-hover"
+          routerLink="/componentes/boton"
+        >
+          <div class="mb-8 flex items-start justify-between">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-700 transition-transform group-hover:scale-105"
+            >
+              <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+              </svg>
+            </div>
+            <span
+              class="text-zinc-400 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand-700"
+            >
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <line x1="7" x2="17" y1="17" y2="7" />
+                <polyline points="7 7 17 7 17 17" />
+              </svg>
+            </span>
+          </div>
+          <div>
+            <h3
+              class="mb-3 text-xl font-bold tracking-tight text-zinc-900 transition-colors group-hover:text-brand-700"
+            >
+              Componentes
+            </h3>
+            <p class="text-sm font-normal leading-relaxed text-zinc-600">
+              Galería de botones, inputs y selects listos para usar.
+            </p>
+          </div>
+        </a>
+
+        <a
+          class="group relative flex flex-col justify-between rounded-3xl border border-surface-border bg-surface-card p-8 shadow-soft-airy transition-all hover:border-brand-600/40 hover:shadow-card-hover"
+          routerLink="/configuracion"
+        >
+          <div class="mb-8 flex items-start justify-between">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-700 transition-transform group-hover:scale-105"
+            >
+              <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3" />
                 <path
-                  d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                  d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 />
               </svg>
-            }
-          </button>
+            </div>
+            <span
+              class="text-zinc-400 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand-700"
+            >
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <line x1="7" x2="17" y1="17" y2="7" />
+                <polyline points="7 7 17 7 17 17" />
+              </svg>
+            </span>
+          </div>
+          <div>
+            <h3
+              class="mb-3 text-xl font-bold tracking-tight text-zinc-900 transition-colors group-hover:text-brand-700"
+            >
+              Configuración
+            </h3>
+            <p class="text-sm font-normal leading-relaxed text-zinc-600">
+              Ajustá el theme provider y los tokens a tu marca.
+            </p>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="mt-20 w-full border-t border-surface-border bg-surface-base py-12">
+    <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-6 md:flex-row">
+      <div class="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
+        <div class="flex items-center gap-2.5">
+          <span
+            class="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-700 text-white shadow-sm"
+            aria-hidden="true"
+          >
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M12 2 3 7v6c0 5 3.8 8.6 9 9 5.2-.4 9-4 9-9V7l-9-5Z"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          <span class="text-base font-bold text-zinc-900">halo-ui</span>
         </div>
+        <span class="text-xs text-zinc-500 sm:text-sm">&copy; 2026 halo-ui. Todos los derechos reservados.</span>
+      </div>
+
+      <nav class="flex items-center gap-6 text-sm font-medium text-zinc-600">
+        <a class="transition-colors hover:text-brand-700" routerLink="/instalacion">Instalación</a>
+        <a class="transition-colors hover:text-brand-700" routerLink="/componentes/boton">Componentes</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a
+          aria-label="GitHub"
+          class="flex h-10 w-10 items-center justify-center rounded-full border border-surface-border bg-white text-zinc-600 shadow-sm transition-all hover:border-surface-borderstrong hover:text-brand-700"
+          href="https://github.com/JosepFernande/halo-ui"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24">
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+            />
+          </svg>
+        </a>
       </div>
     </div>
-  </section>
-
-  <section class="home-page__values">
-    <div class="home-page__section-heading">
-      <h2 class="home-page__section-title">Todo lo que necesitás para construir UI</h2>
-      <p class="home-page__section-subtitle">Pensado para equipos que valoran la consistencia y la velocidad.</p>
-    </div>
-
-    <div class="home-page__value-grid">
-      <article class="home-page__value-card">
-        <span class="home-page__value-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="m9 12 2 2 4-4" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </span>
-        <h3 class="home-page__value-title">Accesibilidad WAI-ARIA</h3>
-        <p class="home-page__value-description">
-          Roles, estados y navegación por teclado incluidos en cada componente, sin trabajo extra de tu parte.
-        </p>
-      </article>
-
-      <article class="home-page__value-card">
-        <span class="home-page__value-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path
-              d="M12 2c-3.5 4.2-6 7.6-6 11a6 6 0 0 0 12 0c0-3.4-2.5-6.8-6-11Z"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </span>
-        <h3 class="home-page__value-title">Theming con variables CSS</h3>
-        <p class="home-page__value-description">
-          Colores, tipografía, espaciados y radios expuestos como custom properties: personalizá sin tocar el código
-          fuente.
-        </p>
-      </article>
-
-      <article class="home-page__value-card">
-        <span class="home-page__value-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="m16 18 6-6-6-6M8 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </span>
-        <h3 class="home-page__value-title">TypeScript estricto</h3>
-        <p class="home-page__value-description">
-          Componentes standalone, señales y tipado estricto de punta a punta para que los errores aparezcan en tu
-          editor, no en producción.
-        </p>
-      </article>
-    </div>
-  </section>
-
-  <section class="home-page__docs">
-    <div class="home-page__section-heading">
-      <h2 class="home-page__section-title">Explorá la documentación</h2>
-      <p class="home-page__section-subtitle">Todo lo que necesitás para arrancar tu próximo proyecto.</p>
-    </div>
-
-    <div class="home-page__docs-grid">
-      <a class="home-page__docs-card" routerLink="/instalacion">
-        <span class="home-page__docs-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 3v12m0 0 4-4m-4 4-4-4" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </span>
-        <span class="home-page__docs-body">
-          <span class="home-page__docs-title">Instalación</span>
-          <span class="home-page__docs-description">Instalá el paquete y configurá el theme engine en minutos.</span>
-        </span>
-        <svg class="home-page__docs-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14m-6-6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </a>
-
-      <a class="home-page__docs-card" routerLink="/componentes/boton">
-        <span class="home-page__docs-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="7" height="7" rx="1" />
-            <rect x="14" y="3" width="7" height="7" rx="1" />
-            <rect x="3" y="14" width="7" height="7" rx="1" />
-            <rect x="14" y="14" width="7" height="7" rx="1" />
-          </svg>
-        </span>
-        <span class="home-page__docs-body">
-          <span class="home-page__docs-title">Componentes</span>
-          <span class="home-page__docs-description">Galería de botones, inputs y selects listos para usar.</span>
-        </span>
-        <svg class="home-page__docs-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14m-6-6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </a>
-
-      <a class="home-page__docs-card" routerLink="/configuracion">
-        <span class="home-page__docs-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="3" />
-            <path
-              d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </span>
-        <span class="home-page__docs-body">
-          <span class="home-page__docs-title">Configuración</span>
-          <span class="home-page__docs-description">Ajustá el theme provider y los tokens a tu marca.</span>
-        </span>
-        <svg class="home-page__docs-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14m-6-6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </a>
-    </div>
-  </section>
-</main>
-
-<footer class="home-page__footer">
-  <div class="home-page__footer-inner">
-    <span class="home-page__footer-brand">halo-ui</span>
-    <span class="home-page__footer-copyright">&copy; 2026 halo-ui</span>
-    <nav class="home-page__footer-links">
-      <a class="home-page__footer-link" routerLink="/instalacion">Instalación</a>
-      <a class="home-page__footer-link" routerLink="/componentes/boton">Componentes</a>
-    </nav>
-  </div>
-</footer>
+  </footer>
+</div>

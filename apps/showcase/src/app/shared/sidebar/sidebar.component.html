@@ -1,7 +1,12 @@
-<div class="app-sidebar">
-  <div class="app-sidebar__brand">
-    <span class="app-sidebar__badge" aria-hidden="true">
-      <svg class="app-sidebar__badge-icon" viewBox="0 0 301 361" xmlns="http://www.w3.org/2000/svg">
+<div
+  class="app-sidebar h-full flex w-70 flex-1 flex-col gap-6 overflow-hidden rounded-tr-3xl rounded-br-3xl border border-surface-border bg-surface-card p-5 shadow-soft-airy"
+>
+  <div class="flex items-center gap-2.5 border-b border-surface-border/70 pb-4">
+    <span
+      class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-brand-700 to-brand-500 text-white shadow-[0_2px_10px_rgba(67,56,202,0.3)]"
+      aria-hidden="true"
+    >
+      <svg class="h-4 w-4" viewBox="0 0 301 361" xmlns="http://www.w3.org/2000/svg">
         <path
           fill="currentColor"
           fill-rule="evenodd"
@@ -10,20 +15,185 @@
         />
       </svg>
     </span>
-    <span class="app-sidebar__brand-text">
-      <span class="app-sidebar__logo">{{ brandTitle() }}</span>
+    <span class="flex flex-col gap-0.5">
+      <span class="block text-base font-bold leading-tight tracking-tight text-indigo-950">{{ brandTitle() }}</span>
       @if (brandSubtitle()) {
-        <span class="app-sidebar__tagline">{{ brandSubtitle() }}</span>
+        <span class="block font-mono text-[10px] font-medium leading-tight text-zinc-500">{{ brandSubtitle() }}</span>
       }
     </span>
   </div>
 
-  <ng-content></ng-content>
+  <div class="app-sidebar__nav-scroll min-h-0 flex-1 overflow-y-auto">
+    <nav class="flex flex-col gap-6">
+      <div class="flex flex-col gap-2">
+        <div
+          class="flex items-center justify-between px-2 text-[11px] font-bold uppercase tracking-wider text-zinc-500"
+        >
+          <span>Primeros pasos</span>
+          <span class="rounded bg-surface-base px-1.5 py-0.5 font-mono text-[9px] text-zinc-500">2</span>
+        </div>
+        <div class="flex flex-col gap-1">
+          <a
+            routerLink="/instalacion"
+            routerLinkActive
+            #instalacionLink="routerLinkActive"
+            class="flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-medium transition-all"
+            [class]="
+              instalacionLink.isActive
+                ? 'bg-surface-base text-brand-700'
+                : 'text-zinc-700 hover:bg-surface-base hover:text-brand-700'
+            "
+          >
+            <svg
+              class="h-4 w-4 transition-colors"
+              [class]="instalacionLink.isActive ? 'text-brand-700' : 'text-zinc-500'"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 16v-4m0-4h.01" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>Introducción</span>
+          </a>
+          <a
+            routerLink="/configuracion"
+            routerLinkActive
+            #configuracionLink="routerLinkActive"
+            class="flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-medium transition-all"
+            [class]="
+              configuracionLink.isActive
+                ? 'bg-surface-base text-brand-700'
+                : 'text-zinc-700 hover:bg-surface-base hover:text-brand-700'
+            "
+          >
+            <svg
+              class="h-4 w-4 transition-colors"
+              [class]="configuracionLink.isActive ? 'text-brand-700' : 'text-zinc-500'"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <span>Configuración</span>
+          </a>
+        </div>
+      </div>
 
-  @if (footerContent()) {
-    <div class="app-sidebar__divider"></div>
-    <div class="app-sidebar__footer">
-      <ng-content select="[appSidebarFooter]"></ng-content>
+      <div class="flex flex-col gap-2">
+        <div class="px-2 text-[11px] font-bold uppercase tracking-wider text-zinc-500">Componentes</div>
+        <div routerLinkActive #componentesGroup="routerLinkActive" class="contents">
+          <a
+            routerLink="/componentes/boton"
+            class="flex items-center justify-between gap-2.5 rounded-xl border px-3 py-2 text-xs font-semibold transition-all"
+            [class]="
+              componentesGroup.isActive
+                ? 'border-brand-700/20 bg-brand-700/10 text-brand-700'
+                : 'border-transparent text-zinc-700 hover:bg-surface-base'
+            "
+          >
+            <span class="flex items-center gap-2.5">
+              <svg
+                class="h-4 w-4"
+                [class]="componentesGroup.isActive ? 'text-brand-700' : 'text-zinc-500'"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                stroke-width="1.8"
+              >
+                <rect x="3" y="3" width="7" height="7" rx="1.5" />
+                <rect x="14" y="3" width="7" height="7" rx="1.5" />
+                <rect x="14" y="14" width="7" height="7" rx="1.5" />
+                <rect x="3" y="14" width="7" height="7" rx="1.5" />
+              </svg>
+              <span>Componentes</span>
+            </span>
+            @if (componentesGroup.isActive) {
+              <span class="h-1.5 w-1.5 rounded-full bg-brand-700"></span>
+            }
+          </a>
+
+          <div class="ml-5 mt-1.5 flex flex-col gap-1 border-l-2 border-surface-border pl-3">
+            <a
+              routerLink="/componentes/boton"
+              routerLinkActive
+              #botonLink="routerLinkActive"
+              class="flex items-center justify-between rounded-md px-2 py-1 text-[11px] font-medium transition-colors"
+              [class]="
+                botonLink.isActive
+                  ? 'bg-surface-base font-bold text-brand-700'
+                  : 'text-zinc-500 hover:bg-surface-base hover:text-brand-700'
+              "
+            >
+              <span>Botón</span>
+              <span class="h-1.5 w-1.5 rounded-full" [class]="botonLink.isActive ? 'bg-green-700' : ''"></span>
+            </a>
+            <a
+              routerLink="/componentes/input-text"
+              routerLinkActive
+              #inputTextLink="routerLinkActive"
+              class="flex items-center justify-between rounded-md px-2 py-1 text-[11px] font-medium transition-colors"
+              [class]="
+                inputTextLink.isActive
+                  ? 'bg-surface-base font-bold text-brand-700'
+                  : 'text-zinc-500 hover:bg-surface-base hover:text-brand-700'
+              "
+            >
+              <span>InputText</span>
+              <span class="h-1.5 w-1.5 rounded-full" [class]="inputTextLink.isActive ? 'bg-green-700' : ''"></span>
+            </a>
+            <a
+              routerLink="/componentes/select"
+              routerLinkActive
+              #selectLink="routerLinkActive"
+              class="flex items-center justify-between rounded-md px-2 py-1 text-[11px] font-medium transition-colors"
+              [class]="
+                selectLink.isActive
+                  ? 'bg-surface-base font-bold text-brand-700'
+                  : 'text-zinc-500 hover:bg-surface-base hover:text-brand-700'
+              "
+            >
+              <span>Select</span>
+              <span class="h-1.5 w-1.5 rounded-full" [class]="selectLink.isActive ? 'bg-green-700' : ''"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div class="-mx-5 -mb-5 border-t border-surface-border bg-surface-base/60 p-3">
+    <div class="relative overflow-hidden rounded-2xl border border-surface-border bg-surface-card p-3 shadow-sm">
+      <div class="flex items-start gap-2.5">
+        <span class="mt-1 h-2 w-2 shrink-0 animate-pulse rounded-full bg-brand-700" aria-hidden="true"></span>
+        <div>
+          <h4 class="text-xs font-bold text-indigo-950">¿Necesitas ayuda?</h4>
+          <p class="mt-0.5 text-[11px] leading-relaxed text-zinc-500">
+            Abrí un issue en GitHub y te ayudamos a resolverlo.
+          </p>
+          <div class="mt-2.5 flex items-center gap-2">
+            <a
+              href="https://github.com/JosepFernande/halo-ui/issues/new"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-1 text-[11px] font-semibold text-brand-700 hover:text-brand-500"
+            >
+              <span>Abrir issue</span>
+              <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
-  }
+  </div>
 </div>
