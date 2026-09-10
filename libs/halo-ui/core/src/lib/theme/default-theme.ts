@@ -17,8 +17,8 @@
  *   `HA_FONT_FAMILY`, `HA_TYPOGRAPHY_SCALE`).
  * - `semantic`: `DEFAULT_THEME.colors` (`theme.tokens.ts`), kept exactly
  *   as-is — this file does NOT widen or rename `DEFAULT_THEME`.
- * - `components`: the new nested value trees in
- *   `foundation/component-default-values.tokens.ts`.
+ * - `components`: the nested value trees in each component's own
+ *   `*-default-values.tokens.ts` (`button/`, `input-text/`, `select/`).
  *
  * This file is NOT one of the 3 files `foundation/no-raw-scale-in-theme-
  * engine.spec.ts` source-regex-checks for a `from ['"].*foundation` import
@@ -28,11 +28,9 @@
  * Foundation import so a raw scale can never reach `mergeTheme`/
  * `deriveTokens` (Requirement: `deriveTokens()` Never Processes Raw Scales).
  */
-import {
-  HA_BUTTON_TOKEN_DEFAULT_VALUES,
-  HA_INPUT_TOKEN_DEFAULT_VALUES,
-  HA_SELECT_TOKEN_DEFAULT_VALUES,
-} from '../foundation/component-default-values.tokens';
+import { HA_BUTTON_TOKEN_DEFAULT_VALUES } from '../button/button-default-values.tokens';
+import { HA_INPUT_TOKEN_DEFAULT_VALUES } from '../input-text/input-text-default-values.tokens';
+import { HA_SELECT_TOKEN_DEFAULT_VALUES } from '../select/select-default-values.tokens';
 import {
   HA_FONT_FAMILY,
   HA_FONT_WEIGHT_SCALE,

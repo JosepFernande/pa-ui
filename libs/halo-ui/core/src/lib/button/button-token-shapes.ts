@@ -26,8 +26,6 @@ export interface HaButtonTokens {
   };
 
   readonly sizing: {
-    /** Unsized gap — coexists with the per-size `gapSm/Md/Lg` below. */
-    readonly gap: string;
     readonly paddingSm: string;
     readonly paddingMd: string;
     readonly paddingLg: string;
@@ -37,21 +35,12 @@ export interface HaButtonTokens {
     readonly minHeightSm: string;
     readonly minHeightMd: string;
     readonly minHeightLg: string;
-    /** Phase 3, additive — see design D4. */
     readonly minWidthSm: string;
     readonly minWidthMd: string;
     readonly minWidthLg: string;
-    /** Phase 3, additive. */
     readonly gapSm: string;
     readonly gapMd: string;
     readonly gapLg: string;
-    /**
-     * Per-size radius, mirroring the Input/Select `radiusSm/Md/Lg` pattern.
-     * `surface.radius` above stays for backward compatibility (still
-     * consumed by existing tests/docs) but is no longer wired into
-     * `button.component.css` — the per-size rules below now own
-     * `border-radius`.
-     */
     readonly radiusSm: string;
     readonly radiusMd: string;
     readonly radiusLg: string;
@@ -106,7 +95,6 @@ export const HA_BUTTON_TOKENS = {
   },
 
   sizing: {
-    gap: '--ha-button-gap',
     paddingSm: '--ha-button-padding-sm',
     paddingMd: '--ha-button-padding-md',
     paddingLg: '--ha-button-padding-lg',

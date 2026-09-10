@@ -80,7 +80,6 @@ describe('provideHaTheme', () => {
       const theme = TestBed.inject(HA_THEME_TOKEN);
       expect(mergeThemeMock).toHaveBeenCalledWith(themeConfig.semantic, options);
       expect(theme.colors['primary']).toBe('#f00');
-      expect(theme.colors['success']).toBe(DEFAULT_THEME.colors['success']);
     });
   });
 
@@ -161,7 +160,7 @@ describe('provideHaTheme', () => {
         'use strict';
         (theme.colors as Record<string, string>)['primary'] = 'mutated';
       }).toThrow();
-      expect(DEFAULT_THEME.colors['success']).toBe('#8fbf21');
+      expect(DEFAULT_THEME.colors['primary']).not.toBe('mutated');
     });
 
     it('does not persist into TransferState when the server-side computation throws', () => {

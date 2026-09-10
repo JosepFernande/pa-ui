@@ -83,7 +83,7 @@ export class ButtonPageComponent {
     },
   ];
 
-  /** The 3 real sizes with their Figma-sourced `min-height`/`min-width` (`libs/core/.../button-dimensions.tokens.ts`). */
+  /** The 3 real sizes with their Figma-sourced `min-height`/`min-width` (`libs/core/.../button-default-values.tokens.ts`). */
   protected readonly sizeInfo: readonly SizeInfo[] = [
     { size: 'sm', minHeight: '40px', minWidth: '200px', confirmed: false },
     { size: 'md', minHeight: '48px', minWidth: '224px', confirmed: true },

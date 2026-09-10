@@ -11,7 +11,7 @@
  */
 
 /** The 11-step lightness axis of a raw Figma color scale (25 = lightest, 900 = darkest). */
-export const HA_COLOR_SCALE_STEPS = [25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
+export const HA_COLOR_SCALE_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
 
 export type HaColorScaleStep = (typeof HA_COLOR_SCALE_STEPS)[number];
 

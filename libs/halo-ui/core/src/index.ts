@@ -68,7 +68,7 @@ export {
   HA_TYPOGRAPHY_SCALE,
 } from './lib/foundation/foundation.tokens';
 
-export { HA_BUTTON_DIMENSIONS } from './lib/foundation/button-dimensions.tokens';
+export { HA_BUTTON_DIMENSIONS } from './lib/button/button-default-values.tokens';
 
 export { HA_COMPONENT_TOKEN_DEFAULTS } from './lib/foundation/component-defaults.tokens';
 

@@ -4,20 +4,12 @@ import type { HaColorValue, HaThemeOptions, ResolvedTheme } from './theme.tokens
 /**
  * The base color keys every default palette must provide. Used to detect
  * gaps when `extendDefaults` is `false` (Requirement: Color Merge Behavior).
- * Matches the `DEFAULT_THEME` roster's semantic set (design D3) — the
- * deprecated `danger` alias is deliberately NOT required here. `secondary`
- * was removed entirely (breaking change, no alias kept) alongside the raw
- * `dark-blue`/`light-blue`/`dark-green`/`light-green` brand families.
+ * Matches the `DEFAULT_THEME` roster's semantic set (design D3) — only the
+ * brand anchor `primary` lives in the shared theme; every other semantic
+ * color (`success`/`error`/`danger`/`warning`/`alert`/`info`/`neutral`) is
+ * the consuming page's own provider concern, not part of `HaTheme`.
  */
-const BASE_COLOR_KEYS = [
-  'primary',
-  'success',
-  'error',
-  'warning',
-  'alert',
-  'info',
-  'neutral',
-] as const;
+const BASE_COLOR_KEYS = ['primary'] as const;
 
 /**
  * Pure, framework-free merge of a consumer's semantic color layer
@@ -31,8 +23,8 @@ const BASE_COLOR_KEYS = [
  *   `semantic` merged over `defaults.colors`, consumer values winning on key
  *   collision.
  * - `extendDefaults` false → returns ONLY `semantic`, with no fallback to
- *   `defaults` for absent keys. If any of the 8 base color keys is missing
- *   from `semantic`, emits a single `console.warn` naming the missing keys
+ *   `defaults` for absent keys. If any base color key is missing from
+ *   `semantic`, emits a single `console.warn` naming the missing keys
  *   and returns the partial map — never throws, never backfills.
  */
 export function mergeTheme(

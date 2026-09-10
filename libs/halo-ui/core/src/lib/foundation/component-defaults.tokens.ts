@@ -9,11 +9,11 @@
  * before — `button.tokens.spec.ts`/`input-text.tokens.spec.ts`/
  * `select.tokens.spec.ts` hard-depend on `Object.keys(HA_COMPONENT_TOKEN_DEFAULTS)`
  * with flat CSS-var-name keys — but its CONSTRUCTION now flattens the nested
- * `component-default-values.tokens.ts` value trees via the same
- * `flattenComponentTokenTree()` walk-style helper `theme/component-overrides.ts`
- * uses for the runtime Component-layer builder, so there is one source of
- * truth (the nested value trees) instead of two independently-authored
- * literals.
+ * per-component `*-default-values.tokens.ts` value trees (`button/`,
+ * `input-text/`, `select/`) via the same `flattenComponentTokenTree()`
+ * walk-style helper `theme/component-overrides.ts` uses for the runtime
+ * Component-layer builder, so there is one source of truth (the nested value
+ * trees) instead of two independently-authored literals.
  */
 import { flattenComponentTokenTree } from '../theme/component-overrides';
 import {
@@ -22,11 +22,9 @@ import {
   HA_SELECT_TOKENS,
 } from '../theme/component-token-shapes';
 import type { ThemeCssVariables } from '../theme/theme.tokens';
-import {
-  HA_BUTTON_TOKEN_DEFAULT_VALUES,
-  HA_INPUT_TOKEN_DEFAULT_VALUES,
-  HA_SELECT_TOKEN_DEFAULT_VALUES,
-} from './component-default-values.tokens';
+import { HA_BUTTON_TOKEN_DEFAULT_VALUES } from '../button/button-default-values.tokens';
+import { HA_INPUT_TOKEN_DEFAULT_VALUES } from '../input-text/input-text-default-values.tokens';
+import { HA_SELECT_TOKEN_DEFAULT_VALUES } from '../select/select-default-values.tokens';
 
 function buildComponentTokenDefaults(): ThemeCssVariables {
   const result: ThemeCssVariables = {};

@@ -31,7 +31,7 @@ Foundation              Semantic                  Component
    directly (hard rule, `SKILL.md:34`).
 
 Scale naming for spacing, gap, radius, font-size, and icon-size is always
-`xs | sm | md | lg | xl` — never numeric-indexed (`-1`, `-2`, `-4`). This is a
+`sm | md | lg ` — never numeric-indexed (`-1`, `-2`, `-4`). This is a
 non-negotiable convention shared with the existing component-token vocabulary
 (`button.tokens.ts`, `input-text.tokens.ts`).
 

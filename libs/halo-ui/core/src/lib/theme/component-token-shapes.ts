@@ -36,11 +36,11 @@
  * into `theme.tokens.ts`.
  */
 
-export { HA_BUTTON_TOKENS } from './button-token-shapes';
-export type { HaButtonTokens } from './button-token-shapes';
+export { HA_BUTTON_TOKENS } from '../button/button-token-shapes';
+export type { HaButtonTokens } from '../button/button-token-shapes';
 
-export { HA_INPUT_TEXT_TOKENS } from './input-text-token-shapes';
-export type { HaInputTextTokens } from './input-text-token-shapes';
+export { HA_INPUT_TEXT_TOKENS } from '../input-text/input-text-token-shapes';
+export type { HaInputTextTokens } from '../input-text/input-text-token-shapes';
 
-export { HA_SELECT_TOKENS } from './select-token-shapes';
-export type { HaSelectTokens } from './select-token-shapes';
+export { HA_SELECT_TOKENS } from '../select/select-token-shapes';
+export type { HaSelectTokens } from '../select/select-token-shapes';
