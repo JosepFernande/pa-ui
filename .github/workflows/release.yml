@@ -54,7 +54,11 @@ jobs:
           HUSKY: '0'
 
       - name: Build
-        run: npx nx run-many -t build
+        # Single publishable project post-consolidation (SDD change
+        # consolidate-halo-ui-single-package): only halo-ui needs a
+        # production build for a release; run-many -t build would also
+        # rebuild showcase, which has no release outcome.
+        run: npx nx build halo-ui --configuration=production
 
       - name: Check for changesets
         id: changesets
@@ -139,62 +143,50 @@ jobs:
         if: steps.changesets.outputs.has_changesets == 'false'
         run: |
           # Publish the real build output: the installable package (fesm
-          # bundles + .d.ts + a package.json with proper entry points) only
-          # exists under dist/{projectRoot}, produced by the "Build" step
-          # above. Publishing the libs/* sources directly would ship a package
-          # with no main/module/exports/typings. Each libs/*/package.json is
-          # used purely as the source of truth for name + version, already
-          # bumped by the prior `changeset version` run.
+          # bundles + per-entry-point .d.ts + a generated package.json with
+          # a proper `exports` map) only exists under dist/libs/halo-ui,
+          # produced by the "Build" step above. Publishing libs/halo-ui
+          # (source) directly would ship a package with no
+          # main/module/exports/typings (the #85 regression). Post-
+          # consolidation (SDD change consolidate-halo-ui-single-package)
+          # there is exactly one publishable package, so this is a single
+          # straight-line step — no dependency-ordered loop needed anymore.
+          # libs/halo-ui/package.json is used purely as the source of truth
+          # for name + version, already bumped by the prior
+          # `changeset version` run.
           #
-          # No --tag is passed: none of these packages has had a real
-          # non-prerelease release, so npm tags them `latest` by default. The
-          # "Point the alpha dist-tag" step below moves `alpha` forward
-          # afterward.
-          # Explicit dependency-ordered list (NOT a libs/*/package.json glob):
-          # core has no internal deps, button/input-text/select each depend on
-          # core, and the halo-ui umbrella depends on all four. A
-          # libs/*/package.json glob sorts alphabetically as button, core,
-          # halo-ui, input-text, select — publishing the umbrella BEFORE
-          # input-text and select even though it depends on them, leaving it
-          # briefly uninstallable. The explicit list guarantees every
-          # dependency is already on the registry before its dependents
-          # publish.
+          # No --tag is passed: npm tags a first publish `latest` by
+          # default. The "Point the alpha dist-tag" step below moves `alpha`
+          # forward afterward, only relevant if the repo re-enters
+          # changesets prerelease mode.
           : > /tmp/newly_published.txt
-          published=false
-          for lib_dir in libs/core libs/button libs/input-text libs/select libs/halo-ui; do
-            src_pkg="$lib_dir/package.json"
-            dist_dir="dist/$lib_dir"
-            [ -f "$dist_dir/package.json" ] || continue
+          name="$(node -p "require('./libs/halo-ui/package.json').name")"
+          version="$(node -p "require('./libs/halo-ui/package.json').version")"
 
-            name="$(node -p "require('./$src_pkg').name")"
-            version="$(node -p "require('./$src_pkg').version")"
-
-            if npm view "${name}@${version}" version >/dev/null 2>&1; then
-              echo "skip: ${name}@${version} already on npm"
-              continue
-            fi
-
-            npm publish "$dist_dir" --access public
+          if npm view "${name}@${version}" version >/dev/null 2>&1; then
+            echo "skip: ${name}@${version} already on npm"
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          else
+            npm publish "dist/libs/halo-ui" --access public
             git tag -a "${name}@${version}" -m "${name}@${version}"
             git push origin "${name}@${version}"
 
             echo "${name}@${version}" >> /tmp/newly_published.txt
-            published=true
-          done
-          echo "published=$published" >> "$GITHUB_OUTPUT"
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Point the alpha dist-tag at what just published
         if: steps.publish.outputs.published == 'true' && hashFiles('.changeset/pre.json') != ''
         run: |
-          # The publish loop above records every newly published
-          # <name>@<version> in /tmp/newly_published.txt, one per line.
-          # Because none of these packages has a prior non-prerelease
-          # release, npm tagged them `latest` by default and `alpha` would go
-          # stale. This step reads that list and explicitly moves the
-          # prerelease dist-tag (alpha, from .changeset/pre.json) forward for
-          # each one.
+          # The publish step above records the newly published
+          # <name>@<version> in /tmp/newly_published.txt (one line, single
+          # package post-consolidation). If a first publish under prerelease
+          # mode happens, npm tags it `latest` by default and `alpha` would
+          # go stale. This step reads that line and explicitly moves the
+          # prerelease dist-tag (alpha, from .changeset/pre.json) forward.
+          # Only relevant if the repo re-enters changesets prerelease mode.
           alpha_tag="$(jq -r '.tag' .changeset/pre.json)"
           while IFS= read -r pkg_tag; do
             [ -n "$pkg_tag" ] || continue
@@ -209,24 +201,14 @@ jobs:
         run: |
           # The run-level tag is versioned instead of stamped with date+sha
           # (issue #92), so the GitHub Release identifies the published semver
-          # at a glance. All packages in a changesets release usually share one
-          # version; when they don't, the first published package's version is
-          # used for the tag and the body below still lists every
-          # package+version precisely. The per-package <name>@<version> tags
-          # created by the publish step are left untouched.
-          versions="$(while IFS= read -r pkg_tag; do
-            [ -n "$pkg_tag" ] || continue
-            echo "${pkg_tag##*@}"
-          done < /tmp/newly_published.txt | sort -u)"
-          count="$(printf '%s\n' "$versions" | sed '/^$/d' | wc -l | tr -d ' ')"
-          if [ "$count" -eq 1 ]; then
-            version="$versions"
-          else
-            version="$(sed '/^$/d' /tmp/newly_published.txt | head -n1)"
-            version="${version##*@}"
-          fi
+          # at a glance. Single publishable package post-consolidation, so the
+          # version is read directly — no multi-package dedup needed anymore.
+          # The <name>@<version> tag created by the publish step is left
+          # untouched.
+          name="$(node -p "require('./libs/halo-ui/package.json').name")"
+          version="$(node -p "require('./libs/halo-ui/package.json').version")"
           if [ -z "$version" ]; then
-            echo "::error::could not derive the published version from /tmp/newly_published.txt"
+            echo "::error::could not derive the published version from libs/halo-ui/package.json"
             exit 1
           fi
 
@@ -261,24 +243,20 @@ jobs:
             echo
           } > /tmp/release-body.md
 
-          for src_pkg in libs/*/package.json; do
-            lib_dir="$(dirname "$src_pkg")"
-            name="$(node -p "require('./$src_pkg').name")"
-            pkg_version="$(node -p "require('./$src_pkg').version")"
-            grep -qx "${name}@${pkg_version}" /tmp/newly_published.txt || continue
-            changelog="$lib_dir/CHANGELOG.md"
-            [ -f "$changelog" ] || continue
-
-            echo "### ${name} ${pkg_version}" >> /tmp/release-body.md
+          # Single publishable package post-consolidation: one CHANGELOG,
+          # read directly instead of looping over libs/*/package.json.
+          changelog="libs/halo-ui/CHANGELOG.md"
+          if [ -f "$changelog" ] && grep -qx "${name}@${version}" /tmp/newly_published.txt; then
+            echo "### ${name} ${version}" >> /tmp/release-body.md
             echo >> /tmp/release-body.md
-            awk -v v="## ${pkg_version}" '
+            awk -v v="## ${version}" '
               $0 == v { found = 1; print; next }
               found && $0 ~ /^## / { exit }
               found { print }
             ' "$changelog" >> /tmp/release-body.md
             echo "- [Full CHANGELOG](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/blob/${GITHUB_SHA}/${changelog})" >> /tmp/release-body.md
             echo >> /tmp/release-body.md
-          done
+          fi
 
       - name: Create GitHub Release
         if: steps.publish.outputs.published == 'true'

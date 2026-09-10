@@ -1,45 +1,76 @@
 // Node built-in test runner: `node --test tools/release/validate-packages.test.mjs`
 //
-// Covers the S3 Threat Matrix item (Git repository selection / Push state):
-// the "Publish to npm from dist" step in release.yml must keep creating an
-// annotated tag with `git tag -a "${name}@${version}"` and pushing it with
-// `git push origin`, in the implicit checkout cwd (no `-C`/relative-path
-// selection, no `--force`/`+refs`). Extracted as a pure function so it is
-// testable without importing (and running) the whole CLI script.
+// Covers two Threat Matrix items and the single-package topology contract
+// introduced by the halo-ui consolidation (SDD change
+// consolidate-halo-ui-single-package, Phase 3 / PR3):
+//
+//   1. Git repository selection / Push state (#139 S3): the "Publish to npm
+//      from dist" step in release.yml must keep creating an annotated tag
+//      with `git tag -a "${name}@${version}"` and pushing it with
+//      `git push origin`, in the implicit checkout cwd (no `-C`/relative-path
+//      selection, no `--force`/`+refs`).
+//   2. Publish-target invariant (replaces the old 5-package publish-order
+//      invariant, which no longer applies now that there is exactly one
+//      publishable lib): the publish step must still target
+//      `dist/libs/halo-ui`, never `libs/halo-ui` (source) or
+//      `changeset publish` (the #85 regression).
+//   3. Single-package entry-point resolution: the dist package.json's
+//      `exports` map must expose all 5 required subpaths (`.`, `./core`,
+//      `./button`, `./input-text`, `./select`), each with both a runtime and
+//      a types entry.
+//   4. No runtime cross-package dependency: the dist package.json must
+//      declare zero `@halolib-ui/*` entries in `dependencies` or
+//      `peerDependencies`.
+//
+// All four are extracted as pure functions so they are testable without
+// importing (and running) the whole CLI script or touching the filesystem.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import {
   extractStep,
   checkTagPushInvariant,
-  extractPublishOrder,
-  checkPublishOrderInvariant,
+  checkDistPublishTargetInvariant,
+  checkExportsShape,
+  checkNoCrossPackageDeps,
 } from './validate-packages.mjs';
+
+const scriptPath = fileURLToPath(new URL('./validate-packages.mjs', import.meta.url));
 
 const PUBLISH_STEP_OK = `- name: Publish to npm from dist
   id: publish
   if: steps.changesets.outputs.has_changesets == 'false'
   run: |
-    for src_pkg in libs/*/package.json; do
-      lib_dir="$(dirname "$src_pkg")"
-      dist_dir="dist/$lib_dir"
-      [ -f "$dist_dir/package.json" ] || continue
-      name="$(node -p "require('./$src_pkg').name")"
-      version="$(node -p "require('./$src_pkg').version")"
-      npm publish "$dist_dir" --access public
+    name="$(node -p "require('./libs/halo-ui/package.json').name")"
+    version="$(node -p "require('./libs/halo-ui/package.json').version")"
+
+    if npm view "\${name}@\${version}" version >/dev/null 2>&1; then
+      echo "skip: \${name}@\${version} already on npm"
+      echo "published=false" >> "$GITHUB_OUTPUT"
+    else
+      npm publish "dist/libs/halo-ui" --access public
       git tag -a "\${name}@\${version}" -m "\${name}@\${version}"
       git push origin "\${name}@\${version}"
-    done
+      echo "\${name}@\${version}" > /tmp/newly_published.txt
+      echo "published=true" >> "$GITHUB_OUTPUT"
+    fi
 - name: Next step
   run: echo done
 `;
 
 test('extractStep pulls exactly the named step block', () => {
   const step = extractStep(PUBLISH_STEP_OK, 'Publish to npm from dist');
-  assert.match(step, /npm publish "\$dist_dir"/);
+  assert.match(step, /npm publish "dist\/libs\/halo-ui"/);
   assert.doesNotMatch(step, /Next step/);
 });
 
-test('checkTagPushInvariant passes when the step still tags and pushes each published package', () => {
+// ----------------------------------------------------------------------
+// Git tag/push invariant (#139 S3) — unchanged by the single-package
+// consolidation, still the same shape check.
+// ----------------------------------------------------------------------
+
+test('checkTagPushInvariant passes when the step still tags and pushes the published package', () => {
   const step = extractStep(PUBLISH_STEP_OK, 'Publish to npm from dist');
   const result = checkTagPushInvariant(step);
   assert.equal(result.ok, true);
@@ -77,58 +108,160 @@ test('checkTagPushInvariant fails on a force-push or refspec escape hatch', () =
 });
 
 // ----------------------------------------------------------------------
-// Publish-order invariant (#139 S4 task 4.9/4.12 — the umbrella-publishes-
-// before-its-deps risk: a `libs/*/package.json` glob sorts alphabetically
-// as button, core, halo-ui, input-text, select, publishing the umbrella
-// before input-text/select even though it depends on them).
+// Publish-target invariant (replaces the 5-package publish-order invariant —
+// with exactly one publishable lib there is nothing left to order).
 // ----------------------------------------------------------------------
 
-const FIVE_LIBS = ['core', 'button', 'input-text', 'select', 'halo-ui'];
-
-test('extractPublishOrder reads the explicit `for lib_dir in ...` list in dependency order', () => {
-  const order = extractPublishOrder(
-    PUBLISH_STEP_OK.replace(
-      'for src_pkg in libs/*/package.json; do\n      lib_dir="$(dirname "$src_pkg")"',
-      'for lib_dir in libs/core libs/button libs/input-text libs/select libs/halo-ui; do\n      src_pkg="$lib_dir/package.json"',
-    ),
-  );
-  assert.deepEqual(order, ['core', 'button', 'input-text', 'select', 'halo-ui']);
-});
-
-test('checkPublishOrderInvariant passes for the explicit dependency-ordered list covering exactly the 5 publishable libs', () => {
-  const result = checkPublishOrderInvariant(
-    ['core', 'button', 'input-text', 'select', 'halo-ui'],
-    FIVE_LIBS,
-  );
+test('checkDistPublishTargetInvariant passes when the step publishes dist/libs/halo-ui', () => {
+  const step = extractStep(PUBLISH_STEP_OK, 'Publish to npm from dist');
+  const result = checkDistPublishTargetInvariant(step);
   assert.equal(result.ok, true);
 });
 
-test('checkPublishOrderInvariant fails when the step reverts to a libs/*/package.json glob', () => {
-  const result = checkPublishOrderInvariant([], FIVE_LIBS);
-  assert.equal(result.ok, false);
-  assert.match(result.reason, /explicit|glob/);
-});
-
-test('checkPublishOrderInvariant fails when a publishable lib is missing from the list', () => {
-  const result = checkPublishOrderInvariant(['core', 'button', 'input-text', 'halo-ui'], FIVE_LIBS);
-  assert.equal(result.ok, false);
-  assert.match(result.reason, /select/);
-});
-
-test('checkPublishOrderInvariant fails when the umbrella is listed before one of its dependencies', () => {
-  const result = checkPublishOrderInvariant(
-    ['core', 'button', 'halo-ui', 'input-text', 'select'],
-    FIVE_LIBS,
+test('checkDistPublishTargetInvariant fails when the step reverts to publishing the source lib', () => {
+  const stepOnSource = PUBLISH_STEP_OK.replace(
+    'npm publish "dist/libs/halo-ui" --access public',
+    'npm publish "libs/halo-ui" --access public',
   );
+  const result = checkDistPublishTargetInvariant(stepOnSource);
   assert.equal(result.ok, false);
-  assert.match(result.reason, /halo-ui|order/);
+  assert.match(result.reason, /dist\/libs\/halo-ui/);
 });
 
-test('checkPublishOrderInvariant fails when core is listed after a dependent', () => {
-  const result = checkPublishOrderInvariant(
-    ['button', 'core', 'input-text', 'select', 'halo-ui'],
-    FIVE_LIBS,
+test('checkDistPublishTargetInvariant fails when the step reverts to `changeset publish`', () => {
+  const stepOnChangesetPublish = PUBLISH_STEP_OK.replace(
+    'npm publish "dist/libs/halo-ui" --access public',
+    'npx changeset publish',
   );
+  const result = checkDistPublishTargetInvariant(stepOnChangesetPublish);
   assert.equal(result.ok, false);
-  assert.match(result.reason, /core|order/);
+  assert.match(result.reason, /dist\/libs\/halo-ui/);
+});
+
+test('checkDistPublishTargetInvariant fails when the step reverts to the old 5-package $lib_dir loop', () => {
+  const stepOnOldLoop = PUBLISH_STEP_OK.replace(
+    'npm publish "dist/libs/halo-ui" --access public',
+    'npm publish "$dist_dir" --access public',
+  );
+  const result = checkDistPublishTargetInvariant(stepOnOldLoop);
+  assert.equal(result.ok, false);
+});
+
+// ----------------------------------------------------------------------
+// Single-package entry-point resolution (spec: "Import Resolution as
+// Installed npm Package" — root + 4 subpaths must all resolve with types).
+// ----------------------------------------------------------------------
+
+const REQUIRED_ENTRY_POINTS = ['.', './core', './button', './input-text', './select'];
+
+const FULL_EXPORTS_MAP = {
+  './package.json': { default: './package.json' },
+  '.': { default: './fesm2022/halolib-ui-angular.mjs', types: './index.d.ts' },
+  './core': { default: './fesm2022/halolib-ui-angular-core.mjs', types: './core/index.d.ts' },
+  './button': { default: './fesm2022/halolib-ui-angular-button.mjs', types: './button/index.d.ts' },
+  './input-text': {
+    default: './fesm2022/halolib-ui-angular-input-text.mjs',
+    types: './input-text/index.d.ts',
+  },
+  './select': { default: './fesm2022/halolib-ui-angular-select.mjs', types: './select/index.d.ts' },
+};
+
+test('checkExportsShape passes when all 5 required entry points have a runtime + types entry', () => {
+  const result = checkExportsShape(FULL_EXPORTS_MAP, REQUIRED_ENTRY_POINTS);
+  assert.equal(result.ok, true);
+  assert.deepEqual(result.missing, []);
+  assert.deepEqual(result.missingRuntime, []);
+  assert.deepEqual(result.missingTypes, []);
+});
+
+test('checkExportsShape flags an entirely missing subpath (e.g. ./select dropped)', () => {
+  const withoutSelect = { ...FULL_EXPORTS_MAP };
+  delete withoutSelect['./select'];
+  const result = checkExportsShape(withoutSelect, REQUIRED_ENTRY_POINTS);
+  assert.equal(result.ok, false);
+  assert.deepEqual(result.missing, ['./select']);
+});
+
+test('checkExportsShape flags a subpath with no runtime ("default") entry', () => {
+  const brokenMap = {
+    ...FULL_EXPORTS_MAP,
+    './core': { types: './core/index.d.ts' },
+  };
+  const result = checkExportsShape(brokenMap, REQUIRED_ENTRY_POINTS);
+  assert.equal(result.ok, false);
+  assert.deepEqual(result.missingRuntime, ['./core']);
+  assert.deepEqual(result.missingTypes, []);
+});
+
+test('checkExportsShape flags a subpath with no "types" entry', () => {
+  const brokenMap = {
+    ...FULL_EXPORTS_MAP,
+    './button': { default: './fesm2022/halolib-ui-angular-button.mjs' },
+  };
+  const result = checkExportsShape(brokenMap, REQUIRED_ENTRY_POINTS);
+  assert.equal(result.ok, false);
+  assert.deepEqual(result.missingTypes, ['./button']);
+  assert.deepEqual(result.missingRuntime, []);
+});
+
+// ----------------------------------------------------------------------
+// No runtime cross-package dependency (spec: "No Runtime Cross-Package
+// Dependencies").
+// ----------------------------------------------------------------------
+
+test('checkNoCrossPackageDeps passes for a dist package.json with only tslib as a dependency', () => {
+  const result = checkNoCrossPackageDeps({ dependencies: { tslib: '^2.3.0' } });
+  assert.equal(result.ok, true);
+  assert.deepEqual(result.offenders, []);
+});
+
+test('checkNoCrossPackageDeps fails when a stale @halolib-ui/* dependency is present', () => {
+  const result = checkNoCrossPackageDeps({
+    dependencies: { tslib: '^2.3.0', '@halolib-ui/core': '19.0.0' },
+  });
+  assert.equal(result.ok, false);
+  assert.deepEqual(result.offenders, ['@halolib-ui/core']);
+});
+
+test('checkNoCrossPackageDeps fails when a stale @halolib-ui/* peerDependency is present', () => {
+  const result = checkNoCrossPackageDeps({
+    peerDependencies: { '@angular/core': '^19.2.0', '@halolib-ui/angular': '19.0.0' },
+  });
+  assert.equal(result.ok, false);
+  assert.deepEqual(result.offenders, ['@halolib-ui/angular']);
+});
+
+// ----------------------------------------------------------------------
+// Absence check: the 5-package publish-order invariant must be gone, not
+// just unused — its presence would signal the rewrite silently kept dead
+// multi-package logic instead of actually dropping it (spec: "Requirement:
+// Release Tooling Validates Single-Package Topology" / scenario
+// "checkPublishOrderInvariant removed").
+// ----------------------------------------------------------------------
+
+test('extractPublishOrder / checkPublishOrderInvariant are no longer exported — publish-order logic was removed, not just unused', async () => {
+  const mod = await import('./validate-packages.mjs');
+  assert.equal(mod.extractPublishOrder, undefined);
+  assert.equal(mod.checkPublishOrderInvariant, undefined);
+});
+
+// ----------------------------------------------------------------------
+// Cross-platform CLI entry-point guard. Regression test for a bug found
+// while validating Phase 3: `import.meta.url === \`file://${process.argv[1]}\``
+// never matches on Windows (process.argv[1] uses backslashes; import.meta.url
+// is always a normalized file:/// URL), so `node
+// tools/release/validate-packages.mjs` silently ran zero checks and always
+// exited 0 there — a real subprocess spawn is the only way to prove the
+// guard actually fires, a pure unit test of the exported functions cannot
+// catch this class of bug.
+// ----------------------------------------------------------------------
+
+test('running the script directly (as CI/a developer would) actually executes its checks and prints output', () => {
+  const result = spawnSync(process.execPath, [scriptPath], { encoding: 'utf8' });
+  // Whether validation passes or fails depends on repo state (a real dist
+  // build, an up-to-date release.yml) — that is exercised separately by
+  // `npm run validate:packages` in CI/local integration runs. What this
+  // regression test guarantees on every platform is that the entry-point
+  // guard actually ran the CLI body instead of silently no-op'ing.
+  assert.match(result.stdout, /Validating publishable packages before publish/);
 });

@@ -157,7 +157,7 @@ to drift.
 Bootstrap example:
 
 ```typescript
-import { provideHaTheme } from '@halolib-ui/core';
+import { provideHaTheme } from '@halolib-ui/angular/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -182,7 +182,7 @@ Full setup is `provideHaTheme()` alone — **no CSS import required**:
 
 ```typescript
 // app.config.ts
-import { provideHaTheme } from '@halolib-ui/core';
+import { provideHaTheme } from '@halolib-ui/angular/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideHaTheme()],
@@ -196,13 +196,13 @@ Foundation, Component) inline on `documentElement` at bootstrap, on both the
 server and the browser, so there is no FOUC gap and no load-order coupling to
 manage.
 
-`@halolib-ui/core` still declares `sideEffects: false` — it ships zero global
-stylesheets and zero CSS assets. The runtime write happens once per bootstrap
-(and once per explicit `applyTheme`/`overrideColor`/`reset` call), computing
-~180+ custom properties via `deriveTokens()` plus the two full builders
-described above; there is no memoization for the common no-override case, so
-this is a real (small, one-time) per-request cost on SSR, not a free static
-include.
+`@halolib-ui/angular/core` still declares `sideEffects: false` — it ships zero
+global stylesheets and zero CSS assets. The runtime write happens once per
+bootstrap (and once per explicit `applyTheme`/`overrideColor`/`reset` call),
+computing ~180+ custom properties via `deriveTokens()` plus the two full
+builders described above; there is no memoization for the common no-override
+case, so this is a real (small, one-time) per-request cost on SSR, not a free
+static include.
 
 ## Fonts and Icons Are the Consumer's Responsibility
 
@@ -210,7 +210,7 @@ The Theme Engine writes `--font-family: 'Montserrat', -apple-system, ...` and
 `--icon-size-*` by name/size only. It does **not** ship a `@font-face`
 declaration, a Montserrat font file, a Flaticon icon font, or any CDN `@import`.
 Loading the actual Montserrat font and Flaticon icon assets is the consuming
-application's responsibility. This keeps `@halolib-ui/core` free of a
+application's responsibility. This keeps `@halolib-ui/angular/core` free of a
 third-party asset dependency and keeps `sideEffects: false` honest.
 
 ## Overriding Tokens
@@ -247,7 +247,7 @@ permanent decision**.
    memoization for the no-override case is planned unless it becomes a measured
    problem.
 3. **Montserrat and Flaticon are the consuming app's responsibility**, not
-   self-hosted or bundled by `@halolib-ui/core`. No alternative delivery
+   self-hosted or bundled by `@halolib-ui/angular/core`. No alternative delivery
    (self-hosted font file, CDN import) has been evaluated or approved.
 4. **Button `sm`/`lg` height, padding, and gap values are assistant-authored
    placeholders**, not Figma-confirmed, pending designer validation. Only `md`

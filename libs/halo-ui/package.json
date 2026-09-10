@@ -1,6 +1,6 @@
 {
   "name": "@halolib-ui/angular",
-  "version": "19.0.1",
+  "version": "19.0.0",
   "license": "MIT",
   "description": "Accessible, token-driven Angular 19 UI component library — umbrella package",
   "keywords": [

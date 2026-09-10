@@ -22,7 +22,7 @@ npm install @halolib-ui/angular @angular/cdk
 ```typescript
 // app.config.ts
 import { ApplicationConfig } from '@angular/core';
-import { provideHaTheme } from '@halolib-ui/core';
+import { provideHaTheme } from '@halolib-ui/angular/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -80,7 +80,7 @@ personalización visual.
 ### Tema por defecto (sin configuración)
 
 ```typescript
-import { provideHaTheme } from '@halolib-ui/core';
+import { provideHaTheme } from '@halolib-ui/angular/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideHaTheme()],
@@ -204,15 +204,20 @@ Todo componente de halo-ui está construido con la accesibilidad como prioridad:
 ```
 halo-ui/
 ├── libs/
-│   ├── button/          # @halolib-ui/button — componente HaButton
-│   ├── input-text/      # @halolib-ui/input-text — componente HaInputText
-│   ├── select/          # @halolib-ui/select — componente HaSelect
-│   ├── core/            # @halolib-ui/core — Theme Engine (provideHaTheme) + capa Foundation
-│   └── halo-ui/         # @halolib-ui/angular — paquete umbrella (re-exporta el resto)
+│   └── halo-ui/          # único paquete publicable — @halolib-ui/angular
+│       ├── src/          # barrel raíz (re-exporta los 4 entry points)
+│       ├── core/         # @halolib-ui/angular/core — Theme Engine (provideHaTheme) + capa Foundation
+│       ├── button/       # @halolib-ui/angular/button — componente HaButton
+│       ├── input-text/   # @halolib-ui/angular/input-text — componente HaInputText
+│       └── select/       # @halolib-ui/angular/select — componente HaSelect
 ├── apps/
 │   └── showcase/        # App de demo con ejemplos en vivo
 └── skills/              # Skills de agentes de IA para hacer cumplir la arquitectura
 ```
+
+`libs/halo-ui` es el único proyecto Nx publicable: un solo paquete npm
+(`@halolib-ui/angular`) construido con ng-packagr, con `core`/`button`/
+`input-text`/`select` como entry points secundarios (no paquetes npm separados).
 
 > Ver [Componentes](./docs/components.md) para el catálogo completo, cada uno
 > enlazado a su carpeta en `libs/`.

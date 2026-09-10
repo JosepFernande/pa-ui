@@ -2,9 +2,9 @@
 
 `halo-ui` uses `apps/showcase` — a real Angular application — as the local
 playground for every published component. There is no separate preview tool: the
-showcase app imports each library from its public entry point
-(`@halolib-ui/button`, `@halolib-ui/input-text`, `@halolib-ui/select`, ...)
-exactly as a consumer would.
+showcase app imports each component from its public subpath
+(`@halolib-ui/angular/button`, `@halolib-ui/angular/input-text`,
+`@halolib-ui/angular/select`, ...) exactly as a consumer would.
 
 ## Running the showcase locally
 
