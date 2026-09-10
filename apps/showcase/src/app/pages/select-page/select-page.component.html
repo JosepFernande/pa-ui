@@ -1,59 +1,626 @@
-<header class="select-page__header">
-  <h1 class="select-page__title">Select</h1>
-  <p class="select-page__description">
-    Combobox accesible e integrado con Angular Forms, con soporte para tamaños, estados y los eventos
-    <code>valueChange</code>, <code>opened</code> y <code>closed</code>.
-  </p>
-</header>
+<nav aria-label="Breadcrumb" class="mb-6 flex items-center gap-2 text-sm text-zinc-400">
+  <span>Documentación</span>
+  <span class="text-zinc-300">/</span>
+  <span>Componentes</span>
+  <span class="text-zinc-300">/</span>
+  <span class="font-medium text-zinc-700">Select</span>
+</nav>
 
-<div class="select-page__docs">
-  <app-code-block label="Instalación" language="bash" code="npm install &#64;halo-ui/angular &#64;angular/cdk" />
-  <app-code-block
-    label="Importación"
-    language="typescript"
-    code="import { HaSelect } from '&#64;halo-ui/angular';
-import type { HaSelectOption } from '&#64;halo-ui/angular';"
-  />
-  <app-code-block
-    label="Uso básico"
-    language="html"
-    code='&lt;ha-select
+<div class="mb-10 border-b border-surface-border pb-6">
+  <div class="mb-3 flex flex-wrap items-center gap-3">
+    <code class="rounded-lg bg-zinc-900 px-3 py-1.5 font-mono text-lg font-bold text-white sm:text-xl"
+      >&lt;ha-select&gt;</code
+    >
+    <span class="rounded-full bg-green-50 px-2.5 py-1 text-xs font-semibold text-green-700">Estable</span>
+    <span class="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">v19.0.1</span>
+    <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700">Signals Ready</span>
+    <span class="rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-semibold text-zinc-600">Angular 19.2+</span>
+  </div>
+  <p class="max-w-3xl text-[15px] font-normal leading-relaxed text-zinc-600 sm:text-base">
+    Combobox accesible y token-driven, a diferencia de
+    <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">button[ha-button]</code> e
+    <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">input[ha-input-text]</code>
+    renderiza su propio trigger y un panel superpuesto vía Angular CDK. Expone tamaños, estado deshabilitado/solo
+    lectura, un estado de error 100% automático desde Angular Forms, y eventos reales de valor y apertura/cierre.
+  </p>
+  <div class="mt-4 flex items-center gap-5 text-sm">
+    <a href="#playground" class="inline-flex items-center gap-1.5 font-semibold text-brand-700 hover:text-brand-500">
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M8 5v14l11-7L8 5Z" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      Playground
+    </a>
+    <a
+      href="#api-reference"
+      class="inline-flex items-center gap-1.5 font-semibold text-brand-700 hover:text-brand-500"
+    >
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      API Docs
+    </a>
+  </div>
+</div>
+
+<!-- SECTION 1: Interactive Playground -->
+<section id="playground" class="mb-14 scroll-mt-6">
+  <h2 class="mb-6 text-2xl font-bold text-zinc-900">Playground interactivo</h2>
+
+  <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
+    <div class="rounded-2xl border border-surface-border bg-white shadow-sm">
+      <div class="flex items-center gap-1 border-b border-surface-border p-2">
+        <button
+          type="button"
+          class="rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors"
+          [class]="activeTab() === 'preview' ? 'bg-surface-base text-brand-700' : 'text-zinc-500 hover:text-zinc-700'"
+          (click)="activeTab.set('preview')"
+        >
+          Vista previa
+        </button>
+        <button
+          type="button"
+          class="rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors"
+          [class]="activeTab() === 'code' ? 'bg-surface-base text-brand-700' : 'text-zinc-500 hover:text-zinc-700'"
+          (click)="activeTab.set('code')"
+        >
+          Código
+        </button>
+      </div>
+
+      <div class="p-8">
+        @if (activeTab() === 'preview') {
+          <div class="flex min-h-32 flex-col items-center justify-center gap-6 rounded-xl bg-surface-base p-6">
+            <ha-select
+              [options]="fruitOptions"
+              [size]="selectedSize()"
+              [disabled]="withDisabled()"
+              [readonly]="withReadonly()"
+              placeholder="Elegí una fruta"
+              class="w-full max-w-sm"
+              (valueChange)="onValueChange($event)"
+              (opened)="onOpened()"
+              (closed)="onClosed()"
+            />
+
+            <div class="grid w-full max-w-sm grid-cols-2 gap-3 rounded-xl border border-surface-border bg-white p-4">
+              <div>
+                <span class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-zinc-400"
+                  >Valor seleccionado</span
+                >
+                <span class="font-mono text-xs font-semibold text-zinc-800">{{ selectedValue() ?? '—' }}</span>
+              </div>
+              <div>
+                <span class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-zinc-400"
+                  >Panel abierto</span
+                >
+                <span class="font-mono text-xs font-semibold text-zinc-800">{{ panelOpen() ? 'sí' : 'no' }}</span>
+              </div>
+            </div>
+          </div>
+        } @else {
+          <app-code-block label="Resultado" language="html" [code]="generatedCode()" />
+        }
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-5 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <div>
+        <span class="mb-2 block text-[11px] font-bold uppercase tracking-wider text-zinc-500">Size</span>
+        <div class="flex flex-wrap gap-2">
+          @for (s of sizes; track s) {
+            <button
+              type="button"
+              class="rounded-full border px-3 py-1.5 text-xs font-semibold uppercase transition-all"
+              [class]="
+                selectedSize() === s
+                  ? 'border-brand-700 bg-brand-700 text-white'
+                  : 'border-surface-border bg-white text-zinc-600 hover:border-brand-600/40'
+              "
+              (click)="selectedSize.set(s)"
+            >
+              {{ s }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2 border-t border-surface-border pt-4">
+        <label class="flex items-center gap-2 text-xs font-semibold text-zinc-700">
+          <input
+            type="checkbox"
+            class="h-4 w-4 rounded border-surface-borderstrong text-brand-700 focus:ring-brand-700"
+            [checked]="withDisabled()"
+            (change)="onDisabledToggle($event)"
+          />
+          disabled
+        </label>
+        <label class="flex items-center gap-2 text-xs font-semibold text-zinc-700">
+          <input
+            type="checkbox"
+            class="h-4 w-4 rounded border-surface-borderstrong text-brand-700 focus:ring-brand-700"
+            [checked]="withReadonly()"
+            (change)="onReadonlyToggle($event)"
+          />
+          readonly
+        </label>
+      </div>
+
+      <p class="border-t border-surface-border pt-4 text-[11px] leading-relaxed text-zinc-500">
+        No hay toggle de <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">multiple</code>,
+        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">search</code> ni
+        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">groups</code> porque
+        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">HaSelect</code> no los expone — es
+        single-select, sin filtro interno y sin agrupación de opciones.
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-6 rounded-2xl border border-surface-border bg-white p-6 shadow-sm">
+    <h3 class="mb-1 text-sm font-bold text-zinc-900">Validación real con Angular Forms</h3>
+    <p class="mb-5 max-w-2xl text-xs leading-relaxed text-zinc-600">
+      El único estado semántico real de <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
+        >HaSelect</code
+      >
+      es el de error, y es 100% automático: se calcula a partir de <code
+        class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
+        >invalid &amp;&amp; touched</code
+      >
+      del <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">FormControl</code> conectado — no
+      existe forma de setearlo a mano. Abrí el panel y cerralo sin elegir nada (Escape, o click afuera) para verlo.
+    </p>
+    <div class="max-w-sm">
+      <span class="mb-1.5 block text-[13px] font-semibold text-zinc-700">Fruta preferida</span>
+      <ha-select
+        [options]="fruitOptions"
+        placeholder="Elegí una fruta"
+        [ariaLabel]="'Fruta preferida'"
+        [ariaDescribedBy]="'plan-demo-hint'"
+        [formControl]="planControl"
+        class="w-full"
+      />
+      @if (planControl.invalid && planControl.touched) {
+        <p id="plan-demo-hint" class="mt-1.5 text-xs" style="color: var(--ha-select-error-color)">
+          Elegí una opción para continuar.
+        </p>
+      } @else {
+        <p id="plan-demo-hint" class="mt-1.5 text-xs text-zinc-500">
+          Usamos esta selección para personalizar tu experiencia.
+        </p>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2: Anatomía real -->
+<section class="mb-14">
+  <h2 class="mb-6 text-2xl font-bold text-zinc-900">Anatomía real</h2>
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div class="rounded-2xl border border-surface-border bg-white p-6 shadow-sm">
+      <h3 class="mb-2 text-sm font-bold text-zinc-900">Un elemento propio, no un atributo</h3>
+      <p class="text-xs leading-relaxed text-zinc-600">
+        A diferencia de <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
+          >button[ha-button]</code
+        >
+        e <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">input[ha-input-text]</code>,
+        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">ha-select</code> es un custom
+        element con template propio: un
+        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">&lt;button role="combobox"&gt;</code>
+        como trigger, más un panel <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
+          >CdkConnectedOverlay</code
+        >.
+      </p>
+    </div>
+    <div class="rounded-2xl border border-surface-border bg-white p-6 shadow-sm">
+      <h3 class="mb-2 text-sm font-bold text-zinc-900">Sin chevron, sin proyección de opciones</h3>
+      <p class="text-xs leading-relaxed text-zinc-600">
+        El trigger real es solo un botón con un <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
+          >&lt;span&gt;</code
+        >
+        de etiqueta — la librería no dibuja ningún ícono de flecha. Las opciones tampoco se proyectan: se pasan como
+        datos vía <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">[options]</code>, no hay
+        un <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">&lt;ha-option&gt;</code> que vos
+        autores. La clase interna <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
+          >HaSelectOptionItem</code
+        >
+        existe solo como adaptador CDK <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
+          >Highlightable</code
+        >
+        privado — deliberadamente no exportado desde <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
+          >public-api.ts</code
+        >.
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-6 rounded-2xl border border-surface-border bg-white p-6 shadow-sm">
+    <h3 class="mb-4 text-sm font-bold text-zinc-900">Estructura renderizada real</h3>
+    <div class="flex flex-col gap-3">
+      <div class="flex items-start gap-3 rounded-xl bg-surface-base p-3">
+        <span
+          class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-700 text-[11px] font-bold text-white"
+          >1</span
+        >
+        <div>
+          <p class="font-mono text-xs font-semibold text-zinc-900">&lt;button role="combobox"&gt;</p>
+          <p class="text-xs text-zinc-600">
+            El trigger. Lleva <code class="rounded bg-zinc-200 px-1 py-0.5 text-[0.9em]">aria-haspopup="listbox"</code>,
+            <code class="rounded bg-zinc-200 px-1 py-0.5 text-[0.9em]">aria-expanded</code>,
+            <code class="rounded bg-zinc-200 px-1 py-0.5 text-[0.9em]">aria-controls</code> y
+            <code class="rounded bg-zinc-200 px-1 py-0.5 text-[0.9em]">aria-activedescendant</code>.
+          </p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 rounded-xl bg-surface-base p-3">
+        <span
+          class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-700 text-[11px] font-bold text-white"
+          >2</span
+        >
+        <div>
+          <p class="font-mono text-xs font-semibold text-zinc-900">&lt;span class="ha-select__label"&gt;</p>
+          <p class="text-xs text-zinc-600">
+            Muestra la etiqueta de la opción seleccionada, o el <code class="rounded bg-zinc-200 px-1 py-0.5 text-[0.9em]"
+              >placeholder</code
+            >
+            si no hay ninguna.
+          </p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 rounded-xl bg-surface-base p-3">
+        <span
+          class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-700 text-[11px] font-bold text-white"
+          >3</span
+        >
+        <div>
+          <p class="font-mono text-xs font-semibold text-zinc-900">&lt;ng-template cdkConnectedOverlay&gt;</p>
+          <p class="text-xs text-zinc-600">
+            Panel posicionado por Angular CDK, con reposicionamiento en scroll y posiciones de fallback
+            conscientes del viewport.
+          </p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 rounded-xl bg-surface-base p-3">
+        <span
+          class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-700 text-[11px] font-bold text-white"
+          >4</span
+        >
+        <div>
+          <p class="font-mono text-xs font-semibold text-zinc-900">&lt;ul role="listbox"&gt; / &lt;li role="option"&gt;</p>
+          <p class="text-xs text-zinc-600">
+            Una opción por cada entrada de <code class="rounded bg-zinc-200 px-1 py-0.5 text-[0.9em]">[options]</code>,
+            generada por el <code class="rounded bg-zinc-200 px-1 py-0.5 text-[0.9em]">&#64;for</code> del template —
+            data-driven, no content projection.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2b: Estados reales -->
+<section class="mb-14">
+  <h2 class="mb-6 text-2xl font-bold text-zinc-900">Estados reales</h2>
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="flex flex-col gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <ha-select [options]="fruitOptions" placeholder="Elegí una fruta" />
+      <span class="text-xs font-semibold text-zinc-500">Default</span>
+    </div>
+
+    <div class="flex flex-col gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <div class="ha-select ha-select--md relative">
+        <span class="ha-select__trigger ha-select__trigger--open block cursor-default">
+          <span class="ha-select__label">Elegí una fruta</span>
+        </span>
+        <ul class="ha-select__panel static mt-1 max-h-none" role="listbox" aria-hidden="true">
+          @for (option of fruitOptions; track option.value) {
+            <li class="ha-select__option" [class.ha-select__option--disabled]="option.disabled">
+              {{ option.label }}
+            </li>
+          }
+        </ul>
+      </div>
+      <span class="text-xs font-semibold text-zinc-500"
+        >Open (ilustrativo — mockup estático, no interactivo)</span
+      >
+    </div>
+
+    <div class="flex flex-col gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <ha-select [options]="fruitOptions" [disabled]="true" placeholder="Deshabilitado" />
+      <span class="text-xs font-semibold text-zinc-500">Disabled</span>
+    </div>
+
+    <div class="flex flex-col gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <ha-select [options]="fruitOptions" [readonly]="true" placeholder="Solo lectura" />
+      <span class="text-xs font-semibold text-zinc-500"
+        >Readonly (focuseable, el panel nunca abre)</span
+      >
+    </div>
+
+    <div class="flex flex-col gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <ha-select [options]="fruitOptions" placeholder="Elegí un plan" [formControl]="errorGalleryControl" />
+      <span class="text-xs font-semibold text-zinc-500"
+        >Error (real, <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
+          >invalid &amp;&amp; touched</code
+        >)</span
+      >
+    </div>
+
+    <div class="flex flex-col gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <ha-select [options]="fruitOptions" placeholder="Abrí el panel" />
+      <span class="text-xs font-semibold text-zinc-500"
+        >Opción deshabilitada (real — "Cereza" en <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
+          >fruitOptions</code
+        >)</span
+      >
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: Integración -->
+<section class="mb-14">
+  <h2 class="mb-6 text-2xl font-bold text-zinc-900">Integración</h2>
+
+  <div class="flex flex-col gap-4">
+    <app-code-block label="Instalación" language="bash" code="npm install &#64;halolib-ui/angular &#64;angular/cdk" />
+    <app-code-block
+      label="Importación"
+      language="typescript"
+      code="import { HaSelect } from '&#64;halolib-ui/angular';
+import type { HaSelectOption } from '&#64;halolib-ui/angular';"
+    />
+    <app-code-block
+      label="Uso básico"
+      language="html"
+      code='&lt;ha-select
   [options]="options"
   size="md"
   placeholder="Elegí una opción"
   (valueChange)="onValueChange($event)"
 /&gt;'
-  />
-</div>
-
-<section class="select-page__section">
-  <h2>Sizes</h2>
-  <div class="select-page__row">
-    @for (size of sizes; track size) {
-      <ha-select [options]="fruitOptions" [size]="size" placeholder="Choose a fruit" />
-    }
-  </div>
-</section>
-
-<section class="select-page__section">
-  <h2>States</h2>
-  <div class="select-page__row">
-    <ha-select [options]="fruitOptions" [disabled]="true" placeholder="Disabled" />
-    <ha-select [options]="fruitOptions" [readonly]="true" placeholder="Read-only" />
-  </div>
-</section>
-
-<section class="select-page__section">
-  <h2>Events</h2>
-  <div class="select-page__row">
-    <ha-select
-      [options]="fruitOptions"
-      placeholder="Choose a fruit"
-      (valueChange)="onValueChange($event)"
-      (opened)="onOpened()"
-      (closed)="onClosed()"
     />
   </div>
-  <p>Selected value: {{ selectedValue() }}</p>
-  <p>Panel open: {{ panelOpen() }}</p>
+
+  <div class="mt-8">
+    <h3 class="mb-3 text-sm font-bold text-zinc-900">Select de plan, con FormControl Y (valueChange) a la vez</h3>
+    <p class="mb-5 max-w-2xl text-xs leading-relaxed text-zinc-600">
+      <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">HaSelect</code> implementa
+      <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">ControlValueAccessor</code>
+      además de emitir <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">(valueChange)</code>
+      — ambos funcionan al mismo tiempo, sin conflicto.
+    </p>
+    <app-code-block
+      label="plan-field.component.ts"
+      language="typescript"
+      code='import { Component } from &apos;&#64;angular/core&apos;;
+import { FormControl, ReactiveFormsModule, Validators } from &apos;&#64;angular/forms&apos;;
+import { HaSelect } from &apos;&#64;halolib-ui/angular&apos;;
+import type { HaSelectOption } from &apos;&#64;halolib-ui/angular&apos;;
+
+&#64;Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, HaSelect],
+  template: `
+    &lt;label for="plan" class="field-label"&gt;Plan&lt;/label&gt;
+    &lt;ha-select
+      id="plan"
+      [options]="planOptions"
+      placeholder="Elegí un plan"
+      [formControl]="plan"
+      (valueChange)="onPlanChange($event)"
+    /&gt;
+    &#64;if (plan.invalid &amp;&amp; plan.touched) {
+      &lt;p class="field-hint field-hint--error"&gt;Elegí un plan para continuar.&lt;/p&gt;
+    }
+  `,
+})
+export class PlanFieldComponent {
+  readonly planOptions: HaSelectOption[] = [
+    { label: &apos;Free&apos;, value: &apos;free&apos; },
+    { label: &apos;Pro&apos;, value: &apos;pro&apos; },
+    { label: &apos;Enterprise&apos;, value: &apos;enterprise&apos; },
+  ];
+
+  readonly plan = new FormControl&lt;string | null&gt;(null, { validators: [Validators.required] });
+
+  onPlanChange(value: unknown): void {
+    // El FormControl ya se actualizó vía ControlValueAccessor;
+    // (valueChange) es útil acá para efectos que no querés atar al form.
+    console.log(&apos;plan elegido:&apos;, value);
+  }
+}'
+    />
+  </div>
 </section>
+
+<!-- SECTION 4: API Reference -->
+<section id="api-reference" class="mb-14 scroll-mt-6">
+  <h2 class="mb-6 text-2xl font-bold text-zinc-900">API Reference</h2>
+
+  <h3 class="mb-3 text-xs font-bold uppercase tracking-wider text-zinc-500">Inputs</h3>
+  <div class="mb-8 overflow-x-auto rounded-2xl border border-surface-border bg-white shadow-sm">
+    <table class="w-full text-left text-sm">
+      <thead
+        class="border-b border-surface-border bg-surface-base text-[11px] font-bold uppercase tracking-wider text-zinc-500"
+      >
+        <tr>
+          <th class="px-4 py-3">Input</th>
+          <th class="px-4 py-3">Tipo</th>
+          <th class="px-4 py-3">Default</th>
+          <th class="px-4 py-3">Descripción</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-surface-border">
+        @for (row of apiInputs; track row.name) {
+          <tr>
+            <td class="px-4 py-3 font-mono text-xs font-semibold text-brand-700">{{ row.name }}</td>
+            <td class="px-4 py-3 font-mono text-xs text-zinc-600">{{ row.type }}</td>
+            <td class="px-4 py-3 font-mono text-xs text-zinc-600">{{ row.default }}</td>
+            <td class="px-4 py-3 text-xs text-zinc-600">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="mb-3 text-xs font-bold uppercase tracking-wider text-zinc-500">Outputs</h3>
+  <div class="mb-8 overflow-x-auto rounded-2xl border border-surface-border bg-white shadow-sm">
+    <table class="w-full text-left text-sm">
+      <thead
+        class="border-b border-surface-border bg-surface-base text-[11px] font-bold uppercase tracking-wider text-zinc-500"
+      >
+        <tr>
+          <th class="px-4 py-3">Output</th>
+          <th class="px-4 py-3">Tipo</th>
+          <th class="px-4 py-3">Descripción</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-surface-border">
+        @for (row of apiOutputs; track row.name) {
+          <tr>
+            <td class="px-4 py-3 font-mono text-xs font-semibold text-brand-700">{{ row.name }}</td>
+            <td class="px-4 py-3 font-mono text-xs text-zinc-600">{{ row.type }}</td>
+            <td class="px-4 py-3 text-xs text-zinc-600">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="mb-3 text-xs font-bold uppercase tracking-wider text-zinc-500">Slots</h3>
+  <p class="max-w-3xl text-sm leading-relaxed text-zinc-600">
+    Sin proyección de contenido — las opciones se pasan como datos vía
+    <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">[options]</code>, no hay
+    <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">&lt;ng-content&gt;</code>.
+  </p>
+</section>
+
+<!-- SECTION 5: Accesibilidad & Tokens -->
+<section class="mb-14">
+  <h2 class="mb-6 text-2xl font-bold text-zinc-900">Accesibilidad &amp; Tokens</h2>
+  <div class="grid gap-4 sm:grid-cols-3">
+    <div class="flex items-start gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <span class="mt-0.5 shrink-0 text-brand-700" aria-hidden="true">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="6" width="18" height="12" rx="2" />
+          <path d="M8 10h8M8 14h4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <div>
+        <h3 class="mb-1 text-sm font-bold text-zinc-900">Patrón combobox real</h3>
+        <p class="text-xs leading-relaxed text-zinc-600">
+          Trigger con <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">role="combobox"</code>,
+          <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">aria-haspopup="listbox"</code> y
+          <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">aria-expanded</code>. Panel con
+          <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">role="listbox"</code> /
+          <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">role="option"</code>. El foco NUNCA
+          se mueve al panel — <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
+            >aria-activedescendant</code
+          >
+          en el trigger indica la opción activa, vía
+          <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
+            >ActiveDescendantKeyManager</code
+          >
+          de Angular CDK.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-start gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <span class="mt-0.5 shrink-0 text-brand-700" aria-hidden="true">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+      </span>
+      <div>
+        <h3 class="mb-1 text-sm font-bold text-zinc-900">Teclado real</h3>
+        <p class="text-xs leading-relaxed text-zinc-600">
+          Click, Enter, Espacio o Flecha-abajo <strong>abren</strong> el panel. Ya abierto, Flechas navegan (con
+          wrap-around en ambos extremos), Home/End saltan a la primera/última opción habilitada, y escribir letras
+          activa typeahead. Enter, Espacio, Tab, Alt+Flecha-arriba o un click <strong>comprometen</strong> el valor y
+          cierran. Escape <strong>cancela</strong>: cierra sin comprometer nada.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-start gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <span class="mt-0.5 shrink-0 text-brand-700" aria-hidden="true">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M12 22a10 10 0 1 1 10-10c0 1.7-1.3 3-3 3h-2.3a1.7 1.7 0 0 0-1.2 2.9c.3.3.5.7.5 1.1 0 1.3-1.7 2.3-4 3Z"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <circle cx="7.5" cy="10.5" r="1" fill="currentColor" stroke="none" />
+          <circle cx="10.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+          <circle cx="15" cy="6.5" r="1" fill="currentColor" stroke="none" />
+          <circle cx="17.5" cy="10.5" r="1" fill="currentColor" stroke="none" />
+        </svg>
+      </span>
+      <div>
+        <h3 class="mb-1 text-sm font-bold text-zinc-900">Theming vía tokens</h3>
+        <p class="text-xs leading-relaxed text-zinc-600">
+          53 custom properties reales, agrupadas en trigger, panel y opción:
+          <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">--ha-select-focus-ring</code>,
+          <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">--ha-select-error-border</code>,
+          <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">--ha-select-panel-shadow</code> y
+          <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">--ha-select-option-selected-bg</code>
+          entre ellas.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="mt-4 flex items-center justify-between border-t border-surface-border pb-12 pt-4">
+  <a
+    routerLink="/componentes/input-text"
+    class="group flex items-center gap-3 rounded-2xl border border-surface-border bg-white px-6 py-3 shadow-sm transition-all hover:border-brand-600/40 hover:shadow"
+  >
+    <svg
+      class="h-4 w-4 text-zinc-400 transition-all group-hover:-translate-x-1 group-hover:text-brand-700"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <line x1="19" x2="5" y1="12" y2="12" />
+      <polyline points="12 19 5 12 12 5" />
+    </svg>
+    <div>
+      <span class="block text-xs text-zinc-400">Anterior</span>
+      <span class="text-sm font-bold text-zinc-800 transition-colors group-hover:text-brand-700">InputText</span>
+    </div>
+  </a>
+
+  <a
+    routerLink="/"
+    class="group flex items-center gap-3 rounded-2xl border border-surface-border bg-white px-6 py-3 shadow-sm transition-all hover:border-brand-600/40 hover:shadow"
+  >
+    <div class="text-right">
+      <span class="block text-xs text-zinc-400">Fin del recorrido</span>
+      <span class="text-sm font-bold text-zinc-800 transition-colors group-hover:text-brand-700">Volver al inicio</span>
+    </div>
+    <svg
+      class="h-4 w-4 text-zinc-400 transition-all group-hover:scale-110 group-hover:text-brand-700"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M3 11.5 12 4l9 7.5" />
+      <path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9" />
+    </svg>
+  </a>
+</div>

@@ -1,33 +1,15 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  ViewEncapsulation,
-  contentChild,
-  input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, input } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 /**
- * Showcase-local docs sidebar shell: brand block, a projected `<nav>` (the
- * app's own routerLink-based nav goes here, untouched), and an optional
- * footer/help slot that renders only when content is projected into it.
- *
- * Footer usage (not currently used by the showcase):
- * ```html
- * <app-sidebar brandTitle="halo-ui" brandSubtitle="...">
- *   <nav>...</nav>
- *   <div appSidebarFooter #appSidebarFooter>...</div>
- * </app-sidebar>
- * ```
- * The `#appSidebarFooter` local template reference (any name works for
- * projection itself — the `appSidebarFooter` attribute is what the
- * `<ng-content select>` below matches on) is what lets this component detect
- * whether anything was actually projected, so the divider + footer wrapper
- * only render when a consumer supplies one.
+ * Showcase-local docs sidebar shell: brand block, the docs nav, and the
+ * help/footer card — all hardcoded directly in this component's own
+ * template (no content projection).
  */
 @Component({
   selector: 'app-sidebar',
   standalone: true,
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
   encapsulation: ViewEncapsulation.None,
@@ -39,7 +21,4 @@ export class SidebarComponent {
 
   /** Muted subtitle/tagline shown under the brand title. */
   readonly brandSubtitle = input('');
-
-  /** Presence of the optional footer/help slot. */
-  protected readonly footerContent = contentChild<ElementRef>('appSidebarFooter');
 }

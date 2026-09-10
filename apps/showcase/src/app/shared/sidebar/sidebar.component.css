@@ -1,116 +1,25 @@
 :host {
   display: flex;
   flex-direction: column;
-  position: sticky;
-  top: var(--ha-spacing-lg);
-  align-self: flex-start;
-  max-height: calc(100vh - var(--ha-spacing-lg) * 2);
-  margin: var(--ha-spacing-lg);
-
-  --sidebar-bg: var(--neutral-50);
-  --sidebar-border: var(--neutral-200);
-  --sidebar-radius: var(--ha-radius-xl);
-  --sidebar-shadow: 0 8px 30px rgb(76 76 76 / 10%);
-  --sidebar-tagline-color: var(--neutral-700);
-  --sidebar-badge-gradient-start: var(--primary-500);
-  --sidebar-badge-gradient-end: var(--primary-700);
-  --sidebar-badge-icon-color: var(--neutral-50);
-  --sidebar-divider-color: var(--neutral-200);
-  --sidebar-footer-bg: var(--neutral-50);
-  --sidebar-footer-border: var(--neutral-200);
-  --sidebar-footer-text-color: var(--neutral-700);
+  height: 100%;
 }
 
-.app-sidebar {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-  box-sizing: border-box;
-  gap: var(--ha-gap-xl);
-  width: 280px;
-  padding: var(--ha-spacing-lg);
-  background: var(--sidebar-bg);
-  border: 1px solid var(--sidebar-border);
-  border-radius: var(--sidebar-radius);
-  box-shadow: var(--sidebar-shadow);
-  overflow-y: auto;
-}
-
-.app-sidebar::-webkit-scrollbar {
+/* Tailwind utilities can't express ::-webkit-scrollbar pseudo-elements, so the
+   thin-scrollbar treatment stays as plain CSS using the real surface-border /
+   surface-borderstrong hex values (mirrors the mockup's `.custom-scroll`). */
+.app-sidebar__nav-scroll::-webkit-scrollbar {
   width: 4px;
 }
 
-.app-sidebar::-webkit-scrollbar-thumb {
-  background: var(--sidebar-border);
-  border-radius: var(--ha-radius-xl);
+.app-sidebar__nav-scroll::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.app-sidebar__brand {
-  display: flex;
-  align-items: center;
-  gap: var(--ha-gap-sm);
-  flex-shrink: 0;
-  padding-bottom: var(--ha-spacing-lg);
-  border-bottom: 1px solid var(--sidebar-divider-color);
+.app-sidebar__nav-scroll::-webkit-scrollbar-thumb {
+  background: #e3e1f7;
+  border-radius: 9999px;
 }
 
-.app-sidebar__badge {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: var(--ha-radius-lg);
-  background: linear-gradient(
-    135deg,
-    var(--sidebar-badge-gradient-start),
-    var(--sidebar-badge-gradient-end)
-  );
-  color: var(--sidebar-badge-icon-color);
-}
-
-.app-sidebar__badge-icon {
-  width: var(--ha-icon-size-sm);
-  height: var(--ha-icon-size-sm);
-}
-
-.app-sidebar__brand-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.app-sidebar__logo {
-  font-size: var(--ha-font-size-small-body);
-  font-weight: var(--ha-font-weight-h2);
-  color: var(--ha-primary);
-}
-
-.app-sidebar__tagline {
-  font-size: var(--ha-font-size-caption);
-  line-height: var(--ha-line-height-caption);
-  color: var(--sidebar-tagline-color);
-}
-
-.app-sidebar__divider {
-  flex-shrink: 0;
-  height: 1px;
-  background: var(--sidebar-divider-color);
-}
-
-.app-sidebar__footer {
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  gap: var(--ha-gap-xs);
-  padding: var(--ha-spacing-md);
-  background: var(--sidebar-footer-bg);
-  border: 1px solid var(--sidebar-footer-border);
-  border-radius: var(--ha-radius-lg);
-  box-shadow: 0 1px 2px rgb(76 76 76 / 8%);
-  font-size: var(--ha-font-size-caption);
-  color: var(--sidebar-footer-text-color);
+.app-sidebar__nav-scroll::-webkit-scrollbar-thumb:hover {
+  background: #c7c4ec;
 }
