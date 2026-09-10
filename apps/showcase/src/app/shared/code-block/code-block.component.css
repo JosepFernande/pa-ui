@@ -6,3 +6,55 @@
   white-space: pre-wrap;
   overflow-wrap: break-word;
 }
+
+.code-block__code .token.comment,
+.code-block__code .token.prolog,
+.code-block__code .token.doctype,
+.code-block__code .token.cdata {
+  color: #6b7292;
+  font-style: italic;
+}
+
+.code-block__code .token.punctuation {
+  color: #9ca8c4;
+}
+
+.code-block__code .token.keyword,
+.code-block__code .token.atrule,
+.code-block__code .token.important {
+  color: #c792ea;
+}
+
+.code-block__code .token.string,
+.code-block__code .token.attr-value,
+.code-block__code .token.char {
+  color: #a3e0a0;
+}
+
+.code-block__code .token.function,
+.code-block__code .token.builtin {
+  color: #82aaff;
+}
+
+.code-block__code .token.class-name,
+.code-block__code .token.tag,
+.code-block__code .token.attr-name {
+  color: #ffcb6b;
+}
+
+.code-block__code .token.number,
+.code-block__code .token.boolean,
+.code-block__code .token.constant {
+  color: #f78c6c;
+}
+
+.code-block__code .token.operator,
+.code-block__code .token.entity,
+.code-block__code .token.url {
+  color: #89ddff;
+}
+
+.code-block__code .token.property,
+.code-block__code .token.symbol {
+  color: #f07178;
+}
