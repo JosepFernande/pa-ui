@@ -1,5 +1,14 @@
 # @halolib-ui/angular
 
+## 19.0.1
+
+### Patch Changes
+
+- d373723: Relocate the button/input-text/select default-values and token-shape
+  files under `core/src/lib/components/**` (no logic changes) and register the
+  `@halolib-ui/angular/icon` path mapping so the new icon entry point resolves
+  correctly for consumers and in local dev.
+
 ## 19.0.0
 
 Initial release of the consolidated `@halolib-ui/angular` package (SDD change
@@ -10,9 +19,9 @@ ng-packagr secondary entry points (`@halolib-ui/angular/core`,
 `@halolib-ui/angular/button`, `@halolib-ui/angular/input-text`,
 `@halolib-ui/angular/select`). The root import keeps working unchanged.
 
-Per an explicit maintainer decision, this CHANGELOG starts fresh — the 4
-legacy packages' history is not merged in. The project has no stable
-consumers yet, so backward-compatibility/changelog continuity does not apply.
-Version `19.0.0` was chosen to align with the Angular major version this
-package targets (Angular 19.2), following the Angular Material/CDK
-convention of matching Angular's major version.
+Per an explicit maintainer decision, this CHANGELOG starts fresh — the 4 legacy
+packages' history is not merged in. The project has no stable consumers yet, so
+backward-compatibility/changelog continuity does not apply. Version `19.0.0` was
+chosen to align with the Angular major version this package targets (Angular
+19.2), following the Angular Material/CDK convention of matching Angular's major
+version.
