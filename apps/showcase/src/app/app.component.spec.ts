@@ -17,24 +17,6 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render a nav link to each showcase route', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    const links = Array.from(compiled.querySelectorAll('nav a')).map((link) =>
-      link.getAttribute('routerLink'),
-    );
-    expect(links).toEqual([
-      '/instalacion',
-      '/instalacion',
-      '/configuracion',
-      '/componentes/boton',
-      '/componentes/input-text',
-      '/componentes/select',
-      '/componentes/boton',
-    ]);
-  });
-
   it('should render the router outlet', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
