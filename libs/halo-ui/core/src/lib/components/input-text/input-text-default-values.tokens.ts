@@ -1,23 +1,5 @@
-import { HA_PADDING_X_SCALE, HA_RADIUS_SCALE } from '../../foundation/foundation.tokens';
+import { HA_INPUT_DIMENSIONS_SCALE } from '../../foundation/foundation.tokens';
 import type { HaInputTextTokens } from './input-text-token-shapes';
-
-export const HA_INPUT_DIMENSIONS_SCALE = {
-  sm: {
-    minHeight: '33px',
-    paddingX: HA_PADDING_X_SCALE.sm,
-    radius: HA_RADIUS_SCALE.sm,
-  },
-  md: {
-    minHeight: '48px',
-    paddingX: HA_PADDING_X_SCALE.md,
-    radius: HA_RADIUS_SCALE.md,
-  },
-  lg: {
-    minHeight: '56px',
-    paddingX: HA_PADDING_X_SCALE.lg,
-    radius: HA_RADIUS_SCALE.lg,
-  },
-} as const;
 
 /**
  * Default values for every `--ha-input-*` design token, shaped like

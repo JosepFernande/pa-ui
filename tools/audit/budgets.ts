@@ -75,6 +75,16 @@ export const PACKAGE_BUDGETS: readonly PackageBudget[] = [
     baselineBytes: 3000,
   },
   {
+    name: '@halolib-ui/angular/icon',
+    file: 'dist/libs/halo-ui/fesm2022/halolib-ui-angular-icon.mjs',
+    // Grows with every new icon added to HA_ICON_REGISTRY (each is its own
+    // @lucide/angular component), unlike button/input-text/select's fixed
+    // per-component footprint — same warn/max split as core.
+    maxGzipBytes: 8 * KB,
+    warnGzipBytes: 4 * KB,
+    baselineBytes: 2507,
+  },
+  {
     name: '@halolib-ui/angular/input-text',
     file: 'dist/libs/halo-ui/fesm2022/halolib-ui-angular-input-text.mjs',
     maxGzipBytes: 6 * KB,

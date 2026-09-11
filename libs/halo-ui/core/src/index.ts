@@ -69,6 +69,7 @@ export {
 } from './lib/foundation/foundation.tokens';
 
 export { HA_BUTTON_DIMENSIONS } from './lib/components/button/button-default-values.tokens';
+export { HA_ICON_SIZE_PX } from './lib/components/icon/icon-default-values.tokens';
 
 export { HA_COMPONENT_TOKEN_DEFAULTS } from './lib/foundation/component-defaults.tokens';
 

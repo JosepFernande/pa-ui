@@ -11,6 +11,8 @@ import type { OverlayRef, ScrollStrategy } from '@angular/cdk/overlay';
  * capture-phase listener on `window` observes every scroll in the document —
  * nested container or not — with zero markup required from consumers.
  */
+// gga-ignore: custom ScrollStrategy implementation, not Overlay.scrollStrategies.reposition() —
+// justified above (reposition() misses scroll on containers without cdkScrollable).
 export function createHaSelectScrollStrategy(): ScrollStrategy {
   let overlayRef: OverlayRef | undefined;
   let listening = false;

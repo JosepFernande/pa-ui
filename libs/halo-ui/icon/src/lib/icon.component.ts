@@ -6,21 +6,10 @@ import {
   input,
 } from '@angular/core';
 import { NgComponentOutlet } from '@angular/common';
-import { HA_ICON_SIZE_SCALE } from '@halolib-ui/angular/core';
+import { HA_ICON_SIZE_PX } from '@halolib-ui/angular/core';
 import { HA_ICON_REGISTRY } from './icon.registry';
 import type { HaIconName } from './icon.registry';
 import type { HaIconSize } from './icon.types';
-
-/**
- * Numeric pixel sizes for each `HaIconSize` step, derived from
- * `HA_ICON_SIZE_SCALE` (the single source of truth for icon sizing shared
- * with every other themed component in this library).
- */
-const HA_ICON_SIZE_PX: Record<HaIconSize, number> = {
-  sm: parseInt(HA_ICON_SIZE_SCALE.sm, 10),
-  md: parseInt(HA_ICON_SIZE_SCALE.md, 10),
-  lg: parseInt(HA_ICON_SIZE_SCALE.lg, 10),
-};
 
 /**
  * Themed icon (custom element `ha-icon`, not an attribute selector) wrapping
