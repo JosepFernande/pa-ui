@@ -21,6 +21,17 @@ jobs:
       - run: npm ci
         env:
           HUSKY: '0'
+      # Workaround temporal (ver issue #146): package-lock.json solo retiene
+      # metadata resuelta del binario nativo de lightningcss para la plataforma
+      # que corrió npm install por última vez (Windows), así que npm ci en
+      # Linux no puede resolver lightningcss-linux-x64-gnu. A diferencia de
+      # esbuild, lightningcss no tiene un postinstall de fallback que lo
+      # descargue solo. Forzamos la instalación explícita del binario correcto
+      # sin tocar el lockfile.
+      - name: Fix missing lightningcss native binary on Linux CI
+        run: |
+          LC_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/lightningcss'].version")
+          npm install --no-save --no-audit --no-fund "lightningcss@${LC_VERSION}"
       - name: Restore Nx cache
         uses: actions/cache@v4
         with:
@@ -41,6 +52,17 @@ jobs:
       - run: npm ci
         env:
           HUSKY: '0'
+      # Workaround temporal (ver issue #146): package-lock.json solo retiene
+      # metadata resuelta del binario nativo de lightningcss para la plataforma
+      # que corrió npm install por última vez (Windows), así que npm ci en
+      # Linux no puede resolver lightningcss-linux-x64-gnu. A diferencia de
+      # esbuild, lightningcss no tiene un postinstall de fallback que lo
+      # descargue solo. Forzamos la instalación explícita del binario correcto
+      # sin tocar el lockfile.
+      - name: Fix missing lightningcss native binary on Linux CI
+        run: |
+          LC_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/lightningcss'].version")
+          npm install --no-save --no-audit --no-fund "lightningcss@${LC_VERSION}"
       - name: Restore Nx cache
         uses: actions/cache@v4
         with:
@@ -60,6 +82,17 @@ jobs:
       - run: npm ci
         env:
           HUSKY: '0'
+      # Workaround temporal (ver issue #146): package-lock.json solo retiene
+      # metadata resuelta del binario nativo de lightningcss para la plataforma
+      # que corrió npm install por última vez (Windows), así que npm ci en
+      # Linux no puede resolver lightningcss-linux-x64-gnu. A diferencia de
+      # esbuild, lightningcss no tiene un postinstall de fallback que lo
+      # descargue solo. Forzamos la instalación explícita del binario correcto
+      # sin tocar el lockfile.
+      - name: Fix missing lightningcss native binary on Linux CI
+        run: |
+          LC_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/lightningcss'].version")
+          npm install --no-save --no-audit --no-fund "lightningcss@${LC_VERSION}"
       - name: Restore Nx cache
         uses: actions/cache@v4
         with:
@@ -79,6 +112,17 @@ jobs:
       - run: npm ci
         env:
           HUSKY: '0'
+      # Workaround temporal (ver issue #146): package-lock.json solo retiene
+      # metadata resuelta del binario nativo de lightningcss para la plataforma
+      # que corrió npm install por última vez (Windows), así que npm ci en
+      # Linux no puede resolver lightningcss-linux-x64-gnu. A diferencia de
+      # esbuild, lightningcss no tiene un postinstall de fallback que lo
+      # descargue solo. Forzamos la instalación explícita del binario correcto
+      # sin tocar el lockfile.
+      - name: Fix missing lightningcss native binary on Linux CI
+        run: |
+          LC_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/lightningcss'].version")
+          npm install --no-save --no-audit --no-fund "lightningcss@${LC_VERSION}"
       - name: Restore Nx cache
         uses: actions/cache@v4
         with:
@@ -104,6 +148,17 @@ jobs:
       - run: npm ci
         env:
           HUSKY: '0'
+      # Workaround temporal (ver issue #146): package-lock.json solo retiene
+      # metadata resuelta del binario nativo de lightningcss para la plataforma
+      # que corrió npm install por última vez (Windows), así que npm ci en
+      # Linux no puede resolver lightningcss-linux-x64-gnu. A diferencia de
+      # esbuild, lightningcss no tiene un postinstall de fallback que lo
+      # descargue solo. Forzamos la instalación explícita del binario correcto
+      # sin tocar el lockfile.
+      - name: Fix missing lightningcss native binary on Linux CI
+        run: |
+          LC_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/lightningcss'].version")
+          npm install --no-save --no-audit --no-fund "lightningcss@${LC_VERSION}"
       - name: Restore Nx cache
         uses: actions/cache@v4
         with:
@@ -129,6 +184,17 @@ jobs:
       - run: npm ci
         env:
           HUSKY: '0'
+      # Workaround temporal (ver issue #146): package-lock.json solo retiene
+      # metadata resuelta del binario nativo de lightningcss para la plataforma
+      # que corrió npm install por última vez (Windows), así que npm ci en
+      # Linux no puede resolver lightningcss-linux-x64-gnu. A diferencia de
+      # esbuild, lightningcss no tiene un postinstall de fallback que lo
+      # descargue solo. Forzamos la instalación explícita del binario correcto
+      # sin tocar el lockfile.
+      - name: Fix missing lightningcss native binary on Linux CI
+        run: |
+          LC_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/lightningcss'].version")
+          npm install --no-save --no-audit --no-fund "lightningcss@${LC_VERSION}"
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
@@ -173,6 +239,17 @@ jobs:
       - run: npm ci
         env:
           HUSKY: '0'
+      # Workaround temporal (ver issue #146): package-lock.json solo retiene
+      # metadata resuelta del binario nativo de lightningcss para la plataforma
+      # que corrió npm install por última vez (Windows), así que npm ci en
+      # Linux no puede resolver lightningcss-linux-x64-gnu. A diferencia de
+      # esbuild, lightningcss no tiene un postinstall de fallback que lo
+      # descargue solo. Forzamos la instalación explícita del binario correcto
+      # sin tocar el lockfile.
+      - name: Fix missing lightningcss native binary on Linux CI
+        run: |
+          LC_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/lightningcss'].version")
+          npm install --no-save --no-audit --no-fund "lightningcss@${LC_VERSION}"
       - name: Restore gga/opencode cache
         id: gga-cache
         uses: actions/cache@v4
