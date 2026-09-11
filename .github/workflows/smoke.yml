@@ -10,6 +10,12 @@ name: Smoke
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'libs/**'
+      - '.changeset/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/release.yml'
 
 concurrency:
   group: smoke-${{ github.ref }}
