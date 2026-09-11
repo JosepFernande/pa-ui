@@ -32,6 +32,15 @@ jobs:
         run: |
           LC_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/lightningcss'].version")
           npm install --no-save --no-audit --no-fund "lightningcss@${LC_VERSION}"
+      # Workaround temporal (ver issue #146): mismo problema que lightningcss,
+      # pero con @tailwindcss/oxide (dependencia nativa de @tailwindcss/postcss,
+      # usada por el pipeline de Angular/PostCSS al compilar). El lockfile solo
+      # tiene resuelto el binario win32-x64-msvc; forzamos la instalación
+      # explícita del binario linux-x64-gnu sin tocar el lockfile.
+      - name: Fix missing @tailwindcss/oxide native binary on Linux CI
+        run: |
+          OXIDE_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/@tailwindcss/oxide'].version")
+          npm install --no-save --no-audit --no-fund "@tailwindcss/oxide-linux-x64-gnu@${OXIDE_VERSION}"
       - name: Restore Nx cache
         uses: actions/cache@v4
         with:
@@ -63,6 +72,15 @@ jobs:
         run: |
           LC_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/lightningcss'].version")
           npm install --no-save --no-audit --no-fund "lightningcss@${LC_VERSION}"
+      # Workaround temporal (ver issue #146): mismo problema que lightningcss,
+      # pero con @tailwindcss/oxide (dependencia nativa de @tailwindcss/postcss,
+      # usada por el pipeline de Angular/PostCSS al compilar). El lockfile solo
+      # tiene resuelto el binario win32-x64-msvc; forzamos la instalación
+      # explícita del binario linux-x64-gnu sin tocar el lockfile.
+      - name: Fix missing @tailwindcss/oxide native binary on Linux CI
+        run: |
+          OXIDE_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/@tailwindcss/oxide'].version")
+          npm install --no-save --no-audit --no-fund "@tailwindcss/oxide-linux-x64-gnu@${OXIDE_VERSION}"
       - name: Restore Nx cache
         uses: actions/cache@v4
         with:
@@ -93,6 +111,15 @@ jobs:
         run: |
           LC_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/lightningcss'].version")
           npm install --no-save --no-audit --no-fund "lightningcss@${LC_VERSION}"
+      # Workaround temporal (ver issue #146): mismo problema que lightningcss,
+      # pero con @tailwindcss/oxide (dependencia nativa de @tailwindcss/postcss,
+      # usada por el pipeline de Angular/PostCSS al compilar). El lockfile solo
+      # tiene resuelto el binario win32-x64-msvc; forzamos la instalación
+      # explícita del binario linux-x64-gnu sin tocar el lockfile.
+      - name: Fix missing @tailwindcss/oxide native binary on Linux CI
+        run: |
+          OXIDE_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/@tailwindcss/oxide'].version")
+          npm install --no-save --no-audit --no-fund "@tailwindcss/oxide-linux-x64-gnu@${OXIDE_VERSION}"
       - name: Restore Nx cache
         uses: actions/cache@v4
         with:
@@ -123,6 +150,15 @@ jobs:
         run: |
           LC_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/lightningcss'].version")
           npm install --no-save --no-audit --no-fund "lightningcss@${LC_VERSION}"
+      # Workaround temporal (ver issue #146): mismo problema que lightningcss,
+      # pero con @tailwindcss/oxide (dependencia nativa de @tailwindcss/postcss,
+      # usada por el pipeline de Angular/PostCSS al compilar). El lockfile solo
+      # tiene resuelto el binario win32-x64-msvc; forzamos la instalación
+      # explícita del binario linux-x64-gnu sin tocar el lockfile.
+      - name: Fix missing @tailwindcss/oxide native binary on Linux CI
+        run: |
+          OXIDE_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/@tailwindcss/oxide'].version")
+          npm install --no-save --no-audit --no-fund "@tailwindcss/oxide-linux-x64-gnu@${OXIDE_VERSION}"
       - name: Restore Nx cache
         uses: actions/cache@v4
         with:
@@ -159,6 +195,15 @@ jobs:
         run: |
           LC_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/lightningcss'].version")
           npm install --no-save --no-audit --no-fund "lightningcss@${LC_VERSION}"
+      # Workaround temporal (ver issue #146): mismo problema que lightningcss,
+      # pero con @tailwindcss/oxide (dependencia nativa de @tailwindcss/postcss,
+      # usada por el pipeline de Angular/PostCSS al compilar). El lockfile solo
+      # tiene resuelto el binario win32-x64-msvc; forzamos la instalación
+      # explícita del binario linux-x64-gnu sin tocar el lockfile.
+      - name: Fix missing @tailwindcss/oxide native binary on Linux CI
+        run: |
+          OXIDE_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/@tailwindcss/oxide'].version")
+          npm install --no-save --no-audit --no-fund "@tailwindcss/oxide-linux-x64-gnu@${OXIDE_VERSION}"
       - name: Restore Nx cache
         uses: actions/cache@v4
         with:
@@ -195,6 +240,15 @@ jobs:
         run: |
           LC_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/lightningcss'].version")
           npm install --no-save --no-audit --no-fund "lightningcss@${LC_VERSION}"
+      # Workaround temporal (ver issue #146): mismo problema que lightningcss,
+      # pero con @tailwindcss/oxide (dependencia nativa de @tailwindcss/postcss,
+      # usada por el pipeline de Angular/PostCSS al compilar). El lockfile solo
+      # tiene resuelto el binario win32-x64-msvc; forzamos la instalación
+      # explícita del binario linux-x64-gnu sin tocar el lockfile.
+      - name: Fix missing @tailwindcss/oxide native binary on Linux CI
+        run: |
+          OXIDE_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/@tailwindcss/oxide'].version")
+          npm install --no-save --no-audit --no-fund "@tailwindcss/oxide-linux-x64-gnu@${OXIDE_VERSION}"
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
@@ -250,6 +304,15 @@ jobs:
         run: |
           LC_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/lightningcss'].version")
           npm install --no-save --no-audit --no-fund "lightningcss@${LC_VERSION}"
+      # Workaround temporal (ver issue #146): mismo problema que lightningcss,
+      # pero con @tailwindcss/oxide (dependencia nativa de @tailwindcss/postcss,
+      # usada por el pipeline de Angular/PostCSS al compilar). El lockfile solo
+      # tiene resuelto el binario win32-x64-msvc; forzamos la instalación
+      # explícita del binario linux-x64-gnu sin tocar el lockfile.
+      - name: Fix missing @tailwindcss/oxide native binary on Linux CI
+        run: |
+          OXIDE_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/@tailwindcss/oxide'].version")
+          npm install --no-save --no-audit --no-fund "@tailwindcss/oxide-linux-x64-gnu@${OXIDE_VERSION}"
       - name: Restore gga/opencode cache
         id: gga-cache
         uses: actions/cache@v4
