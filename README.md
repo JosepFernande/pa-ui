@@ -22,7 +22,7 @@ npm install @halolib-ui/angular @angular/cdk
 ```typescript
 // app.config.ts
 import { ApplicationConfig } from '@angular/core';
-import { provideHaTheme } from '@halolib-ui/core';
+import { provideHaTheme } from '@halolib-ui/angular/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,25 +31,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-### 3. Importar el CSS de Foundation
-
-Además de `provideHaTheme()`, hace falta un import explícito de CSS — trae los
-valores por defecto estáticos de las capas Foundation/Semantic/Component
-(spacing, radius, tipografía, tamaños de íconos, defaults de tokens de
-componente) que hacen que los componentes se rendericen completamente
-estilizados sin configuración adicional:
-
-```css
-/* styles.css (o cualquier hoja de estilos global) */
-@import '@halolib-ui/core/theme.css';
-```
-
-Olvidar este import no rompe la app — los componentes quedan sin estilo, usando
-las custom properties `--ha-*` sin resolver, hasta que se agregue. Ver
-[CSS Strategy](./docs/css-strategy.md) para el detalle completo de las capas y
-la estrategia de distribución.
-
-### 4. Usar un componente
+### 3. Usar un componente
 
 Cada componente en `libs/` tiene su propia implementación y ejemplos de uso
 documentados. Consultá el [catálogo de componentes](./docs/components.md) para
@@ -98,7 +80,7 @@ personalización visual.
 ### Tema por defecto (sin configuración)
 
 ```typescript
-import { provideHaTheme } from '@halolib-ui/core';
+import { provideHaTheme } from '@halolib-ui/angular/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideHaTheme()],
@@ -112,7 +94,7 @@ variantes de hover, active y contraste.
 
 ```typescript
 provideHaTheme({
-  colors: {
+  semantic: {
     primary: { 500: '#0066cc' },
     secondary: { 500: '#6c757d' },
     treasury: { 500: '#0d6efd' },
@@ -134,14 +116,16 @@ Usá `extendDefaults: false` cuando quieras control total — solo se registran 
 colores.
 
 ```typescript
-provideHaTheme({
-  extendDefaults: false,
-  colors: {
-    primary: { 500: '#1a1a2e' },
-    secondary: { 500: '#16213e' },
-    accent: { 500: '#e94560' },
+provideHaTheme(
+  {
+    semantic: {
+      primary: { 500: '#1a1a2e' },
+      secondary: { 500: '#16213e' },
+      accent: { 500: '#e94560' },
+    },
   },
-});
+  { extendDefaults: false },
+);
 ```
 
 ---
@@ -175,7 +159,7 @@ lados:
 
 ```typescript
 provideHaTheme({
-  colors: {
+  semantic: {
     accounting: { 500: '#28a745' },
   },
 });
@@ -220,15 +204,20 @@ Todo componente de halo-ui está construido con la accesibilidad como prioridad:
 ```
 halo-ui/
 ├── libs/
-│   ├── button/          # @halolib-ui/button — componente HaButton
-│   ├── input-text/      # @halolib-ui/input-text — componente HaInputText
-│   ├── select/          # @halolib-ui/select — componente HaSelect
-│   ├── core/            # @halolib-ui/core — Theme Engine (provideHaTheme) + capa Foundation
-│   └── halo-ui/         # @halolib-ui/angular — paquete umbrella (re-exporta el resto)
+│   └── halo-ui/          # único paquete publicable — @halolib-ui/angular
+│       ├── src/          # barrel raíz (re-exporta los 4 entry points)
+│       ├── core/         # @halolib-ui/angular/core — Theme Engine (provideHaTheme) + capa Foundation
+│       ├── button/       # @halolib-ui/angular/button — componente HaButton
+│       ├── input-text/   # @halolib-ui/angular/input-text — componente HaInputText
+│       └── select/       # @halolib-ui/angular/select — componente HaSelect
 ├── apps/
 │   └── showcase/        # App de demo con ejemplos en vivo
 └── skills/              # Skills de agentes de IA para hacer cumplir la arquitectura
 ```
+
+`libs/halo-ui` es el único proyecto Nx publicable: un solo paquete npm
+(`@halolib-ui/angular`) construido con ng-packagr, con `core`/`button`/
+`input-text`/`select` como entry points secundarios (no paquetes npm separados).
 
 > Ver [Componentes](./docs/components.md) para el catálogo completo, cada uno
 > enlazado a su carpeta en `libs/`.

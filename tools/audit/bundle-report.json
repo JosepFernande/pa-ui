@@ -1,39 +1,47 @@
 {
-  "timestamp": "2026-09-03T20:38:03.071Z",
+  "timestamp": "2026-09-11T17:04:39.878Z",
   "results": [
     {
-      "package": "@halo-ui/core",
-      "file": "dist/libs/core/fesm2022/halo-ui-core.mjs",
-      "gzipBytes": 14333,
-      "maxGzipBytes": 16384,
-      "warnGzipBytes": 8192,
-      "status": "warn"
-    },
-    {
-      "package": "@halo-ui/button",
-      "file": "dist/libs/button/fesm2022/halo-ui-button.mjs",
-      "gzipBytes": 3042,
-      "maxGzipBytes": 4096,
+      "package": "@halolib-ui/angular/core",
+      "file": "dist/libs/halo-ui/fesm2022/halolib-ui-angular-core.mjs",
+      "gzipBytes": 19875,
+      "maxGzipBytes": 24576,
+      "warnGzipBytes": 20480,
       "status": "pass"
     },
     {
-      "package": "@halo-ui/input",
-      "file": "dist/libs/input/fesm2022/halo-ui-input.mjs",
-      "gzipBytes": 4156,
+      "package": "@halolib-ui/angular/button",
+      "file": "dist/libs/halo-ui/fesm2022/halolib-ui-angular-button.mjs",
+      "gzipBytes": 2977,
       "maxGzipBytes": 5120,
       "status": "pass"
     },
     {
-      "package": "@halo-ui/select",
-      "file": "dist/libs/select/fesm2022/halo-ui-select.mjs",
-      "gzipBytes": 9078,
+      "package": "@halolib-ui/angular/icon",
+      "file": "dist/libs/halo-ui/fesm2022/halolib-ui-angular-icon.mjs",
+      "gzipBytes": 2466,
+      "maxGzipBytes": 8192,
+      "warnGzipBytes": 4096,
+      "status": "pass"
+    },
+    {
+      "package": "@halolib-ui/angular/input-text",
+      "file": "dist/libs/halo-ui/fesm2022/halolib-ui-angular-input-text.mjs",
+      "gzipBytes": 4211,
+      "maxGzipBytes": 6144,
+      "status": "pass"
+    },
+    {
+      "package": "@halolib-ui/angular/select",
+      "file": "dist/libs/halo-ui/fesm2022/halolib-ui-angular-select.mjs",
+      "gzipBytes": 9183,
       "maxGzipBytes": 12288,
       "status": "pass"
     },
     {
-      "package": "@halo-ui/angular",
-      "file": "dist/libs/halo-ui/index.mjs",
-      "gzipBytes": 76,
+      "package": "@halolib-ui/angular",
+      "file": "dist/libs/halo-ui/fesm2022/halolib-ui-angular.mjs",
+      "gzipBytes": 160,
       "maxGzipBytes": 1024,
       "status": "pass"
     }

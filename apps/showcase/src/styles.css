@@ -1,1 +1,19 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-brand-50: var(--primary-50);
+  --color-brand-100: var(--primary-100);
+  --color-brand-500: var(--primary-400);
+  --color-brand-600: var(--ha-primary);
+  --color-brand-700: var(--ha-primary-hover);
+
+  --color-surface-base: #f8f7fc;
+  --color-surface-card: #ffffff;
+  --color-surface-border: #e3e1f7;
+  --color-surface-borderstrong: #c7c4ec;
+
+  --shadow-soft-airy: 0 4px 24px rgb(67 56 202 / 8%);
+  --shadow-card-hover: 0 12px 32px rgb(67 56 202 / 12%);
+}
+
 /* You can add global styles to this file, and also import other style files */

@@ -1,0 +1,144 @@
+<nav aria-label="Breadcrumb" class="mb-6 flex items-center gap-2 text-sm text-zinc-400">
+  <span>Documentación</span>
+  <span class="text-zinc-300">/</span>
+  <span class="font-medium text-zinc-700">Introducción</span>
+</nav>
+
+<div class="mb-8">
+  <h1 class="mb-4 text-4xl font-extrabold tracking-tight text-zinc-950 sm:text-5xl">Introducción</h1>
+  <p class="max-w-3xl text-[15px] font-normal leading-relaxed text-zinc-600 sm:text-base">
+    halo-ui es una librería de componentes standalone para Angular, construida sobre señales y
+    <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">OnPush</code> de fábrica. Expone una API
+    tipada de punta a punta y soporte WAI-ARIA en cada componente, sin NgModules ni configuración adicional.
+  </p>
+</div>
+
+<hr class="my-8 h-px w-full border-0 bg-surface-border" />
+
+<section class="mb-12">
+  <h2 class="mb-6 text-2xl font-bold text-zinc-900">Por qué usar esta librería</h2>
+
+  <div class="space-y-6">
+    <div class="flex items-start gap-4">
+      <div
+        class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-indigo-100 bg-indigo-50 text-brand-700"
+        aria-hidden="true"
+      >
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="m9 12 2 2 4-4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+      <div>
+        <h3 class="mb-1 text-base font-bold leading-tight text-zinc-900">Accesibilidad nativa</h3>
+        <p class="text-sm leading-relaxed text-zinc-600">
+          Roles, estados y navegación por teclado WAI-ARIA incluidos en cada componente, sin trabajo extra de tu parte.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-start gap-4">
+      <div
+        class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-indigo-100 bg-indigo-50 text-brand-700"
+        aria-hidden="true"
+      >
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M12 2c-3.5 4.2-6 7.6-6 11a6 6 0 0 0 12 0c0-3.4-2.5-6.8-6-11Z"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <div>
+        <h3 class="mb-1 text-base font-bold leading-tight text-zinc-900">Theming basado en tokens</h3>
+        <p class="text-sm leading-relaxed text-zinc-600">
+          Colores, tipografía, espaciados y radios expuestos como custom properties en Foundation CSS: personalizá sin
+          tocar el código fuente.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-start gap-4">
+      <div
+        class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-indigo-100 bg-indigo-50 text-brand-700"
+        aria-hidden="true"
+      >
+        <span class="text-xs font-bold leading-none">TS</span>
+      </div>
+      <div>
+        <h3 class="mb-1 text-base font-bold leading-tight text-zinc-900">TypeScript estricto</h3>
+        <p class="text-sm leading-relaxed text-zinc-600">
+          Componentes standalone, señales y tipado estricto de punta a punta para que los errores aparezcan en tu
+          editor, no en producción.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-start gap-4">
+      <div
+        class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-indigo-100 bg-indigo-50 text-brand-700"
+        aria-hidden="true"
+      >
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+      <div>
+        <h3 class="mb-1 text-base font-bold leading-tight text-zinc-900">Rendimiento optimizado</h3>
+        <p class="text-sm leading-relaxed text-zinc-600">
+          Detección de cambios <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">OnPush</code>
+          y componentes standalone lazy-loadable para bundles livianos y renders predecibles.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mb-10">
+  <h2 class="mb-3 text-2xl font-bold text-zinc-900">Filosofía de diseño</h2>
+  <p class="max-w-3xl text-sm leading-relaxed text-zinc-600">
+    halo-ui se apoya en tres principios: <strong>convención</strong> sobre configuración, para que cada componente se
+    comporte como esperás sin leer la documentación entera; <strong>composición</strong> sobre herencia, favoreciendo
+    inputs, outputs y content projection frente a jerarquías rígidas; y <strong>transparencia</strong>, exponiendo
+    tokens y estados internos en vez de esconderlos detrás de opciones cerradas.
+  </p>
+</section>
+
+<div class="mb-14 flex items-start gap-3.5 rounded-2xl border border-indigo-100 bg-indigo-50/50 p-5" role="note">
+  <span class="mt-0.5 shrink-0 text-brand-700" aria-hidden="true">
+    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 16v-4m0-4h.01" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </span>
+  <p class="text-sm leading-relaxed text-zinc-700">
+    <strong class="mr-1 block font-bold text-zinc-900 sm:inline">Requiere Angular 19.2+.</strong>
+    Los componentes standalone y las señales que usa halo-ui internamente necesitan como mínimo esta versión de Angular.
+  </p>
+</div>
+
+<div class="flex justify-end border-t border-surface-border pb-12 pt-4">
+  <a
+    routerLink="/configuracion"
+    class="group flex items-center gap-3 rounded-2xl border border-surface-border bg-white px-6 py-3 shadow-sm transition-all hover:border-indigo-300 hover:shadow"
+  >
+    <div class="text-right">
+      <span class="block text-xs text-zinc-400">Siguiente</span>
+      <span class="text-sm font-bold text-zinc-800 transition-colors group-hover:text-brand-700">Configuración</span>
+    </div>
+    <svg
+      class="h-4 w-4 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-brand-700"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <line x1="5" x2="19" y1="12" y2="12" />
+      <polyline points="12 5 19 12 12 19" />
+    </svg>
+  </a>
+</div>

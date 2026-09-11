@@ -1,0 +1,20 @@
+# Normalize all text files to LF so line endings never depend on which OS
+# (Windows/macOS/Linux) checked out or last committed the file.
+* text=auto eol=lf
+
+# Shell scripts and git hooks must always be LF — sh/bash fail to parse
+# CRLF-terminated scripts (bit us with .husky/pre-commit).
+*.sh text eol=lf
+.husky/* text eol=lf
+
+# Known binary assets — never run text normalization on these.
+*.ico binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary

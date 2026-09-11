@@ -2,9 +2,9 @@
 
 `halo-ui` uses `apps/showcase` — a real Angular application — as the local
 playground for every published component. There is no separate preview tool: the
-showcase app imports each library from its public entry point
-(`@halolib-ui/button`, `@halolib-ui/input-text`, `@halolib-ui/select`, ...)
-exactly as a consumer would.
+showcase app imports each component from its public subpath
+(`@halolib-ui/angular/button`, `@halolib-ui/angular/input-text`,
+`@halolib-ui/angular/select`, ...) exactly as a consumer would.
 
 ## Running the showcase locally
 
@@ -19,11 +19,13 @@ npx nx build showcase
 ## Theme registration
 
 The showcase registers the halo-ui theme engine at bootstrap (`provideHaTheme()`
-in `apps/showcase/src/app/app.config.ts`) and loads the Foundation stylesheet
-via the `build`/`serve` target's `styles` array
-(`libs/core/src/lib/foundation/theme.css`), so every route renders with
-theme-derived CSS custom properties (e.g. `--ha-primary`) already present on
-`document.documentElement`.
+in `apps/showcase/src/app/app.config.ts`), passing a `semantic` config that
+registers app-specific colors (`success`, `error`, `warning`, `info`, `neutral`)
+alongside the library's default `primary` — this is what powers the color
+swatches on the Button page. `provideHaTheme()` writes every
+Foundation/Semantic/Component CSS custom property (e.g. `--ha-primary`,
+`--ha-button-bg`) inline on `document.documentElement` — no separate Foundation
+stylesheet is loaded via the `build`/`serve` target's `styles` array.
 
 ## Adding a showcase route for a new component
 

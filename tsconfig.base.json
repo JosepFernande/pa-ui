@@ -11,10 +11,11 @@
     "baseUrl": ".",
     "paths": {
       "@halolib-ui/angular": ["./libs/halo-ui/src/index.ts"],
-      "@halolib-ui/button": ["./libs/button/src/index.ts"],
-      "@halolib-ui/core": ["./libs/core/src/index.ts"],
-      "@halolib-ui/input-text": ["./libs/input-text/src/index.ts"],
-      "@halolib-ui/select": ["./libs/select/src/index.ts"]
+      "@halolib-ui/angular/button": ["libs/halo-ui/button/src/index.ts"],
+      "@halolib-ui/angular/core": ["libs/halo-ui/core/src/index.ts"],
+      "@halolib-ui/angular/icon": ["libs/halo-ui/icon/src/index.ts"],
+      "@halolib-ui/angular/input-text": ["libs/halo-ui/input-text/src/index.ts"],
+      "@halolib-ui/angular/select": ["libs/halo-ui/select/src/index.ts"]
     }
   }
 }

@@ -1,32 +1,49 @@
 #!/usr/bin/env node
 /**
- * Pre-publish package validation harness (issue #78).
+ * Pre-publish package validation harness (issue #78, rewritten for the
+ * single-package consolidation — SDD change
+ * consolidate-halo-ui-single-package, Phase 3 / PR3).
  *
- * Guards the exact regression from #85: two alpha cycles were published with
- * no main/module/exports/typings in the published package.json because the
- * publish step targeted the SOURCE package (libs/<lib>) instead of the real
- * ng-packagr output under dist/libs/<lib>. CI stayed green end to end.
+ * Guards the #85 regression class: publishing SOURCE (libs/halo-ui) instead
+ * of the real ng-packagr output under dist/libs/halo-ui, which ships with no
+ * main/exports/typings and breaks every consumer import with TS2307. CI
+ * stayed green end to end when this happened before.
  *
- * Two checks:
- *   1. Every publishable lib's dist/libs/<lib>/package.json must expose a
- *      runtime entry (main and/or exports["."]) and a types entry
- *      (typings/types), all non-null. The dist package itself must exist:
- *      a publishable lib with no dist build would be silently skipped by the
- *      publish loop, so it is a failure too.
- *   2. Invariant: .github/workflows/release.yml must still publish from
- *      dist/$lib_dir. If the publish step ever points back at the source
- *      (libs/<lib>) or reverts to `changeset publish`, this fails explicitly
- *      instead of passing silently on a dist/ directory nobody publishes.
+ * Post-consolidation there is exactly ONE publishable Nx project
+ * (`libs/halo-ui`, npm name `@halolib-ui/angular`) with 4 ng-packagr
+ * secondary entry points (core, button, input-text, select) instead of 5
+ * separate publishable libs. The old publish-order invariant
+ * (`extractPublishOrder`/`checkPublishOrderInvariant`) is gone — there is
+ * nothing left to order.
+ *
+ * Checks:
+ *   1. Exactly one publishable lib exists under libs/* (publishConfig.access
+ *      === "public").
+ *   2. Its dist/libs/halo-ui/package.json exposes all 5 required export
+ *      entries (`.`, `./core`, `./button`, `./input-text`, `./select`),
+ *      each with a runtime ("default") entry AND a "types" entry, and every
+ *      referenced file resolves on disk.
+ *   3. Its dist package.json declares zero `@halolib-ui/*` entries in
+ *      `dependencies` or `peerDependencies` (no runtime cross-package
+ *      dependency survives consolidation).
+ *   4. Invariant: .github/workflows/release.yml must still publish from
+ *      dist/libs/halo-ui, with an unregressed git tag/push step. If the
+ *      publish step ever points back at the source (libs/halo-ui) or
+ *      reverts to `changeset publish`, this fails explicitly instead of
+ *      passing silently on a dist/ directory nobody publishes.
  *
  * Usage: node tools/release/validate-packages.mjs  (run after `nx build`)
  */
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const scriptDir = fileURLToPath(new URL('.', import.meta.url));
 const repoRoot = resolve(scriptDir, '../..');
 const workflowPath = join(repoRoot, '.github/workflows/release.yml');
+
+/** Subpaths every consumer must be able to resolve (spec: library-packaging). */
+const REQUIRED_ENTRY_POINTS = ['.', './core', './button', './input-text', './select'];
 
 const failures = [];
 const log = (msg) => console.log(msg);
@@ -52,33 +69,110 @@ function publishableLibs() {
     .filter((candidate) => candidate !== null && candidate.pkg.publishConfig?.access === 'public');
 }
 
-/** Check 1: the dist package.json that actually gets published. */
+/**
+ * Pure check — does `exportsMap` expose every key in `requiredKeys`, each
+ * with both a runtime ("default") entry and a "types" entry? No filesystem
+ * access here; whether the referenced files actually exist on disk is a
+ * separate, impure concern (see `checkEntryPointFiles`).
+ */
+export function checkExportsShape(exportsMap, requiredKeys) {
+  const missing = [];
+  const missingRuntime = [];
+  const missingTypes = [];
+  for (const key of requiredKeys) {
+    const entry = exportsMap?.[key];
+    if (!entry) {
+      missing.push(key);
+      continue;
+    }
+    const runtime = typeof entry === 'string' ? entry : entry.default;
+    const types = typeof entry === 'object' && entry !== null ? entry.types : undefined;
+    if (!runtime) missingRuntime.push(key);
+    if (!types) missingTypes.push(key);
+  }
+  return {
+    ok: missing.length === 0 && missingRuntime.length === 0 && missingTypes.length === 0,
+    missing,
+    missingRuntime,
+    missingTypes,
+  };
+}
+
+/**
+ * Pure check — no `dependencies`/`peerDependencies` key may start with
+ * `@halolib-ui/` (spec: "No Runtime Cross-Package Dependencies"). A stale
+ * entry here would mean the consolidated build still depends on one of the
+ * 4 deleted sibling packages at runtime.
+ */
+export function checkNoCrossPackageDeps(pkg) {
+  const offenders = [
+    ...Object.keys(pkg.dependencies || {}),
+    ...Object.keys(pkg.peerDependencies || {}),
+  ].filter((name) => name.startsWith('@halolib-ui/'));
+  return { ok: offenders.length === 0, offenders };
+}
+
+/** Impure: resolve each entry point's runtime/types file against disk. */
+function checkEntryPointFiles(exportsMap, lib) {
+  for (const key of REQUIRED_ENTRY_POINTS) {
+    const entry = exportsMap[key];
+    if (!entry) continue; // already reported by checkExportsShape
+    const runtime = typeof entry === 'string' ? entry : entry.default;
+    const types = typeof entry === 'object' && entry !== null ? entry.types : undefined;
+    if (runtime && !existsSync(join(repoRoot, 'dist', 'libs', lib, runtime))) {
+      failures.push(
+        `exports["${key}"].default points at a file that does not exist on disk: ${runtime}`,
+      );
+    }
+    if (types && !existsSync(join(repoRoot, 'dist', 'libs', lib, types))) {
+      failures.push(
+        `exports["${key}"].types points at a file that does not exist on disk: ${types}`,
+      );
+    }
+  }
+}
+
+/** Check the dist package.json that actually gets published. */
 function checkDistPackage({ lib, pkg }) {
   const distPkgPath = join(repoRoot, 'dist', 'libs', lib, 'package.json');
   if (!existsSync(distPkgPath)) {
     failures.push(
       `${pkg.name}: missing dist/libs/${lib}/package.json — publishable package ` +
-        'has no dist build, so the publish loop would skip it silently',
+        'has no dist build, so the publish step would fail against an empty directory',
     );
     return;
   }
   const dist = readJson(distPkgPath);
-  const runtimeEntry = dist.main || dist.exports?.['.'];
-  const typesEntry = dist.typings || dist.types;
-  if (!runtimeEntry) {
+  const exportsMap = dist.exports || {};
+
+  const shape = checkExportsShape(exportsMap, REQUIRED_ENTRY_POINTS);
+  for (const key of shape.missing) {
     failures.push(
-      `${pkg.name}: dist/libs/${lib}/package.json has no main and no exports["."] — ` +
-        'consumers get TS2307 (the #85 regression)',
+      `${pkg.name}: dist package.json exports is missing "${key}" (the #85 regression)`,
     );
   }
-  if (!typesEntry) {
+  for (const key of shape.missingRuntime) {
+    failures.push(`${pkg.name}: exports["${key}"] has no runtime ("default") entry`);
+  }
+  for (const key of shape.missingTypes) {
     failures.push(
-      `${pkg.name}: dist/libs/${lib}/package.json has no typings/types — ` +
-        'consumers get no declaration file',
+      `${pkg.name}: exports["${key}"] has no "types" entry — consumers get no declaration file`,
     );
   }
-  if (runtimeEntry && typesEntry) {
-    log(`  ok  ${pkg.name} (dist/libs/${lib}) — runtime entry + types present`);
+  if (shape.ok) checkEntryPointFiles(exportsMap, lib);
+
+  const crossDeps = checkNoCrossPackageDeps(dist);
+  if (!crossDeps.ok) {
+    failures.push(
+      `${pkg.name}: dist package.json declares stale @halolib-ui/* dependency/peerDependency — ` +
+        crossDeps.offenders.join(', '),
+    );
+  }
+
+  if (shape.ok && crossDeps.ok) {
+    log(
+      `  ok  ${pkg.name} (dist/libs/${lib}) — all ${REQUIRED_ENTRY_POINTS.length} entry points resolve, no @halolib-ui/* deps`,
+    );
   }
 }
 
@@ -128,75 +222,29 @@ export function checkTagPushInvariant(step) {
 }
 
 /**
- * Extracts the lib directory names from an explicit
- * `for lib_dir in libs/core libs/button ...; do` loop header. Returns `[]`
- * if the step still uses a `libs/` wildcard package.json glob (or any other
- * shape), so callers can distinguish "explicit list, empty" from "not
- * explicit" via `checkPublishOrderInvariant`'s own glob detection below.
+ * Pure check — replaces the old 5-package publish-order invariant now that
+ * there is exactly one publishable lib. The publish step must still target
+ * `dist/libs/halo-ui`, never the source (`libs/halo-ui`) or `changeset
+ * publish` (the #85 regression class).
  */
-export function extractPublishOrder(step) {
-  const match = step.match(/for\s+lib_dir\s+in\s+([^;]+);\s*do/);
-  if (!match) return [];
-  return match[1]
-    .trim()
-    .split(/\s+/)
-    .map((token) => token.replace(/^libs\//, ''));
-}
-
-/**
- * Threat Matrix — Push state (#139 S4 task 4.9/4.12): the umbrella package
- * depends on core/button/input-text/select, so it must always publish AFTER
- * all four. A `for src_pkg in libs/` wildcard package.json glob sorts
- * alphabetically as button, core, halo-ui, input-text, select — publishing
- * the umbrella before input-text/select even though it depends on them,
- * leaving it briefly uninstallable. This check requires an EXPLICIT ordered list
- * (never a glob) covering exactly the publishable libs, with core first
- * and the umbrella last.
- */
-export function checkPublishOrderInvariant(order, publishableLibNames) {
-  if (order.length === 0) {
+export function checkDistPublishTargetInvariant(step) {
+  const publishesDist = /npm publish\s+"dist\/libs\/halo-ui"/.test(step);
+  const publishesSource =
+    /npm publish\s+"libs\/halo-ui"|npm publish\s+"\$lib_dir"|npm publish\s+"\$src_pkg"|npm publish\s+"\$dist_dir"|changeset publish/.test(
+      step,
+    );
+  if (!publishesDist || publishesSource) {
     return {
       ok: false,
       reason:
-        'publish step has no explicit `for lib_dir in ...` list (reverted to a libs/*/package.json glob?)',
+        'publish step no longer targets dist/libs/halo-ui — validation checks that directory ' +
+        'while publish would target something else (the #85 source-vs-dist regression)',
     };
   }
-
-  const orderSet = new Set(order);
-  const expectedSet = new Set(publishableLibNames);
-  const missing = publishableLibNames.filter((lib) => !orderSet.has(lib));
-  const extra = order.filter((lib) => !expectedSet.has(lib));
-  if (missing.length > 0 || extra.length > 0) {
-    return {
-      ok: false,
-      reason:
-        `explicit list does not cover exactly the publishable libs — ` +
-        `missing: [${missing.join(', ') || 'none'}], unexpected: [${extra.join(', ') || 'none'}]`,
-    };
-  }
-
-  const umbrella = 'halo-ui';
-  const deps = order.filter((lib) => lib !== 'core' && lib !== umbrella);
-  const coreIndex = order.indexOf('core');
-  for (const dep of deps) {
-    if (order.indexOf(dep) < coreIndex) {
-      return { ok: false, reason: `"core" must be listed before "${dep}" (dependency order)` };
-    }
-  }
-  const umbrellaIndex = order.indexOf(umbrella);
-  for (const dep of [...deps, 'core']) {
-    if (umbrellaIndex < order.indexOf(dep)) {
-      return {
-        ok: false,
-        reason: `"${umbrella}" must be listed last — it depends on "${dep}" (dependency order)`,
-      };
-    }
-  }
-
   return { ok: true };
 }
 
-/** Check 2: the validated directory is the directory release.yml publishes. */
+/** Check: the validated directory is the directory release.yml publishes. */
 function checkPublishInvariant(workflow) {
   const step = extractStep(workflow, 'Publish to npm from dist');
   if (!step) {
@@ -206,46 +254,38 @@ function checkPublishInvariant(workflow) {
     );
     return;
   }
-  const derivesDist = step.includes('dist_dir="dist/$lib_dir"');
-  const publishesDist = /npm publish\s+"\$dist_dir"/.test(step);
-  const publishesSource =
-    /npm publish\s+"\$lib_dir"|npm publish\s+"\$src_pkg"|changeset publish/.test(step);
-  if (!derivesDist || !publishesDist || publishesSource) {
-    failures.push(
-      'release.yml invariant: the "Publish to npm from dist" step no longer publishes ' +
-        'dist/$lib_dir. Validation checks dist/libs/<lib> while publish would target ' +
-        'something else (the source-lib regression from #85). Fix release.yml first.',
-    );
+
+  const targetCheck = checkDistPublishTargetInvariant(step);
+  if (!targetCheck.ok) {
+    failures.push(`release.yml invariant: ${targetCheck.reason}`);
     return;
   }
-  log('  ok  release.yml — publish still targets dist/$lib_dir');
+  log('  ok  release.yml — publish still targets dist/libs/halo-ui');
 
   const tagPush = checkTagPushInvariant(step);
   if (!tagPush.ok) {
     failures.push(`release.yml invariant: publish step git tag/push regressed — ${tagPush.reason}`);
     return;
   }
-  log('  ok  release.yml — publish step still tags and pushes each published package');
-
-  const order = extractPublishOrder(step);
-  const orderCheck = checkPublishOrderInvariant(
-    order,
-    publishableLibs().map((entry) => entry.lib),
-  );
-  if (!orderCheck.ok) {
-    failures.push(`release.yml invariant: publish order regressed — ${orderCheck.reason}`);
-    return;
-  }
-  log('  ok  release.yml — publish order covers exactly the publishable libs, dependency-first');
+  log('  ok  release.yml — publish step still tags and pushes the published package');
 }
 
-const isMainModule = process.argv[1] && import.meta.url === `file://${process.argv[1]}`;
+// `file://${process.argv[1]}` only matches import.meta.url on POSIX — on
+// Windows process.argv[1] uses backslashes (e.g. `C:\repo\file.mjs`) while
+// import.meta.url is always a proper `file:///C:/repo/file.mjs` URL, so that
+// naive comparison silently never matches and this script's checks never
+// ran when invoked directly on Windows. pathToFileURL().href normalizes
+// both sides to the same URL form on every platform.
+const isMainModule = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 
 if (isMainModule) {
   console.log('Validating publishable packages before publish...');
   const libs = publishableLibs();
-  if (libs.length === 0) {
-    failures.push('no publishable libs found under libs/* (publishConfig.access === "public")');
+  if (libs.length !== 1) {
+    failures.push(
+      `expected exactly one publishable lib under libs/* (publishConfig.access === "public"), ` +
+        `found ${libs.length}${libs.length > 0 ? ': ' + libs.map((entry) => entry.lib).join(', ') : ''}`,
+    );
   }
   for (const entry of libs) checkDistPackage(entry);
 

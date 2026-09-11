@@ -20,6 +20,9 @@ yarn-error.log
 .settings/
 *.sublime-workspace
 
+# Claude Code — personal/local overrides only, never the shared .claude/settings.json
+.claude/settings.local.json
+
 # Visual Studio Code
 .vscode/*
 !.vscode/settings.json

@@ -1,47 +1,550 @@
-<header class="input-text-page__header">
-  <h1 class="input-text-page__title">InputText</h1>
-  <p class="input-text-page__description">
-    Campo de texto accesible, integrado con Angular Forms, con soporte para tamaños, estado deshabilitado/solo lectura y
-    binding de dos vías.
-  </p>
-</header>
+<nav aria-label="Breadcrumb" class="mb-6 flex items-center gap-2 text-sm text-zinc-400">
+  <span>Documentación</span>
+  <span class="text-zinc-300">/</span>
+  <span>Componentes</span>
+  <span class="text-zinc-300">/</span>
+  <span class="font-medium text-zinc-700">InputText</span>
+</nav>
 
-<div class="input-text-page__docs">
-  <app-code-block label="Instalación" language="bash" code="npm install &#64;halo-ui/angular &#64;angular/cdk" />
-  <app-code-block
-    label="Importación"
-    language="typescript"
-    code="import { HaInputText } from '&#64;halo-ui/angular';
-import { FormsModule } from '&#64;angular/forms';"
-  />
-  <app-code-block
-    label="Uso básico"
-    language="html"
-    code='&lt;input ha-input-text size="md" placeholder="Escribí algo" [(ngModel)]="value" /&gt;'
-  />
+<div class="mb-10 border-b border-surface-border pb-6">
+  <div class="mb-3 flex flex-wrap items-center gap-3">
+    <code class="rounded-lg bg-zinc-900 px-3 py-1.5 font-mono text-lg font-bold text-white sm:text-xl"
+      >&lt;input ha-input-text&gt;</code
+    >
+    <span class="rounded-full bg-green-50 px-2.5 py-1 text-xs font-semibold text-green-700">Estable</span>
+    <span class="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">v19.0.1</span>
+    <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700"
+      >Angular Forms nativo</span
+    >
+    <span class="rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-semibold text-zinc-600">Angular 19.2+</span>
+  </div>
+  <p class="max-w-3xl text-[15px] font-normal leading-relaxed text-zinc-600 sm:text-base">
+    Campo de texto accesible y token-driven, aplicado como atributo sobre un
+    <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">&lt;input&gt;</code> nativo. Soporta
+    tamaños, estado deshabilitado/solo lectura, y expone un estado de error 100% automático a partir del
+    <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">FormControl</code> que le conectes.
+  </p>
+  <div class="mt-4 flex items-center gap-5 text-sm">
+    <a href="#playground" class="inline-flex items-center gap-1.5 font-semibold text-brand-700 hover:text-brand-500">
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M8 5v14l11-7L8 5Z" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      Playground
+    </a>
+    <a href="#api-reference" class="inline-flex items-center gap-1.5 font-semibold text-brand-700 hover:text-brand-500">
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke-linecap="round" stroke-linejoin="round" />
+        <path
+          d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      API Docs
+    </a>
+  </div>
 </div>
 
-<section class="input-text-page__section">
-  <h2>Sizes</h2>
-  <div class="input-text-page__row">
-    @for (size of sizes; track size) {
-      <input ha-input-text [size]="size" [placeholder]="size" />
+<!-- SECTION 1: Interactive Playground -->
+<section id="playground" class="mb-14 scroll-mt-6">
+  <h2 class="mb-6 text-2xl font-bold text-zinc-900">Playground interactivo</h2>
+
+  <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
+    <div class="rounded-2xl border border-surface-border bg-white shadow-sm">
+      <div class="flex items-center gap-1 border-b border-surface-border p-2">
+        <button
+          type="button"
+          class="rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors"
+          [class]="activeTab() === 'preview' ? 'bg-surface-base text-brand-700' : 'text-zinc-500 hover:text-zinc-700'"
+          (click)="activeTab.set('preview')"
+        >
+          Vista previa
+        </button>
+        <button
+          type="button"
+          class="rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors"
+          [class]="activeTab() === 'code' ? 'bg-surface-base text-brand-700' : 'text-zinc-500 hover:text-zinc-700'"
+          (click)="activeTab.set('code')"
+        >
+          Código
+        </button>
+      </div>
+
+      <div class="p-8">
+        @if (activeTab() === 'preview') {
+          <div class="flex min-h-32 items-center justify-center rounded-xl bg-surface-base p-6">
+            <input
+              ha-input-text
+              [size]="selectedSize()"
+              [disabled]="withDisabled()"
+              [readonly]="withReadonly()"
+              placeholder="Escribí algo"
+              class="w-full max-w-sm"
+            />
+          </div>
+        } @else {
+          <app-code-block label="Resultado" language="html" [code]="generatedCode()" />
+        }
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-5 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <div>
+        <span class="mb-2 block text-[11px] font-bold uppercase tracking-wider text-zinc-500">Size</span>
+        <div class="flex flex-wrap gap-2">
+          @for (s of sizes; track s) {
+            <button
+              type="button"
+              class="rounded-full border px-3 py-1.5 text-xs font-semibold uppercase transition-all"
+              [class]="
+                selectedSize() === s
+                  ? 'border-brand-700 bg-brand-700 text-white'
+                  : 'border-surface-border bg-white text-zinc-600 hover:border-brand-600/40'
+              "
+              (click)="selectedSize.set(s)"
+            >
+              {{ s }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2 border-t border-surface-border pt-4">
+        <label class="flex items-center gap-2 text-xs font-semibold text-zinc-700">
+          <input
+            type="checkbox"
+            class="h-4 w-4 rounded border-surface-borderstrong text-brand-700 focus:ring-brand-700"
+            [checked]="withDisabled()"
+            (change)="onDisabledToggle($event)"
+          />
+          disabled
+        </label>
+        <label class="flex items-center gap-2 text-xs font-semibold text-zinc-700">
+          <input
+            type="checkbox"
+            class="h-4 w-4 rounded border-surface-borderstrong text-brand-700 focus:ring-brand-700"
+            [checked]="withReadonly()"
+            (change)="onReadonlyToggle($event)"
+          />
+          readonly
+        </label>
+      </div>
+
+      <p class="border-t border-surface-border pt-4 text-[11px] leading-relaxed text-zinc-500">
+        No hay toggle de <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">prefix</code>,
+        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">clearable</code> ni
+        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">required</code> porque
+        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">HaInputText</code> no los expone —
+        estos 3 controles son toda la superficie real del componente.
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-6 rounded-2xl border border-surface-border bg-white p-6 shadow-sm">
+    <h3 class="mb-1 text-sm font-bold text-zinc-900">Validación real con Angular Forms</h3>
+    <p class="mb-5 max-w-2xl text-xs leading-relaxed text-zinc-600">
+      El único estado semántico real de
+      <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">HaInputText</code> es el de error, y es
+      100% automático: se calcula a partir de
+      <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">invalid &amp;&amp; touched</code> del
+      <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">FormControl</code> conectado — no
+      existe forma de setearlo a mano. Escribí un email inválido abajo y salí del campo (blur) para verlo.
+    </p>
+    <div class="max-w-sm">
+      <label
+        for="email-demo-input"
+        class="mb-1.5 block text-[13px] font-semibold"
+        style="
+          color: var(--ha-input-label-color);
+          font-size: var(--ha-input-label-font-size);
+          font-weight: var(--ha-input-label-font-weight);
+        "
+        >Email</label
+      >
+      <input
+        id="email-demo-input"
+        ha-input-text
+        size="md"
+        placeholder="vos@ejemplo.com"
+        aria-describedby="email-demo-hint"
+        [formControl]="emailControl"
+        class="w-full"
+      />
+      @if (emailControl.invalid && emailControl.touched) {
+        <p
+          id="email-demo-hint"
+          class="mt-1.5 text-xs"
+          style="color: var(--ha-input-hint-color); font-size: var(--ha-input-hint-font-size)"
+        >
+          Ingresá un email válido.
+        </p>
+      } @else {
+        <p
+          id="email-demo-hint"
+          class="mt-1.5 text-xs"
+          style="color: var(--ha-input-hint-color); font-size: var(--ha-input-hint-font-size)"
+        >
+          Usamos este email para notificarte cambios en tu cuenta.
+        </p>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2: Arquitectura real (reframed "Anatomía" — no fictional slots) -->
+<section class="mb-14">
+  <h2 class="mb-6 text-2xl font-bold text-zinc-900">Arquitectura real</h2>
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div class="rounded-2xl border border-surface-border bg-white p-6 shadow-sm">
+      <h3 class="mb-2 text-sm font-bold text-zinc-900">El host ES el &lt;input&gt; nativo</h3>
+      <p class="text-xs leading-relaxed text-zinc-600">
+        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">HaInputText</code> se aplica como
+        atributo (<code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">input[ha-input-text]</code
+        >) sobre un
+        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">&lt;input&gt;</code> nativo. No
+        renderiza template propio (<code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
+          >template: ''</code
+        >): no hay wrapper, no hay slots de label, prefix, suffix ni helper. Semántica nativa, teclado y foco vienen
+        gratis, igual que en
+        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">button[ha-button]</code>.
+      </p>
+    </div>
+    <div class="rounded-2xl border border-surface-border bg-white p-6 shadow-sm">
+      <h3 class="mb-2 text-sm font-bold text-zinc-900">¿Y el label / texto de ayuda?</h3>
+      <p class="text-xs leading-relaxed text-zinc-600">
+        La librería reserva tokens de label y de hint (<code
+          class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
+          >--ha-input-label-color</code
+        >, <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">--ha-input-hint-color</code>,
+        etc.) aunque nunca dibuja esos elementos. Vos escribís tu propio
+        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">&lt;label&gt;</code> y párrafo de
+        ayuda/error, y los estilizás con esos mismos tokens para que combinen visualmente sin que la librería posea ese
+        markup.
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-6 rounded-2xl border border-surface-border bg-white p-6 shadow-sm">
+    <h3 class="mb-4 text-sm font-bold text-zinc-900">Anatomía de un campo real</h3>
+    <div class="flex flex-col gap-3">
+      <div class="flex items-start gap-3 rounded-xl bg-surface-base p-3">
+        <span
+          class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-[11px] font-bold text-white"
+          >1</span
+        >
+        <div class="flex flex-1 items-center justify-between gap-3">
+          <div>
+            <p class="font-mono text-xs font-semibold text-zinc-900">&lt;label&gt;</p>
+            <p class="text-xs text-zinc-600">Lo escribís vos. Podés colorearlo con `--ha-input-label-color`.</p>
+          </div>
+          <span class="shrink-0 rounded-full bg-zinc-200 px-2.5 py-1 text-[10px] font-bold text-zinc-700">Tuyo</span>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 rounded-xl bg-surface-base p-3">
+        <span
+          class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-700 text-[11px] font-bold text-white"
+          >2</span
+        >
+        <div class="flex flex-1 items-center justify-between gap-3">
+          <div>
+            <p class="font-mono text-xs font-semibold text-zinc-900">&lt;input ha-input-text&gt;</p>
+            <p class="text-xs text-zinc-600">
+              El único elemento que provee la librería: clases BEM + tokens, sin wrapper.
+            </p>
+          </div>
+          <span class="shrink-0 rounded-full bg-brand-50 px-2.5 py-1 text-[10px] font-bold text-brand-700"
+            >Librería</span
+          >
+        </div>
+      </div>
+      <div class="flex items-start gap-3 rounded-xl bg-surface-base p-3">
+        <span
+          class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-[11px] font-bold text-white"
+          >3</span
+        >
+        <div class="flex flex-1 items-center justify-between gap-3">
+          <div>
+            <p class="font-mono text-xs font-semibold text-zinc-900">&lt;p&gt; (hint / error)</p>
+            <p class="text-xs text-zinc-600">
+              Lo escribís vos, condicionado a
+              <code class="rounded bg-zinc-200 px-1 py-0.5 text-[0.9em]"
+                >control.invalid &amp;&amp; control.touched</code
+              >, coloreado con `--ha-input-hint-color`.
+            </p>
+          </div>
+          <span class="shrink-0 rounded-full bg-zinc-200 px-2.5 py-1 text-[10px] font-bold text-zinc-700">Tuyo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2b: Estados reales -->
+<section class="mb-14">
+  <h2 class="mb-6 text-2xl font-bold text-zinc-900">Estados reales</h2>
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="flex flex-col gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <input ha-input-text placeholder="Reposo" />
+      <span class="text-xs font-semibold text-zinc-500">Default</span>
+    </div>
+    <div class="flex flex-col gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <input ha-input-text placeholder="Enfocame con Tab" autofocus />
+      <span class="text-xs font-semibold text-zinc-500"
+        >Focus (real, vía teclado — anillo
+        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">--ha-input-focus-ring</code>)</span
+      >
+    </div>
+    <div class="flex flex-col gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <input ha-input-text placeholder="Deshabilitado" [disabled]="true" />
+      <span class="text-xs font-semibold text-zinc-500">Disabled</span>
+    </div>
+    <div class="flex flex-col gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <input ha-input-text [readonly]="true" value="Valor de solo lectura" />
+      <span class="text-xs font-semibold text-zinc-500">Readonly</span>
+    </div>
+    <div class="flex flex-col gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <input ha-input-text placeholder="Email" [formControl]="errorGalleryControl" />
+      <span class="text-xs font-semibold text-zinc-500"
+        >Error (real,
+        <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">invalid &amp;&amp; touched</code
+        >)</span
+      >
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: Integración -->
+<section class="mb-14">
+  <h2 class="mb-6 text-2xl font-bold text-zinc-900">Integración</h2>
+
+  <div class="flex flex-col gap-4">
+    <app-code-block label="Instalación" language="bash" code="npm install &#64;halolib-ui/angular &#64;angular/cdk" />
+    <app-code-block
+      label="Importación"
+      language="typescript"
+      code="import { HaInputText } from '&#64;halolib-ui/angular';
+import { ReactiveFormsModule } from '&#64;angular/forms';"
+    />
+    <app-code-block
+      label="Uso básico"
+      language="html"
+      code='&lt;input ha-input-text size="md" placeholder="Escribí algo" [formControl]="control" /&gt;'
+    />
+  </div>
+
+  <div class="mt-8">
+    <h3 class="mb-3 text-sm font-bold text-zinc-900">Campo de email con label y error propios</h3>
+    <app-code-block
+      label="user-profile-email-field.component.ts"
+      language="typescript"
+      code='import { Component } from &apos;&#64;angular/core&apos;;
+import { FormControl, ReactiveFormsModule, Validators } from &apos;&#64;angular/forms&apos;;
+import { HaInputText } from &apos;&#64;halolib-ui/angular&apos;;
+
+&#64;Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, HaInputText],
+  template: `
+    &lt;label for="email" class="field-label"&gt;Email&lt;/label&gt;
+    &lt;input
+      id="email"
+      ha-input-text
+      size="md"
+      placeholder="vos&#64;ejemplo.com"
+      aria-describedby="email-hint"
+      [formControl]="email"
+    /&gt;
+    &#64;if (email.invalid &amp;&amp; email.touched) {
+      &lt;p id="email-hint" class="field-hint field-hint--error"&gt;Ingresá un email válido.&lt;/p&gt;
+    } &#64;else {
+      &lt;p id="email-hint" class="field-hint"&gt;Usamos este email para notificarte cambios en tu cuenta.&lt;/p&gt;
     }
+  `,
+  styles: `
+    /* .field-label y .field-hint son tuyos: HaInputText no los renderiza. */
+    .field-label { color: var(--ha-input-label-color); font-size: var(--ha-input-label-font-size); font-weight: var(--ha-input-label-font-weight); }
+    .field-hint { color: var(--ha-input-hint-color); font-size: var(--ha-input-hint-font-size); }
+    .field-hint--error { color: var(--ha-input-error-color); }
+  `,
+})
+export class UserProfileEmailFieldComponent {
+  readonly email = new FormControl(&apos;&apos;, {
+    nonNullable: true,
+    validators: [Validators.required, Validators.email],
+  });
+}'
+    />
   </div>
 </section>
 
-<section class="input-text-page__section">
-  <h2>States</h2>
-  <div class="input-text-page__row">
-    <input ha-input-text placeholder="Disabled" [disabled]="true" />
-    <input ha-input-text placeholder="Read-only" [readonly]="true" value="Read-only value" />
+<!-- SECTION 4: API Reference -->
+<section id="api-reference" class="mb-14 scroll-mt-6">
+  <h2 class="mb-6 text-2xl font-bold text-zinc-900">API Reference</h2>
+
+  <h3 class="mb-3 text-xs font-bold uppercase tracking-wider text-zinc-500">Inputs</h3>
+  <div class="mb-8 overflow-x-auto rounded-2xl border border-surface-border bg-white shadow-sm">
+    <table class="w-full text-left text-sm">
+      <thead
+        class="border-b border-surface-border bg-surface-base text-[11px] font-bold uppercase tracking-wider text-zinc-500"
+      >
+        <tr>
+          <th class="px-4 py-3">Input</th>
+          <th class="px-4 py-3">Tipo</th>
+          <th class="px-4 py-3">Default</th>
+          <th class="px-4 py-3">Descripción</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-surface-border">
+        @for (row of apiInputs; track row.name) {
+          <tr>
+            <td class="px-4 py-3 font-mono text-xs font-semibold text-brand-700">{{ row.name }}</td>
+            <td class="px-4 py-3 font-mono text-xs text-zinc-600">{{ row.type }}</td>
+            <td class="px-4 py-3 font-mono text-xs text-zinc-600">{{ row.default }}</td>
+            <td class="px-4 py-3 text-xs text-zinc-600">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="mb-3 text-xs font-bold uppercase tracking-wider text-zinc-500">Outputs</h3>
+  <p class="mb-8 max-w-3xl text-sm leading-relaxed text-zinc-600">
+    No expone <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">&#64;Output()</code> propios —
+    la integración es vía
+    <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">ControlValueAccessor</code> (<code
+      class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700"
+      >[formControl]</code
+    >
+    / <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">[(ngModel)]</code>), igual que
+    cualquier <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">&lt;input&gt;</code> nativo
+    envuelto en Angular Forms.
+  </p>
+
+  <h3 class="mb-3 text-xs font-bold uppercase tracking-wider text-zinc-500">Slots</h3>
+  <p class="max-w-3xl text-sm leading-relaxed text-zinc-600">
+    No hay content projection: el componente no tiene
+    <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">template</code> propio (<code
+      class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700"
+      >template: ''</code
+    >), así que no puede proyectar
+    <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-brand-700">&lt;ng-content&gt;</code>. No existen
+    slots de prefix/suffix.
+  </p>
+</section>
+
+<!-- SECTION 5: Accesibilidad & Tokens -->
+<section class="mb-14">
+  <h2 class="mb-6 text-2xl font-bold text-zinc-900">Accesibilidad &amp; Tokens</h2>
+  <div class="grid gap-4 sm:grid-cols-3">
+    <div class="flex items-start gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <span class="mt-0.5 shrink-0 text-brand-700" aria-hidden="true">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="7" width="18" height="10" rx="2" />
+          <path d="M7 12h.01" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <div>
+        <h3 class="mb-1 text-sm font-bold text-zinc-900">Semántica nativa</h3>
+        <p class="text-xs leading-relaxed text-zinc-600">
+          Es un <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">&lt;input&gt;</code> nativo:
+          edición de texto, selección, autocompletado y navegación por teclado funcionan sin manejo personalizado.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-start gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <span class="mt-0.5 shrink-0 text-brand-700" aria-hidden="true">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" stroke-linecap="round" stroke-linejoin="round" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+      </span>
+      <div>
+        <h3 class="mb-1 text-sm font-bold text-zinc-900">Foco por teclado</h3>
+        <p class="text-xs leading-relaxed text-zinc-600">
+          Angular CDK
+          <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">FocusMonitor</code> distingue el
+          origen del foco: el anillo extra (<code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700"
+            >--ha-input-focus-ring</code
+          >) solo aparece cuando el foco se originó por teclado, no con clicks de mouse.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-start gap-3 rounded-2xl border border-surface-border bg-white p-5 shadow-sm">
+      <span class="mt-0.5 shrink-0 text-brand-700" aria-hidden="true">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M12 22a10 10 0 1 1 10-10c0 1.7-1.3 3-3 3h-2.3a1.7 1.7 0 0 0-1.2 2.9c.3.3.5.7.5 1.1 0 1.3-1.7 2.3-4 3Z"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <circle cx="7.5" cy="10.5" r="1" fill="currentColor" stroke="none" />
+          <circle cx="10.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+          <circle cx="15" cy="6.5" r="1" fill="currentColor" stroke="none" />
+          <circle cx="17.5" cy="10.5" r="1" fill="currentColor" stroke="none" />
+        </svg>
+      </span>
+      <div>
+        <h3 class="mb-1 text-sm font-bold text-zinc-900">Atributos ARIA reales</h3>
+        <p class="text-xs leading-relaxed text-zinc-600">
+          El host bindea directamente
+          <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">aria-invalid</code>,
+          <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">aria-disabled</code>,
+          <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">aria-describedby</code> y
+          <code class="rounded bg-zinc-100 px-1 py-0.5 text-[0.85em] text-brand-700">aria-label</code> según los inputs
+          y el estado del form control.
+        </p>
+      </div>
+    </div>
   </div>
 </section>
 
-<section class="input-text-page__section">
-  <h2>Two-way binding</h2>
-  <div class="input-text-page__row">
-    <input ha-input-text placeholder="Type something" name="demoInput" [(ngModel)]="boundValue" />
-    <p>Current value: {{ boundValue }}</p>
-  </div>
-</section>
+<div class="mt-4 flex items-center justify-between border-t border-surface-border pb-12 pt-4">
+  <a
+    routerLink="/componentes/boton"
+    class="group flex items-center gap-3 rounded-2xl border border-surface-border bg-white px-6 py-3 shadow-sm transition-all hover:border-brand-600/40 hover:shadow"
+  >
+    <svg
+      class="h-4 w-4 text-zinc-400 transition-all group-hover:-translate-x-1 group-hover:text-brand-700"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <line x1="19" x2="5" y1="12" y2="12" />
+      <polyline points="12 19 5 12 12 5" />
+    </svg>
+    <div>
+      <span class="block text-xs text-zinc-400">Anterior</span>
+      <span class="text-sm font-bold text-zinc-800 transition-colors group-hover:text-brand-700">Botón</span>
+    </div>
+  </a>
+
+  <a
+    routerLink="/componentes/select"
+    class="group flex items-center gap-3 rounded-2xl border border-surface-border bg-white px-6 py-3 shadow-sm transition-all hover:border-brand-600/40 hover:shadow"
+  >
+    <div class="text-right">
+      <span class="block text-xs text-zinc-400">Siguiente</span>
+      <span class="text-sm font-bold text-zinc-800 transition-colors group-hover:text-brand-700">Select</span>
+    </div>
+    <svg
+      class="h-4 w-4 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-brand-700"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <line x1="5" x2="19" y1="12" y2="12" />
+      <polyline points="12 5 19 12 12 19" />
+    </svg>
+  </a>
+</div>

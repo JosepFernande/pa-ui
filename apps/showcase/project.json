@@ -21,8 +21,9 @@
             "input": "apps/showcase/public"
           }
         ],
-        "styles": ["apps/showcase/src/styles.css", "libs/core/src/lib/foundation/theme.css"],
-        "scripts": []
+        "styles": ["apps/showcase/src/styles.css"],
+        "scripts": [],
+        "allowedCommonJsDependencies": ["prismjs"]
       },
       "configurations": {
         "production": {
@@ -71,7 +72,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/showcase/jest.config.ts"
+        "jestConfig": "apps/showcase/jest.config.cjs"
       }
     }
   }

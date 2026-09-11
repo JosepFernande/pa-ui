@@ -1,6 +1,6 @@
 {
   "name": "@halolib-ui/angular",
-  "version": "19.0.1",
+  "version": "19.0.0",
   "license": "MIT",
   "description": "Accessible, token-driven Angular 19 UI component library — umbrella package",
   "keywords": [
@@ -25,29 +25,37 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./index.mjs",
-  "types": "./index.d.mts",
-  "typings": "./index.d.mts",
   "exports": {
     "./package.json": {
       "default": "./package.json"
     },
     ".": {
-      "types": "./index.d.mts",
-      "default": "./index.mjs"
+      "default": "./src/index.ts"
+    },
+    "./core": {
+      "default": "./core/src/index.ts"
+    },
+    "./button": {
+      "default": "./button/src/index.ts"
+    },
+    "./input-text": {
+      "default": "./input-text/src/index.ts"
+    },
+    "./select": {
+      "default": "./select/src/index.ts"
+    },
+    "./icon": {
+      "default": "./icon/src/index.ts"
     }
-  },
-  "dependencies": {
-    "@halolib-ui/button": "19.0.1",
-    "@halolib-ui/core": "19.0.1",
-    "@halolib-ui/input-text": "19.0.1",
-    "@halolib-ui/select": "19.0.1"
   },
   "peerDependencies": {
     "@angular/common": "^19.2.0",
     "@angular/core": "^19.2.0",
     "@angular/cdk": "^19.2.0",
     "@angular/forms": "^19.2.0"
+  },
+  "dependencies": {
+    "@lucide/angular": "^1.44.0"
   },
   "sideEffects": false,
   "type": "module"
