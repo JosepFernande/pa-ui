@@ -124,11 +124,6 @@ export const HA_RADIUS_SCALE: HaSizeScale = {
 };
 
 /**
- *
- */
-export const HA_BORDER_SCALE = '1px solid var(--ha-primary)';
-
-/**
  * Generic horizontal-padding scale — assistant-authored, same status as
  * spacing/gap/radius. Extracted here because Button's and Input's
  * `paddingX` (`button/button-default-values.tokens.ts` /
