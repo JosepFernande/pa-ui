@@ -22,9 +22,9 @@ import {
   HA_SELECT_TOKENS,
 } from '../theme/component-token-shapes';
 import type { ThemeCssVariables } from '../theme/theme.tokens';
-import { HA_BUTTON_TOKEN_DEFAULT_VALUES } from '../button/button-default-values.tokens';
-import { HA_INPUT_TOKEN_DEFAULT_VALUES } from '../input-text/input-text-default-values.tokens';
-import { HA_SELECT_TOKEN_DEFAULT_VALUES } from '../select/select-default-values.tokens';
+import { HA_BUTTON_TOKEN_DEFAULT_VALUES } from '../components/button/button-default-values.tokens';
+import { HA_INPUT_TOKEN_DEFAULT_VALUES } from '../components/input-text/input-text-default-values.tokens';
+import { HA_SELECT_TOKEN_DEFAULT_VALUES } from '../components/select/select-default-values.tokens';
 
 function buildComponentTokenDefaults(): ThemeCssVariables {
   const result: ThemeCssVariables = {};

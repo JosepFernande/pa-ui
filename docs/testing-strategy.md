@@ -196,10 +196,13 @@ CI must fail if coverage drops below these thresholds:
 | Functions  | 90%              |
 | Lines      | 80%              |
 
-These values are centralized in `jest.preset.cjs` (repo root) — each lib's
-`jest.config.cjs` inherits the preset, it does not declare its own
-`coverageThreshold`. The real preset also excludes story files from coverage
-accounting:
+These values are centralized in `jest.preset.cjs` (repo root) — the single
+`libs/halo-ui/jest.config.cjs` (halo-ui is now one consolidated package with
+`core`/`button`/`input-text`/`select` as secondary entry points, not separate
+libs) inherits the preset and does not declare its own `coverageThreshold`. The
+real preset also excludes story files from coverage accounting (a leftover
+exclusion — no `*.stories.ts` files or Storybook tooling exist in the repo
+today):
 
 ```javascript
 // jest.preset.cjs
@@ -215,13 +218,17 @@ coverageThreshold: {
 ## Test File Structure per Component
 
 ```
-libs/button/
+libs/halo-ui/button/
   src/
     lib/
       button.component.ts
       button.component.spec.ts         ← unit tests + accessibility tests (jest-axe)
-      button.stories.ts                ← story, colocated next to the component (not a separate stories/ folder)
+      button.component.css
 ```
+
+There is no Storybook tooling or `*.stories.ts` convention in this repo — the
+showcase app (`apps/showcase`) is the living, centralized playground for each
+component instead (see [Showcase](./showcase.md)).
 
 ## Commands
 
@@ -229,11 +236,15 @@ libs/button/
 # Run all tests
 npx nx run-many -t test
 
-# Run tests for a specific package
-npx nx test button
+# Run tests for the halo-ui package (there is one Nx project, `halo-ui`,
+# not one per entry point — "button", "core", etc. are not Nx project names)
+npx nx test halo-ui
+
+# Run tests for just one entry point, e.g. button
+npx nx test halo-ui --testPathPattern=button
 
 # Run tests with coverage
-npx nx test button --coverage
+npx nx test halo-ui --coverage
 
 # Run the showcase app (manual smoke-check playground)
 npx nx serve showcase

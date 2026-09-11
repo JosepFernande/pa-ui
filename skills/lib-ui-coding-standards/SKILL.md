@@ -27,10 +27,11 @@ libs/<lib>/src/lib/<component>/
 ├── <component>.component.css   # Styles (CSS variables only, :host scoping)
 ├── <component>.types.ts        # TypeScript interfaces, types
 ├── <component>.tokens.ts       # Component token definitions (--ha-<comp>-* )
-├── <component>.constants.ts    # Constants, default values, variant maps
-├── <component>.utils.ts        # Pure helper functions (no side effects)
-├── index.ts                    # Barrel export
-└── public-api.ts               # Public API export (at lib root)
+├── <component>.constants.ts    # Constants, default values, variant maps (as needed)
+└── <component>.utils.ts        # Pure helper functions, no side effects (as needed)
+
+libs/<lib>/src/
+└── index.ts                    # Barrel export for the whole lib (not per-component)
 ```
 
 ## Required Component Decorator
@@ -45,24 +46,32 @@ libs/<lib>/src/lib/<component>/
 })
 ```
 
+Selector convention: components with no native HTML equivalent use a custom
+element selector (`ha-select`). Components that wrap a native form control use
+an attribute selector on that element instead, so the native semantics/a11y are
+preserved (`button[ha-button]`, `input[ha-input-text]`).
+
 ## Input/Output Patterns
+
+Inputs use the signal-based `input()` API, not the `@Input()` decorator.
 
 ```typescript
 // Size: exactly these three
-@Input() size: 'sm' | 'md' | 'lg' = 'md';
+readonly size = input<'sm' | 'md' | 'lg'>('md');
 
 // Variant: exactly these three
-@Input() variant: 'solid' | 'outline' | 'ghost' = 'solid';
+readonly variant = input<'solid' | 'outline' | 'ghost'>('solid');
 
 // Color: string (theme-registered), never enum
-@Input() color: string = 'primary';
+readonly color = input('primary');
 
-// Boolean: no prefix
-@Input() disabled = false;
+// Boolean: no prefix, use booleanAttribute for attribute coercion
+readonly disabled = input(false, { transform: booleanAttribute });
 
-// Output: past tense, no 'on' prefix
-@Output() closed = new EventEmitter<void>();
-@Output() valueChange = new EventEmitter<string>();
+// Output: past tense, no 'on' prefix — @Output() + EventEmitter (not the
+// output() function)
+@Output() readonly closed = new EventEmitter<void>();
+@Output() readonly valueChange = new EventEmitter<string>();
 ```
 
 ## Signal Usage Patterns

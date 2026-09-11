@@ -19,7 +19,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
-import { CdkConnectedOverlay, Overlay } from '@angular/cdk/overlay';
+import { CdkConnectedOverlay } from '@angular/cdk/overlay';
 import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
 import type { HaSelectOption, HaSelectSize } from './select.types';
 import {
@@ -28,37 +28,31 @@ import {
   HA_SELECT_VIEWPORT_MARGIN,
 } from './select.constants';
 import { resolveSelectKeyIntent } from './select.keyboard';
+import { createHaSelectScrollStrategy } from './select.scroll-strategy';
 import { HaSelectOptionItem } from './select.option-item';
 import { findOptionIndexByValue, firstEnabledIndex, nextSelectId, optionId } from './select.utils';
 
 /**
- * Accessible, token-driven single-select combobox (custom element
- * `ha-select`, NOT an attribute selector — unlike `button[ha-button]`/
- * `input[ha-input-text]`, the trigger is a `<button role="combobox">` rendered
- * inside the component's own template).
+ * Accessible, token-driven single-select combobox (custom element `ha-select`,
+ * not an attribute selector) — a `<button role="combobox">` trigger paired
+ * with a `CdkConnectedOverlay` panel (`disableClose=true`; Escape is handled
+ * by the trigger itself in `onTriggerKeydown`). Opens on click/Enter/Space/
+ * ArrowDown, closes on outside click/Escape/blur, without changing the bound
+ * value. `aria-expanded` mirrors `panelOpen()`.
  *
- * The panel is a `CdkConnectedOverlay` (`disableClose=true` — Escape is
- * handled by the trigger itself, see `onTriggerKeydown`) that opens on
- * trigger click/Enter/Space/ArrowDown and closes on outside click, Escape,
- * or trigger blur, without changing the bound value. `aria-expanded`
- * mirrors the real `panelOpen()` state.
- *
- * Keyboard navigation and commit (D4, D6) are driven by an
- * `ActiveDescendantKeyManager<HaSelectOptionItem>` built over a *signal*
- * item source (`optionItems`) — no RxJS subscription needed. Arrow/Home/End/
- * typeahead move `aria-activedescendant` only (navigate); Enter, Space, Tab,
- * Alt+ArrowUp, and clicking an enabled option all commit (D6), writing
- * through the CVA `onChange` and closing the panel. Escape cancels without
- * committing.
- * `withWrap(true)` is enabled so Arrow navigation wraps past disabled
- * options at either end — a deliberate deviation from design decision D5
- * ("clamp, not wrap"): the spec's keyboard matrix mandates wrap-around.
+ * Keyboard navigation and commit run through an
+ * `ActiveDescendantKeyManager<HaSelectOptionItem>` built over the
+ * `optionItems` signal (no RxJS needed). Arrow/Home/End/typeahead only move
+ * `aria-activedescendant`; Enter, Space, Tab, Alt+ArrowUp, and clicking an
+ * enabled option commit through the CVA `onChange` and close the panel.
+ * Escape cancels without committing. `withWrap(true)` lets Arrow navigation
+ * wrap past disabled options instead of clamping, per the keyboard spec.
  *
  * Forms integration mirrors `HaInputText`'s `NgControl` lazy-injection +
- * `validityVersion` idiom (D8, `libs/input-text/src/lib/input-text.component.ts`):
+ * `validityVersion` idiom (`libs/input-text/src/lib/input-text.component.ts`):
  * the bound form directive also injects `NG_VALUE_ACCESSOR` (this component),
- * so resolving `NgControl` eagerly would throw NG0200; resolving lazily
- * inside `hasError` breaks the cycle.
+ * so resolving `NgControl` eagerly throws NG0200; resolving lazily inside
+ * `hasError` breaks the cycle.
  */
 @Component({
   selector: 'ha-select',
@@ -110,7 +104,7 @@ export class HaSelect implements ControlValueAccessor, OnInit {
   /** Raw model value, exactly as written by `writeValue` — never normalized. */
   protected readonly valueState = signal<unknown>(null);
 
-  /** Last open request (click/opening key). Not the render source of truth — see `panelOpen` (D3). */
+  /** Last open request (click/opening key). Not the render source of truth — see `panelOpen`. */
   private readonly openRequested = signal(false);
 
   /** Reference to the trigger button — the overlay's connection origin. */
@@ -119,27 +113,30 @@ export class HaSelect implements ControlValueAccessor, OnInit {
   /** Width (px) of the overlay panel, measured from the trigger at open time. `0` before the first open is harmless. */
   protected readonly triggerWidth = signal<number>(0);
 
-  /** Connected-overlay fallback positions (D7). */
+  /** Connected-overlay fallback positions. */
   protected readonly positions = HA_SELECT_POSITIONS;
 
-  /** Minimum gap (px) kept between the panel and the viewport edge (D7). */
+  /** Minimum gap (px) kept between the panel and the viewport edge. */
   protected readonly viewportMargin = HA_SELECT_VIEWPORT_MARGIN;
 
-  private readonly overlay = inject(Overlay);
-
-  /** Scroll strategy (D7): reposition the panel on scroll rather than closing or blocking it. */
-  protected readonly scrollStrategy = this.overlay.scrollStrategies.reposition();
+  /**
+   * Repositions the panel on scroll. NOT `Overlay.scrollStrategies.reposition()`
+   * — that only reacts to containers registered via `cdkScrollable`, which
+   * would force every consumer to annotate their own scroll containers. See
+   * `select.scroll-strategy.ts` for the capture-phase listener that avoids it.
+   */
+  protected readonly scrollStrategy = createHaSelectScrollStrategy();
 
   /** Tracks the last emitted open state so the transition effect below emits exactly once per transition. */
   private lastEmittedOpen = false;
 
-  /** Deterministic instance id (D10) — prefixes every option DOM id and the panel id. */
+  /** Deterministic instance id — prefixes every option DOM id and the panel id. */
   private readonly selectId = nextSelectId();
 
   /** DOM id of the listbox panel, referenced by the trigger's `aria-controls`. */
   protected readonly panelId = `${this.selectId}-panel`;
 
-  /** Computed: `Highlightable` wrappers per option (D4), passed as a signal to `ActiveDescendantKeyManager`. */
+  /** Computed: `Highlightable` wrappers per option, passed as a signal to `ActiveDescendantKeyManager`. */
   protected readonly optionItems = computed<HaSelectOptionItem[]>(() =>
     this.options().map(
       (option, index) => new HaSelectOptionItem(option, optionId(this.selectId, index)),
@@ -152,7 +149,7 @@ export class HaSelect implements ControlValueAccessor, OnInit {
   );
 
   /**
-   * `ActiveDescendantKeyManager` over `optionItems` (D4). Built in the
+   * `ActiveDescendantKeyManager` over `optionItems`. Built in the
    * constructor body, NOT inside the `effect()` below: CDK's signal-source
    * overload calls `effect()` internally, which throws NG0602 if nested
    * inside another running effect.
@@ -182,7 +179,7 @@ export class HaSelect implements ControlValueAccessor, OnInit {
   /** Computed: disabled from the input OR from the bound form control. */
   protected readonly effectiveDisabled = computed(() => this.disabled() || this.formDisabled());
 
-  /** Computed: the actual open/rendered state (D3) — structurally never `true` while `readonly`/`disabled`. */
+  /** Computed: the actual open/rendered state — structurally never `true` while `readonly`/`disabled`. */
   protected readonly panelOpen = computed(
     () => this.openRequested() && !this.effectiveDisabled() && !this.readonly(),
   );
@@ -251,9 +248,9 @@ export class HaSelect implements ControlValueAccessor, OnInit {
     this.destroyRef.onDestroy(() => this.keyManager.destroy());
 
     // One effect emitting `opened`/`closed` on every `panelOpen()` transition
-    // (D3) — guarantees output/DOM parity instead of duplicating the
-    // open/close decision at every call site that can change it (click,
-    // keydown, outside click, blur, or disabling/making readonly while open).
+    // — guarantees output/DOM parity instead of duplicating the open/close
+    // decision at every call site that can change it (click, keydown, outside
+    // click, blur, or disabling/making readonly while open).
     effect(() => {
       const isOpen = this.panelOpen();
       if (isOpen === this.lastEmittedOpen) {
@@ -314,8 +311,8 @@ export class HaSelect implements ControlValueAccessor, OnInit {
 
   /**
    * Host handler: resolves the keyboard intent and acts on it.
-   * `preventDefault` is honored exactly as the pure resolver decided (D6 —
-   * e.g. `Tab` never calls `preventDefault`, so focus can move on).
+   * `preventDefault` is honored exactly as the pure resolver decided
+   * (e.g. `Tab` never calls `preventDefault`, so focus can move on).
    */
   protected onTriggerKeydown(event: KeyboardEvent): void {
     const intent = resolveSelectKeyIntent(event, {
@@ -344,7 +341,7 @@ export class HaSelect implements ControlValueAccessor, OnInit {
     }
   }
 
-  /** Requests the panel to open. No-op when disabled or readonly (D3). Measures the trigger width first, since `cdkConnectedOverlayWidth` reads it in the same template pass that flips `cdkConnectedOverlayOpen`. */
+  /** Requests the panel to open. No-op when disabled or readonly. Measures the trigger width first, since `cdkConnectedOverlayWidth` reads it in the same template pass that flips `cdkConnectedOverlayOpen`. */
   protected open(): void {
     if (this.effectiveDisabled() || this.readonly()) {
       return;
@@ -359,14 +356,14 @@ export class HaSelect implements ControlValueAccessor, OnInit {
     this.onTouched();
   }
 
-  /** Shared commit primitive (D6) — writes `value` through `onChange`/`valueChange`. Called by both `commitActive` and `onOptionClick`, never duplicated. */
+  /** Shared commit primitive — writes `value` through `onChange`/`valueChange`. Called by both `commitActive` and `onOptionClick`, never duplicated. */
   private commit(value: unknown): void {
     this.valueState.set(value);
     this.onChange(value);
     this.valueChange.emit(value);
   }
 
-  /** Commits the key manager's active option via `commit` (D6) and closes. A no-op commit (no active item) still closes without emitting. */
+  /** Commits the key manager's active option via `commit` and closes. A no-op commit (no active item) still closes without emitting. */
   private commitActive(): void {
     const activeItem = this.keyManager.activeItem;
     if (activeItem) {
@@ -375,7 +372,7 @@ export class HaSelect implements ControlValueAccessor, OnInit {
     this.close();
   }
 
-  /** Host handler: click-commits `item` via `commit` (D6), closes, and refocuses the trigger. Disabled options are a no-op. */
+  /** Host handler: click-commits `item` via `commit`, closes, and refocuses the trigger. Disabled options are a no-op. */
   protected onOptionClick(item: HaSelectOptionItem): void {
     if (item.disabled) {
       return;

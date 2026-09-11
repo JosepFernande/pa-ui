@@ -4,6 +4,7 @@
   "lib": {
     "entryFile": "src/index.ts"
   },
+  "allowedNonPeerDependencies": ["@lucide/angular"],
   "assets": [
     {
       "glob": "README.md",

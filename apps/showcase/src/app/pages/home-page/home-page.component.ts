@@ -12,10 +12,15 @@ import { RouterLink } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePageComponent {
-  private static readonly INSTALL_COMMAND = 'npm install @halo-ui/angular @angular/cdk';
+  private static readonly INSTALL_COMMAND = 'npm install @halolib-ui/angular @angular/cdk';
+
+  /** Published version of `@halolib-ui/angular` (`libs/halo-ui/package.json`). Update alongside a release bump. */
+  protected static readonly LIBRARY_VERSION = '19.0.0';
 
   /** Whether the install command was just copied to the clipboard (resets after ~2s). */
   protected readonly copied = signal(false);
+
+  protected readonly libraryVersion = HomePageComponent.LIBRARY_VERSION;
 
   private copyResetTimeout?: ReturnType<typeof setTimeout>;
 

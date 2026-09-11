@@ -27,7 +27,7 @@
  * hard-asserts (by source-text regex) that `theme.tokens.ts` (along with
  * `theme-engine.ts`/`color-derivation.ts`) never contains an import whose
  * path matches `from ['"].*foundation` — type-only or not. An import path
- * of `../foundation/component-token-shapes` (or any per-component file
+ * of `../components/foundation/component-token-shapes` (or any per-component file
  * under `foundation/`) would trip that literal check even though nothing
  * here is a raw Foundation scale value. Keeping every file's path free of
  * the substring "foundation" satisfies the letter of that spec (which this
@@ -36,11 +36,11 @@
  * into `theme.tokens.ts`.
  */
 
-export { HA_BUTTON_TOKENS } from '../button/button-token-shapes';
-export type { HaButtonTokens } from '../button/button-token-shapes';
+export { HA_BUTTON_TOKENS } from '../components/button/button-token-shapes';
+export type { HaButtonTokens } from '../components/button/button-token-shapes';
 
-export { HA_INPUT_TEXT_TOKENS } from '../input-text/input-text-token-shapes';
-export type { HaInputTextTokens } from '../input-text/input-text-token-shapes';
+export { HA_INPUT_TEXT_TOKENS } from '../components/input-text/input-text-token-shapes';
+export type { HaInputTextTokens } from '../components/input-text/input-text-token-shapes';
 
-export { HA_SELECT_TOKENS } from '../select/select-token-shapes';
-export type { HaSelectTokens } from '../select/select-token-shapes';
+export { HA_SELECT_TOKENS } from '../components/select/select-token-shapes';
+export type { HaSelectTokens } from '../components/select/select-token-shapes';

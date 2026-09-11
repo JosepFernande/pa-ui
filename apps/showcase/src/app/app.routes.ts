@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { ButtonPageComponent } from './pages/button-page/button-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
+import { IconPageComponent } from './pages/icon-page/icon-page.component';
 import { InputTextPageComponent } from './pages/input-text-page/input-text-page.component';
 import { InstallPageComponent } from './pages/install-page/install-page.component';
 import { IntroPageComponent } from './pages/intro-page/intro-page.component';
@@ -18,6 +19,7 @@ export const routes: Routes = [
       { path: 'componentes/boton', component: ButtonPageComponent },
       { path: 'componentes/input-text', component: InputTextPageComponent },
       { path: 'componentes/select', component: SelectPageComponent },
+      { path: 'componentes/iconos', component: IconPageComponent },
     ],
   },
 ];

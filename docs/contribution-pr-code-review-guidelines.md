@@ -12,42 +12,29 @@ that ground accurately; this document does not repeat it. Combine with
 
 ## PR Description Template
 
-There is no `.github/pull_request_template.md` in the repo that auto-fills this
-— it's a convention to copy/paste manually when opening a PR:
+`.github/PULL_REQUEST_TEMPLATE.md` exists and GitHub auto-fills it when opening
+a new PR (per `CONTRIBUTING.md`, PR titles/descriptions are written in Spanish
+in this repo, which is why the template is in Spanish):
 
 ```markdown
-## What
+## Resumen
 
-One-paragraph description of what this PR does and why.
+<!-- Qué cambia y por qué, en bullets -->
 
-## Changes
+-
 
-- Bullet list of notable changes
-- Group by area (e.g. "Component", "Tests", "Docs")
+## Plan de prueba
 
-## Testing
+<!-- Cómo se verificó: tests agregados/actualizados, build, revisión manual -->
 
-- How the change was tested (manual, automated, both)
-- What scenarios were covered
-- Edge cases considered
+- [ ]
 
-## Checklist
+## Changeset
 
-- [ ] Added a changeset (if applicable)
-- [ ] Added/updated tests
-- [ ] Added/updated the showcase route (if user-facing)
-- [ ] Ran `npx nx run-many -t lint` and `npm run lint:css` locally
-- [ ] Ran `npx nx run-many -t test` locally
-- [ ] Ran `npx nx run-many -t build` locally
-- [ ] The component file is under 400 lines
-- [ ] Verified accessibility manually in the showcase route (jest-axe passes in
-      unit tests)
-- [ ] Verified the component works with at least one custom color
-
-## Related
-
-- Closes #123
-- Related to #456
+- [ ] Este PR modifica un paquete publicable (`@halolib-ui/core`,
+      `@halolib-ui/button`, `@halolib-ui/input-text`, `@halolib-ui/angular`) y
+      agrega un changeset (`npx changeset`)
+- [ ] No aplica — no toca ningún paquete publicable
 ```
 
 ## Review Checklist
