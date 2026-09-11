@@ -112,6 +112,7 @@ jobs:
         run: npx changeset version
 
       - name: Create Release Pull Request
+        id: cpr
         if: steps.changesets.outputs.has_changesets == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
@@ -129,6 +130,12 @@ jobs:
           branch: release/version-packages
           branch-suffix: short-commit-hash
           base: main
+
+      - name: Auto-merge version packages PR
+        if: steps.changesets.outputs.has_changesets == 'true'
+        run: gh pr merge --auto --squash "${{ steps.cpr.outputs.pull-request-number }}"
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Audit production dependencies
         if: steps.changesets.outputs.has_changesets == 'false'
