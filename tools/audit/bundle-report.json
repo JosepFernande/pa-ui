@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-09-10T18:48:34.001Z",
+  "timestamp": "2026-09-11T17:04:39.878Z",
   "results": [
     {
       "package": "@halolib-ui/angular/core",
       "file": "dist/libs/halo-ui/fesm2022/halolib-ui-angular-core.mjs",
-      "gzipBytes": 19783,
+      "gzipBytes": 19875,
       "maxGzipBytes": 24576,
       "warnGzipBytes": 20480,
       "status": "pass"
@@ -12,8 +12,16 @@
     {
       "package": "@halolib-ui/angular/button",
       "file": "dist/libs/halo-ui/fesm2022/halolib-ui-angular-button.mjs",
-      "gzipBytes": 2965,
+      "gzipBytes": 2977,
       "maxGzipBytes": 5120,
+      "status": "pass"
+    },
+    {
+      "package": "@halolib-ui/angular/icon",
+      "file": "dist/libs/halo-ui/fesm2022/halolib-ui-angular-icon.mjs",
+      "gzipBytes": 2466,
+      "maxGzipBytes": 8192,
+      "warnGzipBytes": 4096,
       "status": "pass"
     },
     {
@@ -26,7 +34,7 @@
     {
       "package": "@halolib-ui/angular/select",
       "file": "dist/libs/halo-ui/fesm2022/halolib-ui-angular-select.mjs",
-      "gzipBytes": 8851,
+      "gzipBytes": 9183,
       "maxGzipBytes": 12288,
       "status": "pass"
     },

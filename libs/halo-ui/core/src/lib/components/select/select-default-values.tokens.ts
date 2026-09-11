@@ -1,28 +1,10 @@
-import { HA_PADDING_X_SCALE, HA_RADIUS_SCALE } from '../../foundation/foundation.tokens';
+import { HA_INPUT_DIMENSIONS_SCALE } from '../../foundation/foundation.tokens';
 import type { HaSelectTokens } from './select-token-shapes';
-
-export const HA_SELECT_DIMENSIONS_SCALE = {
-  sm: {
-    minHeight: '33px',
-    paddingX: HA_PADDING_X_SCALE.sm,
-    radius: HA_RADIUS_SCALE.sm,
-  },
-  md: {
-    minHeight: '48px',
-    paddingX: HA_PADDING_X_SCALE.md,
-    radius: HA_RADIUS_SCALE.md,
-  },
-  lg: {
-    minHeight: '56px',
-    paddingX: HA_PADDING_X_SCALE.lg,
-    radius: HA_RADIUS_SCALE.lg,
-  },
-} as const;
 
 /**
  * Default values for every `--ha-select-*` design token, shaped like
  * `HaSelectTokens`. Trigger `padding*`/`min-height*`/`radius*` import the
- * same shared `HA_SELECT_DIMENSIONS_SCALE` (`foundation/foundation.tokens.ts`)
+ * same shared `HA_INPUT_DIMENSIONS_SCALE` (`foundation/foundation.tokens.ts`)
  * Input's own defaults use — a select trigger MUST match input field metrics
  * exactly, so both read from the one scale instead of two hand-kept tables.
  */
@@ -36,18 +18,18 @@ export const HA_SELECT_TOKEN_DEFAULT_VALUES = {
     fontWeight: 'var(--font-weight-regular)',
     lineHeight: 'var(--line-height-body)',
     gap: 'var(--gap-sm)',
-    paddingSm: `0 ${HA_SELECT_DIMENSIONS_SCALE.sm.paddingX}`,
-    paddingMd: `0 ${HA_SELECT_DIMENSIONS_SCALE.md.paddingX}`,
-    paddingLg: `0 ${HA_SELECT_DIMENSIONS_SCALE.lg.paddingX}`,
+    paddingSm: `0 ${HA_INPUT_DIMENSIONS_SCALE.sm.paddingX}`,
+    paddingMd: `0 ${HA_INPUT_DIMENSIONS_SCALE.md.paddingX}`,
+    paddingLg: `0 ${HA_INPUT_DIMENSIONS_SCALE.lg.paddingX}`,
     fontSm: 'var(--font-size-small-body)',
     fontMd: 'var(--font-size-body)',
     fontLg: 'var(--font-size-body)',
-    minHeightSm: HA_SELECT_DIMENSIONS_SCALE.sm.minHeight,
-    minHeightMd: HA_SELECT_DIMENSIONS_SCALE.md.minHeight,
-    minHeightLg: HA_SELECT_DIMENSIONS_SCALE.lg.minHeight,
-    radiusSm: HA_SELECT_DIMENSIONS_SCALE.sm.radius,
-    radiusMd: HA_SELECT_DIMENSIONS_SCALE.md.radius,
-    radiusLg: HA_SELECT_DIMENSIONS_SCALE.lg.radius,
+    minHeightSm: HA_INPUT_DIMENSIONS_SCALE.sm.minHeight,
+    minHeightMd: HA_INPUT_DIMENSIONS_SCALE.md.minHeight,
+    minHeightLg: HA_INPUT_DIMENSIONS_SCALE.lg.minHeight,
+    radiusSm: HA_INPUT_DIMENSIONS_SCALE.sm.radius,
+    radiusMd: HA_INPUT_DIMENSIONS_SCALE.md.radius,
+    radiusLg: HA_INPUT_DIMENSIONS_SCALE.lg.radius,
     focusBorder: 'var(--ha-primary)',
     focusRing: '2px solid var(--ha-primary-hover)',
     focusRingOffset: '5px',
