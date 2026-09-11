@@ -132,10 +132,18 @@ element via `[class]="hostClasses()"`.
 | Component                              | CVA | Value type |
 | -------------------------------------- | --- | ---------- |
 | `input[ha-input-text]` (`HaInputText`) | Yes | `string`   |
+| `ha-select` (`HaSelect`)               | Yes | `unknown`  |
 | `button[ha-button]` (`HaButton`)       | No  | —          |
 
-The remaining form components (`checkbox`, `radio`, `select`, `autocomplete`)
-don't exist in the repo yet — they're roadmap, not a live contract.
+`HaSelect` (`libs/select/src/lib/select.component.ts`) follows the same
+lazy-`NgControl` / `validityVersion` pattern as `HaInputText`, but it's a custom
+element with its own template (not an attribute selector on the native control):
+`writeValue` stores the raw value into a `valueState` signal instead of writing
+to the DOM, and `registerOnChange`/`registerOnTouched` wire the same way. See
+its class-level TSDoc for the full comparison.
+
+The remaining form components (`checkbox`, `radio`, `autocomplete`) don't exist
+in the repo yet — they're roadmap, not a live contract.
 
 ## Injecting `NgControl`: Why It Can't Happen in the Constructor
 

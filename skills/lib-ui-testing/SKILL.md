@@ -23,7 +23,7 @@ consistent across the project.
 | Tool                   | Version | Role                                       |
 | ---------------------- | ------- | ------------------------------------------ |
 | Jest                   | ^29.7.0 | Test runner                                |
-| jest-preset-angular    | ~14.4.0 | Angular transform, zone setup, serializers |
+| jest-preset-angular    | ~14.6.0 | Angular transform, zone setup, serializers |
 | jest-axe               | ^10.0.0 | A11y assertions via axe-core               |
 | jest-environment-jsdom | ^29.7.0 | DOM environment                            |
 
@@ -32,10 +32,10 @@ No `@testing-library/angular`, no `ComponentHarness`. Use `TestBed` +
 
 ## Project Configuration
 
-### Per-lib jest.config.ts
+### Per-lib jest.config.cjs
 
-```typescript
-export default {
+```javascript
+module.exports = {
   displayName: '<lib-name>',
   preset: '../../jest.preset.cjs',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
@@ -113,36 +113,46 @@ describe('Button Types', () => {
 
 Verify component tokens export the correct CSS variable names.
 
+Token registries are nested objects, grouped by semantic concern (e.g.
+`surface`, `typography`, `sizing`, `focus`, `states`). Flatten one level to
+write broad checks; use direct nested paths for name-specific assertions.
+
 ```typescript
 import { HA_BUTTON_TOKENS } from './button.tokens';
 
+const FLAT_BUTTON_TOKENS: Record<string, string> = Object.fromEntries(
+  Object.values(HA_BUTTON_TOKENS).flatMap((group) => Object.entries(group)),
+);
+
 describe('Button Tokens', () => {
   it('should export HA_BUTTON_TOKENS with CSS variable name strings', () => {
-    expect(HA_BUTTON_TOKENS.bg).toBe('--ha-button-bg');
+    expect(HA_BUTTON_TOKENS.surface.bg).toBe('--ha-button-bg');
   });
 
   it('should include all required token keys from the design spec', () => {
-    const keys = Object.keys(HA_BUTTON_TOKENS);
+    const keys = Object.keys(FLAT_BUTTON_TOKENS);
     const required = [
       'bg',
       'color',
       'border',
       'radius',
-      'shadow',
-      'hover-bg',
-      'hover-color',
-      'active-bg',
-      'active-color',
-      'focus-ring',
-      'disabled-opacity',
-      'font-size',
-      'font-weight',
-      'padding-x',
-      'padding-y',
-      'min-height',
+      'solidColor',
+      'hoverBg',
+      'activeBg',
+      'disabledBg',
+      'disabledColor',
+      'disabledOpacity',
+      'focusRing',
+      'focusRingOffset',
+      'fontFamily',
+      'fontWeight',
+      'lineHeight',
       'gap',
-      'transition-duration',
-      'loading-opacity',
+      'paddingSm',
+      'paddingMd',
+      'paddingLg',
+      'transitionDuration',
+      'transitionEasing',
     ];
     for (const key of required) {
       expect(keys).toContain(key);
@@ -151,7 +161,7 @@ describe('Button Tokens', () => {
   });
 
   it('should have all values prefixed with --ha-button-', () => {
-    const values = Object.values(HA_BUTTON_TOKENS);
+    const values = Object.values(FLAT_BUTTON_TOKENS);
     for (const value of values) {
       expect(value).toMatch(/^--ha-button-/);
     }

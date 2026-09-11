@@ -55,10 +55,6 @@ export default tseslint.config(
               sourceTag: 'type:utils',
               onlyDependOnLibsWithTags: ['type:utils'],
             },
-            {
-              sourceTag: 'type:umbrella',
-              onlyDependOnLibsWithTags: ['type:ui', 'type:core', 'type:utils'],
-            },
           ],
         },
       ],

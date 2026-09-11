@@ -1,52 +1,133 @@
-<h1 class="install-page__title">Instalación y configuración</h1>
-<p class="install-page__subtitle">De cero a tu primer componente en menos de 5 minutos.</p>
+<nav aria-label="Breadcrumb" class="mb-6 flex items-center gap-2 text-sm text-zinc-400">
+  <span>Documentación</span>
+  <span class="text-zinc-300">/</span>
+  <span class="font-medium text-zinc-700">Instalación y configuración</span>
+</nav>
 
-<ol class="install-page__steps">
-  <li class="install-page__step">
-    <span class="install-page__step-number">1</span>
-    <div class="install-page__step-body">
-      <h2 class="install-page__step-title">Instalar el paquete</h2>
-      <p class="install-page__step-description">
-        Instalá el paquete principal junto con Angular CDK, la única dependencia externa.
-      </p>
-      <pre class="install-page__code">npm install &#64;halo-ui/angular &#64;angular/cdk</pre>
-    </div>
-  </li>
+<div class="mb-10 border-b border-surface-border pb-6">
+  <h1 class="text-4xl font-extrabold tracking-tight text-zinc-950 sm:text-5xl">Instalación y configuración</h1>
+  <p class="mt-4 max-w-3xl text-[15px] font-normal leading-relaxed text-zinc-600 sm:text-base">
+    Instalá la librería, configurala en tu proyecto Angular y creá tu primer componente en minutos.
+  </p>
+</div>
 
-  <li class="install-page__step">
-    <span class="install-page__step-number">2</span>
-    <div class="install-page__step-body">
-      <h2 class="install-page__step-title">Configurar el Theme Engine</h2>
-      <p class="install-page__step-description">
-        Agregá el provider en app.config.ts — con el tema por defecto no necesitás pasarle nada.
-      </p>
-      <pre class="install-page__code">
-import {{ '{' }} provideHaTheme {{ '}' }} from '&#64;halo-ui/core';
-providers: [ provideHaTheme() ]</pre>
-    </div>
-  </li>
+<div class="space-y-12">
+  <section>
+    <h2 class="mb-4 text-xl font-bold tracking-tight text-zinc-900">Requisitos previos</h2>
+    <ul class="flex flex-col gap-4 rounded-2xl border border-surface-border bg-white p-6 shadow-sm">
+      <li class="flex items-center gap-3 text-sm text-zinc-800 sm:text-base">
+        <span
+          class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700"
+          aria-hidden="true"
+        >
+          <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+        Angular 19.2 o superior
+      </li>
+      <li class="flex items-center gap-3 text-sm text-zinc-800 sm:text-base">
+        <span
+          class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700"
+          aria-hidden="true"
+        >
+          <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+        Angular CDK 19.2 o superior
+      </li>
+      <li class="flex items-center gap-3 text-sm text-zinc-800 sm:text-base">
+        <span
+          class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700"
+          aria-hidden="true"
+        >
+          <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+        TypeScript 5.7 o superior
+      </li>
+      <li class="flex items-center gap-3 text-sm text-zinc-800 sm:text-base">
+        <span
+          class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700"
+          aria-hidden="true"
+        >
+          <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+        Conocimientos básicos de Angular standalone components
+      </li>
+    </ul>
+  </section>
 
-  <li class="install-page__step">
-    <span class="install-page__step-number">3</span>
-    <div class="install-page__step-body">
-      <h2 class="install-page__step-title">Importar el CSS de Foundation</h2>
-      <p class="install-page__step-description">
-        Sumá los estilos base una sola vez, en cualquier hoja de estilos global. Si te olvidás este import, los
-        componentes quedan sin estilo hasta que lo agregues.
-      </p>
-      <pre class="install-page__code">&#64;import '&#64;halo-ui/core/theme.css';</pre>
-    </div>
-  </li>
+  <section>
+    <h2 class="mb-4 text-xl font-bold tracking-tight text-zinc-900">Instalación</h2>
+    <p class="mb-4 max-w-3xl text-sm leading-relaxed text-zinc-600 sm:text-base">
+      Instalá el paquete principal junto con Angular CDK, su única dependencia externa.
+    </p>
+    <app-code-block label="Instalación" language="bash" code="npm install &#64;halolib-ui/angular &#64;angular/cdk" />
+  </section>
 
-  <li class="install-page__step">
-    <span class="install-page__step-number">4</span>
-    <div class="install-page__step-body">
-      <h2 class="install-page__step-title">Usar un componente</h2>
-      <p class="install-page__step-description">
-        Eso es todo — no hay NgModules ni configuración adicional. Importá el componente standalone que necesites y
-        listo.
-      </p>
-      <a class="install-page__gallery-link" routerLink="/componentes/boton">Ver galería de componentes →</a>
+  <section>
+    <h2 class="mb-4 text-xl font-bold tracking-tight text-zinc-900">Configuración</h2>
+    <p class="mb-4 max-w-3xl text-sm leading-relaxed text-zinc-600 sm:text-base">
+      Registrá el provider del Theme Engine en app.config.ts — con el tema por defecto no necesitás pasarle nada.
+    </p>
+    <app-code-block
+      label="app.config.ts"
+      language="typescript"
+      code="import { provideHaTheme } from '&#64;halolib-ui/core';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideHaTheme()],
+};"
+    />
+    <p class="mb-4 mt-6 max-w-3xl text-sm leading-relaxed text-zinc-600 sm:text-base">
+      Eso es todo — el Theme Engine construye en runtime las variables CSS de las capas Foundation/Semantic/Component,
+      así que no hace falta ningún import de CSS adicional.
+    </p>
+  </section>
+
+  <section>
+    <h2 class="mb-4 text-xl font-bold tracking-tight text-zinc-900">Primer componente</h2>
+    <p class="mb-4 max-w-3xl text-sm leading-relaxed text-zinc-600 sm:text-base">
+      Eso es todo — no hay NgModules ni configuración adicional. Importá el componente standalone que necesites y listo.
+    </p>
+    <app-code-block
+      label="example.component.ts"
+      language="typescript"
+      code='import { Component } from &apos;&#64;angular/core&apos;;
+import { HaButton } from &apos;&#64;halolib-ui/angular&apos;;
+
+@Component({
+  standalone: true,
+  imports: [HaButton],
+  template: `&lt;button ha-button variant="solid" size="md" color="primary"&gt;Hola mundo&lt;/button&gt;`,
+})
+export class ExampleComponent {}'
+    />
+  </section>
+</div>
+
+<div class="mt-12 flex justify-end border-t border-surface-border pb-12 pt-4">
+  <a
+    routerLink="/componentes/boton"
+    class="group flex items-center gap-3 rounded-2xl border border-surface-border bg-white px-6 py-3 shadow-sm transition-all hover:border-brand-600/40 hover:shadow"
+  >
+    <div class="text-right">
+      <span class="block text-xs text-zinc-400">Siguiente</span>
+      <span class="text-sm font-bold text-zinc-800 transition-colors group-hover:text-brand-700">Componentes</span>
     </div>
-  </li>
-</ol>
+    <span
+      class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700 transition-colors group-hover:bg-brand-700 group-hover:text-white"
+      aria-hidden="true"
+    >
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="5" x2="19" y1="12" y2="12" stroke-linecap="round" stroke-linejoin="round" />
+        <polyline points="12 5 19 12 12 19" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </span>
+  </a>
+</div>

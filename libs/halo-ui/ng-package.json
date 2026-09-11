@@ -1,13 +1,15 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/libs/halo-ui",
-  "allowedNonPeerDependencies": [
-    "@halolib-ui/button",
-    "@halolib-ui/core",
-    "@halolib-ui/input-text",
-    "@halolib-ui/select"
-  ],
   "lib": {
     "entryFile": "src/index.ts"
-  }
+  },
+  "allowedNonPeerDependencies": ["@lucide/angular"],
+  "assets": [
+    {
+      "glob": "README.md",
+      "input": ".",
+      "output": "."
+    }
+  ]
 }

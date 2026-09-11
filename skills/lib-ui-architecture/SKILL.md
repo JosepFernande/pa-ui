@@ -50,15 +50,18 @@ non-obvious.
 
 Three layers, in order of definition:
 
-1. **Foundation** — raw values: `--blue-500`, `--gray-100`, `--radius-lg`,
+1. **Foundation** — raw values: `--primary-600`, `--neutral-500`, `--radius-lg`,
    `--spacing-md`.
-2. **Semantic** — `--ha-primary`, `--ha-surface`, `--ha-border`, `--ha-text`.
+2. **Semantic** — `--ha-primary` (and any other consumer-registered color name;
+   only `primary` ships by default), plus the non-color passthrough
+   `--ha-spacing-*`, `--ha-radius-*`, `--ha-gap-*`, `--ha-icon-size-*`,
+   `--ha-font-size-*`.
 3. **Component** — `--ha-button-bg`, `--ha-button-color`,
    `--ha-input-focus-ring`.
 
 Scale naming (spacing, radius, font-size, size) is **semantic**
-(`xs`/`sm`/`md`/`lg`/`xl`), never numeric (`-1`, `-2`, `-4`). This matches the
-suffix convention already shipped in component tokens (`button.tokens.ts`,
+(`sm`/`md`/`lg`), never numeric (`-1`, `-2`, `-4`). This matches the suffix
+convention already shipped in component tokens (`button.tokens.ts`,
 `input-text.tokens.ts`) — do not introduce a numeric-indexed scale anywhere in
 the token system.
 
@@ -91,7 +94,8 @@ hover, active, and contrast variants from user-registered colors.
    explicitly.
 4. For each component, place files at
    `libs/<lib>/src/lib/<comp>.{component.ts,component.html,component.css,types.ts,tokens.ts,constants.ts,utils.ts}`
-   with `index.ts` and `public-api.ts` at the lib root.
+   with `index.ts` at the entry-point root (Nx convention; there is no
+   `public-api.ts`).
 5. Verification phase: produce a checklist mapping each of the six hard rules to
    the evidence (file, line, test) that proves compliance. Flag any deviation as
    a blocker, not a warning.

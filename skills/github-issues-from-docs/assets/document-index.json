@@ -28,7 +28,7 @@
         "bem",
         "tokens",
         "theme-engine",
-        "theme.css",
+        "default-theme",
         "capas",
         "ha-prefix",
         "stylelint",

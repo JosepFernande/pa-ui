@@ -1,13 +1,29 @@
-<div class="code-block">
-  <span class="code-block__label">{{ label() }}</span>
-  <div class="code-block__card">
-    <div class="code-block__bar">
-      <span class="code-block__lang">{{ language() }}</span>
-      <button type="button" class="code-block__copy" (click)="copy()">
-        <span aria-hidden="true">⧉</span>
-        {{ copied() ? 'Copiado' : 'Copiar' }}
-      </button>
-    </div>
-    <pre class="code-block__code">{{ code() }}</pre>
+<div class="overflow-hidden rounded-xl border border-zinc-800 bg-[#111222] shadow-md">
+  <div class="flex items-center justify-between border-b border-zinc-800/80 bg-[#1A1C30] px-4 py-2.5">
+    <span class="font-mono text-xs font-medium text-zinc-300">{{ label() }}</span>
+    <button
+      type="button"
+      class="flex items-center gap-1.5 rounded px-2 py-1 text-xs text-zinc-400 transition-colors hover:text-white"
+      (click)="copy()"
+    >
+      @if (copied()) {
+        <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m5 12 5 5L20 7" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      } @else {
+        <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="12" height="12" rx="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path
+            d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      }
+      <span>{{ copied() ? 'Copiado' : 'Copiar' }}</span>
+    </button>
   </div>
+  <pre
+    class="code-block__code m-0 overflow-x-auto p-4 font-mono text-sm leading-relaxed text-zinc-200"
+  ><code [innerHTML]="highlightedCode()"></code></pre>
 </div>
