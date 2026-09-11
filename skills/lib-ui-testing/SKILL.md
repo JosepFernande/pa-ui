@@ -23,7 +23,7 @@ consistent across the project.
 | Tool                   | Version | Role                                       |
 | ---------------------- | ------- | ------------------------------------------ |
 | Jest                   | ^29.7.0 | Test runner                                |
-| jest-preset-angular    | ~14.4.0 | Angular transform, zone setup, serializers |
+| jest-preset-angular    | ~14.6.0 | Angular transform, zone setup, serializers |
 | jest-axe               | ^10.0.0 | A11y assertions via axe-core               |
 | jest-environment-jsdom | ^29.7.0 | DOM environment                            |
 

@@ -207,24 +207,29 @@ Both are closed unions in the real types (`HaButtonSize`, `HaButtonVariant`,
 `libs/input-text/src/lib/input-text.types.ts`).
 
 `color` is **not** a closed variant — it is typed `string` and resolved by the
-Theme Engine at runtime (hard rule 6, consistent APIs). The names below are the
-_default theme's_ color roster, not an enum a component enforces:
+Theme Engine at runtime (hard rule 6, consistent APIs). The name below is the
+_default theme's_ entire color roster, not an enum a component enforces:
 
 ```
-primary,
-success, error, warning, alert, info, neutral,
-danger   (deprecated, alias of error)
+primary
 ```
+
+`success`, `error`, `warning`, `alert`, `info`, `neutral`, `danger`, and any
+other name are not shipped defaults — a consuming app registers them itself via
+`semantic`, exactly the same mechanism it would use for a made-up name like
+`treasury`.
 
 **Breaking change:** the former literal brand hues (`dark-blue`, `light-blue`,
 `dark-green`, `light-green`) and the `secondary` semantic alias have been
 removed entirely — no deprecated shim or backwards-compatible mapping is kept.
 The Foundation layer now ships a single `primary` raw scale (25-900), and the
 semantic `primary` theme color is an explicit `{ base, hover }` pair sourced
-from it (`primary-600` base, `primary-700` hover). `danger` remains as a
-deprecated alias of `error` (identical hex) for backward compatibility — do not
-use it in new code. See [Theming Deep-Dive](./theming-deep-dive.md) for the full
-derivation algorithm and hex values.
+from it (`primary-600` base, `primary-700` hover). `danger` used to be kept as a
+deprecated alias of `error`; that mechanism has since been removed from the
+engine entirely — `danger` is now just an ordinary consumer-registered semantic
+color like any other, not a special case. See
+[Theming Deep-Dive](./theming-deep-dive.md) for the full derivation algorithm
+and hex values.
 
 ## Tokens Architecture
 

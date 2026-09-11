@@ -55,8 +55,10 @@ every time, not just the overridden subset.
 
 ### 1. Color — via the Theme Engine's semantic pipeline
 
-Color **bases** (`primary`, `success`, `error`, `warning`, `alert`, `info`,
-`neutral`, and any app-registered custom color) go through the Theme Engine:
+Color **bases** — `primary` is the only one `DEFAULT_THEME` ships; any other
+name (`success`, `danger`, or a fully custom one like `treasury`) is registered
+by the consuming app, same mechanism, not a reserved set — go through the Theme
+Engine:
 
 ```
 provideHaTheme(config?) → mergeTheme() → DEFAULT_THEME + config
@@ -70,8 +72,8 @@ provideHaTheme(config?) → mergeTheme() → DEFAULT_THEME + config
 ```
 
 `provideHaTheme()` with no arguments resolves the shipped `DEFAULT_THEME`
-roster. Passing `colors` merges on top of it (`extendDefaults: true` by default)
-or replaces it entirely (`extendDefaults: false`).
+roster. Passing `semantic` merges on top of it (`extendDefaults: true` by
+default) or replaces it entirely (`extendDefaults: false`).
 
 Because these are written as **inline styles** on `documentElement`, they
 outrank any `:root` stylesheet rule automatically — no `!important`, no
@@ -79,7 +81,7 @@ load-order coupling, and (unlike a later-loaded consumer stylesheet rule) a
 provider's configured value can never be silently outranked.
 
 Raw color scales (the 25→900 steps) are never passed to `deriveTokens()` and
-never appear as a `HaThemeConfig.colors` entry — they have no interactive states
+never appear as a `HaTheme.semantic` entry — they have no interactive states
 (hover/active/contrast make no sense for a fixed swatch), so runtime derivation
 would be meaningless for them. They are still written to the DOM — by the
 separate Foundation builder described next — just never through the color-math
@@ -136,16 +138,18 @@ to drift.
 `DEFAULT_THEME` (the base every `provideHaTheme()` call merges against,
 `libs/core/src/lib/theme/theme.tokens.ts`):
 
-| Key                     | Value                                   | Notes                                                    |
-| ----------------------- | --------------------------------------- | -------------------------------------------------------- |
-| `primary`               | `{ base: '#4f46e5', hover: '#4338ca' }` | Explicit hover — `primary-600` base, `primary-700` hover |
-| `success`               | `#8fbf21`                               |                                                          |
-| `error`                 | `#d71608`                               |                                                          |
-| `warning`               | `#ed9613`                               |                                                          |
-| `alert`                 | `#f8e115`                               |                                                          |
-| `info`                  | `#16a3c3`                               |                                                          |
-| `neutral`               | `#4c4c4c`                               |                                                          |
-| `danger` _(deprecated)_ | `#d71608`                               | Alias of `error`, see "Open Product Assumptions" below   |
+| Key       | Value                                   | Notes                                                    |
+| --------- | --------------------------------------- | -------------------------------------------------------- |
+| `primary` | `{ base: '#4f46e5', hover: '#4338ca' }` | Explicit hover — `primary-600` base, `primary-700` hover |
+
+`primary` is the **entire** shipped roster — there is no default `success`,
+`error`, `warning`, `alert`, `info`, `neutral`, or `danger`. Every one of those
+(and `danger`, which used to be kept as a deprecated alias of `error` — that
+mechanism has since been removed) is now the consuming app's own concern: it
+registers whatever named colors it wants via `semantic`, exactly the same way it
+would register a made-up name like `treasury`. See
+[Theming Deep-Dive](./theming-deep-dive.md) for the full `semantic` API and
+registration examples.
 
 > **Breaking change:** the literal `dark-blue`/`light-blue`/`dark-green`/
 > `light-green` brand hues and the `secondary` semantic alias have been removed
@@ -170,7 +174,7 @@ Registering an app-specific color on top of the defaults:
 
 ```typescript
 provideHaTheme({
-  colors: {
+  semantic: {
     treasury: { base: '#0d6efd' }, // hover/active/contrast auto-derived
   },
 });
@@ -235,10 +239,12 @@ absence of an explicit product decision. They are documented here so they are
 visible and revisitable — **none of them should be read as a confirmed,
 permanent decision**.
 
-1. **`danger` retained as a deprecated alias of `error`.** Kept for one minor
-   version so existing `color="danger"` usage keeps resolving without a runtime
-   error, instead of a hard pre-1.0 break. Pending product sign-off; must be
-   revisited before the next minor release. See design decision D3.
+1. **`danger` as a deprecated alias of `error` — resolved, removed.** This
+   assumption was overtaken by the foundation-tokens/theme-roster consolidation
+   (design decision D3): the alias mechanism has been removed from the engine
+   entirely, along with every other non-`primary` semantic default. `danger` is
+   no longer part of `DEFAULT_THEME`; a consuming app registers it itself via
+   `semantic` if it wants it, like any custom color name.
 2. **`provideHaTheme()` alone, with no CSS import, is the full consumer setup.**
    The Theme Engine computes and writes the complete Foundation/Component var
    set via JS on every bootstrap (server and browser) instead of shipping a

@@ -8,6 +8,7 @@ import {
 import { RouterLink } from '@angular/router';
 import { HaButton } from '@halolib-ui/angular/button';
 import type { HaButtonSize, HaButtonVariant } from '@halolib-ui/angular/button';
+import { HA_BUTTON_DIMENSIONS } from '@halolib-ui/angular/core';
 import { CodeBlockComponent } from '../../shared/code-block/code-block.component';
 
 /** One real theme color usable via `[color]`, paired with its resolved hex for display. */
@@ -23,12 +24,11 @@ interface VariantInfo {
   readonly description: string;
 }
 
-/** One real `size` value with its Figma-sourced dimensions. `confirmed` flags Figma-validated vs. placeholder rows. */
+/** One real `size` value with its dimensions, read straight from `HA_BUTTON_DIMENSIONS`. */
 interface SizeInfo {
   readonly size: HaButtonSize;
   readonly minHeight: string;
   readonly minWidth: string;
-  readonly confirmed: boolean;
 }
 
 /** One row of the real `HaButton` Inputs API reference table. */
@@ -83,12 +83,12 @@ export class ButtonPageComponent {
     },
   ];
 
-  /** The 3 real sizes with their Figma-sourced `min-height`/`min-width` (`libs/core/.../button-default-values.tokens.ts`). */
-  protected readonly sizeInfo: readonly SizeInfo[] = [
-    { size: 'sm', minHeight: '40px', minWidth: '200px', confirmed: false },
-    { size: 'md', minHeight: '48px', minWidth: '224px', confirmed: true },
-    { size: 'lg', minHeight: '56px', minWidth: '280px', confirmed: false },
-  ];
+  /** The 3 real sizes with their `min-height`/`min-width`, sourced directly from `HA_BUTTON_DIMENSIONS`. */
+  protected readonly sizeInfo: readonly SizeInfo[] = this.sizes.map((size) => ({
+    size,
+    minHeight: HA_BUTTON_DIMENSIONS[size].minHeight,
+    minWidth: HA_BUTTON_DIMENSIONS[size].minWidth,
+  }));
 
   /** The real 6-input `HaButton` API surface — no more, no less. */
   protected readonly apiInputs: readonly ApiInput[] = [

@@ -30,6 +30,21 @@ provideHaTheme({
   semantic: { primary: '#0ea5e9' },
 });
 
+// Register app-specific semantic colors — `semantic` is an open dictionary,
+// not limited to whatever the default theme ships. `deriveTokens`/
+// `toSemanticCssVariables` emit the full --ha-{name}/-hover/-active/-contrast
+// set for each key, so a consumer can invent its own names. This is exactly
+// what apps/showcase's app.config.ts does to power its color-swatches demo:
+provideHaTheme({
+  semantic: {
+    success: '#26D980',
+    error: '#D92635',
+    warning: '#D99726',
+    info: '#266BD9',
+    neutral: '#4c4c4c',
+  },
+});
+
 // Explicit override of specific variants
 provideHaTheme({
   semantic: {
@@ -140,16 +155,16 @@ type ThemeCssVariables = Record<string, string>;
 {
   colors: {
     primary: { base: '#4f46e5', hover: '#4338ca' }, // primary-600 base, primary-700 hover
-    success: '#8fbf21',
-    error:   '#d71608',
-    warning: '#ed9613',
-    alert:   '#f8e115',
-    info:    '#16a3c3',
-    neutral: '#4c4c4c', // Figma neutral-900 — also used as the text color across the type scale
-    danger:  '#d71608', // deprecated: alias of error, same hex — do not use in new code
   },
 }
 ```
+
+This is the **entire** shipped roster: `primary` is the only semantic color
+`provideHaTheme()` resolves with zero config. There is no default `success`,
+`error`, `warning`, `alert`, `info`, `neutral`, or `danger` — any other named
+color (including `success`, `danger`, or a fully made-up name like `treasury`)
+is something the consuming app registers itself via `semantic`, using the same
+open-dictionary mechanism, not a reserved or special set.
 
 **Breaking change:** the former literal `dark-blue`/`light-blue`/`dark-green`/
 `light-green` brand hues and the `secondary` semantic alias have been removed
@@ -158,11 +173,11 @@ Foundation layer now ships a single `primary` raw scale (25-900) instead of the
 two-brand-family palette; see [CSS Strategy](./css-strategy.md) for the full
 scale values.
 
-`danger` is marked `@deprecated` in code
-(`libs/core/src/lib/theme/theme.tokens.ts`) and is deliberately excluded from
-the "base color keys" the engine requires when `extendDefaults: false` (see
-below) — kept only for backward compatibility with consumers already using
-`color="danger"`.
+Historically `danger` was kept as a deprecated alias of `error` in the shared
+theme; that mechanism has since been removed. `danger`, like any other
+non-`primary` semantic color, is no longer part of `DEFAULT_THEME` — a consuming
+app registers it itself via `semantic` if it wants it, exactly like any custom
+name.
 
 Used automatically when `provideHaTheme()` is not called, or as the merge base
 when `extendDefaults` is `true` (the default).
@@ -173,13 +188,14 @@ when `extendDefaults` is `true` (the default).
   `theme.semantic` is merged over `DEFAULT_THEME.colors` — unspecified colors
   keep their default value, specified ones win.
 - `false`: **only** `theme.semantic` is used, with no fallback to the defaults.
-  If any of the required base colors is missing — `primary`, `success`, `error`,
-  `warning`, `alert`, `info`, `neutral` — a `console.warn` names the missing
-  keys. It never throws and never backfills silently.
+  If the base color `primary` is missing, a `console.warn` names it. It never
+  throws and never backfills silently.
 
-  This base-key list (`BASE_COLOR_KEYS` in `theme-engine.ts`) is exactly these 7
-  semantic keys — it deliberately does **not** include the deprecated `danger`
-  alias, since it isn't required for a self-consistent palette. (The former
+  This base-key list (`BASE_COLOR_KEYS` in `theme-engine.ts`) is exactly
+  `['primary']` — matching the `DEFAULT_THEME` roster: only the brand anchor
+  `primary` lives in the shared theme, and every other semantic color
+  (`success`/`error`/`danger`/`warning`/`alert`/`info`/`neutral`) is the
+  consuming page's own provider concern, not part of `HaTheme`. (The former
   literal brand hues and `secondary` were removed from the roster entirely —
   breaking change, no alias kept.)
 
@@ -319,10 +335,9 @@ logic (advanced use, not needed for normal consumption):
 
 The architecture leaves the door open for named themes (`dark`, `corporate`)
 switchable at runtime via a class on `<html>`, but **no "theme name" concept
-exists in the code today** — not in `HaThemeConfig`, not in `ResolvedTheme`, not
-in `HaThemeService`. There is no `applyTheme({ name: ... })` and no
-`.ha-theme-*` classes. This section will be updated with the real API once it
-exists.
+exists in the code today** — not in `HaTheme`, not in `ResolvedTheme`, not in
+`HaThemeService`. There is no `applyTheme({ name: ... })` and no `.ha-theme-*`
+classes. This section will be updated with the real API once it exists.
 
 ## SSR Considerations
 

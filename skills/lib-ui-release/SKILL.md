@@ -31,8 +31,9 @@ Merging a PR with a changeset does **not** publish anything by itself:
    **"chore(release): version packages"** PR.
 2. That version-packages PR must be reviewed and merged manually — it does not
    merge itself.
-3. Merging it triggers `release.yml` again. Only now does it run
-   `changeset publish`, create a git tag, and publish a GitHub Release.
+3. Merging it triggers `release.yml` again. Only now does it validate the
+   packages, `npm publish` the build output (not `changeset publish` — see the
+   #85 bug below), create a git tag, and publish a GitHub Release.
 
 If a changeset PR was merged and nothing got published, the first thing to check
 is whether the version-packages PR exists and got merged:

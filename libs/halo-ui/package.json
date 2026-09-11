@@ -43,6 +43,9 @@
     },
     "./select": {
       "default": "./select/src/index.ts"
+    },
+    "./icon": {
+      "default": "./icon/src/index.ts"
     }
   },
   "peerDependencies": {
@@ -50,6 +53,9 @@
     "@angular/core": "^19.2.0",
     "@angular/cdk": "^19.2.0",
     "@angular/forms": "^19.2.0"
+  },
+  "dependencies": {
+    "@lucide/angular": "^1.44.0"
   },
   "sideEffects": false,
   "type": "module"

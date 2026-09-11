@@ -177,13 +177,14 @@ describe('Packaging contract — source-level', () => {
       expect(paths[`@halolib-ui/angular/${entry}`]).toBeDefined();
     });
 
-    it('declares exactly 5 @halolib-ui/angular* path entries (no legacy 5-package paths)', () => {
+    it('declares exactly 6 @halolib-ui/angular* path entries (no legacy 5-package paths)', () => {
       const halolibKeys = Object.keys(paths).filter((key) => key.startsWith('@halolib-ui/angular'));
       expect(halolibKeys.sort()).toEqual(
         [
           '@halolib-ui/angular',
           '@halolib-ui/angular/button',
           '@halolib-ui/angular/core',
+          '@halolib-ui/angular/icon',
           '@halolib-ui/angular/input-text',
           '@halolib-ui/angular/select',
         ].sort(),
